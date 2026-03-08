@@ -1,0 +1,15 @@
+evidence_id,asset_id,region_id,type,url,before_or_after,capture_date
+EVD_DRAIN_GALI7_BEFORE,ASSET_DRAIN_GALI7,REG_W45_GALI7,image,evidence/gali7_drain_before.jpg,before,2024-01-05
+EVD_DRAIN_GALI7_AFTER,ASSET_DRAIN_GALI7,REG_W45_GALI7,image,evidence/gali7_drain_after.jpg,after,2024-03-22
+EVD_ROAD_GALI7_BEFORE,ASSET_ROAD_GALI7,REG_W45_GALI7,image,evidence/gali7_road_before.jpg,before,2024-01-25
+EVD_ROAD_GALI7_AFTER,ASSET_ROAD_GALI7,REG_W45_GALI7,image,evidence/gali7_road_after.jpg,after,2024-04-20
+EVD_WB_0_AFTER,ASSET_WB_272027,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_1_AFTER,ASSET_WB_272028,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_2_AFTER,ASSET_WB_272029,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_3_AFTER,ASSET_WB_272030,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_4_AFTER,ASSET_WB_272031,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_5_AFTER,ASSET_WB_272032,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_6_AFTER,ASSET_WB_272033,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_7_AFTER,ASSET_WB_272034,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_8_AFTER,ASSET_WB_272035,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
+EVD_WB_9_AFTER,ASSET_WB_272036,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01

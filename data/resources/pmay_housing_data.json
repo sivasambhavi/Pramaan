@@ -1,0 +1,424 @@
+{
+    "index_name": "634083c6-bfde-4f17-977c-5d8e32fd8ffc",
+    "title": "State/UT-wise Total Number of Completed and Occupied Houses under the Pradhan Mantri Awas Yojana - Urban (PMAY-U) during 31-03-2024 and 31-12-2024",
+    "desc": "State/UT-wise Total Number of Completed and Occupied Houses under the Pradhan Mantri Awas Yojana - Urban (PMAY-U) during 31-03-2024 and 31-12-2024",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "e3b19e4d-e287-4d32-b53d-70e9617c7770",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1754585514,
+    "updated": 1754585514,
+    "created_date": "2025-08-07T18:51:54Z",
+    "updated_date": "2025-08-07T18:51:54Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "e3b19e4d-e287-4d32-b53d-70e9617c7770",
+        "field": "634083c6-bfde-4f17-977c-5d8e32fd8ffc"
+    },
+    "field": [
+        {
+            "id": "sl__no_",
+            "name": "Sl. No.",
+            "type": "keyword"
+        },
+        {
+            "id": "category",
+            "name": "Category",
+            "type": "keyword"
+        },
+        {
+            "id": "state_ut",
+            "name": "State/UT",
+            "type": "keyword"
+        },
+        {
+            "id": "houses_as_on_31_03_2024___completed",
+            "name": "Houses as on 31-03-2024 - Completed",
+            "type": "double"
+        },
+        {
+            "id": "houses_as_on_31_03_2024___occupied",
+            "name": "Houses as on 31-03-2024 - Occupied",
+            "type": "double"
+        },
+        {
+            "id": "houses_as_on_31_12_2024___completed",
+            "name": "Houses as on 31-12-2024 - Completed",
+            "type": "double"
+        },
+        {
+            "id": "houses_as_on_31_12_2024___occupied",
+            "name": "Houses as on 31-12-2024 - Occupied",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 39,
+    "count": 39,
+    "limit": "100",
+    "offset": "0",
+    "records": [
+        {
+            "sl__no_": "1",
+            "category": "States",
+            "state_ut": "Andhra Pradesh",
+            "houses_as_on_31_03_2024___completed": 954090,
+            "houses_as_on_31_03_2024___occupied": 846802,
+            "houses_as_on_31_12_2024___completed": 1029916,
+            "houses_as_on_31_12_2024___occupied": 944085
+        },
+        {
+            "sl__no_": "2",
+            "category": "States",
+            "state_ut": "Bihar",
+            "houses_as_on_31_03_2024___completed": 120260,
+            "houses_as_on_31_03_2024___occupied": 120260,
+            "houses_as_on_31_12_2024___completed": 167622,
+            "houses_as_on_31_12_2024___occupied": 167571
+        },
+        {
+            "sl__no_": "3",
+            "category": "States",
+            "state_ut": "Chhattisgarh",
+            "houses_as_on_31_03_2024___completed": 219918,
+            "houses_as_on_31_03_2024___occupied": 197795,
+            "houses_as_on_31_12_2024___completed": 251126,
+            "houses_as_on_31_12_2024___occupied": 232621
+        },
+        {
+            "sl__no_": "4",
+            "category": "States",
+            "state_ut": "Goa",
+            "houses_as_on_31_03_2024___completed": 3144,
+            "houses_as_on_31_03_2024___occupied": 3144,
+            "houses_as_on_31_12_2024___completed": 3145,
+            "houses_as_on_31_12_2024___occupied": 3145
+        },
+        {
+            "sl__no_": "5",
+            "category": "States",
+            "state_ut": "Gujarat",
+            "houses_as_on_31_03_2024___completed": 903145,
+            "houses_as_on_31_03_2024___occupied": 851531,
+            "houses_as_on_31_12_2024___completed": 936920,
+            "houses_as_on_31_12_2024___occupied": 888905
+        },
+        {
+            "sl__no_": "6",
+            "category": "States",
+            "state_ut": "Haryana",
+            "houses_as_on_31_03_2024___completed": 67341,
+            "houses_as_on_31_03_2024___occupied": 67341,
+            "houses_as_on_31_12_2024___completed": 69742,
+            "houses_as_on_31_12_2024___occupied": 69726
+        },
+        {
+            "sl__no_": "7",
+            "category": "States",
+            "state_ut": "Himachal Pradesh",
+            "houses_as_on_31_03_2024___completed": 10127,
+            "houses_as_on_31_03_2024___occupied": 10075,
+            "houses_as_on_31_12_2024___completed": 10991,
+            "houses_as_on_31_12_2024___occupied": 10973
+        },
+        {
+            "sl__no_": "8",
+            "category": "States",
+            "state_ut": "Jharkhand",
+            "houses_as_on_31_03_2024___completed": 140220,
+            "houses_as_on_31_03_2024___occupied": 137433,
+            "houses_as_on_31_12_2024___completed": 154170,
+            "houses_as_on_31_12_2024___occupied": 151022
+        },
+        {
+            "sl__no_": "9",
+            "category": "States",
+            "state_ut": "Karnataka",
+            "houses_as_on_31_03_2024___completed": 338571,
+            "houses_as_on_31_03_2024___occupied": 292981,
+            "houses_as_on_31_12_2024___completed": 377985,
+            "houses_as_on_31_12_2024___occupied": 301813
+        },
+        {
+            "sl__no_": "10",
+            "category": "States",
+            "state_ut": "Kerala",
+            "houses_as_on_31_03_2024___completed": 121273,
+            "houses_as_on_31_03_2024___occupied": 121116,
+            "houses_as_on_31_12_2024___completed": 131196,
+            "houses_as_on_31_12_2024___occupied": 131095
+        },
+        {
+            "sl__no_": "11",
+            "category": "States",
+            "state_ut": "Madhya Pradesh",
+            "houses_as_on_31_03_2024___completed": 769350,
+            "houses_as_on_31_03_2024___occupied": 756645,
+            "houses_as_on_31_12_2024___completed": 846501,
+            "houses_as_on_31_12_2024___occupied": 836430
+        },
+        {
+            "sl__no_": "12",
+            "category": "States",
+            "state_ut": "Maharashtra",
+            "houses_as_on_31_03_2024___completed": 839789,
+            "houses_as_on_31_03_2024___occupied": 759504,
+            "houses_as_on_31_12_2024___completed": 881322,
+            "houses_as_on_31_12_2024___occupied": 806210
+        },
+        {
+            "sl__no_": "13",
+            "category": "States",
+            "state_ut": "Odisha",
+            "houses_as_on_31_03_2024___completed": 142756,
+            "houses_as_on_31_03_2024___occupied": 139216,
+            "houses_as_on_31_12_2024___completed": 158320,
+            "houses_as_on_31_12_2024___occupied": 155313
+        },
+        {
+            "sl__no_": "14",
+            "category": "States",
+            "state_ut": "Punjab",
+            "houses_as_on_31_03_2024___completed": 82057,
+            "houses_as_on_31_03_2024___occupied": 82005,
+            "houses_as_on_31_12_2024___completed": 95514,
+            "houses_as_on_31_12_2024___occupied": 95212
+        },
+        {
+            "sl__no_": "15",
+            "category": "States",
+            "state_ut": "Rajasthan",
+            "houses_as_on_31_03_2024___completed": 182524,
+            "houses_as_on_31_03_2024___occupied": 175903,
+            "houses_as_on_31_12_2024___completed": 218237,
+            "houses_as_on_31_12_2024___occupied": 211256
+        },
+        {
+            "sl__no_": "16",
+            "category": "States",
+            "state_ut": "Tamil Nadu",
+            "houses_as_on_31_03_2024___completed": 562206,
+            "houses_as_on_31_03_2024___occupied": 507865,
+            "houses_as_on_31_12_2024___completed": 595841,
+            "houses_as_on_31_12_2024___occupied": 542646
+        },
+        {
+            "sl__no_": "17",
+            "category": "States",
+            "state_ut": "Telangana",
+            "houses_as_on_31_03_2024___completed": 224483,
+            "houses_as_on_31_03_2024___occupied": 123933,
+            "houses_as_on_31_12_2024___completed": 223329,
+            "houses_as_on_31_12_2024___occupied": 164811
+        },
+        {
+            "sl__no_": "18",
+            "category": "States",
+            "state_ut": "Uttar Pradesh",
+            "houses_as_on_31_03_2024___completed": 1457724,
+            "houses_as_on_31_03_2024___occupied": 1429291,
+            "houses_as_on_31_12_2024___completed": 1671083,
+            "houses_as_on_31_12_2024___occupied": 1638701
+        },
+        {
+            "sl__no_": "19",
+            "category": "States",
+            "state_ut": "Uttarakhand",
+            "houses_as_on_31_03_2024___completed": 33655,
+            "houses_as_on_31_03_2024___occupied": 32743,
+            "houses_as_on_31_12_2024___completed": 38695,
+            "houses_as_on_31_12_2024___occupied": 37355
+        },
+        {
+            "sl__no_": "20",
+            "category": "States",
+            "state_ut": "West Bengal",
+            "houses_as_on_31_03_2024___completed": 394471,
+            "houses_as_on_31_03_2024___occupied": 394375,
+            "houses_as_on_31_12_2024___completed": 445166,
+            "houses_as_on_31_12_2024___occupied": 444926
+        },
+        {
+            "sl__no_": "Sub- total (States)",
+            "category": "Sub- total (States)",
+            "state_ut": "Sub- total (States)",
+            "houses_as_on_31_03_2024___completed": 7567104,
+            "houses_as_on_31_03_2024___occupied": 7049958,
+            "houses_as_on_31_12_2024___completed": 8306821,
+            "houses_as_on_31_12_2024___occupied": 7833816
+        },
+        {
+            "sl__no_": "21",
+            "category": "North East States",
+            "state_ut": "Arunachal Pradesh",
+            "houses_as_on_31_03_2024___completed": 7426,
+            "houses_as_on_31_03_2024___occupied": 5890,
+            "houses_as_on_31_12_2024___completed": 8066,
+            "houses_as_on_31_12_2024___occupied": 6850
+        },
+        {
+            "sl__no_": "22",
+            "category": "North East States",
+            "state_ut": "Assam",
+            "houses_as_on_31_03_2024___completed": 99291,
+            "houses_as_on_31_03_2024___occupied": 99291,
+            "houses_as_on_31_12_2024___completed": 118214,
+            "houses_as_on_31_12_2024___occupied": 118214
+        },
+        {
+            "sl__no_": "23",
+            "category": "North East States",
+            "state_ut": "Manipur",
+            "houses_as_on_31_03_2024___completed": 13705,
+            "houses_as_on_31_03_2024___occupied": 13705,
+            "houses_as_on_31_12_2024___completed": 16719,
+            "houses_as_on_31_12_2024___occupied": 16719
+        },
+        {
+            "sl__no_": "24",
+            "category": "North East States",
+            "state_ut": "Meghalaya",
+            "houses_as_on_31_03_2024___completed": 1248,
+            "houses_as_on_31_03_2024___occupied": 1248,
+            "houses_as_on_31_12_2024___completed": 1824,
+            "houses_as_on_31_12_2024___occupied": 1824
+        },
+        {
+            "sl__no_": "25",
+            "category": "North East States",
+            "state_ut": "Mizoram",
+            "houses_as_on_31_03_2024___completed": 8568,
+            "houses_as_on_31_03_2024___occupied": 8568,
+            "houses_as_on_31_12_2024___completed": 24166,
+            "houses_as_on_31_12_2024___occupied": 24166
+        },
+        {
+            "sl__no_": "26",
+            "category": "North East States",
+            "state_ut": "Nagaland",
+            "houses_as_on_31_03_2024___completed": 19364,
+            "houses_as_on_31_03_2024___occupied": 19332,
+            "houses_as_on_31_12_2024___completed": 26408,
+            "houses_as_on_31_12_2024___occupied": 26376
+        },
+        {
+            "sl__no_": "27",
+            "category": "North East States",
+            "state_ut": "Sikkim",
+            "houses_as_on_31_03_2024___completed": 202,
+            "houses_as_on_31_03_2024___occupied": 202,
+            "houses_as_on_31_12_2024___completed": 202,
+            "houses_as_on_31_12_2024___occupied": 202
+        },
+        {
+            "sl__no_": "28",
+            "category": "North East States",
+            "state_ut": "Tripura",
+            "houses_as_on_31_03_2024___completed": 71551,
+            "houses_as_on_31_03_2024___occupied": 71551,
+            "houses_as_on_31_12_2024___completed": 76791,
+            "houses_as_on_31_12_2024___occupied": 76791
+        },
+        {
+            "sl__no_": "Sub- total (N.E. States)",
+            "category": "Sub- total (N.E. States)",
+            "state_ut": "Sub- total (N.E. States)",
+            "houses_as_on_31_03_2024___completed": 221355,
+            "houses_as_on_31_03_2024___occupied": 219787,
+            "houses_as_on_31_12_2024___completed": 272390,
+            "houses_as_on_31_12_2024___occupied": 271142
+        },
+        {
+            "sl__no_": "29",
+            "category": "Union Territories",
+            "state_ut": "Andaman and Nicobar Islands",
+            "houses_as_on_31_03_2024___completed": 47,
+            "houses_as_on_31_03_2024___occupied": 47,
+            "houses_as_on_31_12_2024___completed": 47,
+            "houses_as_on_31_12_2024___occupied": 47
+        },
+        {
+            "sl__no_": "30",
+            "category": "Union Territories",
+            "state_ut": "Chandigarh",
+            "houses_as_on_31_03_2024___completed": 1256,
+            "houses_as_on_31_03_2024___occupied": 1256,
+            "houses_as_on_31_12_2024___completed": 1256,
+            "houses_as_on_31_12_2024___occupied": 1256
+        },
+        {
+            "sl__no_": "31",
+            "category": "Union Territories",
+            "state_ut": "Dadra and Nagar Haveli and Daman and Diu",
+            "houses_as_on_31_03_2024___completed": 9180,
+            "houses_as_on_31_03_2024___occupied": 7942,
+            "houses_as_on_31_12_2024___completed": 9230,
+            "houses_as_on_31_12_2024___occupied": 7992
+        },
+        {
+            "sl__no_": "32",
+            "category": "Union Territories",
+            "state_ut": "Delhi",
+            "houses_as_on_31_03_2024___completed": 29976,
+            "houses_as_on_31_03_2024___occupied": 29976,
+            "houses_as_on_31_12_2024___completed": 29976,
+            "houses_as_on_31_12_2024___occupied": 29976
+        },
+        {
+            "sl__no_": "33",
+            "category": "Union Territories",
+            "state_ut": "Jammu and Kashmir",
+            "houses_as_on_31_03_2024___completed": 21766,
+            "houses_as_on_31_03_2024___occupied": 21766,
+            "houses_as_on_31_12_2024___completed": 28984,
+            "houses_as_on_31_12_2024___occupied": 28984
+        },
+        {
+            "sl__no_": "34",
+            "category": "Union Territories",
+            "state_ut": "Ladakh",
+            "houses_as_on_31_03_2024___completed": 788,
+            "houses_as_on_31_03_2024___occupied": 788,
+            "houses_as_on_31_12_2024___completed": 876,
+            "houses_as_on_31_12_2024___occupied": 876
+        },
+        {
+            "sl__no_": "35",
+            "category": "Union Territories",
+            "state_ut": "Lakshadweep",
+            "houses_as_on_31_03_2024___completed": "NA",
+            "houses_as_on_31_03_2024___occupied": "NA",
+            "houses_as_on_31_12_2024___completed": "NA",
+            "houses_as_on_31_12_2024___occupied": "NA"
+        },
+        {
+            "sl__no_": "36",
+            "category": "Union Territories",
+            "state_ut": "Puducherry",
+            "houses_as_on_31_03_2024___completed": 9445,
+            "houses_as_on_31_03_2024___occupied": 9445,
+            "houses_as_on_31_12_2024___completed": 10652,
+            "houses_as_on_31_12_2024___occupied": 10652
+        },
+        {
+            "sl__no_": "Sub- total (UT)",
+            "category": "Sub- total (UT)",
+            "state_ut": "Sub- total (UT)",
+            "houses_as_on_31_03_2024___completed": 72458,
+            "houses_as_on_31_03_2024___occupied": 71220,
+            "houses_as_on_31_12_2024___completed": 81021,
+            "houses_as_on_31_12_2024___occupied": 79783
+        }
+    ]
+}

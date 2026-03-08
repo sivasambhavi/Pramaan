@@ -1,0 +1,7 @@
+actor_id,name,type,region_id
+ACT_MCD_SHAHDARA_WORKS,MCD Shahdara South Works Dept,government,REG_SHAHDARA_SOUTH
+ACT_MCD_SHAHDARA_SANITATION,MCD Shahdara Sanitation Dept,government,REG_SHAHDARA_SOUTH
+ACT_MCD_ELECTRICAL,MCD Electrical Dept - Shahdara,government,REG_SHAHDARA_SOUTH
+ACT_W45_COUNCILLOR,Ward 45 Councillor,elected_rep,REG_W45
+ACT_CONTRACTOR_INFRA_1,ABC Infra Pvt Ltd,contractor,REG_W45
+ACT_CONTRACTOR_LIGHTS_1,BrightLights Engineering,contractor,REG_W45
