@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     neo4j_uri: str = "bolt://localhost:7687"
     neo4j_user: str = "neo4j"
     neo4j_password: str = "password"
-    app_env: str = "development"
+    pramaan_env: str = "development"
 
     class Config:
         env_file = ".env"

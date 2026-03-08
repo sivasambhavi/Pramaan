@@ -9,7 +9,7 @@ from app.config import settings
 from app.neo4j_client import get_driver
 
 # Config
-DATA_DIR = Path("E:/INDIA_INNOVATES/Pramaan/data/resources/data/final_formalized")
+DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "resources" / "data" / "final_formalized"
 
 def run_cypher(session, query, parameters=None):
     try:
@@ -24,21 +24,7 @@ def main() -> None:
 
     driver = get_driver()
     with driver.session() as session:
-        # --- 1. SET UP CONSTRAINTS ---
-        print("Setting up graph constraints...")
-        constraints = [
-            "CREATE CONSTRAINT region_id IF NOT EXISTS FOR (r:Region) REQUIRE r.region_id IS UNIQUE",
-            "CREATE CONSTRAINT scheme_id IF NOT EXISTS FOR (s:Scheme) REQUIRE s.scheme_id IS UNIQUE",
-            "CREATE CONSTRAINT actor_id IF NOT EXISTS FOR (a:Actor) REQUIRE a.actor_id IS UNIQUE",
-            "CREATE CONSTRAINT asset_id IF NOT EXISTS FOR (a:Asset) REQUIRE a.asset_id IS UNIQUE",
-            "CREATE CONSTRAINT beneficiary_id IF NOT EXISTS FOR (b:Beneficiary) REQUIRE b.beneficiary_id IS UNIQUE",
-            "CREATE CONSTRAINT evidence_id IF NOT EXISTS FOR (e:Evidence) REQUIRE e.evidence_id IS UNIQUE",
-            "CREATE CONSTRAINT event_id IF NOT EXISTS FOR (e:Event) REQUIRE e.event_id IS UNIQUE"
-        ]
-        for c in constraints:
-            session.run(c)
-
-        # --- 2. LOAD REGIONS ---
+        # --- 1. LOAD REGIONS ---
         print("Loading Regions...")
         df_reg = pd.read_csv(DATA_DIR / "regions.csv").fillna("")
         for _, row in df_reg.iterrows():
