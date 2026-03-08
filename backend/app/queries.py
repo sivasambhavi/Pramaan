@@ -37,12 +37,21 @@ ORDER BY a.name
 
 WARD_GAPS = """
 MATCH (s:Scheme)-[:FUNDS]->(a:Asset)-[:LOCATED_IN]->(w:Region {region_id: $ward_id})
-WITH s, count(DISTINCT a) AS asset_count
+OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
+WITH s,
+     count(DISTINCT a) AS asset_count,
+     count(DISTINCT CASE WHEN e IS NOT NULL THEN a END) AS proven_count
 RETURN s.scheme_id   AS scheme_id,
        s.name        AS scheme_name,
-       CASE WHEN asset_count = 0 THEN 'no_assets' ELSE 'partial' END AS gap_type,
-       asset_count   AS linked_assets
-ORDER BY asset_count ASC
+       CASE
+           WHEN asset_count = 0              THEN 'no_assets'
+           WHEN proven_count = asset_count   THEN 'complete'
+           WHEN proven_count > 0             THEN 'partial'
+           ELSE 'no_evidence'
+       END            AS gap_type,
+       asset_count    AS linked_assets,
+       proven_count   AS proven_assets
+ORDER BY proven_count ASC
 """
 
 WARD_DELIVERY_SCORE = """

@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     pramaan_env: str = "development"
     groq_api_key: str = ""
     google_api_key: str = ""
+    api_base_url: str = "http://localhost:8000"
 
     class Config:
         env_file = ".env"

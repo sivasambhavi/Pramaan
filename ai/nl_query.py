@@ -5,10 +5,13 @@ Supports 3 fixed demo questions via keyword matching.
 No LLM needed — deterministic routing for demo reliability.
 """
 
+import os
 import httpx
 from typing import Any
+from dotenv import load_dotenv
 
-BASE_URL = "http://localhost:8000"
+load_dotenv()
+BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 # ---------------------------------------------------------------------------
 # Question templates
@@ -34,14 +37,15 @@ def _match_question(question: str) -> str | None:
     """Match user input to one of the 3 fixed question keys."""
     q = question.lower()
 
-    if any(kw in q for kw in ["built", "ward 45", "constructed", "2 years", "assets"]):
-        return "q1"
+    # Q3 checked first — "missing", "incomplete", "gap" are strong signals
+    if any(kw in q for kw in ["scheme", "low", "gap", "score", "delivery score", "missing", "not performing", "incomplete"]):
+        return "q3"
 
     if any(kw in q for kw in ["gali 7", "gali no", "drain", "delivery chain", "proof chain"]):
         return "q2"
 
-    if any(kw in q for kw in ["scheme", "low", "gap", "score", "delivery score"]):
-        return "q3"
+    if any(kw in q for kw in ["built", "ward 45", "constructed", "2 years", "assets"]):
+        return "q1"
 
     return None
 
