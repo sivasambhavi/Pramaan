@@ -6,6 +6,8 @@ class Settings(BaseSettings):
     neo4j_user: str = "neo4j"
     neo4j_password: str = "password"
     pramaan_env: str = "development"
+    groq_api_key: str = ""
+    google_api_key: str = ""
 
     class Config:
         env_file = ".env"
