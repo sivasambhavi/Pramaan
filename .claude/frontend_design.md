@@ -2,7 +2,7 @@
 **Owner:** Sreenu
 **Stack:** Streamlit + Plotly + streamlit-agraph + streamlit-extras
 **Theme:** Dark governance-intelligence platform (not a data dashboard)
-**Demo target:** 3–4 min smooth walkthrough, offline-capable
+**Demo target:** 3–4 min smooth walkthrough, offline-capable; judges see 3–4 main screens live, others mentioned briefly
 
 ---
 
@@ -241,6 +241,13 @@ div[data-testid="stDataFrame"] {
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.06);
 }
+
+/* ── Glowing progress bar ─────────────────────────── */
+.stProgress > div > div {
+  background: linear-gradient(90deg, #1A56DB, #4C8EDA);
+  box-shadow: 0 0 8px rgba(76, 142, 218, 0.6);
+  border-radius: 4px;
+}
 </style>
 """, unsafe_allow_html=True)
 ```
@@ -344,6 +351,10 @@ for asset in assets:
     # Make clickable — store selected asset in st.session_state
 ```
 
+### Enhancements
+- Pre-select Ward 45 — never show an empty screen on load.
+- Wrap donut chart + asset table in `st.tabs(["Assets", "Schemes", "Gaps"])` to reduce clutter; charts go inside "Schemes" tab.
+
 ---
 
 ## Screen 2 — Proof Chain Viewer (`02_🧷_Proof_Chain.py`)
@@ -432,6 +443,10 @@ filled = sum([
 st.progress(filled / total_steps, text=f"Chain completeness: {filled}/{total_steps} steps")
 ```
 
+### Enhancements
+- Auto-load `ASSET_DRAIN_GALI7` if `st.session_state["selected_asset"]` is not set — never open to a blank chain.
+- Add horizontal breadcrumb at top: `Scheme → Asset → Region → Evidence → Beneficiaries`.
+
 ---
 
 ## Screen 3 — Gap Analysis (`03_📊_Gap_Analysis.py`)
@@ -496,6 +511,9 @@ fig.update_layout(barmode="group", paper_bgcolor="#1A1F2E",
                   plot_bgcolor="#1A1F2E", font_color="white")
 st.plotly_chart(fig, use_container_width=True)
 ```
+
+### Enhancement
+Add a "What would it take to reach 100%?" box at the bottom — for each `partial` or `no_evidence` scheme, list the missing step as a bullet (e.g. "SFC: needs evidence for 41 assets").
 
 ---
 
@@ -731,7 +749,19 @@ if question and (ask or q1 or q2 or q3):
 
     if result["answer_type"] == "asset_list":
         st.markdown(f"→ **{result['total']} assets** found in Ward 45")
-        st.dataframe(result["assets"])
+        # Bar chart by asset type
+        import pandas as pd
+        df = pd.DataFrame(result["assets"])
+        type_counts = df["type"].value_counts().reset_index()
+        type_counts.columns = ["type", "count"]
+        fig = go.Figure(go.Bar(
+            x=type_counts["type"], y=type_counts["count"],
+            marker_color="#4C8EDA",
+        ))
+        fig.update_layout(paper_bgcolor="#1A1F2E", plot_bgcolor="#1A1F2E",
+                          font_color="white", margin=dict(t=20, b=20))
+        st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(df, use_container_width=True)
 
     elif result["answer_type"] == "proof_chain":
         st.markdown(f"→ Full chain for **{result['asset']['name']}**")
@@ -739,12 +769,31 @@ if question and (ask or q1 or q2 or q3):
 
     elif result["answer_type"] == "gap_analysis":
         score = result["delivery_score"]["delivery_score"]
-        st.markdown(f"→ Delivery Score: **{score}%**")
-        st.dataframe(result["gaps"])
+        # Inline gauge (reuse Screen 1 gauge component)
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number", value=score,
+            title={"text": "Delivery Score", "font": {"color": "white"}},
+            gauge={
+                "axis": {"range": [0, 100]},
+                "bar": {"color": "#4C8EDA"},
+                "steps": [
+                    {"range": [0, 40],  "color": "#E74C3C"},
+                    {"range": [40, 70], "color": "#F39C12"},
+                    {"range": [70, 100], "color": "#2ECC71"},
+                ],
+            },
+            number={"suffix": "%", "font": {"color": "white"}},
+        ))
+        fig.update_layout(paper_bgcolor="#1A1F2E", font_color="white", height=220)
+        st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(result["gaps"], use_container_width=True)
 
     elif result["answer_type"] == "unrecognised":
         st.warning(result["error"])
         st.markdown("**Try:** " + " | ".join(result["supported_questions"]))
+
+    st.markdown('<p style="font-size:0.75rem; color:#A0AEB4;">Source: Neo4j · Ward 45 · REG_W45</p>',
+                unsafe_allow_html=True)
 ```
 
 ---
@@ -801,7 +850,7 @@ Every screen should communicate: *"This is serious, data-backed, production-grad
 
 ### Visual Identity
 
-**Logo / Brand mark** (top of sidebar)
+**Logo / Brand mark + demo script** (top of sidebar)
 ```python
 st.sidebar.markdown("""
 <div style="padding: 16px 0 24px 0; border-bottom: 1px solid rgba(76,142,218,0.2); margin-bottom: 16px;">
@@ -811,6 +860,14 @@ st.sidebar.markdown("""
   <div style="font-size: 0.7rem; color: #A0AEB4; letter-spacing: 0.12em; text-transform: uppercase;">
     Governance Intelligence
   </div>
+</div>
+
+<div style="font-size: 0.75rem; color: #9CA3AF; line-height: 1.8;">
+  <strong style="color: #E2E8F0;">Demo path</strong><br/>
+  1️⃣ Ward Overview<br/>
+  2️⃣ Proof Chain<br/>
+  3️⃣ Gaps or Graph<br/>
+  4️⃣ Live Ingestion<br/>
 </div>
 """, unsafe_allow_html=True)
 ```
@@ -959,3 +1016,5 @@ if st.button("📋 Load Demo Text"):
 - No uncolored plain text status — always use badge/glow/color
 - No lorem ipsum placeholder text — every stub should show "Coming soon" with a styled card
 - No horizontal scrollbars — keep all content within `layout="wide"` bounds
+
+> Every screen must communicate: **"This is a governance intelligence platform, not just a dashboard."**
