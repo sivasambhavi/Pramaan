@@ -1,0 +1,70 @@
+{
+  "regions": [
+    {
+      "region_id": "REG_W45",
+      "name": "Ward 45",
+      "type": "ward",
+      "parent_region_id": "REG_SHAHDARA_SOUTH"
+    },
+    {
+      "region_id": "REG_W45_GALI7",
+      "name": "Gali No. 7",
+      "type": "street",
+      "parent_region_id": "REG_W45"
+    },
+    {
+      "region_id": "REG_SHAHDARA_SOUTH",
+      "name": "Shahdara South",
+      "type": "zone",
+      "parent_region_id": ""
+    }
+  ],
+  "schemes": [
+    {
+      "scheme_id": "SCH_SFC",
+      "name": "SFC Local Development Grants",
+      "ministry": "",
+      "category": ""
+    }
+  ],
+  "actors": [
+    {
+      "actor_id": "ACT_MCD_SHAHDARA_WORKS",
+      "name": "MCD Shahdara South Works Department",
+      "type": "government",
+      "region_id": "REG_SHAHDARA_SOUTH"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "ASSET_DRAIN_GALI7",
+      "name": "storm-water drain",
+      "type": "drain",
+      "region_id": "REG_W45_GALI7",
+      "scheme_id": "SCH_SFC",
+      "actor_id": "ACT_MCD_SHAHDARA_WORKS",
+      "cost": 1200000,
+      "status": "completed"
+    }
+  ],
+  "beneficiaries": [
+    {
+      "beneficiary_id": "BEN_W45_GALI7_SFC",
+      "scheme_id": "SCH_SFC",
+      "region_id": "REG_W45_GALI7",
+      "count": 100,
+      "description": "households affected by waterlogging"
+    }
+  ],
+  "evidence": [],
+  "events": [
+    {
+      "event_id": "EVT_DRAIN_GALI7_COMPLETION",
+      "name": "Completion of storm-water drain",
+      "event_type": "completion",
+      "date": "March 2024",
+      "asset_id": "ASSET_DRAIN_GALI7"
+    }
+  ],
+  "_source": "llm"
+}
