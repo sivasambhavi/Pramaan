@@ -1669,10 +1669,10 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
 ## Document Control
 
 **Prepared by:** Team Lead  
-**Version:** 2.0 (Major revision — governance delivery framing)  
-**Date:** March 7, 2026  
-**Previous Version:** 0.1 (Feb 19, 2026 — climate-food-security framing)  
-**Next Review:** March 10, 2026 (after data availability audit)
+**Version:** 2.1 (MVP Implementation Complete)  
+**Date:** March 9, 2026  
+**Previous Version:** 2.0 (March 7, 2026 — Major revision)  
+**Next Review:** Post-Hackathon Showcase
 
 **Change Log:**
 
@@ -1680,7 +1680,8 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
 |---------|------|--------|---------|
 | 0.1 | 2026-02-19 | Team Lead | Initial draft with climate-food-security scenario |
 | 2.0 | 2026-03-07 | Team Lead | Major pivot: governance delivery proof framing; new personas (elected reps, MCD officials); new demo scenario (ward-level delivery chains); new data sources (Delhi-specific); evidence layer added; gap analysis feature added; competitive landscape analysis; data procurement challenges documented; 21-day timeline |
+| 2.1 | 2026-03-09 | Team Lead | Implemented 100% of MVP features and 15 prioritized gap fixes. Deployed PyVis interactive graph visualization, offline-capable AI news ingestion (Llama-3.3-70b), local Streamlit image server for evidence photos, dynamic Ward tracking with Delivery Scores, and full PRAMAAN UI branding. |
 
 ---
 
-**End of PRD v2.0**
+**End of PRD v2.1**

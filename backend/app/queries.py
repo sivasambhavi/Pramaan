@@ -31,7 +31,9 @@ RETURN a.asset_id  AS asset_id,
        a.name      AS name,
        a.type      AS type,
        a.status    AS status,
-       a.cost      AS cost
+       a.cost      AS cost,
+       a.lat       AS lat,
+       a.lon       AS lon
 ORDER BY a.name
 """
 
@@ -45,6 +47,25 @@ RETURN s.scheme_id   AS scheme_id,
 ORDER BY asset_count ASC
 """
 
+LIST_ALL_ASSETS = """
+MATCH (a:Asset)
+RETURN a.asset_id AS asset_id, a.name AS name, a.type AS type
+ORDER BY a.name
+"""
+
+# ---------------------------------------------------------------------------
+# Mapping of Labels to their Primary Key property names
+# ---------------------------------------------------------------------------
+PK_MAP = {
+    "Region": "region_id",
+    "Scheme": "scheme_id",
+    "Actor": "actor_id",
+    "Asset": "asset_id",
+    "Beneficiary": "beneficiary_id",
+    "Evidence": "evidence_id",
+    "Event": "event_id",
+}
+
 WARD_DELIVERY_SCORE = """
 MATCH (w:Region {region_id: $ward_id})
 OPTIONAL MATCH (a:Asset)-[:LOCATED_IN]->(w)
@@ -54,7 +75,7 @@ WITH count(DISTINCT a) AS total_assets,
 RETURN total_assets,
        proven_assets,
        CASE WHEN total_assets = 0 THEN 0.0
-            ELSE round(100.0 * proven_assets / total_assets, 1)
+            ELSE round(100.0 * toFloat(proven_assets) / total_assets, 1)
        END AS delivery_score
 """
 
@@ -66,13 +87,19 @@ ASSET_CHAIN = """
 MATCH (a:Asset {asset_id: $asset_id})
 OPTIONAL MATCH (s:Scheme)-[:FUNDS]->(a)
 OPTIONAL MATCH (a)-[:BUILT_BY]->(act:Actor)
-OPTIONAL MATCH (a)-[:LOCATED_IN]->(r:Region {type: 'street'})
-OPTIONAL MATCH (a)-[:LOCATED_IN]->(w:Region {type: 'ward'})
+OPTIONAL MATCH (a)-[:LOCATED_IN]->(street:Region {type: 'street'})
+OPTIONAL MATCH (a)-[:LOCATED_IN]->(ward:Region {type: 'ward'})
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
-OPTIONAL MATCH (b:Beneficiary)-[:LIVES_IN]->(:Region)<-[:LOCATED_IN]-(a)
-RETURN a, s, act, r, w,
+OPTIONAL MATCH (s)-[:BENEFITS]->(b:Beneficiary)
+RETURN a, s, act, street, ward,
        collect(DISTINCT e) AS evidence_list,
        collect(DISTINCT b) AS beneficiaries
+"""
+
+GET_WARDS_WITH_ASSETS = """
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region {type: 'ward'})
+RETURN DISTINCT r.region_id AS region_id, r.name AS name, count(a) AS asset_count
+ORDER BY asset_count DESC
 """
 
 # ---------------------------------------------------------------------------
@@ -87,26 +114,48 @@ ALLOWED_LABELS = {
 ALLOWED_REL_TYPES = {
     "LOCATED_IN", "REPRESENTS", "FUNDS", "BUILT_BY",
     "BENEFITS", "LIVES_IN", "PROVES", "CAPTURED_AT", "RELATED_TO",
+    "SANCTIONS", "PROVIDES", "IMPLEMENTS", "MANAGES", "OPERATES",
+    "SERVES", "MONITORS", "APPROVES",
+}
+
+# Map AI-generated relation types -> canonical types for consistency
+REL_TYPE_NORMALIZER = {
+    "SANCTIONS": "FUNDS",
+    "PROVIDES": "BENEFITS",
+    "IMPLEMENTS": "BUILT_BY",
+    "MANAGES": "BUILT_BY",
+    "OPERATES": "BUILT_BY",
+    "SERVES": "BENEFITS",
+    "MONITORS": "RELATED_TO",
+    "APPROVES": "FUNDS",
 }
 
 
 def build_merge_entity_query(label: str) -> str:
-    """Return a MERGE query for a whitelisted node label."""
+    """Return a MERGE query for a whitelisted node label with its specific PK."""
     if label not in ALLOWED_LABELS:
         raise ValueError(f"Unknown entity label: {label!r}")
+    
+    pk_field = PK_MAP.get(label, "id")
     return f"""
-    MERGE (n:{label} {{id: $id}})
+    MERGE (n:{label} {{{pk_field}: $id}})
     SET n += $properties
     RETURN n
     """
 
 
-def build_merge_relation_query(rel_type: str) -> str:
-    """Return a MERGE query for a whitelisted relationship type."""
+def build_merge_relation_query(rel_type: str, from_label: str, to_label: str) -> str:
+    """Return a MERGE query for a whitelisted relationship type between specific labels."""
+    # Normalize AI-generated variants to canonical types
+    rel_type = REL_TYPE_NORMALIZER.get(rel_type, rel_type)
     if rel_type not in ALLOWED_REL_TYPES:
         raise ValueError(f"Unknown relationship type: {rel_type!r}")
+    
+    from_pk = PK_MAP.get(from_label, "id")
+    to_pk = PK_MAP.get(to_label, "id")
+
     return f"""
-    MATCH (a {{id: $from_id}}), (b {{id: $to_id}})
+    MATCH (a:{from_label} {{{from_pk}: $from_id}}), (b:{to_label} {{{to_pk}: $to_id}})
     MERGE (a)-[r:{rel_type}]->(b)
     SET r += $properties
     RETURN r

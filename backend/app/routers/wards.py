@@ -1,8 +1,15 @@
 from fastapi import APIRouter, HTTPException
 from app.neo4j_client import get_session
-from app.queries import LIST_WARDS, WARD_ASSETS, WARD_GAPS, WARD_DELIVERY_SCORE
+from app.queries import LIST_WARDS, WARD_ASSETS, WARD_GAPS, WARD_DELIVERY_SCORE, GET_WARDS_WITH_ASSETS
 
 router = APIRouter()
+
+
+@router.get("/with-assets", summary="List wards that have at least 1 asset")
+def wards_with_assets():
+    with get_session() as session:
+        result = session.run(GET_WARDS_WITH_ASSETS)
+        return [{"region_id": r["region_id"], "name": r["name"], "asset_count": r["asset_count"]} for r in result]
 
 
 @router.get("/", summary="List all wards")

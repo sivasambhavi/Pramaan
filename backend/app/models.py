@@ -106,6 +106,8 @@ class AssetSummary(BaseModel):
     name: str
     type: Optional[str] = None
     status: Optional[str] = None
+    lat: Optional[float] = None
+    lon: Optional[float] = None
 
 
 class WardAssetsResponse(BaseModel):
@@ -155,7 +157,9 @@ class IngestEntity(BaseModel):
 
 class IngestRelation(BaseModel):
     from_id: str
+    from_label: str
     to_id: str
+    to_label: str
     type: str                            # must be in ALLOWED_REL_TYPES
     properties: dict = {}
 

@@ -45,12 +45,12 @@ Design and populate a clean, governance-focused ontology and seed dataset for 1 
     *   Document the target JSON structure for extraction to align with CSV/ontology.
 
 **4. Acceptance criteria**
-- [ ] Ontology table (entities, properties, relationships) documented and agreed by team.
-- [ ] `data/*.csv` present with:
-    - [ ] ≥5 full chains.
-    - [ ] No broken references.
-- [ ] Delivery Score formula + gap definitions written in README or a short doc.
-- [ ] Seed data loads cleanly into Neo4j (Person 2 confirms).
+- [x] Ontology table (entities, properties, relationships) documented and agreed by team.
+- [x] `data/*.csv` present with:
+    - [x] ≥5 full chains.
+    - [x] No broken references.
+- [x] Delivery Score formula + gap definitions written in README or a short doc.
+- [x] Seed data loads cleanly into Neo4j (Person 2 confirms).
 
 ---
 
@@ -106,10 +106,10 @@ Implement the Neo4j graph + FastAPI backend that powers all MVP features: ward o
     *   Handle errors gracefully (no crashes if ward or asset not found).
 
 **4. Acceptance criteria**
-- [ ] `uvicorn backend.app.main:app` runs locally.
-- [ ] Seed data loads via script without errors.
-- [ ] All 4 GET endpoints return valid JSON and pass basic tests.
-- [ ] `POST /ingest/entities` correctly creates/links at least one AI-ingested asset/event and can be seen in queries.
+- [x] `uvicorn backend.app.main:app` runs locally.
+- [x] Seed data loads via script without errors.
+- [x] All 4 GET endpoints return valid JSON and pass basic tests.
+- [x] `POST /ingest/entities` correctly creates/links at least one AI-ingested asset/event and can be seen in queries.
 
 ---
 
@@ -182,10 +182,10 @@ Build the Streamlit UI and AI integration that make PRAMAAN feel intelligent and
             *   Ward → assets → one chain → question → live ingestion.
 
 **4. Acceptance criteria**
-- [ ] `streamlit run frontend/app.py` runs locally.
-- [ ] From UI, user can:
-    - [ ] See ward(s) and Delivery Score.
-    - [ ] Click asset and view full chain with images.
-    - [ ] Trigger each of the 3 fixed questions and see correct responses.
-    - [ ] Paste demo PIB text, see extracted entities, ingest, and see updated data.
-- [ ] LLM dependency is optional at demo time (thanks to cached responses).
+- [x] `streamlit run frontend/app.py` runs locally.
+- [x] From UI, user can:
+    - [x] See ward(s) and Delivery Score.
+    - [x] Click asset and view full chain with images.
+    - [x] Trigger each of the 3 fixed questions and see correct responses.
+    - [x] Paste demo PIB text, see extracted entities, ingest, and see updated data.
+- [x] LLM dependency is optional at demo time (thanks to cached responses).

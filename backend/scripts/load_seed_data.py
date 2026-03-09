@@ -69,7 +69,7 @@ def main() -> None:
         for _, row in df_assets.iterrows():
             session.run("""
                 MERGE (a:Asset {asset_id: $asset_id})
-                SET a.name = $name, a.type = $type, a.cost = $cost, a.status = $status
+                SET a.name = $name, a.type = $type, a.cost = $cost, a.status = $status, a.lat = $lat, a.lon = $lon
             """, row.to_dict())
             # Relationships
             if row['region_id']:

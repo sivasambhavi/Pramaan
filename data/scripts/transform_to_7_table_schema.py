@@ -67,13 +67,13 @@ pd.DataFrame(actors).to_csv(os.path.join(output_dir, "actors.csv"), index=False)
 print("Generating assets.csv...")
 assets = []
 
-# Example assets from user request
+# Example assets from user request (with local coordinates)
 req_assets = [
-    {'asset_id': 'ASSET_DRAIN_GALI7', 'name': 'Construction of storm-water drain in Gali No. 7, Shahdara', 'type': 'drain', 'region_id': 'REG_W45_GALI7', 'scheme_id': 'SCH_SFC', 'actor_id': 'ACT_MCD_SHAHDARA_WORKS', 'cost': 1200000, 'status': 'completed'},
-    {'asset_id': 'ASSET_ROAD_GALI7', 'name': 'Resurfacing of internal road in Gali No. 7, Shahdara', 'type': 'road', 'region_id': 'REG_W45_GALI7', 'scheme_id': 'SCH_SFC', 'actor_id': 'ACT_CONTRACTOR_INFRA_1', 'cost': 900000, 'status': 'completed'},
-    {'asset_id': 'ASSET_TOILET_MARKET', 'name': 'Renovation of public toilet near Shahdara Market', 'type': 'toilet', 'region_id': 'REG_W45_MARKET_ROAD', 'scheme_id': 'SCH_SWACHH', 'actor_id': 'ACT_MCD_SHAHDARA_SANITATION', 'cost': 800000, 'status': 'completed'},
-    {'asset_id': 'ASSET_HOUSING_COLONYY', 'name': 'PMAY-Urban housing cluster in Colony Y (30 units)', 'type': 'housing', 'region_id': 'REG_W45_COLONY_Y', 'scheme_id': 'SCH_PMAY', 'actor_id': 'ACT_MCD_SHAHDARA_WORKS', 'cost': 30000000, 'status': 'completed'},
-    {'asset_id': 'ASSET_LIGHTS_BLOCKA', 'name': 'LED streetlight upgrade on Block A internal roads', 'type': 'streetlight', 'region_id': 'REG_W45_BLOCKA', 'scheme_id': 'SCH_LOCAL_LIGHTS', 'actor_id': 'ACT_CONTRACTOR_LIGHTS_1', 'cost': 600000, 'status': 'completed'}
+    {'asset_id': 'ASSET_DRAIN_GALI7', 'name': 'Construction of storm-water drain in Gali No. 7, Shahdara', 'type': 'drain', 'region_id': 'REG_W45_GALI7', 'scheme_id': 'SCH_SFC', 'actor_id': 'ACT_MCD_SHAHDARA_WORKS', 'cost': 1200000, 'status': 'completed', 'lat': 28.6692, 'lon': 77.2945},
+    {'asset_id': 'ASSET_ROAD_GALI7', 'name': 'Resurfacing of internal road in Gali No. 7, Shahdara', 'type': 'road', 'region_id': 'REG_W45_GALI7', 'scheme_id': 'SCH_SFC', 'actor_id': 'ACT_CONTRACTOR_INFRA_1', 'cost': 900000, 'status': 'completed', 'lat': 28.6695, 'lon': 77.2948},
+    {'asset_id': 'ASSET_TOILET_MARKET', 'name': 'Renovation of public toilet near Shahdara Market', 'type': 'toilet', 'region_id': 'REG_W45_MARKET_ROAD', 'scheme_id': 'SCH_SWACHH', 'actor_id': 'ACT_MCD_SHAHDARA_SANITATION', 'cost': 800000, 'status': 'completed', 'lat': 28.6685, 'lon': 77.2955},
+    {'asset_id': 'ASSET_HOUSING_COLONYY', 'name': 'PMAY-Urban housing cluster in Colony Y (30 units)', 'type': 'housing', 'region_id': 'REG_W45_COLONY_Y', 'scheme_id': 'SCH_PMAY', 'actor_id': 'ACT_MCD_SHAHDARA_WORKS', 'cost': 30000000, 'status': 'completed', 'lat': 28.6670, 'lon': 77.2960},
+    {'asset_id': 'ASSET_LIGHTS_BLOCKA', 'name': 'LED streetlight upgrade on Block A internal roads', 'type': 'streetlight', 'region_id': 'REG_W45_BLOCKA', 'scheme_id': 'SCH_LOCAL_LIGHTS', 'actor_id': 'ACT_CONTRACTOR_LIGHTS_1', 'cost': 600000, 'status': 'completed', 'lat': 28.6700, 'lon': 77.2965}
 ]
 assets.extend(req_assets)
 
@@ -94,15 +94,26 @@ try:
         asset_id = f"ASSET_WB_{data_dict.get('objectid', 'UNK')}"
         village = data_dict.get('village', 'Unknown')
         
+        # Extract coordinates
+        point = placemark.find('.//kml:Point/kml:coordinates', namespace)
+        lat, lon = 28.6692, 77.2945 # Default to Shahdara
+        if point is not None:
+            coords = point.text.strip().split(',')
+            if len(coords) >= 2:
+                lon = float(coords[0])
+                lat = float(coords[1])
+        
         assets.append({
             'asset_id': asset_id,
             'name': f"Water Body - {village}",
             'type': 'water_body',
-            'region_id': 'REG_W45', # Default to demo ward
-            'scheme_id': 'SCH_SFC', # Assumed funding
-            'actor_id': 'ACT_MCD_SHAHDARA_WORKS', # Assumed actor
-            'cost': 500000, # Placeholder
-            'status': 'completed'
+            'region_id': 'REG_W45',
+            'scheme_id': 'SCH_SFC',
+            'actor_id': 'ACT_MCD_SHAHDARA_WORKS',
+            'cost': 500000,
+            'status': 'completed',
+            'lat': lat,
+            'lon': lon
         })
         if i >= 50: break # Only 50 for demo
 except Exception as e:
