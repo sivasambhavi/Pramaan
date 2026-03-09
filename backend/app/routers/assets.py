@@ -5,10 +5,10 @@ from app.queries import ASSET_CHAIN, LIST_ALL_ASSETS
 router = APIRouter()
 
 @router.get("/list", summary="List all assets in the knowledge graph")
-def list_all_assets():
+def list_all_assets(ward_region_id: str = "REG_W45"):
     with get_session() as session:
-        result = session.run(LIST_ALL_ASSETS)
-        assets = [{"asset_id": r["asset_id"], "name": r["name"], "type": r["type"]} for r in result]
+        result = session.run(LIST_ALL_ASSETS, ward_region_id=ward_region_id)
+        assets = [{"asset_id": r["asset_id"], "name": r["name"], "type": r["type"], "status": r["status"]} for r in result]
     return {"assets": assets}
 
 
@@ -28,6 +28,7 @@ def asset_chain(asset_id: str):
         "built_by": dict(record["act"]) if record["act"] else None,
         "region": dict(record["street"]) if record["street"] else None,
         "ward": dict(record["ward"]) if record["ward"] else None,
-        "evidence": [dict(e) for e in record["evidence_list"]],
-        "beneficiaries": [dict(b) for b in record["beneficiaries"]],
+        "evidence": [dict(e) for e in record["evidence_list"] if e is not None],
+        "people_served": record["people_served"],
+        "beneficiary_desc": record["beneficiary_desc"],
     }

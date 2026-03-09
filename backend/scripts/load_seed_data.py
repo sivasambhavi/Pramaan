@@ -85,7 +85,7 @@ def main() -> None:
         for _, row in df_ben.iterrows():
             session.run("""
                 MERGE (b:Beneficiary {beneficiary_id: $beneficiary_id})
-                SET b.count = $count, b.description = $description
+                SET b.count = $count, b.description = $description, b.scheme_id = $scheme_id, b.region_id = $region_id
             """, row.to_dict())
             if row['scheme_id']:
                 session.run("MATCH (b:Beneficiary {beneficiary_id: $id}) MATCH (s:Scheme {scheme_id: $sid}) MERGE (s)-[:BENEFITS]->(b)", {"id": row['beneficiary_id'], "sid": row['scheme_id']})

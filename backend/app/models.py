@@ -172,3 +172,4 @@ class IngestPayload(BaseModel):
 class IngestResponse(BaseModel):
     entities_created: int
     relations_created: int
+    delivery_chain: Optional[dict] = None

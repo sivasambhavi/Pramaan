@@ -22,3 +22,16 @@ async def scrape_and_analyze(q: str = Query(..., description="Query to search fo
         return extracted_data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+from pydantic import BaseModel
+class AnalyzeRequest(BaseModel):
+    text: str
+
+@router.post("/analyze")
+async def analyze_text(payload: AnalyzeRequest):
+    """Analyze raw text to extract governance ontology."""
+    try:
+        extracted_data = ai_service.extract_governance_ontology(payload.text)
+        return extracted_data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

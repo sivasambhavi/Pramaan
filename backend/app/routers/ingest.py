@@ -48,7 +48,33 @@ def ingest_entities(payload: IngestPayload):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+    delivery_chain = None
+    try:
+        primary_asset_id = next((e.id for e in payload.entities if e.label == "Asset"), None)
+        if primary_asset_id:
+            from app.queries import ASSET_CHAIN
+            with get_session() as session:
+                res = session.run(ASSET_CHAIN, asset_id=primary_asset_id)
+                rec = res.single()
+                if rec and rec["a"]:
+                    ward_name = dict(rec["ward"]).get("name") if rec["ward"] else None
+                    street_name = dict(rec["street"]).get("name") if rec["street"] else None
+                    delivery_chain = {
+                        "asset_id": primary_asset_id,
+                        "asset_name": dict(rec["a"]).get("name", "Unknown"),
+                        "scheme": dict(rec["s"]) if rec["s"] else None,
+                        "actor": dict(rec["act"]) if rec["act"] else None,
+                        "region": {"ward": ward_name, "street": street_name},
+                        "people_served": rec["people_served"],
+                        "beneficiary_desc": rec["beneficiary_desc"],
+                        "evidence": [dict(e) for e in rec["evidence_list"] if e is not None],
+                        "matched_existing": entities_created == 0  # Approximation
+                    }
+    except Exception as e:
+        print(f"Error fetching delivery chain: {e}")
+
     return IngestResponse(
         entities_created=entities_created,
         relations_created=relations_created,
+        delivery_chain=delivery_chain
     )

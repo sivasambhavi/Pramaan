@@ -294,3 +294,7 @@ REG_W45_GALI7,Gali No. 7,street,REG_W45
 REG_W45_MARKET_ROAD,Shahdara Market Road,street,REG_W45
 REG_W45_BLOCKA,Block A Residential Pocket,street,REG_W45
 REG_W45_COLONY_Y,Colony Y Housing Cluster,street,REG_W45
+
+REG_W44,DMC Ward No - 44,ward,REG_SHAHDARA_SOUTH
+REG_W46,DMC Ward No - 46,ward,REG_SHAHDARA_SOUTH
+REG_W47,DMC Ward No - 47,ward,REG_SHAHDARA_SOUTH

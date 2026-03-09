@@ -1,0 +1,87 @@
+{
+  "articles": [
+    {
+      "title": "Delhi MCD completes Shahdara drain revamp under AMRUT 2.0",
+      "summary": "The Municipal Corporation of Delhi has successfully completed the desilting and modernization of the main Shahdara drain. Funded under the AMRUT 2.0 scheme by the Ministry of Housing and Urban Affairs, the Rs 1.5 crore project will benefit over 50,000 residents in Ward 45, improving sanitation and preventing waterlogging.",
+      "published": "Mon, 09 Mar 2026 10:00:00 GMT",
+      "link": "https://timesofindia.com/city/delhi/shahdara-drain-amrut"
+    }
+  ],
+  "entities": [
+    {
+      "id": "scheme_amrut_2",
+      "label": "Scheme",
+      "properties": {
+        "name": "AMRUT 2.0",
+        "ministry": "Ministry of Housing and Urban Affairs",
+        "category": "sanitation"
+      }
+    },
+    {
+      "id": "actor_mcd",
+      "label": "Actor",
+      "properties": {
+        "name": "Municipal Corporation of Delhi",
+        "type": "government"
+      }
+    },
+    {
+      "id": "reg_w45",
+      "label": "Region",
+      "properties": {
+        "name": "Ward 45",
+        "type": "ward",
+        "parent_region_id": "REG_W45"
+      }
+    },
+    {
+      "id": "asset_shahdara_drain",
+      "label": "Asset",
+      "properties": {
+        "name": "Main Shahdara Drain",
+        "type": "drain",
+        "cost": 15000000.0,
+        "status": "completed"
+      }
+    },
+    {
+      "id": "ben_shahdara",
+      "label": "Beneficiary",
+      "properties": {
+        "count": 50000,
+        "description": "Residents in Ward 45 benefiting from sanitation"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_id": "scheme_amrut_2",
+      "from_label": "Scheme",
+      "to_id": "asset_shahdara_drain",
+      "to_label": "Asset",
+      "type": "FUNDS"
+    },
+    {
+      "from_id": "asset_shahdara_drain",
+      "from_label": "Asset",
+      "to_id": "actor_mcd",
+      "to_label": "Actor",
+      "type": "BUILT_BY"
+    },
+    {
+      "from_id": "asset_shahdara_drain",
+      "from_label": "Asset",
+      "to_id": "reg_w45",
+      "to_label": "Region",
+      "type": "LOCATED_IN"
+    },
+    {
+      "from_id": "scheme_amrut_2",
+      "from_label": "Scheme",
+      "to_id": "ben_shahdara",
+      "to_label": "Beneficiary",
+      "type": "BENEFITS"
+    }
+  ],
+  "success": true
+}

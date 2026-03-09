@@ -8,6 +8,10 @@ import streamlit as st
 
 def main() -> None:
     st.set_page_config(page_title="Pramaan | Governance Proof Engine", layout="wide", page_icon="🛡️")
+    # Hide Live Ingestion from sidebar navigation (admin only via direct URL)
+    st.markdown("""
+    <style>[data-testid="stSidebarNav"] ul li:nth-child(4) { display: none; }</style>
+    """, unsafe_allow_html=True)
 
     # GAP-19: Home page branding
     st.markdown("""
@@ -53,7 +57,7 @@ def main() -> None:
 
     col_a, col_b, col_c = st.columns([1, 2, 1])
     with col_b:
-        st.page_link("pages/01_🏙_Ward_Map.py", label="🚀 Start Demo → Ward Map", use_container_width=True)
+        st.markdown("<div style='text-align:center'><p style='color:#8b949e;font-size:1.1em;'>Select <b>Ward Map</b> from the sidebar to begin.</p></div>", unsafe_allow_html=True)
 
     st.divider()
     st.markdown("""

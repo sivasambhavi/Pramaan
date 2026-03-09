@@ -57,10 +57,13 @@ ORDER BY proven_count ASC
 """
 
 LIST_ALL_ASSETS = """
-MATCH (a:Asset)
-RETURN a.asset_id AS asset_id, a.name AS name, a.type AS type
-ORDER BY a.name
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)
+WHERE r.region_id = $ward_region_id OR r.parent_region_id = $ward_region_id
+RETURN a.asset_id AS asset_id, a.name AS name, a.type AS type, a.status AS status, a.cost AS cost, 
+       r.region_id as region_id, r.name as region_name
+ORDER BY a.type, a.name
 """
+
 
 # ---------------------------------------------------------------------------
 # Mapping of Labels to their Primary Key property names
@@ -75,17 +78,28 @@ PK_MAP = {
     "Event": "event_id",
 }
 
-WARD_DELIVERY_SCORE = """
-MATCH (w:Region {region_id: $ward_id})
-OPTIONAL MATCH (a:Asset)-[:LOCATED_IN]->(w)
+# Return raw asset data so Python endpoint applies A/B verification criteria honestly
+WARD_ASSET_DETAIL = """
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)
+WHERE r.region_id = $ward_id OR r.parent_region_id = $ward_id
+OPTIONAL MATCH (s:Scheme)-[:FUNDS]->(a)
+OPTIONAL MATCH (a)-[:BUILT_BY]->(act:Actor)
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
-WITH count(DISTINCT a) AS total_assets,
-     count(DISTINCT CASE WHEN e IS NOT NULL THEN a END) AS proven_assets
-RETURN total_assets,
-       proven_assets,
-       CASE WHEN total_assets = 0 THEN 0.0
-            ELSE round(100.0 * toFloat(proven_assets) / total_assets, 1)
-       END AS delivery_score
+  WHERE e.url IS NOT NULL AND trim(e.url) <> '' AND e.url <> 'N/A'
+WITH a, s, act, collect(DISTINCT e.url) AS evidence_urls
+RETURN
+  a.asset_id  AS asset_id,
+  a.name      AS name,
+  a.type      AS type,
+  a.status    AS status,
+  a.cost      AS cost,
+  a.lat       AS lat,
+  a.lon       AS lon,
+  s.name      AS scheme_name,
+  s.scheme_id AS scheme_id,
+  act.name    AS actor_name,
+  evidence_urls
+ORDER BY a.name
 """
 
 # ---------------------------------------------------------------------------
@@ -99,16 +113,27 @@ OPTIONAL MATCH (a)-[:BUILT_BY]->(act:Actor)
 OPTIONAL MATCH (a)-[:LOCATED_IN]->(street:Region {type: 'street'})
 OPTIONAL MATCH (a)-[:LOCATED_IN]->(ward:Region {type: 'ward'})
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
-OPTIONAL MATCH (s)-[:BENEFITS]->(b:Beneficiary)
+OPTIONAL MATCH (b:Beneficiary) WHERE b.asset_id = a.asset_id
+WITH a, s, act, street, ward, e, b
+OPTIONAL MATCH (s)-[:BENEFITS]->(b2:Beneficiary)-[:LIVES_IN]->(ward) WHERE b IS NULL
+WITH a, s, act, street, ward, collect(DISTINCT e) AS evidence_list, b, b2
 RETURN a, s, act, street, ward,
-       collect(DISTINCT e) AS evidence_list,
-       collect(DISTINCT b) AS beneficiaries
+       evidence_list,
+       COALESCE(b.count, b2.count) AS people_served,
+       COALESCE(b.description, b2.description) AS beneficiary_desc
 """
 
 GET_WARDS_WITH_ASSETS = """
 MATCH (a:Asset)-[:LOCATED_IN]->(r:Region {type: 'ward'})
 RETURN DISTINCT r.region_id AS region_id, r.name AS name, count(a) AS asset_count
 ORDER BY asset_count DESC
+"""
+
+DISTRICT_COMPARISON = """
+MATCH (r:Region {type:'ward'})
+OPTIONAL MATCH (a:Asset)-[:LOCATED_IN]->(r)
+RETURN r.name AS ward_name, count(a) AS assets
+ORDER BY assets DESC
 """
 
 # ---------------------------------------------------------------------------
