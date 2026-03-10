@@ -4,6 +4,11 @@ Main entry point for the Streamlit frontend.
 """
 
 import streamlit as st
+import pandas as pd
+import requests
+import time
+import plotly.graph_objects as go
+from datetime import datetime
 
 
 def main() -> None:
@@ -27,37 +32,61 @@ def main() -> None:
     </div>
     """, unsafe_allow_html=True)
 
+    # Premium card styling
+    st.markdown("""
+    <style>
+        .feature-card {
+            background: #161B22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("""
-        <div style="background:#161B22;border-radius:12px;padding:24px;border:1px solid #30363d;text-align:center">
-            <div style="font-size:2em">🗺️</div>
-            <h3 style="color:#E63946;margin:8px 0">Ward Map</h3>
-            <p style="color:#8b949e;font-size:0.9em">Visualize infrastructure assets across Delhi wards with delivery scores and coverage gaps.</p>
+        <div class="feature-card">
+            <div>
+                <div style="font-size:2em">🗺️</div>
+                <h3 style="color:#E63946;margin:8px 0">Ward Map</h3>
+                <p style="color:#8b949e;font-size:0.9em">Visualize infrastructure assets across Delhi wards with delivery scores and coverage gaps.</p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
+        st.page_link("pages/01_🏙_Ward_Map.py", label="Explore Maps", icon="📍", use_container_width=True)
+
     with col2:
         st.markdown("""
-        <div style="background:#161B22;border-radius:12px;padding:24px;border:1px solid #30363d;text-align:center">
-            <div style="font-size:2em">🧷</div>
-            <h3 style="color:#f59e0b;margin:8px 0">Proof Chain</h3>
-            <p style="color:#8b949e;font-size:0.9em">Trace every rupee from scheme → agency → physical asset → evidence → beneficiary.</p>
+        <div class="feature-card">
+            <div>
+                <div style="font-size:2em">🧷</div>
+                <h3 style="color:#f59e0b;margin:8px 0">Proof Chain</h3>
+                <p style="color:#8b949e;font-size:0.9em">Trace every rupee from scheme → agency → physical asset → evidence → beneficiary.</p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
+        st.page_link("pages/02_🧷_Proof_Chain.py", label="Verify Chains", icon="🖇️", use_container_width=True)
+
     with col3:
         st.markdown("""
-        <div style="background:#161B22;border-radius:12px;padding:24px;border:1px solid #30363d;text-align:center">
-            <div style="font-size:2em">⚡</div>
-            <h3 style="color:#10b981;margin:8px 0">Live Ingestion</h3>
-            <p style="color:#8b949e;font-size:0.9em">Auto-scrape governance news and map extracted entities into the Neo4j knowledge graph using AI.</p>
+        <div class="feature-card">
+            <div>
+                <div style="font-size:2em">🔍</div>
+                <h3 style="color:#10b981;margin:8px 0">Governance Audit</h3>
+                <p style="color:#8b949e;font-size:0.9em">Interrogate the knowledge graph. Ask any question about what was built, funded, and proven.</p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
+        st.page_link("pages/06_❓_Questions.py", label="Open Audit", icon="🔎", use_container_width=True)
 
     st.markdown("<br/>", unsafe_allow_html=True)
-
-    col_a, col_b, col_c = st.columns([1, 2, 1])
-    with col_b:
-        st.markdown("<div style='text-align:center'><p style='color:#8b949e;font-size:1.1em;'>Select <b>Ward Map</b> from the sidebar to begin.</p></div>", unsafe_allow_html=True)
 
     st.divider()
     st.markdown("""

@@ -49,9 +49,9 @@ DELHI_ZONES = {
 
 ZONE_WARDS = {
     "Shahdara North Zone": {
-        "DMC Ward No - 45": "REG_W45",
-        "DMC Ward No - 46": "REG_W46",
-        "DMC Ward No - 47": "REG_W47",
+        "DMC Ward No - 45": "WARD45_SHAHDARA",
+        "DMC Ward No - 46": "WARD46_KRISHNANAGAR",
+        "DMC Ward No - 47": "WARD47_GANDHINAGAR",
         "DMC Ward No - 48": "REG_W48",
         "DMC Ward No - 49": "REG_W49",
     },
@@ -60,14 +60,14 @@ ZONE_WARDS = {
         "DMC Ward No - 51": "REG_W51",
         "DMC Ward No - 52": "REG_W52",
     },
-    "City Zone":    {"City Ward 1": "REG_W45", "City Ward 2": "REG_W45"},
-    "Central Zone": {"Central Ward 1": "REG_W45", "Central Ward 2": "REG_W45"},
-    "West Zone":    {"West Ward 1": "REG_W45", "West Ward 2": "REG_W45"},
-    "South Zone":   {"South Ward 1": "REG_W45", "South Ward 2": "REG_W45"},
-    "Najafgarh Zone": {"Najafgarh Ward 1": "REG_W45"},
-    "Narela Zone":  {"Narela Ward 1": "REG_W45"},
-    "NDMC Zone":    {"NDMC Ward 1": "REG_W45"},
-    "Cantonment Zone": {"Cantonment Ward 1": "REG_W45"},
+    "City Zone":    {"City Ward 1": "WARD45_SHAHDARA", "City Ward 2": "WARD45_SHAHDARA"},
+    "Central Zone": {"Central Ward 1": "WARD45_SHAHDARA", "Central Ward 2": "WARD45_SHAHDARA"},
+    "West Zone":    {"West Ward 1": "WARD45_SHAHDARA", "West Ward 2": "WARD45_SHAHDARA"},
+    "South Zone":   {"South Ward 1": "WARD45_SHAHDARA", "South Ward 2": "WARD45_SHAHDARA"},
+    "Najafgarh Zone": {"Najafgarh Ward 1": "WARD45_SHAHDARA"},
+    "Narela Zone":  {"Narela Ward 1": "WARD45_SHAHDARA"},
+    "NDMC Zone":    {"NDMC Ward 1": "WARD45_SHAHDARA"},
+    "Cantonment Zone": {"Cantonment Ward 1": "WARD45_SHAHDARA"},
 }
 
 # ──────────────────────────────────────────────────────────────
@@ -155,7 +155,7 @@ def render_geo_selector(sidebar: bool = True) -> dict:
     )
 
     # ── Ward ─────────────────────────────────────────────────
-    ward_map  = ZONE_WARDS.get(zone, {DEFAULT_WARD: "REG_W45"})
+    ward_map  = ZONE_WARDS.get(zone, {DEFAULT_WARD: "WARD45_SHAHDARA"})
     ward_names = list(ward_map.keys())
     def_ward  = ss.get("ward_name", DEFAULT_WARD)
     if def_ward not in ward_names:

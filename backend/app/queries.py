@@ -26,8 +26,8 @@ ORDER BY w.name
 
 WARD_ASSETS = """
 MATCH (w:Region {region_id: $ward_id})
-MATCH (a:Asset)-[:LOCATED_IN]->(w)
-RETURN a.asset_id  AS asset_id,
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
+RETURN DISTINCT a.asset_id  AS asset_id,
        a.name      AS name,
        a.type      AS type,
        a.status    AS status,
@@ -56,10 +56,18 @@ RETURN s.scheme_id   AS scheme_id,
 ORDER BY proven_count ASC
 """
 
+LIST_WARD_ASSETS = """
+MATCH (w:Region {region_id: $ward_id})
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
+OPTIONAL MATCH (s:Scheme)-[:FUNDS]->(a)
+OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
+RETURN a.asset_id AS id, a.name AS name, a.type AS type, collect(s.name) AS schemes, count(e) > 0 AS verified, a.status AS status
+"""
+
 LIST_ALL_ASSETS = """
-MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)
-WHERE r.region_id = $ward_region_id OR r.parent_region_id = $ward_region_id
-RETURN a.asset_id AS asset_id, a.name AS name, a.type AS type, a.status AS status, a.cost AS cost, 
+MATCH (w:Region {region_id: $ward_region_id})
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
+RETURN DISTINCT a.asset_id AS asset_id, a.name AS name, a.type AS type, a.status AS status, a.cost AS cost,
        r.region_id as region_id, r.name as region_name
 ORDER BY a.type, a.name
 """
@@ -78,24 +86,24 @@ PK_MAP = {
     "Event": "event_id",
 }
 
-# Return raw asset data so Python endpoint applies A/B verification criteria honestly
 WARD_ASSET_DETAIL = """
-MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)
-WHERE r.region_id = $ward_id OR r.parent_region_id = $ward_id
+MATCH (w:Region {region_id: $ward_id})
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
 OPTIONAL MATCH (s:Scheme)-[:FUNDS]->(a)
 OPTIONAL MATCH (a)-[:BUILT_BY]->(act:Actor)
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
-  WHERE e.url IS NOT NULL AND trim(e.url) <> '' AND e.url <> 'N/A'
+  WHERE e.url_or_path IS NOT NULL AND trim(e.url_or_path) <> '' AND e.url_or_path <> 'N/A'
 OPTIONAL MATCH (a)-[:MENTIONED_IN]->(n:NewsArticle)
-WITH a, s, act, count(e) AS ev_count, count(n) AS news_count
-RETURN
+WITH a, s, act, count(DISTINCT e) AS ev_count, count(DISTINCT n) AS news_count
+RETURN DISTINCT
   a.asset_id  AS asset_id,
   a.name      AS name,
   a.type      AS type,
   a.status    AS status,
   a.cost      AS cost,
-  CASE WHEN news_count > 0 THEN 'fully_verified'
-       WHEN ev_count > 0 THEN 'partially_verified'
+  CASE 
+       WHEN (news_count > 0 OR ev_count >= 2) THEN 'fully_verified'
+       WHEN (ev_count = 1) THEN 'partially_verified'
        ELSE 'unverified'
   END AS proof_status,
   a.lat       AS lat,

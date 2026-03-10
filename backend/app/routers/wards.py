@@ -51,6 +51,13 @@ def ward_score(ward_id: str):
         rows = [dict(r) for r in result]
 
     if not rows:
+        query = """
+        MATCH (w:Region {region_id: $ward_id})
+        MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
+        OPTIONAL MATCH (s:Scheme)-[:FUNDS]->(a)
+        OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
+        RETURN a.asset_id AS id, a.name AS name, a.type AS type, collect(s.name) AS schemes, count(e) > 0 AS verified, a.status AS status
+        """
         return {
             "ward_id": ward_id,
             "total_assets": 0,

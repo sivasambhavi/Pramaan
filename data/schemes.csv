@@ -1,0 +1,11 @@
+schemeid,name,ministry,category,budget_allocated,budget_released,budget_utilized,target_beneficiaries,launch_date,year,status,description
+SCHEME_PMAY,Pradhan Mantri Awas Yojana,Housing & Urban Affairs,WelfareDelivery,5000000000,4200000000,3800000000,120000,2015-06-25,2024,Active,Housing for all urban poor by 2024
+SCHEME_SFC_GRANT_2024,State Finance Commission Grant 2024,Finance,GovernanceScheme,250000000,210000000,180000000,500000,2024-01-01,2024,Active,State devolution for local body infrastructure
+SCHEME_SBM,Swachh Bharat Mission Urban,Jal Shakti,GovernanceScheme,1500000000,1300000000,1150000000,80000,2014-10-02,2024,Active,Open defecation free urban India
+SCHEME_PMGSY,Pradhan Mantri Gram Sadak Yojana,Rural Development,InfrastructureAsset,800000000,720000000,650000000,200000,2000-12-25,2024,Active,All-weather rural road connectivity
+SCHEME_AMRUT,AMRUT 2.0 Urban,Housing & Urban Affairs,InfrastructureAsset,780000000,600000000,520000000,95000,2021-10-01,2024,Active,Urban water and sanitation infrastructure
+SCHEME_AB,Ayushman Bharat PM-JAY,Health & Family Welfare,WelfareDelivery,6400000000,5800000000,5200000000,500000000,2018-09-23,2024,Active,Health cover Rs 5 lakh per family per year
+SCHEME_PMKISAN,PM-KISAN Samman Nidhi,Agriculture,WelfareDelivery,870000000000,860000000000,840000000000,110000000,2019-02-01,2024,Active,Rs 6000 per year income support to farmers
+SCHEME_STREETLIGHT,Smart Street Light Mission,Power,InfrastructureAsset,120000000,95000000,88000000,300000,2022-04-01,2024,Active,LED smart street lighting for urban areas
+SCHEME_JJBY,Jeevan Jyoti Bima Yojana,Finance,WelfareDelivery,15000000000,14000000000,13500000000,180000000,2015-06-01,2024,Active,Life insurance cover Rs 2 lakh at Rs 436 premium
+SCHEME_PMJDY,PM Jan Dhan Yojana,Finance,WelfareDelivery,25000000000,24000000000,23000000000,500000000,2014-08-28,2024,Active,Financial inclusion bank account for every household

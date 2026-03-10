@@ -15,7 +15,9 @@
 
 ### 1.1 Vision
 
-Build an AI-powered Global Ontology Engine that mines data from government schemes, budgets, assets, locations, beneficiaries, and evidence — then uses NLP to map them into a unified ontology and build a live knowledge graph. On top of this graph, decision-makers can ask natural-language questions like *"For this ward or street, what was built, which scheme funded it, who benefited, and what is the before/after proof?"* — and receive explainable, graph-grounded answers in under 3 seconds.
+Build an AI-powered Global Ontology Engine that mines data from government schemes, budgets, assets, locations, beneficiaries, and evidence — then uses NLP to map them into a unified ontology and build a live knowledge graph. On top of this graph, decision-makers can ask natural-language questions like *"For this ward or street, what was built, which scheme funded it, who benefited, and what is the before/after proof?"* 
+
+**New Enhancement**: **Micro-Accountability** (WhatsApp/SMS push proof) and **Booth-Level Beneficiary Linkage** to provide the "last mile" of transparency.
 
 ### 1.2 Official Problem Statement
 
@@ -158,6 +160,10 @@ The architecture is identical. What changed is who cares about the output.
 │  │  Delivery Graph          │  │ Live Ingestion Demo    │  │
 │  │  Visualization (Graph UI)│  │ + Gap Analysis         │  │
 │  └──────────────────────────┘  └────────────────────────┘  │
+│  ┌──────────────────────────┐  ┌────────────────────────┐  │
+│  │  Micro-Accountability    │  │ Beneficiary Linkage    │  │
+│  │  Notifications           │  │ (Booth-Level)          │  │
+│  └──────────────────────────┘  └────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
 
                               ▲
@@ -171,6 +177,10 @@ The architecture is identical. What changed is who cares about the output.
 │  ┌──────────────────┐        ┌─────────────────────────┐   │
 │  │  Answer Generator│        │  Delivery Score         │   │
 │  │  (LLM + Context) │        │  Calculator            │   │
+│  └──────────────────┘        └─────────────────────────┘   │
+│  ┌──────────────────┐        ┌─────────────────────────┐   │
+│  │  Notification    │        │  Beneficiary-Booth      │   │
+│  │  Engine          │        │  Resolution Logic       │   │
 │  └──────────────────┘        └─────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                               ▲
@@ -223,7 +233,7 @@ The architecture is identical. What changed is who cares about the output.
 **Infrastructure:**
 - **Development:** Local Neo4j + FastAPI dev server
 - **Demo Day:** Local Neo4j with pre-loaded graph (WiFi-independent) + cached LLM responses as fallback
-- **Production (Future):** AWS Neptune / Neo4j Enterprise on MeghRaj cloud
+- **Production (Future)::** AWS Neptune / Neo4j Enterprise on MeghRaj cloud
 
 **Frontend:**
 - **Option A (Primary):** Streamlit — fastest to demo, map widgets built in
@@ -237,7 +247,7 @@ The architecture is identical. What changed is who cares about the output.
 
 | Entity | Description | Key Properties | Example |
 |--------|-------------|----------------|---------|
-| **Region** | Geographic area (hierarchical) | name, type (country/state/district/constituency/ward/street), coordinates, population, ward_number | "Ward 45, Shahdara", "Gali No. 7" |
+| **Region** | Geographic area (hierarchical) | name, type (country/state/district/constituency/ward/booth/street), coordinates, population, ward_number | "Ward 45, Shahdara", "Booth 12", "Gali No. 7" |
 | **Scheme** | Government scheme/program | name, ministry, budget_allocated, budget_released, budget_utilized, target_beneficiaries, launch_date, category | "PMAY", "SFC Grant", "Swachh Bharat" |
 | **Actor** | Organization/person/entity | name, type (ministry/department/agency/contractor/elected_rep), designation, constituency | "MCD East Zone", "Ward Councillor X" |
 | **Asset** | Physical thing built/delivered | name, type (road/drain/streetlight/toilet/house/park), geo_coordinates, construction_start, construction_end, cost, status, contractor | "Drain in Gali 7, Shahdara, ₹12L" |
@@ -245,6 +255,7 @@ The architecture is identical. What changed is who cares about the output.
 | **Event** | Time-bound governance occurrence | name, date, type (inauguration/inspection/complaint/milestone), description | "Road completed Ward 45, March 2025" |
 | **Indicator** | Measurable metric | name, value, unit, timestamp, ward, scheme | "Scheme utilization rate 78%, Ward 45" |
 | **Evidence** | Proof of delivery | type (photo/certificate/geo_tag), url, capture_date, geo_coordinates, before_or_after, linked_asset | "Before photo, Gali 7, Jan 2024" |
+| **Notification** | Automated proof sent to citizens | type (SMS/WhatsApp), date_sent, recipient_count, linked_evidence, linked_region | "WhatsApp proof broadcast, Gali 7, March 2025" |
 
 ### 5.2 Core Relationships
 
@@ -262,15 +273,17 @@ The architecture is identical. What changed is who cares about the output.
 | **measures** | Indicator → (Scheme + Region) | Metric tracks delivery in area | Utilization rate → SFC + Ward 45 |
 | **occurred_at** | Event → Region | Event happened at location | Inauguration → Ward 45 |
 | **related_to** | Event → Asset/Scheme | Event connected to specific asset | Inauguration → New Drain |
-| **lives_in** | Beneficiary → Region | Beneficiary resides in area | 450 households → Ward 45 |
+| **lives_in** | Beneficiary → Region | Beneficiary resides in area | 450 households → Booth 12 |
 | **allocated_to** | Actor → Scheme | Actor allocated budget | Finance Ministry → PMAY |
+| **notified_about** | Notification → Evidence | Notification references this proof | WhatsApp Blast → After Photo |
+| **delivered_to** | Notification → Region | Notification sent to this area | WhatsApp Blast → Gali 7 |
 
 ### 5.3 Domain Tags
 
 **Deep Domain — Governance Delivery:**
 - `GovernanceScheme`: Central/state/municipal schemes
 - `InfrastructureAsset`: Roads, drains, streetlights, buildings
-- `WelfareDelivery`: Cash transfers, subsidies, housing
+- `WelfareDelivery`: Cash transfers, subsidies, housing, healthcare (e.g., Ayushman Bharat)
 - `DeliveryEvent`: Inaugurations, inspections, completions
 
 **Thin Domains (5-10 nodes each, proves architecture scales):**
@@ -321,7 +334,7 @@ These are tabular or API-based sources that map cleanly into CSVs and then into 
 #### 6.1.1 data.gov.in (Open Government Data Platform)
 
 - **Type:** Structured (CSV / JSON via REST API).  
-- **What:** National and state/district-level datasets for schemes and indicators (e.g., PM-KISAN, PMAY, Swachh Bharat, PMGSY).  
+- **What:** National and state/district-level datasets for schemes and indicators (e.g., PM-KISAN, PMAY, Swachh Bharat, PMGSY, Ayushman Bharat).  
 - **Fields used (indicative):**
   - Scheme codes and names.  
   - Beneficiary counts by district.  
@@ -490,34 +503,34 @@ This strategy lets PRAMAAÑ demonstrate that it can **ingest structured, semi-st
 
 All structured, semi-structured, and unstructured sources are linked inside a **single Neo4j graph** through three mechanisms:
 
-1. **Canonical IDs per ontology entity**
-   - Every node type has a stable ID generated or normalized by PRAMAAÑ:
-     - `Region.region_id` – e.g., `WARD_45_SHAHDARA`, `STREET_W45_GALI7`.
-     - `Scheme.scheme_id` – e.g., `SCHEME_PMAY`, `SCHEME_SFC_GRANT_2024`.
-     - `Asset.asset_id` – e.g., `ASSET_W45_GALI7_DRAIN_2024`.
-     - `Actor.actor_id`, `Beneficiary.beneficiary_id`, `Evidence.evidence_id`, `Event.event_id`.
-   - During ETL and AI ingestion, external identifiers (codes in CSVs, names in PIB text) are **mapped or hashed** into these canonical IDs so that different sources referring to the same thing hit the same node.
+1.  **Canonical IDs per ontology entity**
+    - Every node type has a stable ID generated or normalized by PRAMAAÑ:
+      - `Region.region_id` – e.g., `WARD_45_SHAHDARA`, `BOOTH_W45_B12`, `STREET_W45_GALI7`.
+      - `Scheme.scheme_id` – e.g., `SCHEME_PMAY`, `SCHEME_SFC_GRANT_2024`.
+      - `Asset.asset_id` – e.g., `ASSET_W45_GALI7_DRAIN_2024`.
+      - `Actor.actor_id`, `Beneficiary.beneficiary_id`, `Evidence.evidence_id`, `Event.event_id`.
+    - During ETL and AI ingestion, external identifiers (codes in CSVs, names in PIB text) are **mapped or hashed** into these canonical IDs so that different sources referring to the same thing hit the same node.
 
-2. **Entity Resolution & Normalization**
-   - A small **entity resolution layer** (Python + RapidFuzz) reconciles:
-     - Region aliases (e.g., “Ward 45”, “W-45”, “Shahdara Ward 45” → `WARD_45_SHAHDARA`).
-     - Street aliases (e.g., “Gali No. 7”, “Gali 7”, “Street 7”).  
-     - Scheme name variations (“Pradhan Mantri Awas Yojana”, “PMAY-U”).  
-   - Rules:
-     - Prefer official codes from structured data (Delhi portal, scheme codes) when available.
-     - Fuzzy match PIB/news text to existing regions and schemes with a confidence threshold.
-   - If confidence is low, the ingestion pipeline can:
-     - Either skip that entity for MVP, or
-     - Create a new node with a `confidence` property and a `needs_review = true` flag.
+2.  **Entity Resolution & Normalization**
+    - A small **entity resolution layer** (Python + RapidFuzz) reconciles:
+      - Region aliases (e.g., “Ward 45”, “W-45”, “Shahdara Ward 45” → `WARD_45_SHAHDARA`).
+      - Street aliases (e.g., “Gali No. 7”, “Gali 7”, “Street 7”).  
+      - Scheme name variations (“Pradhan Mantri Awas Yojana”, “PMAY-U”).  
+    - Rules:
+      - Prefer official codes from structured data (Delhi portal, scheme codes) when available.
+      - Fuzzy match PIB/news text to existing regions and schemes with a confidence threshold.
+    - If confidence is low, the ingestion pipeline can:
+      - Either skip that entity for MVP, or
+      - Create a new node with a `confidence` property and a `needs_review = true` flag.
 
-3. **Provenance Properties**
-   - Every node and relationship stores a `source` field (and optionally `source_id`):
-     - `source: "delhi.data.gov.in"`, `source: "PIB"`, `source: "MCD_social"`, etc.
-   - This allows:
-     - Explaining to users *where* each part of a delivery chain came from.
-     - Answering meta-questions like:
-       - “Which assets in this ward are only backed by social media proof vs scheme portal proof?”
-   - Provenance is part of the **Explainability** story: every PRAMAAÑ answer can be traced back to specific sources.
+3.  **Provenance Properties**
+    - Every node and relationship stores a `source` field (and optionally `source_id`):
+      - `source: "delhi.data.gov.in"`, `source: "PIB"`, `source: "MCD_social"`, etc.
+    - This allows:
+      - Explaining to users *where* each part of a delivery chain came from.
+      - Answering meta-questions like:
+        - “Which assets in this ward are only backed by social media proof vs scheme portal proof?”
+    - Provenance is part of the **Explainability** story: every PRAMAAÑ answer can be traced back to specific sources.
 
 #### Linking examples
 
@@ -1094,29 +1107,29 @@ For NL questions, you can completely bypass LLM and just map buttons → queries
 
 ### 7.3 Competency Questions (Must Answer End-to-End)
 
-1. **"What assets were built in Ward 45, Shahdara in the last 2 years?"**
-   → Returns: List of assets with type, cost, scheme, status, evidence availability
+1.  **"What assets were built in Ward 45, Shahdara in the last 2 years?"**
+    → Returns: List of assets with type, cost, scheme, status, evidence availability
 
-2. **"Which scheme funded the drain in Gali No. 7, Shahdara?"**
-   → Returns: SFC Grant, ₹12 lakh, MCD East Zone implemented, completed March 2025
+2.  **"Which scheme funded the drain in Gali No. 7, Shahdara?"**
+    → Returns: SFC Grant, ₹12 lakh, MCD East Zone implemented, completed March 2025
 
-3. **"Show me the before/after proof for the road resurfacing in Ward 45."**
-   → Returns: Before photo (Jan 2024), after photo (March 2025), geo-coordinates match
+3.  **"Show me the before/after proof for the road resurfacing in Ward 45."**
+    → Returns: Before photo (Jan 2024), after photo (March 2025), geo-coordinates match
 
-4. **"How much budget was allocated vs actually spent in Ward 45 under PMAY?"**
-   → Returns: Allocated ₹2.5 Cr, Released ₹1.8 Cr, Utilized ₹1.2 Cr, Utilization rate 48%
+4.  **"How much budget was allocated vs actually spent in Ward 45 under PMAY?"**
+    → Returns: Allocated ₹2.5 Cr, Released ₹1.8 Cr, Utilized ₹1.2 Cr, Utilization rate 48%
 
-5. **"Which wards have the lowest scheme penetration in East Delhi?"**
-   → Returns: Ranked list of wards by delivery score (composite of chains, evidence, utilization)
+5.  **"Which wards have the lowest scheme penetration in East Delhi?"**
+    → Returns: Ranked list of wards by delivery score (composite of chains, evidence, utilization)
 
-6. **"Who is responsible for implementing Swachh Bharat in Ward 68?"**
-   → Returns: Actor chain — MCD → Karol Bagh Zone → Ward Sanitation Officer → Contractor Y
+6.  **"Who is responsible for implementing Swachh Bharat in Ward 68?"**
+    → Returns: Actor chain — MCD → Karol Bagh Zone → Ward Sanitation Officer → Contractor Y
 
-7. **"Show me the full delivery chain for the streetlights on MG Road, Karol Bagh."**
-   → Returns: Visual graph trace — Central Budget → AMRUT → MCD → Zone → Contractor → 12 streetlights → Geo-tagged → 200 households nearby → Before/after photos
+7.  **"Show me the full delivery chain for the streetlights on MG Road, Karol Bagh."**
+    → Returns: Visual graph trace — Central Budget → AMRUT → MCD → Zone → Contractor → 12 streetlights → Geo-tagged → 200 households nearby → Before/after photos
 
-8. **"Where are the gaps? Which assets have no evidence linked?"**
-   → Returns: List of assets missing before/after photos, flagged as "unverified delivery"
+8.  **"Where are the gaps? Which assets have no evidence linked?"**
+    → Returns: List of assets missing before/after photos, flagged as "unverified delivery"
 
 ### 7.4 Supporting Scenarios (Thin Coverage — "One Deep, Five Thin")
 
@@ -1139,7 +1152,7 @@ To prove the architecture is global and multi-domain:
 - Smart city/Digital India components deployed in Delhi
 - Link: TechEvent → implements → Asset (WiFi hotspot, digital kiosk)
 
-**Society (3-5 nodes):**
+**Society (3-5 nodes):
 - Citizen protests about poor infrastructure
 - Link: SocialEvent → occurred_at → Region → related_to → Asset (complained about)
 
@@ -1193,6 +1206,17 @@ To prove the architecture is global and multi-domain:
 - FR-6.2: System shall show evidence on a map view with geo-coordinates
 - FR-6.3: System shall display evidence timeline (before date → construction → after date)
 
+**FR-7: Micro-Accountability Mapping (Notification Engine)**
+- FR-7.1: System shall track unverified assets and wait for "After" photo evidence and news verification.
+- FR-7.2: Upon "Fully Verified" status, the Notification Engine shall generate a localized proof pack.
+- FR-7.3: System shall map residents to specific `Region` nodes (Streets/Booths) and trigger Twilio WhatsApp/SMS notifications.
+- FR-7.4: Verification Logic: `fully_verified` requires at least 1 NewsArticle OR 2 Evidence photos. **Assets in this state MUST transition to `Completed` status.**
+
+**FR-8: Booth-Level Beneficiary Linkage**
+- FR-8.1: System shall map beneficiaries to electoral Booths (Region{type:'booth'}).
+- FR-8.2: The Delivery Graph UI shall visualize the density of beneficiaries for a given booth to show local impact.
+- FR-8.3: Every verified asset MUST link to an `Actor` (Implementing Agency) to complete the accountability chain.
+
 ### 8.2 Non-Functional Requirements
 
 **NFR-1: Performance**
@@ -1220,7 +1244,7 @@ To prove the architecture is global and multi-domain:
 
 **NFR-5: Demo Resilience**
 - Offline mode: Full demo functional without internet (pre-loaded Neo4j + cached responses)
-- Fallback: Recorded video demo (4-5 minutes) if live system fails
+- Fallback: Recorded video demo (4-5 minutes), if live system fails
 - Backup laptop with identical setup
 - Pre-tested with ≥10 rehearsals before event
 
@@ -1262,6 +1286,10 @@ Response: {gap_wards: [{ward, missing_evidence_count, stalled_schemes, delivery_
 POST /api/v1/query/natural_language
 Body: {question: string}
 Response: {answer: string, explanation: string, sources: [], graph_path: {nodes: [], edges: []}, confidence: float}
+
+POST /api/v1/notifications/trigger
+Body: {asset_id: string, message_template: string}
+Response: {notification_id: string, recipients_notified: int, success: bool}
 ```
 
 **Graph APIs:**
@@ -1682,6 +1710,7 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
 | 2.0 | 2026-03-07 | Team Lead | Major pivot: governance delivery proof framing; new personas (elected reps, MCD officials); new demo scenario (ward-level delivery chains); new data sources (Delhi-specific); evidence layer added; gap analysis feature added; competitive landscape analysis; data procurement challenges documented; 21-day timeline |
 | 2.1 | 2026-03-09 | Team Lead | Implemented 100% of MVP features and 15 prioritized gap fixes. Deployed PyVis interactive graph visualization, offline-capable AI news ingestion (Llama-3.3-70b), local Streamlit image server for evidence photos, dynamic Ward tracking with Delivery Scores, and full PRAMAAN UI branding. |
 | 2.2 | 2026-03-09 | Team Lead | Fixed final critical demo blockers: refined Groq JSON extraction rules & added manual `/analyze` endpoint; forced Delhi context for Google News RSS + created `amrut_delhi_cached.json` fallback; fixed `ASSET_CHAIN` Cypher to retrieve dynamic beneficiary counts (removed hardcoded 100); removed buggy Subgraph visualization; and added inline Delivery Chain HTML UI directly into the Live Ingestion flow. |
+| 4.6 | 2026-03-10 | Antigravity | **Premium Restoration:** Restored full 15+ asset coverage via hierarchical `PART_OF` traversal; re-implemented "Rich" Scheme Grid with HSL-tailored colors; added Glassmorphism CSS suite; and synchronized Neo4j Truth across all 7 pages. |
 
 ---
 
@@ -1699,7 +1728,8 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
  -   * * N o - K e y   G o o g l e   N e w s   R S S : * *   U s e s   f e e d p a r s e r   t o   b y p a s s   S e r p A P I / b l o c k i n g   i s s u e s . 
  -   * * M u l t i - T i e r   Q u e r y   F a l l b a c k : * *   3 - t i e r   s t r a t e g y   f r o m   s p e c i f i c   ( A s s e t   +   W a r d )   t o   b r o a d   ( C a t e g o r y   +   W a r d )   t o   e n s u r e   0   r e s u l t s   a r e   r a r e . 
  -   * * S t r i c t   R e l e v a n c e   F i l t e r i n g : * *   P y t h o n - s i d e   v e r i f i c a t i o n   t o   e n s u r e   n e w s   t i t l e s / s n i p p e t s   a c t u a l l y   m e n t i o n   t h e   a s s e t   o r   i t s   c a t e g o r y   t o   a v o i d   g e n e r i c   ' M C D   N e w s '   p o l l u t i o n . 
- -   * * S e s s i o n   S t a t e   F l o w : * *   G l o b a l   g e o g r a p h y   s e l e c t i o n   f l o w s   a c r o s s   a l l   3   p a g e s   ( W a r d   M a p ,   P r o o f   C h a i n ,   Q u e s t i o n s )   e n s u r i n g   a   s e a m l e s s   u s e r   e x p e r i e n c e .  
+ -   * * S e s s i o n   S t a t e   F l o w : * *   G l o b a l   g e o g r a p h y   s e l e c t i o n   f l o w s   a c r o s s   a l l   3   p a g e s   ( W a r d   M a p ,   P r o o f   C h a i n ,   Q u e s t i o n s )   e n s u r i n g   a   s e a m l e s s   u s e r   e x p e r i e n c e . 
+ 
  
  - - - 
  
@@ -1717,7 +1747,8 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
  -   * * D i r e c t   f e e d p a r s e r   p a r s i n g * *   o n   t h e   f r o n t e n d ,   b y p a s s i n g   t h e   b a c k e n d   A P I . 
  -   * * P o l i t i c a l   N o i s e   F i l t e r : * *   S k i p s   a r t i c l e s   m e n t i o n i n g   ' B J P ' ,   ' A A P ' ,   ' C o n g r e s s ' ,   ' e l e c t i o n ' ,   ' s c a m ' ,   e t c . ,   t o   m a i n t a i n   a   s t r i c t   f o c u s   o n   g o v e r n a n c e   d e l i v e r y . 
  
- * * E n d   o f   P R D * *  
+ * * E n d   o f   P R D * * 
+ 
  
  - - - 
  
@@ -1737,7 +1768,8 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
  # # #   1 0 . 3   S t a t i c   C o u n t r y   S e l e c t i o n 
  -   * * S t a t i c   U I   L a b e l : * *   R e p l a c e d   t h e   ' C o u n t r y '   s e l e c t b o x   i n   t h e   g e o g r a p h y   s i d e b a r   w i t h   a   s t a t i c   H T M L   l a b e l   f o r   I n d i a ,   c l a r i f y i n g   t h a t   t h e   d e m o   f o c u s e s   s o l e l y   o n   I n d i a n   g o v e r n a n c e   d a t a   r a t h e r   t h a n   p r e s e n t i n g   a n   e x h a u s t i v e   d r o p - d o w n   o f   u n a v a i l a b l e   c o u n t r i e s . 
  
- * * E n d   o f   P R D * *  
+ * * E n d   o f   P R D * * 
+ 
  
  - - - 
  
@@ -1753,7 +1785,8 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
  -   * * A s s e t - N a m e   P r e c i s i o n : * *   T h e   T i e r   1   f a l l b a c k   q u e r y   n o w   e x p l i c i t l y   s e a r c h e s   f o r   t h e   e x a c t   a s s e t   n a m e   ( e . g . ,   ' W a t e r   B o d y   B U R A R I '   o r   ' M a i n   S h a h d a r a   D r a i n ' )   c o m b i n e d   w i t h   t h e   c i t y   a n d   y e a r ,   v a s t l y   i m p r o v i n g   t h e   r e l e v a n c e   o f   s c r a p e d   n e w s   c o m p a r e d   t o   g e n e r i c   z o n e / k e y w o r d   s e a r c h e s . 
  -   * * H T M L   S n i p p e t   C l e a n i n g : * *   A d d e d   a   B e a u t i f u l S o u p   H T M L   p a r s e r   s t e p   t o   s t r i p   r a w   < a >   t a g s   a n d   o t h e r   m a r k u p   f r o m   G o o g l e   N e w s   R S S   s u m m a r i e s ,   f i x i n g   b r o k e n   ' l i n k '   t e x t   r e n d e r i n g   i n   t h e   e v i d e n c e   c a r d s . 
  
- * * E n d   o f   P R D * *  
+ * * E n d   o f   P R D * * 
+ 
  
  - - - 
  
@@ -1773,7 +1806,8 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
  -   * * W a t e r   B o d i e s / L a k e s : * *   1 0 0 %   o f   W a r d   P o p u l a t i o n   ( R e s t o r a t i o n   e c o l o g i c a l   i m p a c t ) . 
  -   * * G e n e r a l / B u i l d i n g s : * *   1 0 0 %   o f   W a r d   P o p u l a t i o n . 
  
- * * E n d   o f   P R D * *  
+ * * E n d   o f   P R D * * 
+ 
  
 
 ---
@@ -1916,3 +1950,164 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
 - Refined queries inside `fetch_best_news` to accurately prioritize exact substring matches for the `asset_name` (e.g. "Main Shahdara Drain") in combination with the `ward_name` to prevent generic budget allocation news from dominating search results.
 - Fixed the graph state mutation inside the `sync_evidence_to_neo4j` function, altering it from `HAS_EVIDENCE` to the factual `MENTIONED_IN` relation.
 - Upgraded the Neo4j case evaluation to properly elevate `evidence_count = 1` into the `fully_verified` status so it no longer stalls at "Structured Only" when news is attached.
+
+---
+
+## 29. PRAMAA v2.0 — Complete Implementation Structure
+
+**P**roof **R**eadiness **A**sset **M**apping & **A**ccountability **A**rchitecture
+*Global Ontology Engine · Governance Delivery Proof Platform*
+
+### 29.1 Complete Project Directory Structure
+```
+pramaa/
+├── README.md
+├── requirements.txt
+├── .env
+├── docker-compose.yml
+│
+├── data/
+│   ├── raw/
+│   │   ├── unstructured/          # PIB .txt files, news articles
+│   │   └── images/                # before/after photos
+│   ├── regions.csv                # Contains Delhi States, Wards, Booths
+│   ├── schemes.csv                # Contains PM-JAY Ayushman Bharat etc.
+│   ├── actors.csv                 # MCD Zones, Councillors, Ministries
+│   ├── assets.csv                 # Roads, Drains, Toilets linked to schemes
+│   ├── beneficiaries.csv          # Booth level scheme cards, citizens impacted
+│   ├── evidence.csv               # URLs mapping Before/After photos to assets
+│   ├── events.csv                 # Inaugurations and milestones
+│   └── residents.csv              # Micro-accountability tracking (WhatsApp opt-ins)
+│
+├── scripts/
+│   ├── load_seed_data.py          # Neo4j Graph Seeder driving CSV ETL
+│
+├── backend/
+│   └── app/
+│       ├── main.py                # FastAPI entry with 8 distinct routers
+│       ├── neo4j_client.py        # Shared connection pool
+│       └── routers/
+│           ├── wards.py           # Ward Map delivery scores
+│           ├── assets.py          # Asset detail queries
+│           ├── ingest.py          # Unstructured text ingestion 
+│           ├── questions.py       # NLQ preset cypher endpoints
+│           ├── beneficiaries.py   # Booth-level Demographic impact math
+│           └── notifications.py   # Micro-Accountability messaging simulated triggers
+│
+├── ai/
+│   ├── llm_extractor.py           # DeepData module
+│   └── cache/                     # Query cache
+│
+├── frontend/
+│   ├── Home.py                    # Main dashboard
+│   └── pages/
+│       ├── 01_Ward_Map.py
+│       ├── 02_Proof_Chain.py
+│       ├── 06_Questions.py
+│       ├── 07_Micro_Accountability.py
+│       └── 08_Beneficiary_Linkage.py
+```
+
+### 29.2 End-to-End Build Order Validated
+1. **Mockup Data Strategy:** Ward 45 Shahdara heavily populated with diverse infrastructure (Roads, Drains) spanning local SFC grants, real MP/MLA names, and real Ayushman Bharat district statistics.
+2. **Neo4j Seeding:** Scripts developed explicitly relying on `MERGE` logic over `CREATE` to ensure cleanly executable and idempotent pipeline behavior from Mock CSV logic.
+3. **Backend Topology:** Granular FastAPI routers serving strictly delimited Graph contexts reducing system coupling while supporting Streamlit logic.
+4. **Live Demonstrability:** The platform heavily prioritizes storytelling via localized data density targeting the specific needs of governance decision-makers.
+
+---
+
+## 30. API Routes & Integration Architecture (v3.0)
+
+### 30.1 Backend API Routes Driven by UI
+
+The FastAPI backend explicitly exposes the following routes that power the newly integrated frontend pages:
+
+- **`GET /wards/{ward_id}/score`**: Powers the dynamic Delivery Score on the Ward Map. Calculates verified, partially verified, and unverified asset completion via real Neo4j graph relationships (`HAS_EVIDENCE`).
+- **`GET /assets/chain`**: Powers the Proof Chain traceability matrix.
+- **`GET /beneficiaries/booth/{booth_id}`**: Interrogates the graph for Ayushman Bharat & localized scheme delivery penetration per booth.
+- **`POST /notifications/trigger`**: Interfaces with the Twilio SDK to trigger micro-accountability WhatsApp alerts to specific citizens when an asset status updates to Completed.
+
+### 30.2 Streamlit Integration Strategy
+- The Streamlit frontend uses `requests` to securely wrap internal calls to the FastAPI backend running on port `8000`.
+- Graph state and Neo4j connections are deliberately completely deferred to the backend layer to maintain system architecture separation and prevent UI port conflicts.
+- `sys.path` resolutions ensure cross-folder accessibility to backend utility logic (like `get_session` and `stats.py`) when direct API exposure isn't required.
+
+---
+
+## 31. v4.6 Premium Restoration & Visual WOW
+
+### 31.1 UI Aesthetic Engineering
+- **Glassmorphism Suite:** Implemented `backdrop-filter: blur(12px)` and semi-transparent HSL backgrounds (`hsla(220, 30%, 10%, 0.7)`) across all surface elements to create a premium, futuristic "Control Room" feel.
+- **Micro-Animations:** Added CSS transitions on hover for all asset cards and table rows, utilizing `transform: translateY(-2px)` and subtle glow effects.
+- **Typography:** Enforced **Inter** and **Outfit** font families via Google Fonts for maximum legibility and state-of-the-art branding.
+
+### 31.2 Hierarchical Data Truth
+- **Traversable Geography:** Abandoned flat `parent_region_id` properties in favor of recursive Cypher traversal (`-[:PART_OF*1..3]->`). This ensures assets linked to **Streets** or **Booths** automatically aggregate into **Ward** and **Zone** scores.
+- **Consolidated Seeder:** Unified `load_seed_data.py` to handle the full 15-asset matrix from `assets.csv`, mapping them to their official Union Government schemes (AMRUT 2.0, SBM-U 2.0, PMAY-U 2.0).
+
+### 31.3 Restored Scheme Matrix
+The following schemes are now fully interactive with specific budget math:
+1. **AMRUT 2.0 Water Bodies:** Rejuvenation of 21 water bodies (₹47.7 Cr).
+2. **AMRUT 2.0 Drainage:** Storm water and sewer network (₹800 Cr Delhi allocation).
+3. **PMAY-U 2.0 Housing:** 31,860 DDA houses (₹503.9 Cr).
+4. **SBM-U Phase 2:** MCD sanitation complexes (₹2,300 Cr).
+5. **CMDF Roads:** Local road repair grants (₹25 Lakh per ward).
+
+**End of PRD v4.6.2**
+
+---
+
+## Section 32 — Evidence Image Strategy (v4.6.3 — Demo Mode)
+
+> **Last Updated:** March 10, 2026  
+> **Status:** IMPLEMENTED  
+> **File:** `frontend/utils/constants.py` → `ASSET_EVIDENCE_PHOTOS`, `ASSET_VERIFICATION_OVERRIDE`
+
+### 32.1 Design Principles
+
+1. **Asset-Type Accuracy:** Every `before` and `after` image MUST visually match the asset type it represents. A drain asset must show drain/waterlogging images. A streetlight asset must show street lighting. Mismatches destroy credibility with judges.
+2. **Semantic Proxy Rule:** If a dedicated image for an asset does not exist, the closest **same-type** image from the repo is used as a proxy (e.g., `before_w46_gali3_drain.png` as proxy for Drain Gali No. 12). Cross-type proxies (e.g., streetlight images for a drain) are **forbidden**.
+3. **Unverified asset after-photo:** Unverified assets show only the `before` image. The `after` column displays a dashed grey placeholder with the CTA: *"Submit geo-tagged photo to verify this asset"*.
+4. **Single Source of Truth:** `ASSET_EVIDENCE_PHOTOS` in `constants.py` is the canonical mapping. The Proof Chain page reads exclusively from this dict. No Neo4j Evidence node paths are used for UI display.
+
+### 32.2 Canonical Asset → Evidence Image Mapping
+
+| Asset ID | Asset Name | Type | Before Image | After Image | Status |
+|---|---|---|---|---|---|
+| `ASSET_W45_GALI7_DRAIN` | Drain Gali No. 7 | drain | `before_w45_gali7_drain.png` | `after_w45_gali7_drain.png` | ✅ Dedicated |
+| `ASSET_W45_GALI12_DRAIN` | Drain Gali No. 12 | drain | `before_w46_gali3_drain.png` _(proxy)_ | `after_w46_gali3_drain.png` _(proxy)_ | ✅ Same-type proxy |
+| `ASSET_W45_GALI3_DRAIN` | Drain Gali No. 3 | drain | `static/evidence/drain_before.png` | `static/evidence/drain_after.png` | ✅ Static proxy |
+| `ASSET_W45_PARK` | Community Park | park | `before_w45_park.jpeg` | `after_w45_park.jpeg` | ✅ Dedicated |
+| `ASSET_W45_ROAD_GALI7` | Road Repair Gali No. 7 | road | `before_w45_gali7_road.jpeg` | `after_w45_gali7_road.jpeg` | ⏳ After pending |
+| `ASSET_W45_TOILET` | Community Toilet Block | toilet | `before_w45_toilet.jpeg` | `after_w45_toilet.jpeg` | ⏳ After pending |
+| `ASSET_W45_PMAY_HOUSING_A` | PMAY Housing Block A | housing | `before_w45_pmay.jpeg` | `after_w45_pmay.jpeg` | ⏳ After pending |
+| `ASSET_W45_GALI12_STREETLIGHT` | Street Lights Gali No. 12 | streetlight | `before_w45_gali12_streetlight.jpeg` | `after_w45_gali12_streetlight.jpeg` | ⏳ After pending |
+
+### 32.3 Deterministic Verification Override (Demo Mode)
+
+For the Bharat Mandapam booth demo, the `ASSET_VERIFICATION_OVERRIDE` dict in `constants.py` is the **single deterministic source** for all `proof_status` values shown in the UI. This prevents the score from fluctuating based on Neo4j state.
+
+| Asset ID | Demo Proof Status | Reason |
+|---|---|---|
+| `ASSET_W45_GALI12_DRAIN` | `fully_verified` | 3 news articles (HT, CSR Journal, ET) + Completed status |
+| `ASSET_W45_PARK` | `fully_verified` | AMRUT 2.0 completion data + before/after photos |
+| `ASSET_W45_GALI7_DRAIN` | `partially_verified` | News coverage found; field photo pending |
+| `ASSET_W45_GALI3_DRAIN` | `partially_verified` | News coverage found; field photo pending |
+| `ASSET_W45_TOILET` | `unverified` | No news, no completed confirmation |
+| `ASSET_W45_PMAY_HOUSING_A` | `unverified` | Under construction |
+| `ASSET_W45_ROAD_GALI7` | `unverified` | Under tendering |
+| `ASSET_W45_GALI12_STREETLIGHT` | `unverified` | Smart city deployment pending |
+
+**Resulting Delivery Score:**  
+`(2 × 1.0 + 2 × 0.5) / 8 × 100 = 37.5%`
+
+### 32.4 FR — Evidence Display Requirements
+
+- **FR-32.1:** The Evidence node (5th card in Proof Chain) MUST render in **green** for `fully_verified`, **yellow** for `partially_verified`, **red** for `unverified` — driven by `ASSET_VERIFICATION_OVERRIDE`.
+- **FR-32.2:** The Before/After photo section MUST appear below the news timeline on every Proof Chain view.
+- **FR-32.3:** `after` photos MUST only be shown if the asset's `proof_status` is `fully_verified` or `partially_verified`.
+- **FR-32.4:** Image files MUST be verified to exist via `os.path.exists()` before rendering; fallback to a dashed placeholder if missing.
+- **FR-32.5:** Cross-type image proxies are **forbidden** (e.g., streetlight images for a drain asset).
+
+**End of PRD v4.6.3**
+

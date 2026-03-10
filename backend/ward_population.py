@@ -1,9 +1,9 @@
 DELHI_WARD_POPULATION = {
-    "REG_W45": {"name": "DMC Ward No - 45", "zone": "Shahdara North",
+    "WARD45_SHAHDARA": {"name": "DMC Ward No - 45", "zone": "Shahdara North",
                 "population": 14200, "households": 3100, "area_sqkm": 2.3},
-    "REG_W46": {"name": "DMC Ward No - 46", "zone": "Shahdara North",
+    "WARD46_KRISHNANAGAR": {"name": "DMC Ward No - 46", "zone": "Shahdara North",
                 "population": 16800, "households": 3650, "area_sqkm": 2.8},
-    "REG_W47": {"name": "DMC Ward No - 47", "zone": "Shahdara North",
+    "WARD47_GANDHINAGAR": {"name": "DMC Ward No - 47", "zone": "Shahdara North",
                 "population": 12900, "households": 2800, "area_sqkm": 2.1},
     "REG_W48": {"name": "DMC Ward No - 48", "zone": "Shahdara North",
                 "population": 15400, "households": 3350, "area_sqkm": 2.5},
@@ -16,8 +16,8 @@ DELHI_WARD_POPULATION = {
 def get_ward_population(ward_name: str, population_dict: dict) -> dict:
     normalized_input = ward_name.strip().lower().replace("-","").replace(" ","")
     for key, val in population_dict.items():
-        normalized_key = key.strip().lower().replace("-","").replace(" ","")
-        if normalized_key in normalized_input or normalized_input in normalized_key:
+        normalized_db_name = val["name"].strip().lower().replace("-","").replace(" ","")
+        if normalized_db_name in normalized_input or normalized_input in normalized_db_name:
             return val
     return {"population": "N/A", "households": "N/A"}
 
