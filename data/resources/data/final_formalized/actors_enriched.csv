@@ -1,0 +1,75 @@
+actor_id,name,type,region_id,total_tenders,budget_lakhs
+act_newdelhimunicipalcouncil,New Delhi Municipal Council,Government Agency,reg_delhi,2203,952679.31
+act_publicworksdepartment,Public Works Department,Government Agency,reg_delhi,6499,736652.53
+act_irrigationandfloodcontrol,Irrigation and Flood Control,Government Agency,reg_delhi,2248,368788.58
+act_delhijalboard,Delhi Jal Board,Government Agency,reg_delhi,12180,338617.52
+act_delhitranscolimited,Delhi Transco Limited,Government Agency,reg_delhi,59,151409.64
+act_dsiidc,DSIIDC,Government Agency,reg_delhi,226,58277.67
+act_delhiurbanshelterimprovementboard,Delhi Urban Shelter Improvement Board,Government Agency,reg_delhi,1437,49204.13
+act_directorateofhealthservices,Directorate of Health Services,Government Agency,reg_delhi,15,34606.48
+act_ggsinderprasthauniversity,GGS INDERPRASTHA UNIVERSITY,Government Agency,reg_delhi,110,30125.12
+act_departmentofforestsandwildlife,Department of Forests and Wildlife,Government Agency,reg_delhi,42,20993.82
+act_lawjusticeandlegislativeaffairs,Law justice and Legislative Affairs,Government Agency,reg_delhi,2,20659.0
+act_departmentofeducation,Department of Education,Government Agency,reg_delhi,7,18017.3
+act_gbpanthospital,G B Pant Hospital,Government Agency,reg_delhi,15,14413.43
+act_delhitransportinfrastructuredevlopmentcorpltd,Delhi Transport Infrastructure Devlopment Corp Ltd,Government Agency,reg_delhi,79,13639.37
+act_delhibuildingandotherconstructionworkerswelf,Delhi Building and Other Construction workers Welf,Government Agency,reg_delhi,1,13512.0
+act_ipgclppcl,IPGCL-PPCL,Government Agency,reg_delhi,255,13116.38
+act_dyconservatorofforestswest,Dy. Conservator of Forests(West),Government Agency,reg_delhi,69,10152.37
+act_dttdc,DTTDC,Government Agency,reg_delhi,56,9756.51
+act_delhitransportcorporation,Delhi Transport Corporation,Government Agency,reg_delhi,58,8261.79
+act_foodsuplyandconsumeraffairdeptt,Food Suply and Consumer affair Deptt,Government Agency,reg_delhi,2,6000.0
+act_delhiagriculturalmarketingboard,Delhi Agricultural Marketing Board,Government Agency,reg_delhi,73,4940.76
+act_delhitechnologicaluniversity,Delhi Technological University,Government Agency,reg_delhi,80,4567.93
+act_instituteofliverandbiliarysciences,Institute of Liver and Biliary Sciences,Government Agency,reg_delhi,16,3207.26
+act_departmentoftrgandtecheducation,Department of Trg. and Tech.Education,Government Agency,reg_delhi,2,3107.48
+act_delhipollutioncontrolcommittee,Delhi Pollution Control Committee,Government Agency,reg_delhi,3,2205.0
+act_centraljailtihar,Central Jail Tihar,Government Agency,reg_delhi,18,2190.0
+act_nsit,NSIT,Government Agency,reg_delhi,82,1993.05
+act_directorateofayush,Directorate of Ayush,Government Agency,reg_delhi,3,1760.0
+act_delhipharmaceuticalscienceandresearchuniversity,Delhi Pharmaceutical Science and Research University,Government Agency,reg_delhi,17,787.69
+act_dyconservatorofforestscentral,Dy. Conservator of Forests (Central),Government Agency,reg_delhi,4,556.27
+act_generaladministrationdepartment,General Administration Department,Government Agency,reg_delhi,3,530.0
+act_gtbhospital,G T B Hospital,Government Agency,reg_delhi,5,490.07
+act_132ecotaskforce,132 Eco Task Force,Government Agency,reg_delhi,9,446.85
+act_scertdelhi,SCERT(Delhi),Government Agency,reg_delhi,3,395.0
+act_delhistatecivilsuppliescorporationltd,Delhi State Civil Supplies Corporation LTD,Government Agency,reg_delhi,7,360.0
+act_acharyashreebhikshugovthospital,Acharyashree Bhikshu Govt. Hospital,Government Agency,reg_delhi,3,360.0
+act_nationallawuniversitydelhi,National Law University Delhi,Government Agency,reg_delhi,13,349.93
+act_sanjaygandhimemorialhospital,Sanjay Gandhi Memorial Hospital,Government Agency,reg_delhi,1,300.0
+act_statehealthagency,State Health Agency,Government Agency,reg_delhi,1,270.6
+act_indiragandhidelhitechnicaluniversityforwomen,Indira Gandhi Delhi Technical University For Women,Government Agency,reg_delhi,8,210.0
+act_dduhospital,DDU Hospital,Government Agency,reg_delhi,2,180.0
+act_maulanaazadmedicalcollege,Maulana Azad Medical College,Government Agency,reg_delhi,2,157.05
+act_deepchandbandhuhospitalashokvihar,"Deep Chand Bandhu Hospital , Ashok Vihar",Government Agency,reg_delhi,7,150.9
+act_ambedkaruniversitydelhi,Ambedkar University Delhi,Government Agency,reg_delhi,12,133.22
+act_lalbahadurshastrihospital,Lal Bahadur Shastri Hospital,Government Agency,reg_delhi,2,133.0
+act_intelligentcommunicationsystemsindialtd,Intelligent Communication Systems India Ltd,Government Agency,reg_delhi,2,115.0
+act_delhiparksandgardenssociety,Delhi Parks and Gardens Society,Government Agency,reg_delhi,2,109.76
+act_delhijudicialacademy,Delhi Judicial Academy,Government Agency,reg_delhi,2,93.7
+act_delhisatehealthmission,Delhi Sate Health Mission,Government Agency,reg_delhi,1,90.0
+act_departmentofdelhiarchives,Department of Delhi Archives,Government Agency,reg_delhi,1,88.59
+act_instituteofhumanbehaviourandalliedsciences,Institute of Human Behaviour and Allied Sciences,Government Agency,reg_delhi,4,58.4
+act_delhistatecancerinstitute,Delhi State Cancer Institute,Government Agency,reg_delhi,6,44.36
+act_departmentofenvironment,Department of Environment,Government Agency,reg_delhi,1,40.13
+act_revenuedepartment,Revenue Department,Government Agency,reg_delhi,1,38.0
+act_chachanehrubalchikitsalaya,Chacha Nehru Bal Chikitsalaya,Government Agency,reg_delhi,8,24.0
+act_gurugovindsinghgovthospital,Guru Govind Singh Govt Hospital,Government Agency,reg_delhi,4,22.8
+act_collegeofart,College of Art,Government Agency,reg_delhi,1,13.6
+act_babujagjivanrammemorialhospital,Babu Jagjivan Ram Memorial Hospital,Government Agency,reg_delhi,1,10.0
+act_attarsainijaineyeandgeneralhospitallawrenc,"Attar Saini Jain Eye and General Hospital, Lawrenc",Government Agency,reg_delhi,1,8.0
+act_bhagwanmahavirhospital,Bhagwan Mahavir Hospital,Government Agency,reg_delhi,1,7.2
+act_maulanaazadinstituteofdentalsciences,Maulana Azad Institute of Dental Sciences,Government Agency,reg_delhi,1,3.6
+act_jagpraveshchandrahospital,Jag Pravesh Chandra Hospital,Government Agency,reg_delhi,1,1.8
+act_delhilegislativeassemblysecretariat,Delhi Legislative Assembly Secretariat,Government Agency,reg_delhi,2,0.48
+act_delhisocietyforpreventionofcrueltytoanimals,Delhi Society For Prevention of Cruelty to Animals,Government Agency,reg_delhi,2,0.0
+act_directorateofinformationandpublicity,Directorate of Information and Publicity,Government Agency,reg_delhi,1,0.0
+act_depttofinformationtechnology,Deptt of Information Technology,Government Agency,reg_delhi,4,0.0
+act_delhisubordinateserviceselectionboard,Delhi Subordinate Service Selection Board,Government Agency,reg_delhi,1,0.0
+act_delhistateaidscontrolsociety,Delhi State Aids Control Society,Government Agency,reg_delhi,3,0.0
+act_delhikhadiandvillageindustrialboard,Delhi Khadi and Village Industrial Board,Government Agency,reg_delhi,1,0.0
+act_delhifireservice,Delhi Fire Service,Government Agency,reg_delhi,1,0.0
+act_delhiconsumerscooperativeewholesalestoreltd,Delhi Consumers Cooperative E Wholesale Store Ltd.,Government Agency,reg_delhi,1,0.0
+act_officeofcommofexciseenttandluxurytax,Office of Comm. of Excise Entt and Luxury Tax,Government Agency,reg_delhi,1,0.0
+act_animalhusbandrydepartmentgnctd,Animal Husbandry Department GNCTD,Government Agency,reg_delhi,2,0.0
+act_financedepartment,Finance Department,Government Agency,reg_delhi,1,0.0

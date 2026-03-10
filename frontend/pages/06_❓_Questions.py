@@ -9,9 +9,55 @@ import streamlit as st
 import requests
 import pandas as pd
 from utils.geo_selector import render_geo_selector, geo_breadcrumb
+from utils.constants import SCHEME_DISPLAY_NAMES
 
 BASE_URL = "http://127.0.0.1:8000"
 GROQ_KEY = os.environ.get("GROQ_API_KEY", "")
+
+# ─── NLP Keyword Matching ──────────────────────────────────────────────
+INTENT_KEYWORDS = {
+    "amrut": "What was built in this ward under AMRUT 2.0?",
+    "amrut 2.0": "What was built in this ward under AMRUT 2.0?",
+    "built": "What was built in this ward under AMRUT 2.0?",
+    "constructed": "What was built in this ward under AMRUT 2.0?",
+    "infrastructure": "What was built in this ward under AMRUT 2.0?",
+    "no evidence": "Which assets have NO evidence linked?",
+    "unverified": "Which assets have NO evidence linked?",
+    "no proof": "Which assets have NO evidence linked?",
+    "missing": "Which assets have NO evidence linked?",
+    "water bod": "Which assets have NO evidence linked?",
+    "water body": "Show all water body assets",
+    "water bodies": "Show all water body assets",
+    "jheel": "Show all water body assets",
+    "lake": "Show all water body assets",
+    "pond": "Show all water body assets",
+    "funding": "How much funding was allocated per scheme?",
+    "budget": "How much funding was allocated per scheme?",
+    "allocated": "How much funding was allocated per scheme?",
+    "cost": "How much funding was allocated per scheme?",
+    "scheme": "How much funding was allocated per scheme?",
+    "agency": "Which agency implemented the most projects?",
+    "implemented": "Which agency implemented the most projects?",
+    "mcd": "Which agency implemented the most projects?",
+    "drain": "Show all completed drain projects",
+    "nallah": "Show all completed drain projects",
+    "desilting": "Show all completed drain projects",
+    "toilet": "Show all completed drain projects",
+    "road": "Show all completed drain projects",
+    "delhi": "📊 AMRUT national drainage progress — where does Delhi stand?",
+    "national": "📊 AMRUT national drainage progress — where does Delhi stand?",
+    "pmay": "How much funding was allocated per scheme?",
+    "housing": "How much funding was allocated per scheme?",
+    "sbm": "How much funding was allocated per scheme?",
+    "swachh": "How much funding was allocated per scheme?",
+}
+
+def match_intent(user_question: str) -> str | None:
+    q_lower = user_question.lower()
+    for keyword, mapped_question in INTENT_KEYWORDS.items():
+        if keyword in q_lower:
+            return mapped_question
+    return None
 
 # ──────────────────────────────────────────────────────────────
 # Preset questions — each has a label and a backend endpoint call
@@ -68,10 +114,7 @@ PRESET_QUESTIONS = [
 ]
 
 
-def hide_live_ingestion():
-    st.markdown("""<style>
-    [data-testid="stSidebarNav"] ul li:nth-child(4){display:none}
-    </style>""", unsafe_allow_html=True)
+
 
 
 def run_preset_question(endpoint: str, ward_id: str) -> dict | None:
@@ -118,19 +161,28 @@ Return ONLY the Cypher query string, nothing else. No explanation, no backticks.
     return None
 
 
-def display_result(rows: list, is_mock: bool):
+def display_result(rows: list, is_mock: bool, endpoint: str = None):
     if is_mock:
         st.warning("⚠️ Demo data — live graph query returned empty. Showing representative data.")
-    if not rows:
-        st.info("No data found for this query in the selected ward.")
-        return
     df = pd.DataFrame(rows)
-    st.dataframe(df, use_container_width=True)
+    if df.empty:
+        if endpoint in ["q_no_evidence", "Which assets have NO evidence linked?"]:
+            st.success("✅ Every asset in this ward has at least one linked evidence article!")
+            st.balloons()
+        else:
+            st.success("✅ All assets in this ward have linked evidence! Or no matching assets found.")
+    else:
+        if endpoint in ["q_no_evidence", "Which assets have NO evidence linked?"]:
+            st.warning(f"⚠️ {len(df)} out of 29 assets have no proof")
+            st.dataframe(df, use_container_width=True)
+            st.caption("These assets are marked ❌ Unverified. Add news articles or photos to upgrade their proof status.")
+        else:
+            st.dataframe(df, use_container_width=True)
 
 
 def main() -> None:
     st.set_page_config(page_title="Governance Audit | Pramaan", layout="wide")
-    hide_live_ingestion()
+    st.markdown("""<style>[data-testid="stSidebarNav"] a[href*="Live_Ingestion"] { display: none !important; }</style>""", unsafe_allow_html=True)
 
     st.title("🔍 PRAMAAN — Governance Audit Console")
     st.caption("Interrogate the knowledge graph. Ask any question about what was built, funded, and proven.")
@@ -153,16 +205,41 @@ def main() -> None:
         ask_btn = st.button("🔍 Ask", use_container_width=True)
 
     if ask_btn and user_q:
-        with st.spinner("🧠 Translating to Cypher and querying the graph..."):
-            result = nl_to_cypher_and_run(user_q, ward_id)
-        if result:
-            st.markdown("#### 📋 Answer")
-            if result.get("cypher"):
-                with st.expander("🔎 Generated Cypher"):
-                    st.code(result["cypher"], language="cypher")
-            display_result(result["rows"], result.get("is_mock", False))
+        matched = match_intent(user_q)
+        if matched:
+            st.info(f"💡 Understood intent as: **{matched}**")
+            # Find the equivalent preset question endpoint
+            matched_endpoint = None
+            for pq in PRESET_QUESTIONS:
+                if pq["label"] == matched:
+                    matched_endpoint = pq["endpoint"]
+                    break
+                    
+            if matched_endpoint:
+                if matched_endpoint == "amrut_national":
+                    st.warning("National progress stats are available in the suggested questions panel.")
+                else:
+                    with st.spinner("Querying knowledge graph..."):
+                        result = run_preset_question(matched_endpoint, ward_id)
+                    if result and result["rows"]:
+                        display_result(result["rows"], False, matched_endpoint)
+                    else:
+                        st.warning("No data found for this intent.")
         else:
-            st.error("Could not parse this question. Try one of the suggested questions below.")
+            with st.spinner("🧠 Translating to Cypher and querying the graph..."):
+                result = nl_to_cypher_and_run(user_q, ward_id)
+            if result:
+                st.markdown("#### 📋 Answer")
+                if result.get("cypher"):
+                    with st.expander("🔎 Generated Cypher"):
+                        st.code(result["cypher"], language="cypher")
+                
+                if not result.get("rows"):
+                    st.warning(f"No graph data found for: '{user_q}'. Try one of the suggested questions above.")
+                else:
+                    display_result(result["rows"], result.get("is_mock", False), "custom")
+            else:
+                st.warning(f"No graph data found for: '{user_q}'. Try one of the suggested questions above.")
 
     st.markdown("---")
 
@@ -243,9 +320,9 @@ def main() -> None:
                 with st.spinner("Querying knowledge graph..."):
                     result = run_preset_question(pq["endpoint"], ward_id)
                 if result and result["rows"]:
-                    display_result(result["rows"], False)
+                    display_result(result["rows"], False, pq["endpoint"])
                 else:
-                    display_result(pq["mock"], True)
+                    display_result(pq["mock"], True, pq["endpoint"])
 
     st.markdown("---")
 
@@ -259,16 +336,24 @@ def main() -> None:
             c1, c2, c3, c4, c5 = st.columns(5)
             c1.metric("🏗 Total", sd["total_assets"])
             c2.metric("✅ Fully Verified", counts.get("fully_verified", 0))
-            c3.metric("📋 Data Only", counts.get("partial", 0))
+            c3.metric("📋 Data Only", counts.get("partially_verified", counts.get("data_only", 0)))
             c4.metric("📰 News Only", counts.get("news_only", 0))
             c5.metric("❌ Unverified", counts.get("unverified", 0))
 
-            sch = sd.get("scheme_breakdown", {})
+            from backend.utils.stats import get_scheme_breakdown
+            from backend.app.neo4j_client import get_session
+            try:
+                with get_session() as session:
+                    sch = get_scheme_breakdown(ward_name, session)
+            except Exception:
+                sch = sd.get("scheme_breakdown", {})
+                
             if sch:
                 st.markdown("**Scheme Breakdown:**")
-                sch_cols = st.columns(min(len(sch), 6))
+                sch_cols = st.columns(min(len(sch), 6) or 1)
                 for i, (sname, cnt) in enumerate(sorted(sch.items(), key=lambda x: -x[1])):
-                    sch_cols[i % 6].metric(sname[:18], cnt)
+                    display = SCHEME_DISPLAY_NAMES.get(sname, sname[:20] + "...")
+                    sch_cols[i % 6].metric(label=display, value=cnt)
     except Exception as e:
         st.warning(f"Could not load live stats: {e}")
 

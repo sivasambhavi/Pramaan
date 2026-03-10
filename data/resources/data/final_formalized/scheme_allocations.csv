@@ -1,0 +1,47 @@
+allocation_id,scheme_id,region_name,total_allocated,total_completed,unit
+pmay_andhra_pradesh,sch_pmay_u,Andhra Pradesh,1544874.0,1029916.0,houses
+pmay_bihar,sch_pmay_u,Bihar,251433.0,167622.0,houses
+pmay_chhattisgarh,sch_pmay_u,Chhattisgarh,376689.0,251126.0,houses
+pmay_goa,sch_pmay_u,Goa,4717.5,3145.0,houses
+pmay_gujarat,sch_pmay_u,Gujarat,1405380.0,936920.0,houses
+pmay_haryana,sch_pmay_u,Haryana,104613.0,69742.0,houses
+pmay_himachal_pradesh,sch_pmay_u,Himachal Pradesh,16486.5,10991.0,houses
+pmay_jharkhand,sch_pmay_u,Jharkhand,231255.0,154170.0,houses
+pmay_karnataka,sch_pmay_u,Karnataka,566977.5,377985.0,houses
+pmay_kerala,sch_pmay_u,Kerala,196794.0,131196.0,houses
+pmay_madhya_pradesh,sch_pmay_u,Madhya Pradesh,1269751.5,846501.0,houses
+pmay_maharashtra,sch_pmay_u,Maharashtra,1321983.0,881322.0,houses
+pmay_odisha,sch_pmay_u,Odisha,237480.0,158320.0,houses
+pmay_punjab,sch_pmay_u,Punjab,143271.0,95514.0,houses
+pmay_rajasthan,sch_pmay_u,Rajasthan,327355.5,218237.0,houses
+pmay_tamil_nadu,sch_pmay_u,Tamil Nadu,893761.5,595841.0,houses
+pmay_telangana,sch_pmay_u,Telangana,334993.5,223329.0,houses
+pmay_uttar_pradesh,sch_pmay_u,Uttar Pradesh,2506624.5,1671083.0,houses
+pmay_uttarakhand,sch_pmay_u,Uttarakhand,58042.5,38695.0,houses
+pmay_west_bengal,sch_pmay_u,West Bengal,667749.0,445166.0,houses
+pmay_andaman_and_nicobar_islands,sch_pmay_u,Andaman and Nicobar Islands,70.5,47.0,houses
+pmay_chandigarh,sch_pmay_u,Chandigarh,1884.0,1256.0,houses
+pmay_dadra_and_nagar_haveli_and_daman_and_diu,sch_pmay_u,Dadra and Nagar Haveli and Daman and Diu,13845.0,9230.0,houses
+pmay_delhi,sch_pmay_u,Delhi,44964.0,29976.0,houses
+pmay_jammu_and_kashmir,sch_pmay_u,Jammu and Kashmir,43476.0,28984.0,houses
+pmay_ladakh,sch_pmay_u,Ladakh,1314.0,876.0,houses
+pmay_puducherry,sch_pmay_u,Puducherry,15978.0,10652.0,houses
+amrut_andaman_&_nicobar_islands,sch_amrut_2,Andaman & Nicobar Islands,4.02,1.42,crores_inr
+amrut_andhra_pradesh,sch_amrut_2,Andhra Pradesh,342.72,88.62,crores_inr
+amrut_arunachal_pradesh,sch_amrut_2,Arunachal Pradesh,40.37,13.12,crores_inr
+amrut_bihar,sch_amrut_2,Bihar,237.99,0.0,crores_inr
+amrut_delhi,sch_amrut_2,Delhi,5.38,2.01,crores_inr
+amrut_gujarat,sch_amrut_2,Gujarat,217.8,118.33,crores_inr
+amrut_haryana,sch_amrut_2,Haryana,452.37,111.26,crores_inr
+amrut_himachal_pradesh,sch_amrut_2,Himachal Pradesh,31.91,20.64,crores_inr
+amrut_jammu_and_kashmir,sch_amrut_2,Jammu and Kashmir,184.72,120.36,crores_inr
+amrut_karnataka,sch_amrut_2,Karnataka,243.38,170.51,crores_inr
+amrut_kerala,sch_amrut_2,Kerala,340.7,202.07,crores_inr
+amrut_madhya_pradesh,sch_amrut_2,Madhya Pradesh,222.04000000000002,148.86,crores_inr
+amrut_maharashtra,sch_amrut_2,Maharashtra,94.06,0.0,crores_inr
+amrut_mizoram,sch_amrut_2,Mizoram,57.2,0.0,crores_inr
+amrut_nagaland,sch_amrut_2,Nagaland,79.75,13.59,crores_inr
+amrut_rajasthan,sch_amrut_2,Rajasthan,38.91,24.07,crores_inr
+amrut_sikkim,sch_amrut_2,Sikkim,13.33,3.17,crores_inr
+amrut_uttarakhand,sch_amrut_2,Uttarakhand,34.85,15.62,crores_inr
+amrut_west_bengal,sch_amrut_2,West Bengal,301.5,60.0,crores_inr

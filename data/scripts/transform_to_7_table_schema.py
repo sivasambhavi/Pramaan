@@ -50,7 +50,7 @@ pd.DataFrame(regions).to_csv(os.path.join(output_dir, "regions.csv"), index=Fals
 # --- 3. ACTORS ---
 print("Generating actors.csv...")
 actors = [
-    {'actor_id': 'ACT_MCD_SHAHDARA_WORKS', 'name': 'MCD Shahdara South Works Dept', 'type': 'government', 'region_id': 'REG_SHAHDARA_SOUTH'},
+    {'actor_id': 'ACT_MCD_SHAHDARA_WORKS', 'name': 'MCD Shahdara North Works Dept', 'type': 'government', 'region_id': 'REG_SHAHDARA_NORTH'},
     {'actor_id': 'ACT_MCD_SHAHDARA_SANITATION', 'name': 'MCD Shahdara Sanitation Dept', 'type': 'government', 'region_id': 'REG_SHAHDARA_SOUTH'},
     {'actor_id': 'ACT_MCD_ELECTRICAL', 'name': 'MCD Electrical Dept - Shahdara', 'type': 'government', 'region_id': 'REG_SHAHDARA_SOUTH'},
     {'actor_id': 'ACT_W45_COUNCILLOR', 'name': 'Ward 45 Councillor', 'type': 'elected_rep', 'region_id': 'REG_W45'}

@@ -48,6 +48,29 @@ def main() -> None:
                 SET s.name = $name, s.ministry = $ministry, s.category = $category
             """, row.to_dict())
 
+        # --- 3B. LOAD SCHEME ALLOCATIONS ---
+        allocations_path = DATA_DIR / "scheme_allocations.csv"
+        if allocations_path.exists():
+            print("Loading Scheme Allocations...")
+            df_alloc = pd.read_csv(allocations_path).fillna("")
+            for _, row in df_alloc.iterrows():
+                # Ensure region via name
+                session.run("""
+                    MERGE (r:Region {name: $region_name})
+                    ON CREATE SET r.region_id = 'reg_' + toLower(replace($region_name, ' ', '_')), r.type = 'state'
+                """, {"region_name": row['region_name']})
+                
+                session.run("""
+                    MERGE (sa:SchemeAllocation {allocation_id: $allocation_id})
+                    SET sa.total_allocated = $total_allocated, sa.total_completed = $total_completed, sa.unit = $unit
+                    WITH sa
+                    MATCH (s:Scheme {scheme_id: $scheme_id})
+                    MERGE (s)-[:ALLOCATED]->(sa)
+                    WITH sa
+                    MATCH (r:Region {name: $region_name})
+                    MERGE (sa)-[:FOR_REGION]->(r)
+                """, row.to_dict())
+
         # --- 4. LOAD ACTORS ---
         print("Loading Actors...")
         df_actors = pd.read_csv(DATA_DIR / "actors.csv").fillna("")
@@ -63,14 +86,34 @@ def main() -> None:
                     MERGE (a)-[:REPRESENTS]->(r)
                 """, row.to_dict())
 
+        # --- 4B. LOAD ENRICHED ACTORS ---
+        actors_env_path = DATA_DIR / "actors_enriched.csv"
+        if actors_env_path.exists():
+            print("Loading Enriched Actors (Tenders)...")
+            df_actors_en = pd.read_csv(actors_env_path).fillna("")
+            for _, row in df_actors_en.iterrows():
+                session.run("""
+                    MERGE (a:Actor {actor_id: $actor_id})
+                    SET a.name = $name, a.type = $type, a.total_tenders = $total_tenders, a.budget_lakhs = $budget_lakhs
+                """, row.to_dict())
+                if row['region_id']:
+                    session.run("""
+                        MATCH (a:Actor {actor_id: $actor_id})
+                        MATCH (r:Region {region_id: $region_id})
+                        MERGE (a)-[:REPRESENTS]->(r)
+                    """, row.to_dict())
+
         # --- 5. LOAD ASSETS ---
         print("Loading Assets...")
         df_assets = pd.read_csv(DATA_DIR / "assets.csv").fillna("")
         for _, row in df_assets.iterrows():
+            key = f"{row['type']}_{str(row['name']).lower().replace(' ', '_')}_{row['region_id']}"
             session.run("""
-                MERGE (a:Asset {asset_id: $asset_id})
-                SET a.name = $name, a.type = $type, a.cost = $cost, a.status = $status, a.lat = $lat, a.lon = $lon
-            """, row.to_dict())
+                MERGE (a:Asset {unique_asset_key: $key})
+                ON CREATE SET a.asset_id = $asset_id, a.name = $name, a.type = $type, 
+                              a.cost = $cost, a.status = $status, a.lat = $lat, a.lon = $lon
+                ON MATCH SET a.cost = $cost, a.status = $status
+            """, {**row.to_dict(), "key": key})
             # Relationships
             if row['region_id']:
                 session.run("MATCH (a:Asset {asset_id: $id}) MATCH (r:Region {region_id: $rid}) MERGE (a)-[:LOCATED_IN]->(r)", {"id": row['asset_id'], "rid": row['region_id']})

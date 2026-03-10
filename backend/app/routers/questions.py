@@ -37,12 +37,12 @@ def q_amrut(ward_id: str = "REG_W45"):
 def q_no_evidence(ward_id: str = "REG_W45"):
     cypher = """
     MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)
-    WHERE r.region_id = $ward_id OR r.parent_region_id = $ward_id
-    AND NOT EXISTS {
-      MATCH (e:Evidence)-[:PROVES]->(a)
-      WHERE e.url IS NOT NULL AND trim(e.url) <> '' AND e.url <> 'N/A'
-    }
-    RETURN a.name AS Asset, a.type AS Type, a.status AS Status
+    WHERE (r.region_id = $ward_id OR r.parent_region_id = $ward_id)
+    AND NOT EXISTS { MATCH (e:Evidence)-[:PROVES]->(a) }
+    AND NOT EXISTS { MATCH (n:NewsArticle)<-[:MENTIONED_IN]-(a) }
+    RETURN a.name AS `Asset`,
+           a.type AS `Type`,
+           a.status AS `Status`
     ORDER BY a.name
     """
     rows = _run(cypher, {"ward_id": ward_id})
@@ -56,8 +56,9 @@ def q_scheme_funding(ward_id: str = "REG_W45"):
     MATCH (s:Scheme)-[:FUNDS]->(a:Asset)-[:LOCATED_IN]->(r:Region)
     WHERE r.region_id = $ward_id OR r.parent_region_id = $ward_id
     RETURN s.name AS Scheme,
-           count(DISTINCT a) AS Assets,
-           sum(CASE WHEN a.cost IS NOT NULL THEN a.cost ELSE 0 END) AS `Total Allocated (₹)`
+           count(DISTINCT a) AS `Asset Count`,
+           sum(CASE WHEN a.cost IS NOT NULL THEN a.cost ELSE 0 END) AS `Total Allocated (₹)`,
+           collect(DISTINCT a.type) AS `Asset Types`
     ORDER BY `Total Allocated (₹)` DESC
     """
     rows = _run(cypher, {"ward_id": ward_id})
@@ -71,8 +72,10 @@ def q_top_agency(ward_id: str = "REG_W45"):
     MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)
     WHERE r.region_id = $ward_id OR r.parent_region_id = $ward_id
     MATCH (a)-[:BUILT_BY]->(act:Actor)
-    RETURN act.name AS Agency, count(DISTINCT a) AS Projects
-    ORDER BY Projects DESC
+    RETURN act.name AS Agency, act.type AS Type,
+           count(DISTINCT a) AS `Projects Implemented`,
+           collect(DISTINCT a.type) AS `Asset Types`
+    ORDER BY `Projects Implemented` DESC
     """
     rows = _run(cypher, {"ward_id": ward_id})
     return {"data": rows}
@@ -85,9 +88,11 @@ def q_drains(ward_id: str = "REG_W45"):
     MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)
     WHERE (r.region_id = $ward_id OR r.parent_region_id = $ward_id)
       AND a.type = 'drain' AND a.status = 'completed'
+    OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
     RETURN a.name AS Asset,
            a.cost AS `Cost (₹)`,
-           a.status AS Status
+           a.status AS Status,
+           count(e) AS `Evidence Articles`
     ORDER BY a.name
     """
     rows = _run(cypher, {"ward_id": ward_id})

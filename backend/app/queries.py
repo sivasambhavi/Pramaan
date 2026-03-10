@@ -86,19 +86,23 @@ OPTIONAL MATCH (s:Scheme)-[:FUNDS]->(a)
 OPTIONAL MATCH (a)-[:BUILT_BY]->(act:Actor)
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
   WHERE e.url IS NOT NULL AND trim(e.url) <> '' AND e.url <> 'N/A'
-WITH a, s, act, collect(DISTINCT e.url) AS evidence_urls
+OPTIONAL MATCH (a)-[:MENTIONED_IN]->(n:NewsArticle)
+WITH a, s, act, count(e) AS ev_count, count(n) AS news_count
 RETURN
   a.asset_id  AS asset_id,
   a.name      AS name,
   a.type      AS type,
   a.status    AS status,
   a.cost      AS cost,
+  CASE WHEN news_count > 0 THEN 'fully_verified'
+       WHEN ev_count > 0 THEN 'partially_verified'
+       ELSE 'unverified'
+  END AS proof_status,
   a.lat       AS lat,
   a.lon       AS lon,
   s.name      AS scheme_name,
   s.scheme_id AS scheme_id,
-  act.name    AS actor_name,
-  evidence_urls
+  act.name    AS actor_name
 ORDER BY a.name
 """
 

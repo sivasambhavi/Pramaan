@@ -1755,3 +1755,164 @@ If any of the above is missing → prioritize ruthlessly. Cut thin domains first
  
  * * E n d   o f   P R D * *  
  
+ - - - 
+ 
+ # #   1 2 .   v 3 . 5   D e m o g r a p h i c   I m p a c t   I n t e g r a t i o n 
+ 
+ # # #   1 2 . 1   W a r d - L e v e l   B e n e f i c i a r y   M o d e l i n g 
+ T o   d e m o n s t r a t e   t h e   d i r e c t   h u m a n   i m p a c t   o f   c o m p l e t e d   g o v e r n a n c e   p r o j e c t s ,   t h e   * * B e n e f i c i a r i e s * *   s e c t i o n   h a s   b e e n   r e s t o r e d   w i t h   a   d y n a m i c   d e m o g r a p h i c   e x t r a p o l a t i o n   m o d e l : 
+ -   * * B a s e l i n e   D a t a : * *   U t i l i z e s   D e l h i   C e n s u s   2 0 1 1   p o p u l a t i o n   d a t a   a t   t h e   D M C   W a r d   l e v e l . 
+ -   * * E x t r a p o l a t i o n : * *   P r o j e c t s   p o p u l a t i o n   g r o w t h   t o   2 0 2 6   ( e s t i m a t e d   2 %   a n n u a l   g r o w t h )   t o   d i s p l a y   r e a l i s t i c   c u r r e n t   f i g u r e s   f o r   W a r d   P o p u l a t i o n   a n d   T o t a l   H o u s e h o l d s . 
+ 
+ # # #   1 2 . 2   A s s e t - S p e c i f i c   I m p a c t   C a l c u l a t i o n 
+ D i r e c t   b e n e f i c i a r i e s   a r e   c a l c u l a t e d   a l g o r i t h m i c a l l y   b a s e d   o n   t h e   a s s e t   t y p e ' s   u t i l i t y   p a t t e r n : 
+ -   * * D r a i n s : * *   1 0 0 %   o f   W a r d   H o u s e h o l d s   ( F l o o d   p r e v e n t i o n   u t i l i t y ) . 
+ -   * * R o a d s : * *   7 0 %   o f   W a r d   P o p u l a t i o n   ( D a i l y   c o m m u t e r s   a n d   p e d e s t r i a n s ) . 
+ -   * * P a r k s : * *   3 0 %   o f   W a r d   P o p u l a t i o n   ( R e c r e a t i o n a l   u s e r s ,   c h i l d r e n ,   s e n i o r s ) . 
+ -   * * T o i l e t s : * *   5 0 %   o f   W a r d   P o p u l a t i o n   ( W o m e n   a n d   c h i l d r e n   p r i m a r y   u t i l i t y ) . 
+ -   * * W a t e r   B o d i e s / L a k e s : * *   1 0 0 %   o f   W a r d   P o p u l a t i o n   ( R e s t o r a t i o n   e c o l o g i c a l   i m p a c t ) . 
+ -   * * G e n e r a l / B u i l d i n g s : * *   1 0 0 %   o f   W a r d   P o p u l a t i o n . 
+ 
+ * * E n d   o f   P R D * *  
+ 
+
+---
+
+## 13. v3.6 Data Modeling, Deduplication & Backend Mapping
+
+### 13.1 Neo4j Deduplication
+- **Problem:** Asset duplicates (e.g., Water Body - BAGROLA) appear multiple times in the Ward Map.
+- **Solution:** Execute a multi-step Cypher cleanup to merge duplicate groups into a single node, reassign evidence relationships, and detach/delete the extraneous nodes. Introduce a unique constraint .unique_asset_key and ensure all Python seed scripts use MERGE instead of CREATE for idempotency.
+
+### 13.2 Extended Multi-Scheme Modeling
+- **PMAY Housing:** Parse housing data to create Funding nodes (scheme_name: PMAY) and Asset properties tracking sanctioned, completed, and under-construction houses. Cost calculated via fund_released_cr.
+- **Swachh Bharat:** Parse sanitation data to create Funding nodes (scheme_name: Swachh Bharat) and Asset properties tracking public toilets built and ODF status.
+- **Ingestion Script:** ackend/seed_multi_scheme.py will handle reading these formats and inserting the new nodes/relationships.
+
+### 13.3 Backend Beneficiary Mapping
+- **Module:** Create ackend/ward_population.py containing a centralized DELHI_WARD_POPULATION lookup extrapolated from Census data.
+- **Mapping Logic:** Encapsulate get_beneficiary_count to map asset types (drain, road, park, toilet, water_body) to their specific formulas using dynamic population metrics.
+
+
+---
+
+## 14. v3.7 UI Polish & UI Fixes
+1. **Map Jitter:** Added random GPS offset to Shahdara Ward 45 Map points to prevent clustering and overlapping dots.
+2. **Scheme Metainfo Reduction:** Shortened long st.metric headings for scheme titles to LDG, PMAY, and SBM Urban.
+3. **Safe Photo Evidence Logic:** Fallback st.info on empty or broken image URLs in Proof Chain replacing large HTML blocks.
+4. **Beneficiaries Direct Impact Delta:** Contextualized households shielded vs residents directly served based on asset type.
+5. **No Data Warnings:** Provided a warning condition on the AI Questions Graph to avoid empty tables.
+
+
+---
+
+## 15. v3.8 UI Polish & Query Accuracy
+1. **Empty Asset Queries:** The 'Which assets have NO evidence linked?' Cypher query was fixed to enforce 'NOT EXISTS' logic on HAS_EVIDENCE/PROVES strictly removing structurally verified items.
+2. **Fuzzy Ward Naming:** Addressed backend logic in get_beneficiary_count for 'Main Shahdara Drain' population mismatch by stripping cases and dashes.
+3. **Datetime Parsing Cleanup:** Formatted article string tags to strictly omit raw HTTP date newline sequences.
+4. **Clarified Scheme Names:** In the UI Ward Map section SCHEME_DISPLAY_NAMES strictly decodes LDG vs AMRUT with descriptive metadata.
+5. **Empty DataFrame Display state:** Provided a user-centric message No unverified assets found globally to Questions dataframe output on empty lists.
+
+
+---
+
+## 16. v3.9 Smart Scraping & UI Extensions
+1. **Smart Query Builder:** Built uild_news_query combining asset names, schemes, and localities with a tiered fallback approach.
+2. **Relevance Filtering:** Added etch_best_news to scrape Google News RSS and strictly filter by relevant project keywords (e.g. allocated, completed) and count relevance scores.
+3. **Delivery Status Tracker:** Integrated ASSET_PROGRESS_TEMPLATE into Proof Chain to split project milestones into ✅ Completed, 🔄 In Progress, and ⏳ Pending buckets dynamically by asset type.
+4. **Budget Tracker:** Inserted a financial tracking block calculating estimated fund releases (95% for completed, 50% for in_progress) against sanctioned costs directly into the Proof Chain.
+
+
+---
+
+## 17. v4.1 Hardcoded News & Scheme Mappings
+1. **Hardcoded News Replacement:** Replaced the live Google News RSS scraper with REAL_NEWS_DATA inside Proof_Chain.py to ensure 100% relevant, verifiable project history (e.g., Delhi MCD desilting reports instead of generic parking lot news) for the MVP demo.
+2. **Dynamic Scheme Mappings:** Injected ASSET_TYPE_TO_SCHEME inside Ward_Map.py to dynamically override placeholder Scheme names (like LDG) with verified Government Scheme matrix (AMRUT 2.0, SBM-U Phase 2, PMAY-U 2.0) and display explicit budget allocations natively on the map cards.
+
+
+---
+
+## 18. v4.0 News Timeline & Mathematical Progress Analytics
+1. **News Coverage Analytics:** Extracted critical numerical statistics directly from the news texts (e.g., 16,966 MT silt cleared, 100% small drains, ₹10.2 Cr active phase 1).
+2. **Timeline View:** Structured the Proof_Chain.py UI to present the matched news history as an explicit timeline displaying What is Covered vs. Yet to be Covered.
+
+
+---
+
+## 19. v4.2 Bug Fixes: Beneficiaries & Search Queries
+1. **Differentiated Beneficiary Math:** Replaced the generic ward population fallback in Proof_Chain.py with custom BENEFICIARY_LOGIC mathematical calculation formulas per asset type (e.g., drains protect 85% of households from waterlogging, toilets serve 500 women/children each).
+2. **Questions Console Cypher Refactoring:** Fixed logic in ackend/app/routers/questions.py for all 5 preset graph interrogation endpoints to correctly return accurate aggregation statistics (Projects Implemented, Evidence Articles Linked) without false 29-asset defaults on missing edges.
+3. **DataFrame Empty State Handlers:** Updated Questions.py to properly trap empty query states and output specific st.warning notices instead of misleading success defaults.
+
+
+---
+
+## 20. v4.3 MVP Final Bug Fixes & UI Polish
+1. **App Crashes Resolved:** Fixed indentation bug causing Streamlit initialization failure on `02_Proof_Chain.py` and solved `IndexError: list index out of range` in `01_Ward_Map.py` by dynamically scaling UI layout lists depending on backend scheme breakdown results.
+2. **NLP Intent Matcher & Empty Queries:** Upgraded `06_Questions.py` natural language parser with a 34-keyword `INTENT_KEYWORDS` dictionary mapping fuzzy terminology to preset graph queries. Implemented explicit dataframe empty check warnings to prevent misleading `Success` badges on 0-result searches.
+3. **Agency Nomenclature & Scheme UI Consistency:** Hardcoded Neo4j graph update altering errant agency values from `MCD Shahdara South Works Dept` to their correct `North` designation and implemented shared `constants.py` variables containing standard display abbreviations for truncated metrics limits.
+
+
+---
+
+## 21. v4.4 Sync Delivery Scores & Neo4j Truth
+1. **Proof_Chain Neo4j Sync:** Built `sync_evidence_to_neo4j` into `Proof_Chain.py` to auto-write verified `REAL_NEWS_DATA` evidence back into the knowledge graph, eliminating the disjoint frontend-backend state.
+2. **Questions Engine Filtering:** Adjusted `06_Questions.py` Cypher query to correctly return purely unverified assets by relying on `NOT EXISTS { MATCH (a)-[:HAS_EVIDENCE]->(:NewsArticle) }` and mapped success callbacks.
+3. **Ward Map Score Synchronization:** Altered the entire delivery score weighting backend algorithm in `app/routers/wards.py` to count actual `a.proof_status` stored uniformly in Neo4j, updating the KPI colors and percentages dynamically via frontend mapping and refresh controls.
+
+
+---
+
+## 22. v4.5 Regression Fixes & UI Integrations
+1. **Import Context Resolutions:** Overhauled `app.config` Streamlit path resolutions through `sys.path.insert` execution scope injection.
+2. **Delivery Scoring Analytics:** Overrode the proxy string-status mapping inside `queries.py` to calculate fractional verified statuses purely derived from edge traversal (`HAS_EVIDENCE` and `PROVES` counts), syncing the summary header perfectly with table nodes.
+3. **Scheme Typology Patching:** Ran direct Neo4j commands to upgrade incorrectly classified "water_body" properties. Embedded native HTML title tooltips over previously truncated names in `Ward_Map.py`.
+4. **Unified Stats API:** Separated scheme distributions into a callable component inside `backend/utils/stats.py`, executing from the raw Neo4j graph context. Applied identically into `Questions.py` and `Ward_Map.py` to enforce consistency.
+5. **NO_EVIDENCE Specificity:** Patched the `backend/app/routers/questions.py` logic to query specifically across `HAS_EVIDENCE` and `MENTIONED_IN` constraints without overlapping.
+6. **Baseline Indicators:** Updated the delivery gauge with Plotly `delta` mechanics tracking against a 45% `Delhi Avg` static red dashed threshold benchmark.
+
+
+---
+
+## 23. v4.5.1 Final UI State Sync & Integrity
+1. **Table Integrity**: Removed naive python loops breaking table scheme truncation, replacing them with raw text spans reflecting true Neo4j node properties.
+2. **Graph Structure Update**: Ran a migration explicitly migrating generic Scheme allocations on Water Body assets to explicitly match `SCH_AMRUT2`.
+3. **Sidebar Hotfix**: Applied a generic `[data-testid="stSidebarNav"] a[href*="Live_Ingestion"]` CSS declaration across ALL Streamlit routed components (`Ward_Map`, `Proof_Chain`, `Questions`) to prevent the page from reappearing during SPA transitions.
+4. **Plotly Gauge Error**: Reverted invalid `dash` property inside the delivery gauge mapping, restoring the visual `Delhi Avg` benchmark.
+5. **NO EVIDENCE Strict Adherence**: Refactored the Questions engine to rigorously use `(e:Evidence)-[:PROVES]->(a)` schemas rather than inverted mappings, ensuring true zero-sum node evaluations.
+
+
+---
+
+## 24. Final Audio Feedback Polish
+1. **Scheme Abbreviations Restored**: Stripped out unconditional python string truncation (`sname[:20] + "..."`) that was mangling short Scheme names inside the Ward Map summary metrics. Mapped display values directly through `SCHEME_SHORT_NAMES` formatting them across UI blocks cleanly.
+2. **Sidebar Lockdown**: Fully isolated the Live Ingestion page by physically moving `_Live_Ingestion.py` to `hidden_Live_Ingestion.py` completely circumventing Streamlit routing rules to enforce its removal from the UI.
+3. **Proof Chain Dynamic Budgets**: Expurged the fake `0.95%` hardcoded arrays on the Asset proof chain. Swapped the tracker state to output explicit "Awaiting Audit" labels pending factual API connections.
+4. **Questions DB Integrity**: Realigned the Q2 Cypher explicitly matching `(e:Evidence)-[:PROVES]->(a)` and `(n:NewsArticle)<-[:MENTIONED_IN]-(a)` edges. This immediately dropped the No Evidence result from an erroneous 29 ward-wide flag down to the precise 4 genuinely undocumented assets.
+
+
+---
+
+## 25. Fix Unknown Asset Schemes
+1. **Identify Unknowns**: Ran Cypher queries to identify 3 assets that were missing a `Scheme` relationship or had `a.scheme = \'Unknown\'`.
+2. **Graph Structure Update**: Executed a Neo4j migration to map these assets to their correct canonical Scheme nodes (e.g., `AMRUT 2.0 — Storm Water Drainage`, `CMDF — Chief Minister\'s Development Fund`) based on their `a.type`.
+3. **Property Update**: Explicitly populated the `a.scheme` property on these nodes mapped to their abbreviation titles (`AMRUT 2.0 Drainage`, `CMDF Roads`, etc.) for seamless fallback support.
+
+
+## 26. Fix Delivery Score Calculation
+- The delivery score calculation in `01_Ward_Map.py` has been updated to query Neo4j nodes dynamically rather than relying on stale Asset node properties that may be out of date.
+- It calculates the score using a specific formula: fully verified assets contribute 1.0, and partially verified assets contribute 0.5. `score = ((full_verified + partial) / total) * 100`.
+- It queries directly the `(:Evidence)-[:PROVES]->(a)` and `(a)-[:MENTIONED_IN]->(n:NewsArticle)` relationships.
+
+
+## 27. Fix Scheme Naming Truncations
+- Updated `SCHEME_SHORT_NAMES` in `constants.py` to correctly map shorthand names with embedded newlines (`\n`) for legacy schemes such as `PMAY - Pradhan Mantri Awas Yojana` and `Local Development Grants - Roads & Drains (Delhi)`.
+- Without this mapping, Streamlit natively truncated the long strings horizontally into ellipses (`...`) rendering them unreadable.
+- Added dynamic keyword matching in `Ward_Map.py` to route the `budget_source` correctly for legacy schemes that did not have a completely exact 1:1 match in `ASSET_TYPE_TO_SCHEME`.
+
+
+## 28. Real RSS Scraping and Proof Validation Logic
+- Re-enabled actual Google News RSS scraping inside `02_🧷_Proof_Chain.py` replacing the temporary hardcoded news blocks.
+- Refined queries inside `fetch_best_news` to accurately prioritize exact substring matches for the `asset_name` (e.g. "Main Shahdara Drain") in combination with the `ward_name` to prevent generic budget allocation news from dominating search results.
+- Fixed the graph state mutation inside the `sync_evidence_to_neo4j` function, altering it from `HAS_EVIDENCE` to the factual `MENTIONED_IN` relation.
+- Upgraded the Neo4j case evaluation to properly elevate `evidence_count = 1` into the `fully_verified` status so it no longer stalls at "Structured Only" when news is attached.

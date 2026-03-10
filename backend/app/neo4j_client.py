@@ -1,6 +1,15 @@
+import sys, os
 from contextlib import contextmanager
 from neo4j import GraphDatabase
-from app.config import settings
+
+try:
+    from app.config import settings
+except ImportError:
+    # Handle the case where the script is run from the frontend Streamlit app
+    # Or if root is not in sys.path
+    import sys, os
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+    from backend.app.config import settings
 
 _driver = None
 
