@@ -49,3 +49,42 @@ def amrut_drainage():
         "grand_total": grand_total,
         "states": states,
     }
+
+
+@router.get("/pmay-housing")
+def pmay_housing():
+    """
+    State/UT-wise PMAY-U completed & occupied houses (as on 31-Dec-2024).
+    Source: data.gov.in — MoHUA
+    """
+    raw = _load("pmay_housing_data.json")
+    records = raw.get("records", [])
+
+    # Separate Delhi row and totals
+    delhi = next((r for r in records if str(r.get("state_ut", "")).strip() == "Delhi"), None)
+    total = next(
+        (r for r in records if "total" in str(r.get("state_ut", "")).lower()),
+        None
+    )
+    states = [r for r in records if "total" not in str(r.get("state_ut", "")).lower()]
+
+    # Compute national totals from numeric fields if no explicit total row
+    if not total and states:
+        def _sum(field):
+            return sum(int(r.get(field, 0) or 0) for r in states)
+        total = {
+            "state_ut": "All India Total",
+            "houses_as_on_31_03_2024___completed": _sum("houses_as_on_31_03_2024___completed"),
+            "houses_as_on_31_03_2024___occupied": _sum("houses_as_on_31_03_2024___occupied"),
+            "houses_as_on_31_12_2024___completed": _sum("houses_as_on_31_12_2024___completed"),
+            "houses_as_on_31_12_2024___occupied": _sum("houses_as_on_31_12_2024___occupied"),
+        }
+
+    return {
+        "title": raw.get("title", "PMAY-U Housing Data"),
+        "source": "data.gov.in — MoHUA PMAY-U State/UT-wise data",
+        "source_url": "https://data.gov.in/catalog/statut-wise-total-number-completed-and-occupied-houses-under-pradhan-mantri-awas-yojana",
+        "delhi": delhi,
+        "national_total": total,
+        "states": states,
+    }

@@ -188,10 +188,10 @@ REAL_NEWS_DATA = {
     ]
 }
 
-def sync_evidence_to_neo4j(session, asset_name: str, asset_type: str, articles: list[dict]):
+def sync_evidence_to_neo4j(session, asset_id: str, asset_name: str, asset_type: str, articles: list[dict]):
     """
     Write REAL_NEWS_DATA articles to Neo4j as NewsArticle nodes 
-    linked via HAS_EVIDENCE, then update asset proof_status.
+    linked via MENTIONED_IN, then update asset proof_status.
     """
     if not articles:
         return
@@ -210,8 +210,8 @@ def sync_evidence_to_neo4j(session, asset_name: str, asset_type: str, articles: 
                 n.relevance = $relevance,
                 n.scraped_at = date()
             MERGE (a)-[:MENTIONED_IN]->(n)
-        """, 
-        asset_name=asset_name,
+        """,
+        asset_id=asset_id,
         evidence_id=evidence_id,
         title=article.get('title', ''),
         source=article.get('source', ''),
@@ -221,7 +221,7 @@ def sync_evidence_to_neo4j(session, asset_name: str, asset_type: str, articles: 
         relevance=article.get('relevance', '')
         )
     
-    # Now update the asset's proof_status based on evidence count
+    # Update the asset's proof_status based on evidence count
     session.run("""
         MATCH (a:Asset {asset_id: $asset_id})
         OPTIONAL MATCH (a)-[:MENTIONED_IN]->(n:NewsArticle)
@@ -676,7 +676,12 @@ def main() -> None:
                                 st.markdown("📰")
                         st.divider()
                 
-                # NOTE: Neo4j real-time sync removed (used asset_id out of scope).
+                # Sync evidence articles to Neo4j in real-time
+                try:
+                    with get_session() as neo_session:
+                        sync_evidence_to_neo4j(neo_session, asset_id, asset_name, asset_type, live_articles)
+                except Exception:
+                    pass  # Non-critical — UI proceeds even if Neo4j sync fails
                 # Evidence photos are driven by ASSET_EVIDENCE_PHOTOS in constants.py.
             else:
                 render_node("🔍", "Evidence Status",
@@ -941,6 +946,66 @@ def main() -> None:
                     st.caption("🔴 Red = NCT of Delhi | 🔵 Blue = other states")
             except Exception as ex:
                 st.caption(f"National data unavailable: {ex}")
+
+        # ── PMAY National Context Panel ───────────────────────────────────
+        if funding_name and "PMAY" in funding_name.upper():
+            import pandas as pd
+            st.divider()
+            st.markdown("### 🏠 National Context — PMAY-U Housing Delivery")
+            st.caption(
+                "Source: **data.gov.in** · MoHUA · State/UT-wise PMAY-U completed & occupied houses "
+                "(as on 31-Dec-2024) · "
+                "[View Dataset](https://data.gov.in/catalog/statut-wise-total-number-completed-and-occupied-houses-under-pradhan-mantri-awas-yojana)"
+            )
+            try:
+                pmay_resp = requests.get(f"{BASE_URL}/data/pmay-housing", timeout=6)
+                if pmay_resp.status_code == 200:
+                    pmay      = pmay_resp.json()
+                    delhi_p   = pmay.get("delhi", {}) or {}
+                    nat_total = pmay.get("national_total", {}) or {}
+                    states_p  = pmay.get("states", [])
+
+                    p1, p2, p3, p4 = st.columns(4)
+                    p1.metric("🏙️ Delhi Completed (Mar'24)",
+                              f"{delhi_p.get('houses_as_on_31_03_2024___completed', 'N/A'):,}" 
+                              if isinstance(delhi_p.get('houses_as_on_31_03_2024___completed'), int) else "N/A")
+                    p2.metric("🏙️ Delhi Completed (Dec'24)",
+                              f"{delhi_p.get('houses_as_on_31_12_2024___completed', 'N/A'):,}"
+                              if isinstance(delhi_p.get('houses_as_on_31_12_2024___completed'), int) else "N/A")
+                    p3.metric("🌍 National Completed (Dec'24)",
+                              f"{nat_total.get('houses_as_on_31_12_2024___completed', 'N/A'):,}"
+                              if isinstance(nat_total.get('houses_as_on_31_12_2024___completed'), int) else "N/A")
+                    p4.metric("🌍 National Occupied (Dec'24)",
+                              f"{nat_total.get('houses_as_on_31_12_2024___occupied', 'N/A'):,}"
+                              if isinstance(nat_total.get('houses_as_on_31_12_2024___occupied'), int) else "N/A")
+
+                    # Bar chart — top 10 states by completed houses Dec 2024
+                    df_pmay = pd.DataFrame(states_p)
+                    col_cmp = "houses_as_on_31_12_2024___completed"
+                    if col_cmp in df_pmay.columns:
+                        df_pmay[col_cmp] = pd.to_numeric(df_pmay[col_cmp], errors="coerce").fillna(0)
+                        df_top_p = df_pmay.nlargest(10, col_cmp)
+                        colors_p = ["#E63946" if "Delhi" in str(s) else "#3b82f6"
+                                    for s in df_top_p["state_ut"]]
+                        fig_p = go.Figure(go.Bar(
+                            x=df_top_p["state_ut"],
+                            y=df_top_p[col_cmp],
+                            marker_color=colors_p,
+                            text=df_top_p[col_cmp].astype(int),
+                            textposition="outside"
+                        ))
+                        fig_p.update_layout(
+                            title="Top 10 States — PMAY-U Houses Completed (Dec 2024)",
+                            paper_bgcolor="rgba(0,0,0,0)",
+                            plot_bgcolor="rgba(0,0,0,0)",
+                            font={"color": "white"},
+                            xaxis={"tickfont": {"size": 10}},
+                            height=340, margin=dict(l=20, r=20, t=40, b=80)
+                        )
+                        st.plotly_chart(fig_p, use_container_width=True)
+                        st.caption("🔴 Red = NCT of Delhi | 🔵 Blue = other states")
+            except Exception as ex:
+                st.caption(f"PMAY national data unavailable: {ex}")
 
     except Exception as e:
         st.error(f"Error: {e}")
