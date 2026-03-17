@@ -268,5 +268,73 @@ Region, Scheme, Actor, Asset, Beneficiary, Evidence, Event
 
 ---
 
+## PART 11 — NEWLY DISCOVERED GAPS (Deep Codebase Scan — March 17, 2026)
+
+> Items not captured in Parts 1–10. Found by scanning every file in the repo.
+
+---
+
+### 🔴 CRITICAL — Will break demo or expose data
+
+| # | Where | What | Fix |
+|---|---|---|---|
+| 11.1 | Root | **No `.env` file exists** — project won't start. `config.py` defaults `groq_api_key=""` and `neo4j_password="password"`. First-time setup will silently fail. | Create `.env` with real keys + create `.env.example` as template |
+| 11.2 | `docker-compose.yml` vs `config.py` | **Password mismatch** — Docker sets `NEO4J_AUTH: neo4j/pramaa2026` but `config.py` default is `neo4j_password: str = "password"`. If running via Docker without `.env`, app can't connect to Neo4j. | Set `neo4j_password: str = "pramaa2026"` in config.py or document in `.env.example` |
+| 11.3 | `data/residents.csv` | **Real phone numbers of team members** — Sambhavi's (`+919966236799`) and Siddharth's (`+919100209204`) real numbers are in the CSV. If Twilio is wired during demo, they receive actual WhatsApp messages. Security + demo embarrassment risk. | Replace with fake demo numbers (`+919999900001`, etc.) |
+| 11.4 | `backend/app/config.py` | **`groq_api_key` is declared twice** (lines 8 and 10) — second declaration silently shadows the first. Python won't error but it's a bug. | Remove the duplicate line |
+| 11.5 | `frontend/app.py` | **CSS page-hide targets wrong page** — `nth-child(4)` hides the 4th sidebar item which is `07_💬_Micro_Accountability.py`, NOT Live Ingestion (which isn't even in `pages/` yet). The hide logic is broken. | Fix after promoting Live Ingestion: use correct nth-child or hide by page name |
+| 11.6 | `frontend/pages/` | **Page numbering gap** — Pages are `01, 02, 06, 07`. Numbers 03, 04, 05 are missing. Streamlit sidebar shows them out of order/with gaps. Looks unfinished. | Renumber all pages sequentially when promoting Live Ingestion |
+
+---
+
+### 🟡 IMPORTANT — Correctness and credibility issues
+
+| # | Where | What | Fix |
+|---|---|---|---|
+| 11.7 | `frontend/utils/constants.py` | **Delivery score is hardcoded in demo override dict** — `ASSET_VERIFICATION_OVERRIDE` forces specific assets to `fully_verified`/`partially_verified`/`unverified`, and the Ward Map score (37.5%) is computed from this dict, not from actual Neo4j graph data. Changing seed data won't change the score. | Remove override dict; compute score from live graph query only |
+| 11.8 | `ai/llm_extractor.py` + `backend/app/services/ai_service.py` | **Duplicate AI extraction implementations** — Two separate files doing the same job. `hidden_Live_Ingestion.py` uses `llm_extractor.py`; `scrape.py` router uses `ai_service.py`. They have different prompts and different output formats, causing inconsistent extractions. | Consolidate into one: `backend/app/services/ai_service.py` as the single source |
+| 11.9 | `backend/app/routers/ingest.py` | **`DELETE /ingest/demo-nodes` is missing** — Live Ingestion UI calls this endpoint (developer tools "Clear Graph"). The endpoint doesn't exist in `ingest.py`. Results in 404 silently. | Add `DELETE /ingest/demo-nodes` endpoint that removes nodes with `source_type="demo"` |
+| 11.10 | `data/residents.csv` | **`Resident` nodes are not seeded into Neo4j** — `notifications.py` does `MATCH (res:Resident {opt_in: true})` but no seed script loads `residents.csv` into Neo4j. WhatsApp notification will always return "no opted-in residents". | Add `Resident` node loading to `load_seed_data.py` + wire `RESIDES_ON` relationships |
+| 11.11 | `data/cache/last_autosearch.json` | **Offline cache is empty** — File exists but contains `{"entities": [], "relations": [], "articles": []}`. The offline demo fallback won't work — it'll show a blank result. | Pre-populate cache with a real extraction result from a successful news scrape |
+| 11.12 | `ai/` folder | **`nl_query.py` doesn't exist** — Referenced in `PENDING_AI_TASKS.md`, `todo.md`, `AI_MAPPER_SPEC.md` and `ENGINEERING_PRDS.md` as a core file (`ai/nl_query.py`). It was never created. The Questions page works via direct backend calls, not via this module. Either create it or remove all references from docs. | Create stub or delete references from docs |
+
+---
+
+### 🟢 CLEANUP — Messy project structure
+
+| # | Where | What | Fix |
+|---|---|---|---|
+| 11.13 | Project root | **14 before/after evidence images in project root** — `before_w45_gali7_drain.png`, `after_w45_park.jpeg`, etc. are all in `/Pramaan/` root. They're served via `constants.py` absolute paths. Should be in `frontend/static/evidence/` like the other 4 static images. | Move to `frontend/static/evidence/`, update `_img()` path in `constants.py` |
+| 11.14 | Project root | **3 debug/diagnostic scripts in root** — `diag_hierarchy.py`, `test_query.py`, `check_neo4j_local.py` are dev scripts scattered in root. These aren't part of the app. | Move to `backend/scripts/debug/` or add to `.gitignore` |
+| 11.15 | `data/scripts/` | **14 ETL scripts with no documentation or run order** — `generate_seed_data.py`, `extract_amrut.py`, `transform_to_7_table_schema.py`, etc. No README, no documented order, no pipeline. New developer can't reproduce the data. | Add `data/scripts/README.md` with: what each script does, run order, output files |
+| 11.16 | `data/docs/graph_model.json` | **Undocumented JSON graph schema** — A visual graph model JSON exists with `style`, `nodes`, `relationships` keys. Likely a yFiles/Arrows.app export. Not referenced anywhere in code or docs. | Document what it is and either use it or remove it |
+| 11.17 | `data/resources/README.md` | **Completely empty** — Just says `# Pramaan`. 10+ raw data files in the folder with no explanation. | Populate with a table: filename → what it contains → used by |
+| 11.18 | `docs/PENDING_AI_TASKS.md` | **Mostly obsolete** — Written when AI was a stub. Most tasks are done (Groq integration, Live Ingestion, extraction). Still has checklist items marked pending that are completed. | Archive as `PENDING_AI_TASKS_ARCHIVED.md` or delete; replace with current state |
+| 11.19 | `docs/todo.md` | **Sprint tasks marked pending but sprint deadline passed (Mar 10)** — Team sprint board still shows all tasks unchecked. Misleading. | Update to reflect current completion status |
+
+---
+
+### Summary of Part 11
+
+| Severity | Count |
+|---|---|
+| 🔴 Critical (demo-breaking or data-exposing) | 6 |
+| 🟡 Important (correctness issues) | 6 |
+| 🟢 Cleanup (structure/docs debt) | 7 |
+| **Total new items** | **19** |
+
+---
+
+### Updated Grand Total
+
+| | Count |
+|---|---|
+| Parts 1–10 (previously known) | 46 items |
+| Part 11 (newly discovered) | 19 items |
+| Already fixed ✅ | 3 items |
+| **Total open items** | **65 items** |
+
+---
+
 *Last updated: March 17, 2026*
 *Source: Full project audit conversation with AI coding assistant*
