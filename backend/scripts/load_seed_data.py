@@ -30,7 +30,8 @@ def main() -> None:
         for _, row in df_reg.iterrows():
             session.run("""
                 MERGE (r:Region {region_id: $region_id})
-                SET r.name = $name, r.type = $type
+                SET r.name = $name, r.type = $type,
+                    r.source_type = 'official_csv', r.confidence = 1.0, r.ingested_by = 'seed_script'
             """, row.to_dict())
             if row['parent_region_id']:
                 session.run("""
@@ -45,7 +46,8 @@ def main() -> None:
         for _, row in df_schemes.iterrows():
             session.run("""
                 MERGE (s:Scheme {scheme_id: $scheme_id})
-                SET s.name = $name, s.ministry = $ministry, s.category = $category
+                SET s.name = $name, s.ministry = $ministry, s.category = $category,
+                    s.source_type = 'official_csv', s.confidence = 1.0, s.ingested_by = 'seed_script'
             """, row.to_dict())
 
         # --- 3B. LOAD SCHEME ALLOCATIONS ---
@@ -77,7 +79,8 @@ def main() -> None:
         for _, row in df_actors.iterrows():
             session.run("""
                 MERGE (a:Actor {actor_id: $actor_id})
-                SET a.name = $name, a.type = $type
+                SET a.name = $name, a.type = $type,
+                    a.source_type = 'official_csv', a.confidence = 1.0, a.ingested_by = 'seed_script'
             """, row.to_dict())
             if row['region_id']:
                 session.run("""
@@ -107,13 +110,15 @@ def main() -> None:
         print("Loading Assets...")
         df_assets = pd.read_csv(DATA_DIR / "assets.csv").fillna("")
         for _, row in df_assets.iterrows():
-            key = f"{row['type']}_{str(row['name']).lower().replace(' ', '_')}_{row['region_id']}"
             session.run("""
-                MERGE (a:Asset {unique_asset_key: $key})
-                ON CREATE SET a.asset_id = $asset_id, a.name = $name, a.type = $type, 
-                              a.cost = $cost, a.status = $status, a.lat = $lat, a.lon = $lon
-                ON MATCH SET a.cost = $cost, a.status = $status
-            """, {**row.to_dict(), "key": key})
+                MERGE (a:Asset {asset_id: $asset_id})
+                SET a.name = $name, a.type = $type,
+                    a.cost = $cost, a.status = $status, a.lat = $lat, a.lon = $lon,
+                    a.source_type = $source_type, a.confidence = $confidence,
+                    a.ingested_by = 'seed_script'
+            """, {**row.to_dict(),
+                  "source_type": row.get("source_type", "official_csv"),
+                  "confidence": float(row.get("confidence", 1.0))})
             # Relationships
             if row['region_id']:
                 session.run("MATCH (a:Asset {asset_id: $id}) MATCH (r:Region {region_id: $rid}) MERGE (a)-[:LOCATED_IN]->(r)", {"id": row['asset_id'], "rid": row['region_id']})

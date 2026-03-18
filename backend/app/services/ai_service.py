@@ -17,12 +17,12 @@ Text: {text}
 Extract and return this exact JSON structure:
 {{
   "entities": [
-    {{"id": "scheme_amrut", "label": "Scheme", "properties": {{"name": "scheme name", "ministry": "ministry name", "category": "roads/sanitation/housing/drainage/other"}}}},
-    {{"id": "reg_w45", "label": "Region", "properties": {{"name": "location name", "type": "ward/street/city/zone", "parent_region_id": "REG_W45"}}}},
-    {{"id": "asset_1", "label": "Asset", "properties": {{"name": "asset description", "type": "drain/road/toilet/housing/park/streetlight/water_body/other", "cost": 1200000, "status": "completed/ongoing/planned"}}}},
-    {{"id": "actor_mcd", "label": "Actor", "properties": {{"name": "agency or contractor name", "type": "government/contractor/elected_rep"}}}},
-    {{"id": "ben_1", "label": "Beneficiary", "properties": {{"count": 100, "description": "description of who benefits"}}}},
-    {{"id": "ev_1", "label": "Evidence", "properties": {{"type": "photo/report/certificate", "description": "what the evidence shows"}}}}
+    {{"id": "scheme_amrut", "label": "Scheme", "properties": {{"name": "scheme name", "ministry": "ministry name", "category": "roads/sanitation/housing/drainage/other", "confidence": 0.9}}}},
+    {{"id": "reg_w45", "label": "Region", "properties": {{"name": "location name", "type": "ward/street/city/zone", "parent_region_id": "REG_W45", "confidence": 0.85}}}},
+    {{"id": "asset_1", "label": "Asset", "properties": {{"name": "asset description", "type": "drain/road/toilet/housing/park/streetlight/water_body/other", "cost": 1200000, "status": "completed/ongoing/planned", "confidence": 0.8}}}},
+    {{"id": "actor_mcd", "label": "Actor", "properties": {{"name": "agency or contractor name", "type": "government/contractor/elected_rep", "confidence": 0.85}}}},
+    {{"id": "ben_1", "label": "Beneficiary", "properties": {{"count": 100, "description": "description of who benefits", "confidence": 0.7}}}},
+    {{"id": "ev_1", "label": "Evidence", "properties": {{"type": "photo/report/certificate", "description": "what the evidence shows", "confidence": 0.75}}}}
   ],
   "relations": [
     {{"from_id": "scheme_amrut", "from_label": "Scheme", "to_id": "asset_1", "to_label": "Asset", "type": "FUNDS"}},
@@ -34,6 +34,7 @@ Extract and return this exact JSON structure:
 Rules:
 - If a field is unknown, omit it or use null.
 - cost must be a number in rupees (e.g. 1200000 for Rs 12 lakh).
+- confidence must be a float 0.0–1.0 reflecting how certain you are about this entity from the text.
 - Return ONLY the JSON object. Nothing else.
 """
         try:

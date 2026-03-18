@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException
 from app.neo4j_client import get_session
 from app.models import IngestPayload, IngestResponse
@@ -15,10 +16,19 @@ def ingest_entities(payload: IngestPayload):
     try:
         with get_session() as session:
             # Always ingest entities first
+            stamp = {
+                "source_type":  "ai_extract",
+                "ingested_at":  datetime.now(timezone.utc).isoformat(),
+                "ingested_by":  "pramaan_live_ingestion",
+            }
             for entity in payload.entities:
                 try:
+                    props = {**entity.properties, **stamp}
+                    # Don't overwrite confidence if LLM already set it
+                    if "confidence" not in props:
+                        props["confidence"] = 0.7
                     query = build_merge_entity_query(entity.label)
-                    session.run(query, id=entity.id, properties=entity.properties)
+                    session.run(query, id=entity.id, properties=props)
                     entities_created += 1
                 except (ValueError, Exception) as e:
                     print(f"Skipping entity {entity.id!r}: {e}")

@@ -11,38 +11,117 @@ import streamlit as st
 import requests
 from utils.geo_selector import render_geo_selector, geo_breadcrumb
 from utils.constants import ASSET_VERIFICATION_OVERRIDE
+from utils.icons import icon, icon_box
 
 BASE_API = "http://127.0.0.1:8000"
 
 def main():
-    st.set_page_config(page_title="Micro Accountability | Pramaan", layout="wide")
+    st.set_page_config(page_title="Micro Accountability | Pramaan", layout="wide", page_icon="🛡️")
 
     st.markdown("""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@500;700&display=swap');
-        .main { background-color: #0d1117; color: #c9d1d9; font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; font-weight: 700; color: #f0f6fc; }
-        [data-testid="stSidebar"] {
-            background-color: hsla(220, 30%, 10%, 0.8) !important;
-            backdrop-filter: blur(12px);
-            border-right: 1px solid rgba(255,255,255,0.1);
-        }
-        [data-testid="stSidebarNav"] a[href*="Live_Ingestion"] { display: none !important; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif;
+        background-color: #020b14 !important;
+        color: #e2e8f0 !important;
+    }
+    .block-container { padding-top: 3.5rem !important; }
+
+    .top-bar {
+        background: linear-gradient(135deg, #0d1a2e 0%, #0c2461 60%, #0d1a2e 100%);
+        border-bottom: 1px solid rgba(249,115,22,0.28);
+        border-radius: 14px; padding: 18px 28px;
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+    .top-bar-left { display:flex; align-items:center; gap:14px; }
+    .top-bar-logo {
+        font-size:2em; width:52px; height:52px;
+        display:flex; align-items:center; justify-content:center;
+        background:rgba(56,189,248,0.12); border-radius:12px; flex-shrink:0;
+    }
+    .top-bar-title {
+        font-family:'Outfit',sans-serif; font-size:1.6em; font-weight:800;
+        background:linear-gradient(90deg,#f97316,#38bdf8);
+        -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+        margin:0; line-height:1.1;
+    }
+    .top-bar-sub   { font-size:0.75em; color:#475569; margin:2px 0 0 0; }
+    .top-bar-badge {
+        background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.35);
+        border-radius:20px; padding:5px 16px; font-size:0.75em;
+        color:#38bdf8; font-weight:600; letter-spacing:0.04em;
+    }
+
+    .step-header {
+        font-family:'Outfit',sans-serif; font-size:1em; font-weight:700;
+        color:#f97316; margin:0 0 12px 0;
+        border-left:3px solid #f97316; padding-left:10px;
+    }
+
+    .kpi-tile {
+        background:rgba(15,23,42,0.9); border-radius:12px; padding:18px 12px;
+        border:1px solid rgba(71,85,105,0.5);
+        display:flex; flex-direction:column; align-items:center; text-align:center;
+    }
+    .kpi-icon {
+        font-size:1.6em; width:44px; height:44px;
+        display:flex; align-items:center; justify-content:center;
+        background:rgba(56,189,248,0.1); border-radius:10px; margin-bottom:8px;
+    }
+    .kpi-value { font-size:2em; font-weight:800; font-family:'Outfit',sans-serif;
+                 color:#38bdf8; line-height:1; }
+    .kpi-label { font-size:0.68em; color:#64748b; margin-top:5px;
+                 text-transform:uppercase; letter-spacing:0.07em; }
+
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0d1a2e 0%, #020b14 100%);
+        border-right: 1px solid rgba(71,85,105,0.4);
+    }
+    [data-testid="stMetric"] {
+        background: rgba(15,23,42,0.9); border-radius:12px;
+        padding:16px; border:1px solid rgba(71,85,105,0.5);
+    }
+    [data-testid="stTextArea"] textarea {
+        background: rgba(15,23,42,0.8) !important;
+        border: 1px solid rgba(71,85,105,0.5) !important;
+        color: #e2e8f0 !important; border-radius: 8px !important;
+    }
+    hr { border-color: rgba(71,85,105,0.4) !important; }
+
+    [data-testid="stSidebarNav"] a span { color:#94a3b8 !important; font-size:0.9em !important; font-weight:500 !important; }
+    [data-testid="stSidebarNav"] a[aria-current="page"] span { color:#f97316 !important; font-weight:700 !important; }
+    [data-testid="stSidebarNav"] a svg { color:#64748b !important; fill:#64748b !important; }
+    [data-testid="stSidebarNav"] a[aria-current="page"] svg { color:#f97316 !important; fill:#f97316 !important; }
+    [data-testid="stSidebarNav"] a[aria-current="page"] { background:rgba(249,115,22,0.08) !important; border-radius:8px !important; border-left:3px solid #f97316 !important; }
     </style>
     """, unsafe_allow_html=True)
 
-    st.title("💬 Micro-Accountability Engine")
-    st.caption("Trigger WhatsApp alerts to opted-in citizens when local infrastructure is **fully verified**.")
+    logo_svg = icon_box("message-circle", bg="rgba(56,189,248,0.15)", color="#38bdf8", size=24, box=52)
+    st.markdown(f"""
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <div class="top-bar-logo">{logo_svg}</div>
+            <div>
+                <div class="top-bar-title">Micro-Accountability</div>
+                <div class="top-bar-sub">Hyper-local WhatsApp alerts to citizens — verified assets only</div>
+            </div>
+        </div>
+        <span class="top-bar-badge">{icon("send", "#38bdf8", 14)} WhatsApp + SMS</span>
+    </div>
+    """, unsafe_allow_html=True)
 
     geo       = render_geo_selector(sidebar=True)
     ward_id   = geo["ward_id"]
     ward_name = geo["ward_name"]
 
-    st.markdown(f"**📍 Target Zone:** `{geo_breadcrumb()}`")
-    st.divider()
+    _pin = icon("map-pin", "#64748b", 13)
+    st.markdown(f"<p style='color:#64748b;font-size:0.85em;margin-bottom:1rem;'>{_pin} {geo_breadcrumb()}</p>", unsafe_allow_html=True)
 
     # ── Step 1: Select a Verified Asset ──────────────────────────────────────
-    st.markdown("### Step 1: Select a Fully Verified Asset")
+    st.markdown("<div class='step-header'>Step 1 — Select a Fully Verified Asset</div>", unsafe_allow_html=True)
 
     try:
         resp = requests.get(f"{BASE_API}/assets/list", params={"ward_region_id": ward_id}, timeout=5)
@@ -82,7 +161,7 @@ def main():
             f"This prevents false alerts and maintains public trust.")
 
     # ── Step 2: Configure Message ─────────────────────────────────────────────
-    st.markdown("### Step 2: Configure Broadcast Message")
+    st.markdown("<div class='step-header'>Step 2 — Configure Broadcast Message</div>", unsafe_allow_html=True)
 
     default_msg = (
         f"🏗 Pramaan Alert from MCD:\n\n"
@@ -116,8 +195,8 @@ def main():
                            "real WhatsApp messages are dispatched via Twilio API._")
 
     # ── Step 3: Citizen Notification Preview ──────────────────────────────────
-    st.divider()
-    st.markdown("### Step 3: Citizen Notification Preview")
+    st.markdown("<hr/>", unsafe_allow_html=True)
+    st.markdown("<div class='step-header'>Step 3 — Citizen Notification Preview</div>", unsafe_allow_html=True)
     st.caption(f"47 opted-in residents in **{ward_name}** will receive this alert via WhatsApp.")
 
     mock_citizens = [

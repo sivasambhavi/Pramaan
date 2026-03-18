@@ -7,6 +7,7 @@ import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.constants import ASSET_VERIFICATION_OVERRIDE, ASSET_EVIDENCE_PHOTOS
+from utils.icons import icon_box, icon as svg_icon
 
 import streamlit as st
 import requests
@@ -30,21 +31,59 @@ extractor  = DeepDataExtractor()
 # ──────────────────────────────────────────────────────────────────────────────
 
 
-def render_node(icon, label, content, color):
+# icon name lookup for each node type
+_NODE_ICONS = {
+    "Scheme / Funding":        "banknote",
+    "Implementing Agency":     "building-2",
+    "Asset / Infrastructure":  "building",
+    "Location":                "map-pin",
+    "Evidence":                "check-circle",
+    "Evidence Status":         "eye",
+}
+
+_TRUST_TIERS = {
+    "official":     ("Official",      "#22c55e", "rgba(34,197,94,0.12)",  "rgba(34,197,94,0.35)"),
+    "verified":     ("Verified",      "#38bdf8", "rgba(56,189,248,0.12)", "rgba(56,189,248,0.35)"),
+    "ai_extracted": ("AI Extracted",  "#f59e0b", "rgba(245,158,11,0.12)", "rgba(245,158,11,0.35)"),
+    "unverified":   ("Unverified",    "#ef4444", "rgba(239,68,68,0.12)",  "rgba(239,68,68,0.35)"),
+}
+
+def trust_badge(tier: str) -> str:
+    label, color, bg, border = _TRUST_TIERS.get(tier, _TRUST_TIERS["unverified"])
+    return (
+        f'<span style="display:inline-block;padding:2px 10px;border-radius:20px;'
+        f'font-size:0.68em;font-weight:700;letter-spacing:0.05em;'
+        f'background:{bg};border:1px solid {border};color:{color};">'
+        f'{label}</span>'
+    )
+
+def render_node(emoji_unused, label, content, color, trust: str = "", confidence: float = None):
+    ico_name = _NODE_ICONS.get(label, "circle")
+    ico = icon_box(ico_name, bg=f"rgba(0,0,0,0.2)", color=color, size=20, box=44)
+    badge = f'{trust_badge(trust)}' if trust in _TRUST_TIERS else ""
+    conf_html = ""
+    if confidence is not None:
+        conf_pct = int(confidence * 100)
+        conf_color = "#22c55e" if conf_pct >= 80 else "#f59e0b" if conf_pct >= 60 else "#ef4444"
+        conf_html = (
+            f'<span style="font-size:0.68em;color:{conf_color};margin-left:8px;">'
+            f'confidence {conf_pct}%</span>'
+        )
+    right_block = f'<span style="float:right;">{badge}{conf_html}</span>' if (badge or conf_html) else ""
     st.markdown(f"""
-    <div class="proof-node" style="border-left:5px solid {color};">
-      <div style="display: flex; align-items: center; gap: 15px;">
-        <div style="font-size:2em; background:{color}22; padding:10px; border-radius:12px;">{icon}</div>
-        <div>
-          <div style="font-weight:700; color:{color}; font-size:0.75em; text-transform:uppercase; letter-spacing:.1em;">{label}</div>
-          <div style="margin-top:4px; font-size:1.05em; line-height:1.5; color:#f0f6fc;">{content}</div>
+    <div class="proof-node" style="border-left:4px solid {color};">
+      <div style="display:flex; align-items:flex-start; gap:14px;">
+        {ico}
+        <div style="flex:1;">
+          <div class="proof-node-label" style="color:{color};">{label} {right_block}</div>
+          <div class="proof-node-value">{content}</div>
         </div>
       </div>
     </div>""", unsafe_allow_html=True)
 
 def arrow():
-    st.markdown('<div style="text-align:center; font-size:1.8em; color:rgba(255,255,255,0.2); margin: -5px 0 5px 0;">↓</div>',
-                unsafe_allow_html=True)
+    arr = svg_icon("arrow-down", "#334155", 16)
+    st.markdown(f'<div class="chain-arrow">{arr}</div>', unsafe_allow_html=True)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -403,50 +442,107 @@ def answer_from_graph(q, asset_name, asset_type, ward_name, status,
 # Main
 # ──────────────────────────────────────────────────────────────────────────────
 def main() -> None:
-    st.set_page_config(page_title="Proof Chain | Pramaan", layout="wide")
+    st.set_page_config(page_title="Proof Chain | Pramaan", layout="wide", page_icon="🛡️")
     
     # ── Styling ────────────────────────────────────────────────────────
     st.markdown("""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@500;700&display=swap');
-        
-        .main { background-color: #0d1117; color: #c9d1d9; font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; font-weight: 700; color: #f0f6fc; }
-        
-        /* Glassmorphism Sidebar */
-        [data-testid="stSidebar"] {
-            background-color: hsla(220, 30%, 10%, 0.8) !important;
-            backdrop-filter: blur(12px);
-            border-right: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        /* Node Styling */
-        .proof-node {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(8px);
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-        .proof-node:hover {
-            transform: scale(1.01);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif;
+        background-color: #020b14 !important;
+        color: #e2e8f0 !important;
+    }
+    .block-container { padding-top: 3.5rem !important; }
+
+    .top-bar {
+        background: linear-gradient(135deg, #0d1a2e 0%, #0c2461 60%, #0d1a2e 100%);
+        border-bottom: 1px solid rgba(249,115,22,0.28);
+        border-radius: 14px; padding: 18px 28px;
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+    .top-bar-left  { display:flex; align-items:center; gap:14px; }
+    .top-bar-logo  { display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .top-bar-title {
+        font-family:'Outfit',sans-serif; font-size:1.6em; font-weight:800;
+        background:linear-gradient(90deg,#f97316,#38bdf8);
+        -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+        margin:0; line-height:1.1;
+    }
+    .top-bar-sub   { font-size:0.75em; color:#475569; margin:2px 0 0 0; }
+    .top-bar-badge {
+        background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.35);
+        border-radius:20px; padding:5px 16px; font-size:0.75em;
+        color:#38bdf8; font-weight:600; letter-spacing:0.04em;
+    }
+
+    /* Proof chain nodes */
+    .proof-node {
+        background: rgba(15,23,42,0.85);
+        border-radius: 14px; padding: 18px 20px;
+        border: 1px solid rgba(71,85,105,0.5);
+        margin-bottom: 4px;
+        transition: border-color 0.2s, background 0.2s;
+    }
+    .proof-node:hover {
+        background: rgba(15,23,42,0.95);
+        border-color: rgba(249,115,22,0.4);
+    }
+    .proof-node-label {
+        font-size:0.7em; font-weight:700; text-transform:uppercase;
+        letter-spacing:0.08em; margin:0 0 4px 0;
+    }
+    .proof-node-value {
+        font-size:1.0em; font-weight:600; color:#f1f5f9; margin:0; line-height:1.5;
+    }
+
+    .chain-arrow {
+        text-align:center; color:rgba(249,115,22,0.35);
+        margin:2px 0; font-size:1.2em; line-height:1;
+        display:flex; align-items:center; justify-content:center;
+        gap:8px;
+    }
+
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0d1a2e 0%, #020b14 100%);
+        border-right: 1px solid rgba(71,85,105,0.4);
+    }
+    [data-testid="stMetric"] {
+        background: rgba(15,23,42,0.9); border-radius:12px;
+        padding:16px; border:1px solid rgba(71,85,105,0.5);
+    }
+    [data-testid="stSidebarNav"] a span { color:#94a3b8 !important; font-size:0.9em !important; font-weight:500 !important; }
+    [data-testid="stSidebarNav"] a[aria-current="page"] span { color:#f97316 !important; font-weight:700 !important; }
+    [data-testid="stSidebarNav"] a svg { color:#64748b !important; fill:#64748b !important; }
+    [data-testid="stSidebarNav"] a[aria-current="page"] svg { color:#f97316 !important; fill:#f97316 !important; }
+    [data-testid="stSidebarNav"] a[aria-current="page"] { background:rgba(249,115,22,0.08) !important; border-radius:8px !important; border-left:3px solid #f97316 !important; }
+    hr { border-color: rgba(71,85,105,0.4) !important; }
     </style>
     """, unsafe_allow_html=True)
 
-    st.title("🔗 Governance Delivery Proof Chain")
-    st.caption("Trace any asset from funding source → agency → physical asset → live internet evidence.")
+    logo_svg = icon_box("link", bg="rgba(56,189,248,0.15)", color="#38bdf8", size=24, box=52)
+    st.markdown(f"""
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <div class="top-bar-logo">{logo_svg}</div>
+            <div>
+                <div class="top-bar-title">Proof Chain</div>
+                <div class="top-bar-sub">Scheme → Agency → Asset → Location → Evidence · Full traceability</div>
+            </div>
+        </div>
+        <span class="top-bar-badge">{svg_icon("shield-check", "#38bdf8", 14)} VERIFIED CHAIN</span>
+    </div>
+    """, unsafe_allow_html=True)
 
     # ── Geography from session (or re-select if fresh page) ──────────────
     geo = render_geo_selector(sidebar=True)
     ward_id   = geo["ward_id"]
     ward_name = geo["ward_name"]
 
-    st.markdown(f"**📍** `{geo_breadcrumb()}`")
+    _pin = svg_icon("map-pin", "#94a3b8", 13)
+    st.markdown(f"<span style='color:#94a3b8;font-size:0.85em;'>{_pin} {geo_breadcrumb()}</span>", unsafe_allow_html=True)
     st.divider()
 
     # ── Asset selector ────────────────────────────────────────────────────
@@ -463,7 +559,10 @@ def main() -> None:
         st.error(f"Backend error: {e}")
         return
 
-    asset_options = {f"{a['name']} ({a.get('type','?')})": a["asset_id"] for a in all_assets}
+    def _fmt_type(t: str) -> str:
+        return t.replace("_", " ").title() if t else "?"
+
+    asset_options = {f"{a['name']} ({_fmt_type(a.get('type','?'))})": a["asset_id"] for a in all_assets}
 
     # Support jump-to from Ward Map click
     preselect = st.session_state.get("selected_asset")
@@ -474,7 +573,7 @@ def main() -> None:
                 default_idx = i
                 break
 
-    selected_label = st.selectbox("🔍 Select Asset to Trace", list(asset_options.keys()), index=default_idx)
+    selected_label = st.selectbox("Select Asset to Trace", list(asset_options.keys()), index=default_idx)
     asset_id  = asset_options[selected_label]
     st.session_state["selected_asset"] = asset_id
 
@@ -506,19 +605,76 @@ def main() -> None:
         funding_name= scheme.get("name", "N/A") if scheme else "N/A"
         seed_ev_url = seed_evs[0].get("url","") if seed_evs else ""
 
-        st.subheader(f"🔗 Proof Chain: {asset_name}")
+        _link_ico = svg_icon("link", "#94a3b8", 16)
+        st.markdown(f"<h3 style='color:#f1f5f9;margin:0 0 4px 0;'>{_link_ico} Proof Chain: {asset_name}</h3>", unsafe_allow_html=True)
 
-        chain_col, _ = st.columns([5, 1])
+        chain_col, _ = st.columns([3, 1])
 
         with chain_col:
-            st.caption("Full traceability: Funding → Agency → Asset → Location → Evidence")
 
             # ── Scheme node ───────────────────────────────────────────────
             if scheme:
                 render_node("💰", "Scheme / Funding",
                     f"<b>{scheme.get('name','N/A')}</b><br/>"
                     f"Ministry: {scheme.get('ministry','N/A')} | "
-                    f"Category: {scheme.get('category','N/A')}", "#3b82f6")
+                    f"Category: {scheme.get('category','N/A')}", "#3b82f6",
+                    trust=scheme.get('source_type', ''),
+                    confidence=scheme.get('confidence'))
+
+                # National context from data.gov.in — dynamic by selected state
+                scheme_name_lower = scheme.get('name', '').lower()
+                selected_state = st.session_state.get("state", "Delhi (NCT)")
+
+                def _match_state(states: list, selected: str) -> dict:
+                    """Fuzzy-match selected state name against API state list."""
+                    sel_lower = selected.lower().replace("(nct)", "").replace("nct of ", "").strip()
+                    for s in states:
+                        api_name = str(s.get("state_ut", "")).lower().replace("nct of ", "").strip()
+                        if sel_lower in api_name or api_name in sel_lower:
+                            return s
+                    return {}
+
+                gov_data = None
+                gov_label = ""
+                try:
+                    if 'amrut' in scheme_name_lower:
+                        r = requests.get(f"{BASE_URL}/data/amrut-drainage", timeout=5)
+                        if r.status_code == 200:
+                            d = r.json()
+                            state_row = _match_state(d.get('states', []), selected_state)
+                            if state_row:
+                                state_display = state_row.get('state_ut', selected_state)
+                                gov_data = {
+                                    f"{state_display} — Completed": f"{state_row.get('work_completed___number', 'N/A')} projects (₹{state_row.get('work_completed___amount', 'N/A')} cr)",
+                                    f"{state_display} — In Progress": f"{state_row.get('work_in_progress___number', 'N/A')} projects (₹{state_row.get('work_in_progress___amount', 'N/A')} cr)",
+                                    f"{state_display} — Total Outlay": f"₹{state_row.get('total___amount', 'N/A')} cr across {state_row.get('total___number', 'N/A')} projects",
+                                }
+                                gov_label = f"AMRUT Storm-Water Drainage — {state_display} (data.gov.in)"
+                    elif 'pmay' in scheme_name_lower or 'pradhan mantri awas' in scheme_name_lower:
+                        r = requests.get(f"{BASE_URL}/data/pmay-housing", timeout=5)
+                        if r.status_code == 200:
+                            d = r.json()
+                            state_row = _match_state(d.get('states', []), selected_state)
+                            if state_row:
+                                state_display = state_row.get('state_ut', selected_state)
+                                gov_data = {
+                                    f"{state_display} — Completed (Mar 2024)": f"{state_row.get('houses_as_on_31_03_2024___completed', 0):,}",
+                                    f"{state_display} — Completed (Dec 2024)": f"{state_row.get('houses_as_on_31_12_2024___completed', 0):,}",
+                                    f"{state_display} — Occupied (Dec 2024)":  f"{state_row.get('houses_as_on_31_12_2024___occupied', 0):,}",
+                                }
+                                gov_label = f"PMAY-U Housing — {state_display} (data.gov.in)"
+                except Exception:
+                    pass
+
+                if gov_data:
+                    with st.expander(f"State Data: {gov_label}", expanded=False):
+                        cols = st.columns(len(gov_data))
+                        for col, (k, v) in zip(cols, gov_data.items()):
+                            col.metric(k, v)
+                        st.caption(
+                            f"Source: data.gov.in — Ministry of Housing & Urban Affairs · Official Government Open Data  \n"
+                            f"Note: Data available at **state level only**. Ward/zone/city breakdowns are not published in national datasets."
+                        )
             else:
                 render_node("💰", "Scheme / Funding", "No linked scheme found. Verification pending.", "#64748b")
             arrow()
@@ -526,7 +682,9 @@ def main() -> None:
             # ── Actor node ────────────────────────────────────────────────
             if actor:
                 render_node("🏛️", "Implementing Agency",
-                    f"<b>{actor.get('name','N/A')}</b><br/>Type: {actor.get('type','N/A')}", "#8b5cf6")
+                    f"<b>{actor.get('name','N/A')}</b><br/>Type: {actor.get('type','N/A')}", "#8b5cf6",
+                    trust=actor.get('source_type', ''),
+                    confidence=actor.get('confidence'))
             else:
                 render_node("🏛️", "Implementing Agency", "No implementing agency identified yet.", "#64748b")
             arrow()
@@ -535,7 +693,9 @@ def main() -> None:
             cost_str = f"₹{cost_val:,.0f}" if cost_val else "N/A"
             render_node("🏗️", "Asset / Infrastructure",
                 f"<b>{asset_name}</b><br/>"
-                f"Type: {asset_type} | Status: {status} | Cost: {cost_str}", "#f59e0b")
+                f"Type: {asset_type} | Status: {status} | Cost: {cost_str}", "#f59e0b",
+                trust=asset.get('source_type', ''),
+                confidence=asset.get('confidence'))
             arrow()
 
             # ── Location node ─────────────────────────────────────────────
@@ -544,7 +704,8 @@ def main() -> None:
             if region: loc_parts.append(f"Street: {region.get('name','')}")
             
             if loc_parts:
-                render_node("📍", "Location", " | ".join(loc_parts), "#10b981")
+                render_node("📍", "Location", " | ".join(loc_parts), "#10b981",
+                    trust=ward.get('source_type', '') if ward else '')
             else:
                 render_node("📍", "Location", "Location metadata pending verification.", "#64748b")
             arrow()
@@ -555,46 +716,27 @@ def main() -> None:
             if not _v_status and st.session_state.get(f"ev_{asset_id}"):
                 _v_status = "partially_verified"
             if _v_status == "fully_verified":
-                _ev_text  = "✅ <b>FULLY VERIFIED</b> — News articles + completion data confirmed."
+                _ev_text  = "<b style='color:#22c55e;'>FULLY VERIFIED</b> — News articles + completion data confirmed."
                 _ev_color = "#22c55e"
             elif _v_status == "partially_verified":
-                _ev_text  = "⚠️ <b>PARTIALLY VERIFIED</b> — News coverage found; photo pending submission."
+                _ev_text  = "<b style='color:#f59e0b;'>PARTIALLY VERIFIED</b> — News coverage found; photo pending submission."
                 _ev_color = "#f59e0b"
             else:
-                _ev_text  = "❌ No evidence found yet. Field photo submission required to verify this asset."
+                _ev_text  = "No evidence found yet. Field photo submission required to verify this asset."
                 _ev_color = "#ef4444"
-            render_node("🔍", "Evidence", _ev_text, _ev_color)
+            _ev_source     = seed_evs[0].get('source_type', '') if seed_evs else ''
+            _ev_confidence = seed_evs[0].get('confidence') if seed_evs else None
+            render_node("🔍", "Evidence", _ev_text, _ev_color,
+                        trust=_ev_source, confidence=_ev_confidence)
 
-            # ── Budget Tracker PREMIUM ─────────────────────────────────────
+            # ── Budget Card ────────────────────────────────────────────────
             sanctioned = asset.get('cost', 0) or 0
-            
             st.markdown("---")
-            st.markdown("#### 💎 Financial Integrity Tracker")
-            
-            # 3-Bar Grouped Chart (FIX 5)
-            released = sanctioned * 0.92
-            verified = sanctioned * 0.85 if status.lower() == 'completed' else sanctioned * 0.10
-            
-            fig = go.Figure(data=[
-                go.Bar(name='Sanctioned', x=['Budget'], y=[sanctioned], marker_color='#3b82f6'),
-                go.Bar(name='Released', x=['Budget'], y=[released], marker_color='#8b5cf6'),
-                go.Bar(name='Verified Proof', x=['Budget'], y=[verified], marker_color='#10b981')
-            ])
-            fig.update_layout(
-                barmode='group',
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                font={'color': "white", 'family': "Inter"},
-                height=300,
-                margin=dict(l=20,r=20,t=40,b=20),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-            )
-            st.plotly_chart(fig, use_container_width=True)
-            
-            b1, b2, b3 = st.columns(3)
-            b1.metric("Sanctioned", f"₹{sanctioned:,.0f}" if sanctioned else "N/A")
-            b2.metric("Released", f"₹{released:,.0f}")
-            b3.metric("Verified (Proof)", f"₹{verified:,.0f}")
+            st.markdown(f"<p style='font-weight:700;color:#cbd5e1;margin:6px 0;'>{svg_icon('banknote','#94a3b8',14)} Budget Allocation</p>", unsafe_allow_html=True)
+            b1, b2 = st.columns(2)
+            b1.metric("Sanctioned Cost", f"₹{sanctioned:,.0f}" if sanctioned else "N/A",
+                      help="As recorded in scheme allocation data")
+            b2.metric("Status", status.capitalize() if status else "Unknown")
 
             # ── LIVE EVIDENCE (auto-scrape) ───────────────────────────────
             arrow()
@@ -621,17 +763,18 @@ def main() -> None:
             if live_articles:
                 # Patch asset as verified
                 patch_asset_verified(asset_id)
-                st.markdown("""
+                _news_ico = svg_icon('newspaper','#06b6d4',18)
+                st.markdown(f"""
                 <div style="background:linear-gradient(135deg,#06b6d422,#06b6d411);
                            border-left:4px solid #06b6d4;border-radius:8px;
                            padding:12px 16px;margin-bottom:6px;">
-                  <div style="font-size:1.4em">📰</div>
+                  <div>{_news_ico}</div>
                   <div style="font-weight:700;color:#06b6d4;font-size:0.8em;
                               text-transform:uppercase;letter-spacing:.06em;margin-top:4px">Live Evidence (scraped & verified)</div>
                 </div>""", unsafe_allow_html=True)
-                
+
                 # ── News Coverage Analytics (Math Timeline) ─────────────
-                st.markdown("#### 📈 News Coverage Analytics")
+                st.markdown(f"<p style='font-weight:700;color:#cbd5e1;margin:6px 0;'>{svg_icon('trending-up','#94a3b8',14)} News Coverage Analytics</p>", unsafe_allow_html=True)
                 
                 # Mathematical extraction logic from facts
                 covered_str = "Coverage underway."
@@ -652,18 +795,18 @@ def main() -> None:
                     covered_str = "31,860 houses sanctioned in Delhi."
                     remaining_str = "Delivery and occupation pending."
 
-                st.info(f"**🎯 What's Covered:** {covered_str}\n\n**⏳ Yet to be Covered:** {remaining_str}")
-                
-                st.markdown("#### ⏳ Historical Updates Timeline")
+                st.info(f"**What's Covered:** {covered_str}\n\n**Yet to be Covered:** {remaining_str}")
+
+                st.markdown(f"<p style='font-weight:700;color:#cbd5e1;margin:6px 0;'>{svg_icon('clock','#94a3b8',14)} Historical Updates Timeline</p>", unsafe_allow_html=True)
 
                 for ev in live_articles:
                     with st.container():
                         col1, col2 = st.columns([3, 1])
                         with col1:
-                            st.markdown(f"**📰 {ev['title']}**")
-                            st.markdown(f"🔗 [{ev['source']}]({ev['url']})")
-                            st.caption(f"📅 {ev.get('published', '')}  |  🎯 Relevance: {ev.get('relevance', 'calculated')}")
-                            st.info(f"💡 Key Fact: {ev.get('key_fact', 'Relevant local progress update verified.')}")
+                            st.markdown(f"**{ev['title']}**")
+                            st.markdown(f"[{ev['source']}]({ev['url']})")
+                            st.caption(f"{ev.get('published', '')}  |  Relevance: {ev.get('relevance', 'calculated')}")
+                            st.info(f"Key Fact: {ev.get('key_fact', 'Relevant local progress update verified.')}")
                         with col2:
                             # Try to show article thumbnail
                             img_url = get_og_image(ev['url'])
@@ -671,9 +814,7 @@ def main() -> None:
                                 try:
                                     st.image(img_url, use_container_width=True)
                                 except:
-                                    st.markdown("📷")
-                            else:
-                                st.markdown("📰")
+                                    pass
                         st.divider()
                 
                 # Sync evidence articles to Neo4j in real-time
@@ -701,11 +842,11 @@ def main() -> None:
 
             if _photos and _has_before:
                 st.markdown("---")
-                st.markdown("#### 📸 Visual Evidence — Before & After")
+                st.markdown(f"<p style='font-weight:700;color:#cbd5e1;margin:6px 0;'>{svg_icon('camera','#94a3b8',14)} Visual Evidence — Before &amp; After</p>", unsafe_allow_html=True)
                 _col_b, _col_a = st.columns(2)
 
                 with _col_b:
-                    st.markdown("**🔴 BEFORE**")
+                    st.markdown("<span style='color:#ef4444;font-weight:700;'>BEFORE</span>", unsafe_allow_html=True)
                     st.image(_bp, use_container_width=True)
                     st.caption(_photos.get("before_caption", ""))
                     if _photos.get("before_gps"):    st.caption(_photos["before_gps"])
@@ -713,23 +854,23 @@ def main() -> None:
 
                 with _col_a:
                     if _has_after and _v in ("fully_verified", "partially_verified"):
-                        st.markdown("**🟢 AFTER**")
+                        st.markdown("<span style='color:#22c55e;font-weight:700;'>AFTER</span>", unsafe_allow_html=True)
                         st.image(_ap, use_container_width=True)
                         st.caption(_photos.get("after_caption", ""))
                         if _photos.get("after_gps"):    st.caption(_photos["after_gps"])
                         if _photos.get("after_source"): st.caption(_photos["after_source"])
                     else:
-                        st.markdown("**⏳ AFTER (pending)**")
+                        st.markdown("<span style='color:#94a3b8;font-weight:700;'>AFTER (pending)</span>", unsafe_allow_html=True)
                         st.markdown(
-                            '<div style="background:#111;border:2px dashed #333;border-radius:8px;'
-                            'padding:40px 20px;text-align:center;color:#8b949e;">'
-                            '📸 Submit geo-tagged photo<br>to verify this asset</div>',
+                            f'<div style="background:#111;border:2px dashed #333;border-radius:8px;'
+                            f'padding:40px 20px;text-align:center;color:#8b949e;">'
+                            f'{svg_icon("camera","#8b949e",20)}<br>Submit geo-tagged photo<br>to verify this asset</div>',
                             unsafe_allow_html=True
                         )
                         st.caption("After photo pending — field verification required")
 
                 st.info(
-                    "🔍 **HOW PRAMAAN WORKS**: Any citizen or MCD field officer can submit a "
+                    "**HOW PRAMAAN WORKS**: Any citizen or MCD field officer can submit a "
                     "geo-tagged photo from their phone. PRAMAAN reads the GPS coordinates from "
                     "the photo\u2019s EXIF data, matches it to the nearest asset in the graph, and "
                     "upgrades its verification status — creating an immutable proof chain."
@@ -766,21 +907,21 @@ def main() -> None:
             progress = ASSET_PROGRESS_TEMPLATE.get(asset_type, {})
             if progress:
                 st.markdown("---")
-                st.markdown("### 📊 Delivery Status — What Was Done vs Pending")
+                st.markdown(f"<p style='font-weight:700;color:#cbd5e1;margin:6px 0;'>{svg_icon('check-square','#94a3b8',14)} Delivery Status — What Was Done vs Pending</p>", unsafe_allow_html=True)
                 col1, col2, col3 = st.columns(3)
-                
+
                 with col1:
-                    st.markdown("**✅ Completed**")
+                    st.markdown("<span style='color:#22c55e;font-weight:600;'>Completed</span>", unsafe_allow_html=True)
                     for item in progress.get("done", []):
                         st.markdown(f"- {item}")
                 
                 with col2:
-                    st.markdown("**🔄 In Progress**")
+                    st.markdown("<span style='color:#f59e0b;font-weight:600;'>In Progress</span>", unsafe_allow_html=True)
                     for item in progress.get("in_progress", []):
                         st.markdown(f"- {item}")
                 
                 with col3:
-                    st.markdown("**⏳ Pending**")
+                    st.markdown("<span style='color:#94a3b8;font-weight:600;'>Pending</span>", unsafe_allow_html=True)
                     for item in progress.get("pending", []):
                         st.markdown(f"- {item}")
             
@@ -830,32 +971,48 @@ def main() -> None:
 
             asset_type_clean = asset_type.lower()
             logic = BENEFICIARY_LOGIC.get(asset_type_clean, {})
-            # fallback for water_body matching
-            if not logic and 'water' in asset_type_clean: logic = BENEFICIARY_LOGIC.get('water_body', {})
-            
+            if not logic and 'water' in asset_type_clean:
+                logic = BENEFICIARY_LOGIC.get('water_body', {})
+
             label = logic.get('label', 'Ward residents benefited')
             description = logic.get('description', '')
             source = logic.get('source', 'MCD Ward Data')
 
-            if asset_type_clean == 'drain':             count = int(households * 0.85)
-            elif asset_type_clean == 'water_body' or 'lake' in asset_type_clean: count = int(population * 0.60)
-            elif asset_type_clean == 'road':            count = int(population * 0.95)
-            elif asset_type_clean == 'toilet':          count = 500
-            elif asset_type_clean == 'housing':         count = int(31860 / 272)
-            else:                                       count = int(population * 0.5)
+            # Try live beneficiary API first
+            count = None
+            scheme_id_val = scheme.get('scheme_id') if scheme else None
+            if scheme_id_val:
+                try:
+                    ben_resp = requests.get(f"{BASE_URL}/beneficiaries/scheme/{scheme_id_val}", timeout=5)
+                    if ben_resp.status_code == 200:
+                        metrics = ben_resp.json().get('metrics', [])
+                        if metrics:
+                            count = sum(m.get('beneficiary_count', 0) for m in metrics)
+                            source = "Live Neo4j graph — Beneficiary nodes"
+                except Exception:
+                    pass
+
+            # Fall back to formula if API returned nothing
+            if not count:
+                if asset_type_clean == 'drain':             count = int(households * 0.85)
+                elif asset_type_clean == 'water_body' or 'lake' in asset_type_clean: count = int(population * 0.60)
+                elif asset_type_clean == 'road':            count = int(population * 0.95)
+                elif asset_type_clean == 'toilet':          count = 500
+                elif asset_type_clean == 'housing':         count = int(31860 / 272)
+                else:                                       count = int(population * 0.5)
 
             ELIGIBLE_ESTIMATE = population if count > households else households
             if count > ELIGIBLE_ESTIMATE: ELIGIBLE_ESTIMATE = count + 50
             uncovered = ELIGIBLE_ESTIMATE - count
             coverage_pct = (count / ELIGIBLE_ESTIMATE) * 100 if ELIGIBLE_ESTIMATE > 0 else 0
 
-            st.markdown("### 👥 Beneficiary Linkage & Impact")
-            
+            st.markdown(f"<p style='font-weight:700;color:#cbd5e1;margin:6px 0;'>{svg_icon('users','#94a3b8',14)} Beneficiary Linkage &amp; Impact</p>", unsafe_allow_html=True)
+
             k1, k2, k3, k4 = st.columns(4)
-            k1.metric("🏘️ Target Population Estimate", f"{ELIGIBLE_ESTIMATE:,}")
-            k2.metric("✅ Direct Beneficiaries", f"{count:,}")
-            k3.metric("❌ Gap / Uncovered", f"{uncovered:,}")
-            k4.metric("📊 Coverage %", f"{coverage_pct:.1f}%")
+            k1.metric("Target Population", f"{ELIGIBLE_ESTIMATE:,}")
+            k2.metric("Direct Beneficiaries", f"{count:,}")
+            k3.metric("Gap / Uncovered", f"{uncovered:,}")
+            k4.metric("Coverage %", f"{coverage_pct:.1f}%")
             
             st.markdown(f"**Impact:** {label}")
             if description: st.caption(description)
@@ -893,7 +1050,7 @@ def main() -> None:
         if funding_name and "AMRUT" in funding_name.upper():
             import pandas as pd
             st.divider()
-            st.markdown("### 🌐 National Context — AMRUT Storm Drainage")
+            st.markdown(f"<p style='font-weight:700;color:#cbd5e1;margin:6px 0;'>{svg_icon('globe','#94a3b8',14)} National Context — AMRUT Storm Drainage</p>", unsafe_allow_html=True)
             st.caption(
                 "Source: **data.gov.in** · Rajya Sabha Starred Question, 20 Dec 2021 · "
                 "[View Dataset](https://data.gov.in/catalog/stateut-wise-status-progress-"
@@ -908,13 +1065,13 @@ def main() -> None:
                     states    = amrut.get("states", [])
 
                     d1, d2, d3, d4 = st.columns(4)
-                    d1.metric("🏙️ Delhi Completed",
+                    d1.metric("Delhi Completed",
                               f"{delhi_d.get('work_completed___number','N/A')} projects")
-                    d2.metric("💰 Delhi Amount",
+                    d2.metric("Delhi Amount",
                               f"₹{delhi_d.get('work_completed___amount','N/A')} Cr")
-                    d3.metric("🔨 Delhi In-Progress",
+                    d3.metric("Delhi In-Progress",
                               f"{delhi_d.get('work_in_progress___number','N/A')} projects")
-                    d4.metric("🌍 National Total",
+                    d4.metric("National Total",
                               f"{nat_total.get('total___number','N/A')} projects · "
                               f"₹{nat_total.get('total___amount','N/A')} Cr")
 
@@ -943,7 +1100,7 @@ def main() -> None:
                         height=340, margin=dict(l=20, r=20, t=40, b=80)
                     )
                     st.plotly_chart(fig, use_container_width=True)
-                    st.caption("🔴 Red = NCT of Delhi | 🔵 Blue = other states")
+                    st.caption("Red = NCT of Delhi | Blue = other states")
             except Exception as ex:
                 st.caption(f"National data unavailable: {ex}")
 
@@ -951,7 +1108,7 @@ def main() -> None:
         if funding_name and "PMAY" in funding_name.upper():
             import pandas as pd
             st.divider()
-            st.markdown("### 🏠 National Context — PMAY-U Housing Delivery")
+            st.markdown(f"<p style='font-weight:700;color:#cbd5e1;margin:6px 0;'>{svg_icon('home','#94a3b8',14)} National Context — PMAY-U Housing Delivery</p>", unsafe_allow_html=True)
             st.caption(
                 "Source: **data.gov.in** · MoHUA · State/UT-wise PMAY-U completed & occupied houses "
                 "(as on 31-Dec-2024) · "
@@ -966,16 +1123,16 @@ def main() -> None:
                     states_p  = pmay.get("states", [])
 
                     p1, p2, p3, p4 = st.columns(4)
-                    p1.metric("🏙️ Delhi Completed (Mar'24)",
-                              f"{delhi_p.get('houses_as_on_31_03_2024___completed', 'N/A'):,}" 
+                    p1.metric("Delhi Completed (Mar'24)",
+                              f"{delhi_p.get('houses_as_on_31_03_2024___completed', 'N/A'):,}"
                               if isinstance(delhi_p.get('houses_as_on_31_03_2024___completed'), int) else "N/A")
-                    p2.metric("🏙️ Delhi Completed (Dec'24)",
+                    p2.metric("Delhi Completed (Dec'24)",
                               f"{delhi_p.get('houses_as_on_31_12_2024___completed', 'N/A'):,}"
                               if isinstance(delhi_p.get('houses_as_on_31_12_2024___completed'), int) else "N/A")
-                    p3.metric("🌍 National Completed (Dec'24)",
+                    p3.metric("National Completed (Dec'24)",
                               f"{nat_total.get('houses_as_on_31_12_2024___completed', 'N/A'):,}"
                               if isinstance(nat_total.get('houses_as_on_31_12_2024___completed'), int) else "N/A")
-                    p4.metric("🌍 National Occupied (Dec'24)",
+                    p4.metric("National Occupied (Dec'24)",
                               f"{nat_total.get('houses_as_on_31_12_2024___occupied', 'N/A'):,}"
                               if isinstance(nat_total.get('houses_as_on_31_12_2024___occupied'), int) else "N/A")
 
@@ -1003,7 +1160,7 @@ def main() -> None:
                             height=340, margin=dict(l=20, r=20, t=40, b=80)
                         )
                         st.plotly_chart(fig_p, use_container_width=True)
-                        st.caption("🔴 Red = NCT of Delhi | 🔵 Blue = other states")
+                        st.caption("Red = NCT of Delhi | Blue = other states")
             except Exception as ex:
                 st.caption(f"PMAY national data unavailable: {ex}")
 

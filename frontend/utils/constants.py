@@ -48,15 +48,15 @@ ASSET_VERIFICATION_OVERRIDE: dict[str, str] = {
 # Keyed by asset_id → {"before": path, "after": path, "before_caption": ..., ...}
 # All paths are relative to the PRAMAAN project root; we resolve at runtime.
 # ─────────────────────────────────────────────────────────────────────────────
-_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+_EVIDENCE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "static", "evidence"))
 
 def _img(filename: str) -> str:
-    """Return absolute path if the file exists, else empty string."""
-    full = os.path.join(_ROOT, filename)
+    """Return absolute path if the file exists in the evidence directory, else empty string."""
+    full = os.path.join(_EVIDENCE_DIR, filename)
     return full if os.path.exists(full) else ""
 
 ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
-    # ── DRAIN: Gali No. 7 — has its own dedicated drain before/after photos ──
+    # ── DRAIN: Gali No. 7 ─────────────────────────────────────────────────
     "ASSET_W45_GALI7_DRAIN": {
         "before":          _img("before_w45_gali7_drain.png"),
         "after":           _img("after_w45_gali7_drain.png"),
@@ -67,7 +67,7 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "before_source":   "📋 MCD Complaint Log #2024-SHD-0132",
         "after_source":    "📸 Geo-tagged photo — MCD field inspector",
     },
-    # ── DRAIN: Gali No. 12 — uses drain images (w46 drain as visual proxy) ──
+    # ── DRAIN: Gali No. 12 — uses w46 drain as visual proxy ──────────────
     "ASSET_W45_GALI12_DRAIN": {
         "before":          _img("before_w46_gali3_drain.png"),
         "after":           _img("after_w46_gali3_drain.png"),
@@ -78,10 +78,10 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "before_source":   "📋 MCD Complaint Log #2024-SHD-0147",
         "after_source":    "📸 Geo-tagged photo — MCD field inspector",
     },
-    # ── DRAIN: Gali No. 3 — uses static drain evidence images ─────────────
+    # ── DRAIN: Gali No. 3 ─────────────────────────────────────────────────
     "ASSET_W45_GALI3_DRAIN": {
-        "before":          _img("frontend/static/evidence/drain_before.png"),
-        "after":           _img("frontend/static/evidence/drain_after.png"),
+        "before":          _img("drain_before.png"),
+        "after":           _img("drain_after.png"),
         "before_caption":  "Reported: blocked drain, overflow onto road — Jan 2024",
         "after_caption":   "Partially verified: drain cleared, surface repair pending",
         "before_gps":      "📍 28.6760°N, 77.2912°E — Gali No. 3 Shahdara",
@@ -133,7 +133,7 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "before_source":   "📋 DDA PMAY-U Sanction Report #2023-DDA-H45",
         "after_source":    "",
     },
-    # ── STREETLIGHT: Gali No. 12 — correctly uses streetlight images ───────
+    # ── STREETLIGHT: Gali No. 12 ──────────────────────────────────────────
     "ASSET_W45_GALI12_STREETLIGHT": {
         "before":          _img("before_w45_gali12_streetlight.jpeg"),
         "after":           _img("after_w45_gali12_streetlight.jpeg"),
