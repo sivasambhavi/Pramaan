@@ -19,8 +19,8 @@ import plotly.graph_objects as go
 
 from utils.constants import SCHEME_SHORT_NAMES, ASSET_VERIFICATION_OVERRIDE
 from utils.icons import icon, icon_box
-from utils.geo_selector import INDIAN_STATES, DELHI_ULBS, DELHI_ZONES, ZONE_WARDS
-from utils.session import init_session, get_ward_id, get_ward_name, get_breadcrumb, DEFAULT_STATE, DEFAULT_CITY, DEFAULT_ZONE, DEFAULT_WARD
+from utils.geo_selector import _fetch_regions, _build_hierarchy, DEFAULT_STATE, DEFAULT_CITY, DEFAULT_WARD
+from utils.session import init_session, get_ward_id, get_ward_name, get_breadcrumb
 from components.topnav import render_topnav
 
 BASE_URL = "http://127.0.0.1:8000"
@@ -403,30 +403,40 @@ def main() -> None:
         init_session()
         ss = st.session_state
 
-        fc1, fc2, fc3, fc4, fc5 = st.columns([1.5, 1.5, 2.5, 2, 0.5], vertical_alignment="bottom")
+        # ── Build hierarchy from live API ──────────────────────────────────────
+        _raw = _fetch_regions()
+        _states, _districts, _wards = _build_hierarchy(_raw) if _raw else ([DEFAULT_STATE], {DEFAULT_STATE: [DEFAULT_CITY]}, {DEFAULT_CITY: {DEFAULT_WARD: "REG_W45"}})
+
+        fc1, fc2, fc3, fc4, fc5 = st.columns([1.5, 1.5, 2, 2.5, 0.5], vertical_alignment="bottom")
         with fc1:
             st.caption("STATE / UT")
-            _state_idx = INDIAN_STATES.index(ss.get("selected_state", DEFAULT_STATE)) if ss.get("selected_state", DEFAULT_STATE) in INDIAN_STATES else 0
-            state = st.selectbox("w_state", INDIAN_STATES, index=_state_idx, label_visibility="collapsed", key="sel_state")
+            _def_state = ss.get("selected_state", DEFAULT_STATE)
+            if _def_state not in _states: _def_state = _states[0] if _states else DEFAULT_STATE
+            state = st.selectbox("w_state", _states, index=_states.index(_def_state), label_visibility="collapsed", key="sel_state")
             ss["selected_state"] = state
         with fc2:
             st.caption("CITY / ULB")
-            _city_idx = DELHI_ULBS.index(ss.get("selected_city", DEFAULT_CITY)) if ss.get("selected_city", DEFAULT_CITY) in DELHI_ULBS else 0
-            city = st.selectbox("w_city", DELHI_ULBS, index=_city_idx, label_visibility="collapsed", key="sel_city")
+            _city_options = ["MCD Delhi"]
+            city = st.selectbox("w_city", _city_options, index=0, label_visibility="collapsed", key="sel_city")
             ss["selected_city"] = city
         with fc3:
             st.caption("ZONE")
-            _zone_list = DELHI_ZONES.get(city, [DEFAULT_ZONE])
-            _cur_zone  = ss.get("selected_zone", DEFAULT_ZONE) if ss.get("selected_zone", DEFAULT_ZONE) in _zone_list else _zone_list[0]
-            zone = st.selectbox("w_zone", _zone_list, index=_zone_list.index(_cur_zone), label_visibility="collapsed", key="sel_zone")
-            ss["selected_zone"] = zone
+            _dist_list = _districts.get(state, [DEFAULT_CITY])
+            _def_dist  = ss.get("selected_zone", DEFAULT_CITY)
+            if _def_dist not in _dist_list: _def_dist = _dist_list[0] if _dist_list else DEFAULT_CITY
+            district = st.selectbox("w_zone", _dist_list, index=_dist_list.index(_def_dist), label_visibility="collapsed", key="sel_district")
+            ss["selected_zone"] = district
+            ss["zone"] = district
         with fc4:
             st.caption("WARD")
-            _ward_map   = ZONE_WARDS.get(zone, {DEFAULT_WARD: "REG_W45"})
+            _ward_map   = _wards.get(district, {DEFAULT_WARD: "REG_W45"})
             _ward_names = list(_ward_map.keys())
-            _cur_ward   = ss.get("selected_ward", DEFAULT_WARD) if ss.get("selected_ward", DEFAULT_WARD) in _ward_names else _ward_names[0]
-            ward_sel = st.selectbox("w_ward", _ward_names, index=_ward_names.index(_cur_ward), label_visibility="collapsed", key="sel_ward")
+            _def_ward   = ss.get("selected_ward", DEFAULT_WARD)
+            if _def_ward not in _ward_names: _def_ward = _ward_names[0] if _ward_names else DEFAULT_WARD
+            ward_sel = st.selectbox("w_ward", _ward_names, index=_ward_names.index(_def_ward), label_visibility="collapsed", key="sel_ward")
             ss["selected_ward"] = ward_sel
+            ss["ward_name"]     = ward_sel
+            ss["ward_id"]       = _ward_map[ward_sel]
         with fc5:
             if st.button("↺", key="filter_refresh", use_container_width=True, help="Reset filters to India level."):
                 ss["last_refresh"] = datetime.datetime.now().strftime("%H:%M:%S")

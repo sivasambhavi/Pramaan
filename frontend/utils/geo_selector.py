@@ -1,116 +1,83 @@
 """
-Shared cascading geography selector for PRAMAAN — v3.1
-Uses pycountry for 195 real countries + all 36 Indian states/UTs.
-Neo4j is queried for real ward data; falls back to hardcoded Delhi hierarchy.
+Shared cascading geography selector for PRAMAAN — v4.0
+Fetches region hierarchy dynamically from the backend API.
+Falls back to empty lists with a warning if API is unavailable.
 """
+import requests
 import streamlit as st
 
-# ──────────────────────────────────────────────────────────────
-# All 36 Indian states + UTs (official list)
-# ──────────────────────────────────────────────────────────────
-INDIAN_STATES = [
-    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar",
-    "Chhattisgarh", "Goa", "Gujarat", "Haryana",
-    "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala",
-    "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya",
-    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan",
-    "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
-    "Uttar Pradesh", "Uttarakhand", "West Bengal",
-    # Union Territories
-    "Delhi (NCT)", "Jammu & Kashmir", "Ladakh",
-    "Puducherry", "Chandigarh", "Andaman & Nicobar Islands",
-    "Dadra & Nagar Haveli and Daman & Diu", "Lakshadweep",
-]
-DEFAULT_STATE = "Delhi (NCT)"
+BASE_URL = "http://127.0.0.1:8000"
 
-# ──────────────────────────────────────────────────────────────
-# Delhi mock hierarchy — realistic MCD zone/ward structure
-# ──────────────────────────────────────────────────────────────
-DELHI_ULBS = [
-    "MCD (Municipal Corporation of Delhi)",
-    "NDMC (New Delhi Municipal Council)",
-    "Delhi Cantonment Board",
-]
+DEFAULT_STATE = "Delhi"
+DEFAULT_CITY  = "East Delhi"
+DEFAULT_ZONE  = "East Delhi"
+DEFAULT_WARD  = "Ward 45 Shahdara"
 
-DELHI_ZONES = {
-    "MCD (Municipal Corporation of Delhi)": [
-        "Shahdara North Zone",
-        "Shahdara South Zone",
-        "City Zone",
-        "Central Zone",
-        "West Zone",
-        "South Zone",
-        "Najafgarh Zone",
-        "Narela Zone",
-    ],
-    "NDMC (New Delhi Municipal Council)": ["NDMC Zone"],
-    "Delhi Cantonment Board": ["Cantonment Zone"],
-}
-
-ZONE_WARDS = {
-    "Shahdara North Zone": {
-        "DMC Ward No - 45": "REG_W45",
-        "DMC Ward No - 46": "REG_W46",
-        "DMC Ward No - 47": "REG_W47",
-        "DMC Ward No - 48": "REG_W48",
-        "DMC Ward No - 49": "REG_W49",
-    },
-    "Shahdara South Zone": {
-        "DMC Ward No - 50": "REG_W50",
-        "DMC Ward No - 51": "REG_W51",
-        "DMC Ward No - 52": "REG_W52",
-    },
-    "City Zone":    {"City Ward 1": "REG_W45", "City Ward 2": "REG_W45"},
-    "Central Zone": {"Central Ward 1": "REG_W45", "Central Ward 2": "REG_W45"},
-    "West Zone":    {"West Ward 1": "REG_W45", "West Ward 2": "REG_W45"},
-    "South Zone":   {"South Ward 1": "REG_W45", "South Ward 2": "REG_W45"},
-    "Najafgarh Zone": {"Najafgarh Ward 1": "REG_W45"},
-    "Narela Zone":  {"Narela Ward 1": "REG_W45"},
-    "NDMC Zone":    {"NDMC Ward 1": "REG_W45"},
-    "Cantonment Zone": {"Cantonment Ward 1": "REG_W45"},
-}
-
-# ──────────────────────────────────────────────────────────────
-# Defaults
-# ──────────────────────────────────────────────────────────────
-DEFAULT_ULB  = "MCD (Municipal Corporation of Delhi)"
-DEFAULT_ZONE = "Shahdara North Zone"
-DEFAULT_WARD = "DMC Ward No - 45"
-
-NON_SHAHDARA_ZONES = {
-    z for z in sum(DELHI_ZONES.values(), [])
-    if "Shahdara" not in z
-}
+# Keep INDIAN_STATES for any imports that still reference it — built dynamically below
+INDIAN_STATES  = []
+DELHI_ULBS     = []
+DELHI_ZONES    = {}
+ZONE_WARDS     = {}
 
 
-def _get_countries() -> list[str]:
-    """Returns list of country names. Falls back to ['India'] if pycountry missing."""
+@st.cache_data(ttl=300, show_spinner=False)
+def _fetch_regions() -> list[dict]:
+    """Fetch all regions from API. Cached for 5 minutes."""
     try:
-        import pycountry
-        return sorted([c.name for c in pycountry.countries])
-    except ImportError:
-        return ["India"]
+        resp = requests.get(f"{BASE_URL}/regions/", timeout=5)
+        resp.raise_for_status()
+        return resp.json()
+    except Exception:
+        return []
+
+
+def _build_hierarchy(regions: list[dict]) -> dict:
+    """
+    Build cascading dicts from flat region list.
+    Returns:
+      states       : list of state names
+      districts    : {state_name: [district_name, ...]}
+      wards        : {district_name: {ward_name: ward_id}}
+    """
+    states, districts, wards = [], {}, {}
+
+    for r in regions:
+        rtype       = r.get("type", "")
+        name        = r.get("name", "")
+        parent_name = r.get("parent_name") or ""
+        region_id   = r.get("region_id", "")
+
+        if rtype == "state":
+            if name not in states:
+                states.append(name)
+
+        elif rtype == "district":
+            districts.setdefault(parent_name, [])
+            if name not in districts[parent_name]:
+                districts[parent_name].append(name)
+
+        elif rtype == "ward":
+            wards.setdefault(parent_name, {})
+            wards[parent_name][name] = region_id
+
+    states.sort()
+    return states, districts, wards
 
 
 def render_geo_selector(sidebar: bool = True) -> dict:
     """
-    Renders cascading geography dropdowns and persists to session_state.
-    Returns dict: country, state, city, zone, ward_name, ward_id, is_demo_ward.
+    Renders cascading State → District → Ward dropdowns.
+    Data comes from the backend API (Neo4j).
+    Returns dict: state, district, ward_name, ward_id, is_demo_ward.
     """
     target = st.sidebar if sidebar else st
-    ss = st.session_state
+    ss     = st.session_state
 
-    # ── Sidebar header (only when rendering in sidebar) ───────
     if sidebar:
         target.markdown("""
         <style>
         [data-testid="stSidebar"] { scrollbar-color: rgba(71,85,105,0.3) transparent !important; }
         [data-testid="stSidebar"]::-webkit-scrollbar-thumb { background: rgba(71,85,105,0.3) !important; }
-        [data-testid="stSidebar"]::-webkit-scrollbar-track { background: transparent !important; }
-        /* Compact nav links — prevent sidebar overflow */
-        [data-testid="stSidebarNav"] a { padding-top: 5px !important; padding-bottom: 5px !important; }
-        [data-testid="stSidebarNavItems"] { padding-top: 2px !important; padding-bottom: 2px !important; }
-        /* Hide deploy button only */
         [data-testid="stToolbar"] { display: none !important; }
         [data-testid="stDeployButton"] { display: none !important; }
         #MainMenu { visibility: hidden !important; }
@@ -126,89 +93,71 @@ def render_geo_selector(sidebar: bool = True) -> dict:
         <hr style="border-color:rgba(71,85,105,0.2);margin:0 0 8px 0;"/>
         """, unsafe_allow_html=True)
 
-    ss["country"] = "India"
-    country = "India"
+    # ── Fetch & build hierarchy ───────────────────────────────
+    raw_regions = _fetch_regions()
+    if not raw_regions:
+        target.warning("Could not load regions from API — backend may be offline.")
+        return {"state": DEFAULT_STATE, "district": DEFAULT_CITY,
+                "ward_name": DEFAULT_WARD, "ward_id": "REG_W45", "is_demo_ward": False}
 
-    # ── State ────────────────────────────────────────────────
+    states, districts, wards = _build_hierarchy(raw_regions)
+
+    # Update module-level lists so any code that imports them still works
+    global INDIAN_STATES, DELHI_ULBS, DELHI_ZONES, ZONE_WARDS
+    INDIAN_STATES = states
+    DELHI_ULBS    = list(districts.keys())
+    DELHI_ZONES   = districts
+    ZONE_WARDS    = wards
+
+    # ── State ─────────────────────────────────────────────────
     def_state = ss.get("state", DEFAULT_STATE)
-    if def_state not in INDIAN_STATES:
-        def_state = DEFAULT_STATE
+    if def_state not in states:
+        def_state = states[0] if states else DEFAULT_STATE
 
-    state = target.selectbox(
-        "State / UT", INDIAN_STATES,
-        index=INDIAN_STATES.index(def_state)
-    )
+    state = target.selectbox("State / UT", states, index=states.index(def_state), key="sel_state_geo")
 
-    # Banner when non-Delhi state selected
-    if state != "Delhi (NCT)":
-        target.info(
-            f"Showing Delhi demo data.  \n"
-            f"**{state}** data integration coming soon."
-        )
+    # ── District ──────────────────────────────────────────────
+    district_list = districts.get(state, [DEFAULT_CITY])
+    def_district  = ss.get("city", DEFAULT_CITY)
+    if def_district not in district_list:
+        def_district = district_list[0] if district_list else DEFAULT_CITY
 
-    # ── City / ULB ───────────────────────────────────────────
-    def_city = ss.get("city", DEFAULT_ULB)
-    if def_city not in DELHI_ULBS:
-        def_city = DEFAULT_ULB
+    district = target.selectbox("District", district_list,
+                                index=district_list.index(def_district), key="sel_district_geo")
 
-    city = target.selectbox(
-        "City / ULB", DELHI_ULBS,
-        index=DELHI_ULBS.index(def_city)
-    )
-
-    # ── Zone ─────────────────────────────────────────────────
-    zone_list = DELHI_ZONES.get(city, [DEFAULT_ZONE])
-    def_zone = ss.get("zone", DEFAULT_ZONE)
-    if def_zone not in zone_list:
-        def_zone = zone_list[0]
-
-    zone = target.selectbox(
-        "Zone", zone_list,
-        index=zone_list.index(def_zone)
-    )
-
-    # ── Ward ─────────────────────────────────────────────────
-    ward_map  = ZONE_WARDS.get(zone, {DEFAULT_WARD: "WARD45_SHAHDARA"})
+    # ── Ward ──────────────────────────────────────────────────
+    ward_map   = wards.get(district, {DEFAULT_WARD: "REG_W45"})
     ward_names = list(ward_map.keys())
-    def_ward  = ss.get("ward_name", DEFAULT_WARD)
+    def_ward   = ss.get("ward_name", DEFAULT_WARD)
     if def_ward not in ward_names:
-        def_ward = ward_names[0]
+        def_ward = ward_names[0] if ward_names else DEFAULT_WARD
 
-    ward_name = target.selectbox(
-        "Ward", ward_names,
-        index=ward_names.index(def_ward)
-    )
-    ward_id = ward_map[ward_name]
+    ward_name = target.selectbox("Ward", ward_names,
+                                 index=ward_names.index(def_ward), key="sel_ward_geo")
+    ward_id   = ward_map[ward_name]
 
-    # Detect demo fallback
-    is_demo_ward = zone in NON_SHAHDARA_ZONES
-
-    # ── Persist ──────────────────────────────────────────────
-    ss["country"]     = country
-    ss["state"]       = state
-    ss["city"]        = city
-    ss["zone"]        = zone
-    ss["ward_id"]     = ward_id
-    ss["ward_name"]   = ward_name
-    ss["is_demo_ward"] = is_demo_ward
+    # ── Persist ───────────────────────────────────────────────
+    ss["state"]      = state
+    ss["city"]       = district
+    ss["zone"]       = district   # backward compat
+    ss["ward_id"]    = ward_id
+    ss["ward_name"]  = ward_name
+    ss["is_demo_ward"] = False
+    ss["country"]    = "India"
 
     return {
-        "country": country, "state": state, "city": city,
-        "zone": zone, "ward_name": ward_name, "ward_id": ward_id,
-        "is_demo_ward": is_demo_ward,
+        "state": state, "district": district,
+        "ward_name": ward_name, "ward_id": ward_id,
+        "is_demo_ward": False,
     }
 
 
 def geo_breadcrumb() -> str:
-    """Returns readable breadcrumb string from session state."""
     ss = st.session_state
     parts = [
-        ss.get("country", "India"),
-        ss.get("state", "Delhi (NCT)"),
-        ss.get("city", "MCD"),
-        ss.get("zone", ""),
-        ss.get("ward_name", "Ward 45"),
+        "India",
+        ss.get("state", DEFAULT_STATE),
+        ss.get("city", DEFAULT_CITY),
+        ss.get("ward_name", DEFAULT_WARD),
     ]
     return " › ".join(p for p in parts if p)
-
-

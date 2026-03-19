@@ -250,6 +250,16 @@ Region, Scheme, Actor, Asset, Beneficiary, Evidence, Event
 | 3.6 | `sync_evidence_to_neo4j()` bug — `asset_id` param added, Cypher fixed, call re-enabled |
 | 3.7 | `GET /data/pmay-housing` endpoint added — Delhi + national PMAY data from data.gov.in |
 | 1.2 | `05_📊_Delivery_Graph.py` — decided to skip, Proof Chain covers this |
+| 1.1 | `hidden_Live_Ingestion.py` promoted → `pages/03_Live_Ingestion.py` — visible in nav |
+| 1.4 | Questions merged into Proof Chain — "Ask the Graph" NL query box at bottom of page |
+| 2.2 | Voice-to-text input — `utils/voice_input.py` with Web Speech API, mic embedded inside input box, works in Chrome/Edge. Used in Proof Chain (Ask the Graph) and Live Ingestion search |
+| 4.3 | Trust tier badge shown in Proof Chain — FULLY VERIFIED / PARTIALLY VERIFIED / UNVERIFIED with correct sync on asset switch |
+| — | Landing page fully redesigned — Pramaan logo, Tryminds logo in topnav, stats counter, badges, footer, no-scroll single-page layout |
+| — | Ward Map — outside-boundary assets shown as gray pins instead of hidden; deduplication added; "outside ward boundary" expander |
+| — | Ward Map — geo selector now fetches State/District/Ward dynamically from `/regions/` API — no hardcoded zones/ULBs |
+| — | Backend — `GET /regions/` endpoint added, returns full region hierarchy from Neo4j |
+| — | Live Ingestion — Ward: None display fixed; LIVE FEED badge made non-interactive; mic inside search box |
+| — | Proof Chain — badge sync race condition fixed; Ask the Graph button works; radio form fields update correctly; context articles differentiated |
 
 ---
 

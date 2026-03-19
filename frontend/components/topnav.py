@@ -3,6 +3,7 @@ PRAMAAN Top Navigation Bar
 Hides the Streamlit sidebar and renders a fixed 52px dark navbar.
 Call render_topnav(active_page) as the first thing in every page's main().
 """
+import os, base64
 import streamlit as st
 
 PAGES = [
@@ -22,6 +23,22 @@ _HIDE_SIDEBAR = """
   .block-container { padding-top: 0 !important; padding-bottom: 1rem !important; }
 </style>
 """
+
+
+_TRYMINDS_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "Tryminds_logo.jpeg")
+)
+
+
+def _tryminds_img_tag() -> str:
+    if not os.path.exists(_TRYMINDS_PATH):
+        return ""
+    with open(_TRYMINDS_PATH, "rb") as f:
+        b64 = base64.b64encode(f.read()).decode()
+    return (
+        f'<img src="data:image/jpeg;base64,{b64}" alt="Tryminds" '
+        f'style="height:32px;width:auto;object-fit:contain;border-radius:6px;opacity:0.9;">'
+    )
 
 
 def render_topnav(active_page: str | None = None) -> None:
@@ -70,10 +87,12 @@ def render_topnav(active_page: str | None = None) -> None:
         animation: navShine 3.5s linear infinite;
       }}
       .pramaan-nav-links {{ display: flex; align-items: stretch; height: 52px; }}
+      .pramaan-nav-right {{ margin-left: auto; display: flex; align-items: center; }}
     </style>
     <div class="pramaan-nav">
       <a href="/" target="_self" class="pramaan-nav-brand">PRAMAAN</a>
       <div class="pramaan-nav-links">{links_html}</div>
+      <div class="pramaan-nav-right">{_tryminds_img_tag()}</div>
     </div>
     """, unsafe_allow_html=True)
 
