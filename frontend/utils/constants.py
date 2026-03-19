@@ -26,21 +26,30 @@ SCHEME_SHORT_NAMES = {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# DETERMINISTIC VERIFICATION OVERRIDE — v4.6.3 Demo Mode
-# Each asset_id is mapped to its demo-mode verification status.
-# This dict is the single source of truth used by Ward Map, Proof Chain,
-# Micro-Accountability, and any future pages that need proof_status.
-# Score: (2×1.0 + 2×0.5) / 8 × 100 = 37.5% → shown as 37.5% in gauge
+# DETERMINISTIC VERIFICATION OVERRIDE — v4.7 Demo Mode
+# IDs must exactly match asset_id values in assets.csv and Neo4j.
+# Score target: (7×1.0 + 7×0.5) / 30 × 100 = 35% → "Warning" band
 # ─────────────────────────────────────────────────────────────────────────────
 ASSET_VERIFICATION_OVERRIDE: dict[str, str] = {
-    "ASSET_W45_GALI12_DRAIN":   "fully_verified",    # drain: 3 HT/CSR/ET news articles + Completed status
-    "ASSET_W45_PARK":           "fully_verified",     # park: AMRUT completion data + photos
-    "ASSET_W45_GALI7_DRAIN":    "partially_verified", # drain: news only (no photos in chain yet)
-    "ASSET_W45_GALI3_DRAIN":    "partially_verified", # drain: news only
-    "ASSET_W45_TOILET":         "unverified",
-    "ASSET_W45_PMAY_HOUSING_A": "unverified",
-    "ASSET_W45_ROAD_GALI7":     "unverified",
-    "ASSET_W45_GALI12_STREETLIGHT": "unverified",
+    # Core Shahdara infrastructure — field photos + completion data available
+    "ASSET_DRAIN_GALI7":        "fully_verified",     # drain: geo-tagged photo + MCD completion report
+    "ASSET_TOILET_MARKET":      "fully_verified",     # toilet: SBM-U ODF++ certificate + inspection photo
+    "ASSET_HOUSING_COLONYY":    "fully_verified",     # PMAY: possession letters + DDA sanction data
+    "ASSET_ROAD_GALI7":         "partially_verified", # road: news coverage only, no after-photo yet
+    "ASSET_LIGHTS_BLOCKA":      "partially_verified", # streetlight: tender closed, installation unconfirmed
+
+    # Water bodies — a mix reflecting real-world monitoring gaps
+    "ASSET_WB_272027":          "fully_verified",     # BURARI: DDA survey + satellite imagery
+    "ASSET_WB_272030":          "fully_verified",     # TIMARPUR: MCD wetland audit completed
+    "ASSET_WB_272031":          "fully_verified",     # WAZIRABAD: Delhi Jal Board report filed
+    "ASSET_WB_272038":          "fully_verified",     # KHICHRIPUR: field inspection photo
+    "ASSET_WB_272028":          "partially_verified", # JHARODA MAZRA BURARI: news mention only
+    "ASSET_WB_272029":          "partially_verified", # JHARODA MAZRA BURARI: single site visit log
+    "ASSET_WB_272032":          "partially_verified", # CHILLA SARODA BANGAR: satellite data only
+    "ASSET_WB_272034":          "partially_verified", # DALLUPURA: SBM audit pending
+    "ASSET_WB_272043":          "partially_verified", # KOTLA: partial encroachment report
+    "ASSET_WB_272049":          "partially_verified", # KHUREJI KHAS: DDA note filed, photo missing
+    # All others default to unverified (no entry needed — backend returns unverified)
 }
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -8,6 +8,9 @@ import streamlit as st
 import requests
 import json
 from utils.icons import icon, icon_box
+from utils.session import init_session, get_breadcrumb
+from utils.voice_input import voice_text_input
+from components.topnav import render_topnav
 
 BASE_URL = "http://127.0.0.1:8000"
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "cache")
@@ -22,7 +25,7 @@ html, body, [class*="css"] {
     background-color: #020b14 !important;
     color: #e2e8f0 !important;
 }
-.block-container { padding-top: 3.5rem !important; }
+.block-container { padding-top: 0.5rem !important; }
 
 .top-bar {
     background: linear-gradient(135deg, #0d1a2e 0%, #0c2461 60%, #0d1a2e 100%);
@@ -104,6 +107,13 @@ button[data-baseweb="tab"][aria-selected="true"] {
     border-radius: 8px !important;
 }
 hr { border-color: rgba(71,85,105,0.4) !important; }
+[data-testid="stToolbar"] { display:none !important; }
+[data-testid="stDeployButton"] { display:none !important; }
+#MainMenu { visibility:hidden !important; }
+* { scrollbar-width:thin; scrollbar-color:#f97316 #1a1f2e; }
+*::-webkit-scrollbar { width:6px; height:6px; }
+*::-webkit-scrollbar-track { background:#1a1f2e; }
+*::-webkit-scrollbar-thumb { background:#f97316; border-radius:3px; }
 
 [data-testid="stSidebarNav"] a span { color:#94a3b8 !important; font-size:0.9em !important; font-weight:500 !important; }
 [data-testid="stSidebarNav"] a[aria-current="page"] span { color:#f97316 !important; font-weight:700 !important; }
@@ -130,6 +140,8 @@ def load_cache():
 
 def main() -> None:
     st.set_page_config(page_title="Live Ingestion | Pramaan", layout="wide", page_icon="🛡️")
+    render_topnav("Live Ingestion")
+    init_session()
     st.markdown(PREMIUM_CSS, unsafe_allow_html=True)
 
     logo_svg = icon_box("zap", bg="rgba(249,115,22,0.15)", color="#f97316", size=24, box=52)
@@ -142,9 +154,15 @@ def main() -> None:
                 <div class="top-bar-sub">Auto-extract governance entities from news → write to Knowledge Graph</div>
             </div>
         </div>
-        <span class="top-bar-badge">{icon("activity", "#4ade80", 14)} LIVE FEED</span>
+        <span class="top-bar-badge" title="Status indicator — AI scraper is ready to ingest live news" style="cursor:default;">{icon("activity", "#4ade80", 14)} LIVE FEED</span>
     </div>
     """, unsafe_allow_html=True)
+
+    _pin = icon("map-pin", "#64748b", 13)
+    if not st.session_state.get("selected_ward"):
+        st.markdown("<p style='color:#64748b;font-size:0.82em;'>📍 No ward selected — <a href='/Ward_Map' target='_self' style='color:#FF6B35;'>go to Ward Map</a> to select a location.</p>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<p style='color:#64748b;font-size:0.85em;margin-bottom:1rem;'>{_pin} {get_breadcrumb()}</p>", unsafe_allow_html=True)
 
     tab1, tab2 = st.tabs(["Strategic Scraper", "Manual Ingestion"])
 
@@ -152,18 +170,17 @@ def main() -> None:
     with tab1:
         st.markdown(f"<p class='sec-label'>{icon('globe', '#94a3b8', 15)} Auto-Search from News</p>", unsafe_allow_html=True)
 
-        col_a, col_b = st.columns([3, 1])
-        with col_a:
-            search_query = st.text_input(
-            "Search Query",
-            value="AMRUT 2.0 Delhi MCD",
+        # voice_text_input: mic embedded inside the search box
+        search_query = voice_text_input(
             placeholder="e.g. AMRUT 2.0 Delhi MCD drain desilting 2025",
+            key="live_search_query",
             help="Enter a governance topic. The AI will scrape recent news and extract entities into the knowledge graph.",
         )
-        with col_b:
-            # GAP-15: offline fallback
-            use_cache = st.checkbox("📂 Use cached result", value=False,
-                                    help="Load the last successful scrape result offline")
+
+        # GAP-15: offline fallback — grouped with a subtle container
+        with st.container():
+            use_cache = st.checkbox("Use cached result", value=False,
+                                    help="Load the last successful scrape result instead of running a live search")
 
         if st.button("🔍 Auto-Search & Map to Graph"):
             if use_cache:
@@ -266,7 +283,10 @@ def main() -> None:
                                     st.markdown('<div class="chain-arrow">↓</div>', unsafe_allow_html=True)
 
                                     region = response_chain.get("region", {})
-                                    loc_str = f"Ward: {region.get('ward', 'Unknown')}"
+                                    _ward_val = region.get('ward')
+                                    if not _ward_val or str(_ward_val).lower() in ('none', 'null', ''):
+                                        _ward_val = "Not resolved — ward name not found in article"
+                                    loc_str = f"Ward: {_ward_val}"
                                     if region.get('street'):
                                         loc_str += f" · Street: {region.get('street')}"
                                     st.markdown(f"""

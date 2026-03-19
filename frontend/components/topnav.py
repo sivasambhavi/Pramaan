@@ -1,0 +1,81 @@
+"""
+PRAMAAN Top Navigation Bar
+Hides the Streamlit sidebar and renders a fixed 52px dark navbar.
+Call render_topnav(active_page) as the first thing in every page's main().
+"""
+import streamlit as st
+
+PAGES = [
+    ("Ward Map",             "/Ward_Map"),
+    ("Proof Chain",          "/Proof_Chain"),
+    ("Live Ingestion",       "/Live_Ingestion"),
+    ("Micro Accountability", "/Micro_Accountability"),
+]
+
+_HIDE_SIDEBAR = """
+<style>
+  [data-testid="stSidebar"]        { display: none !important; }
+  [data-testid="collapsedControl"] { display: none !important; }
+  #MainMenu  { visibility: hidden; }
+  footer     { visibility: hidden; }
+  header     { visibility: hidden; }
+  .block-container { padding-top: 0 !important; padding-bottom: 1rem !important; }
+</style>
+"""
+
+
+def render_topnav(active_page: str | None = None) -> None:
+    """Inject fixed top navbar, hide sidebar, push content below bar."""
+    st.markdown(_HIDE_SIDEBAR, unsafe_allow_html=True)
+
+    links_html = ""
+    for name, url in PAGES:
+        active = name == active_page
+        color  = "#FF6B35" if active else "#94a3b8"
+        weight = "600"     if active else "500"
+        border = "3px solid #FF6B35" if active else "3px solid transparent"
+        links_html += (
+            f'<a href="{url}" target="_self" style="'
+            f'color:{color};text-decoration:none;font-size:13.5px;font-weight:{weight};'
+            f'padding:0 18px;height:52px;display:inline-flex;align-items:center;'
+            f'border-bottom:{border};transition:color 0.15s ease,border-color 0.15s ease;"'
+            f' onmouseover="if(this.style.borderBottomColor===\'transparent\')this.style.color=\'#ffffff\'"'
+            f' onmouseout="if(this.style.borderBottomColor===\'transparent\')this.style.color=\'#94a3b8\'"'
+            f'>{name}</a>'
+        )
+
+    st.markdown(f"""
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+      @keyframes navShine {{
+        0%   {{ background-position: 200% center; }}
+        100% {{ background-position: -50% center; }}
+      }}
+      .pramaan-nav {{
+        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+        height: 52px; background: #0D1117;
+        border-bottom: 1px solid #1e293b;
+        display: flex; align-items: center; padding: 0 28px;
+        font-family: 'Inter', sans-serif; gap: 0;
+      }}
+      .pramaan-nav-brand {{
+        font-family: 'Cinzel', serif;
+        font-size: 17px; font-weight: 900;
+        letter-spacing: 0.16em; margin-right: 32px; flex-shrink: 0;
+        text-decoration: none !important;
+        background: linear-gradient(105deg, #f97316 0%, #fb923c 28%, #fff4e6 46%, #ffe9b0 52%, #fb923c 68%, #38bdf8 100%);
+        background-size: 250% auto;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: navShine 3.5s linear infinite;
+      }}
+      .pramaan-nav-links {{ display: flex; align-items: stretch; height: 52px; }}
+    </style>
+    <div class="pramaan-nav">
+      <a href="/" target="_self" class="pramaan-nav-brand">PRAMAAN</a>
+      <div class="pramaan-nav-links">{links_html}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Spacer pushes Streamlit content below the fixed bar
+    st.markdown("<div style='height:60px'></div>", unsafe_allow_html=True)

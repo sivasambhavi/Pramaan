@@ -17,11 +17,41 @@ import folium
 from streamlit_folium import st_folium
 import plotly.graph_objects as go
 
-from utils.geo_selector import render_geo_selector, geo_breadcrumb
 from utils.constants import SCHEME_SHORT_NAMES, ASSET_VERIFICATION_OVERRIDE
 from utils.icons import icon, icon_box
+from utils.geo_selector import INDIAN_STATES, DELHI_ULBS, DELHI_ZONES, ZONE_WARDS
+from utils.session import init_session, get_ward_id, get_ward_name, get_breadcrumb, DEFAULT_STATE, DEFAULT_CITY, DEFAULT_ZONE, DEFAULT_WARD
+from components.topnav import render_topnav
 
 BASE_URL = "http://127.0.0.1:8000"
+
+# Approximate ward boundary polygons (lat/lon pairs, clockwise).
+# Used to draw the ward outline on the folium map.
+# Extend this dict as more wards are added.
+WARD_BOUNDARIES: dict[str, list[tuple[float, float]]] = {
+    "REG_W45": [
+        (28.677, 77.284), (28.677, 77.306),
+        (28.672, 77.313), (28.660, 77.309),
+        (28.655, 77.291), (28.659, 77.283),
+        (28.677, 77.284),  # close polygon
+    ],
+}
+
+# Ward centroid + max-radius (km) for pin sanity-filter.
+# Pins beyond the radius are almost certainly mis-tagged data.
+WARD_CENTROID: dict[str, tuple[float, float]] = {
+    "REG_W45": (28.666, 77.296),
+}
+PIN_RADIUS_KM = 18  # generous enough for Burari / Khureji Khas (~10 km away)
+
+
+def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Approximate great-circle distance in km."""
+    R = 6371.0
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+    a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2
+    return R * 2 * math.asin(math.sqrt(a))
 
 STATUS_CONFIG = {
     "fully_verified":     ("✅ Fully Verified",      "green",  "#10b981", "#22c55e"),
@@ -92,6 +122,7 @@ def kpi_tile(icon_name: str, bg: str, icon_color: str, value: int, label: str, v
 
 def main() -> None:
     st.set_page_config(page_title="Ward Map | Pramaan", layout="wide", page_icon="🛡️")
+    render_topnav("Ward Map")
 
     st.markdown("""
     <style>
@@ -103,7 +134,7 @@ def main() -> None:
         color: #e2e8f0 !important;
     }
 
-    .block-container { padding-top: 3.5rem !important; }
+    .block-container { padding-top: 0.5rem !important; }
 
     /* ── Keyframe animations ── */
     @keyframes fadeInDown {
@@ -326,6 +357,13 @@ def main() -> None:
     .empty-state-body { font-size:0.83em; color:#334155; line-height:1.6; }
 
     hr { border-color:rgba(71,85,105,0.35) !important; }
+    [data-testid="stToolbar"] { display:none !important; }
+    [data-testid="stDeployButton"] { display:none !important; }
+    #MainMenu { visibility:hidden !important; }
+    * { scrollbar-width:thin; scrollbar-color:#f97316 #1a1f2e; }
+    *::-webkit-scrollbar { width:6px; height:6px; }
+    *::-webkit-scrollbar-track { background:#1a1f2e; }
+    *::-webkit-scrollbar-thumb { background:#f97316; border-radius:3px; }
 
     /* ── map legend ── */
     .map-legend {
@@ -345,23 +383,6 @@ def main() -> None:
     """, unsafe_allow_html=True)
 
     try:
-        # ── Sidebar — compact branding only ───────────────────────────────────
-        with st.sidebar:
-            st.markdown("""
-            <div style="padding:16px 4px 12px 4px;text-align:center;">
-                <div style="font-family:'Outfit',sans-serif;font-size:1.35em;font-weight:800;
-                            background:linear-gradient(90deg,#f97316,#38bdf8);
-                            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-                            line-height:1.1;margin-bottom:4px;">PRAMAAN</div>
-                <div style="font-size:0.68em;color:#475569;letter-spacing:0.05em;
-                            text-transform:uppercase;font-weight:600;">Governance Proof Engine</div>
-            </div>
-            <hr style="border-color:rgba(71,85,105,0.2);margin:0 0 10px 0;"/>
-            """, unsafe_allow_html=True)
-            if st.button("Refresh data", use_container_width=True):
-                st.cache_data.clear()
-                st.rerun()
-
         # ── Top bar ────────────────────────────────────────────────────────────
         logo_svg = icon_box("map", bg="rgba(249,115,22,0.15)", color="#f97316", size=24, box=52)
         st.markdown(f"""
@@ -370,24 +391,57 @@ def main() -> None:
                 <div class="top-bar-logo">{logo_svg}</div>
                 <div>
                     <div class="top-bar-title">Ward Delivery Map</div>
-                    <div class="top-bar-sub">Ward-Level Governance Proof · Scheme → Asset → Evidence</div>
+                    <div class="top-bar-sub">Track field proof for assets and schemes, ward by ward.</div>
                 </div>
             </div>
             <span class="top-bar-badge">{icon("shield-check", "#f97316", 14)} PRAMAAN LIVE</span>
         </div>
         """, unsafe_allow_html=True)
 
-        # ── Inline geo selector ────────────────────────────────────────────────
-        geo = render_geo_selector(inline=True)
+        # ── Inline ward filter (Ward Map only) ────────────────────────────────
+        import datetime
+        init_session()
+        ss = st.session_state
 
-        ward_id   = geo["ward_id"]
-        ward_name = geo["ward_name"]
+        fc1, fc2, fc3, fc4, fc5 = st.columns([1.5, 1.5, 2.5, 2, 0.5], vertical_alignment="bottom")
+        with fc1:
+            st.caption("STATE / UT")
+            _state_idx = INDIAN_STATES.index(ss.get("selected_state", DEFAULT_STATE)) if ss.get("selected_state", DEFAULT_STATE) in INDIAN_STATES else 0
+            state = st.selectbox("w_state", INDIAN_STATES, index=_state_idx, label_visibility="collapsed", key="sel_state")
+            ss["selected_state"] = state
+        with fc2:
+            st.caption("CITY / ULB")
+            _city_idx = DELHI_ULBS.index(ss.get("selected_city", DEFAULT_CITY)) if ss.get("selected_city", DEFAULT_CITY) in DELHI_ULBS else 0
+            city = st.selectbox("w_city", DELHI_ULBS, index=_city_idx, label_visibility="collapsed", key="sel_city")
+            ss["selected_city"] = city
+        with fc3:
+            st.caption("ZONE")
+            _zone_list = DELHI_ZONES.get(city, [DEFAULT_ZONE])
+            _cur_zone  = ss.get("selected_zone", DEFAULT_ZONE) if ss.get("selected_zone", DEFAULT_ZONE) in _zone_list else _zone_list[0]
+            zone = st.selectbox("w_zone", _zone_list, index=_zone_list.index(_cur_zone), label_visibility="collapsed", key="sel_zone")
+            ss["selected_zone"] = zone
+        with fc4:
+            st.caption("WARD")
+            _ward_map   = ZONE_WARDS.get(zone, {DEFAULT_WARD: "REG_W45"})
+            _ward_names = list(_ward_map.keys())
+            _cur_ward   = ss.get("selected_ward", DEFAULT_WARD) if ss.get("selected_ward", DEFAULT_WARD) in _ward_names else _ward_names[0]
+            ward_sel = st.selectbox("w_ward", _ward_names, index=_ward_names.index(_cur_ward), label_visibility="collapsed", key="sel_ward")
+            ss["selected_ward"] = ward_sel
+        with fc5:
+            if st.button("↺", key="filter_refresh", use_container_width=True, help="Reset filters to India level."):
+                ss["last_refresh"] = datetime.datetime.now().strftime("%H:%M:%S")
+                st.cache_data.clear()
+                st.rerun()
+
+        st.markdown("<hr style='border:none;border-top:1px solid #1e293b;margin:4px 0 10px 0;'>", unsafe_allow_html=True)
+
+        ward_id   = get_ward_id()
+        ward_name = get_ward_name()
 
         # ── Breadcrumb ─────────────────────────────────────────────────────────
-        crumb = geo_breadcrumb()
         pin_icon = icon("map-pin", "#64748b", 12)
         st.markdown(
-            f'<div class="breadcrumb" style="font-size:0.78em;">{pin_icon} {crumb}</div>',
+            f'<div class="breadcrumb" style="font-size:0.78em;">{pin_icon} {get_breadcrumb()}</div>',
             unsafe_allow_html=True,
         )
 
@@ -401,6 +455,10 @@ def main() -> None:
         total      = sd.get("total_assets", 0)
         breakdown  = sd.get("asset_breakdown", [])
         scheme_bk  = sd.get("scheme_breakdown", {})
+
+        # Deduplicate by asset_id (keep first occurrence)
+        _seen = set()
+        breakdown = [a for a in breakdown if not (_seen.add(a["asset_id"]) if a["asset_id"] not in _seen else True)]
 
         breakdown  = apply_override(breakdown)
         score, counts = compute_score(breakdown)
@@ -469,7 +527,7 @@ def main() -> None:
                 oy = (R + 20) * math.sin(angle)
                 out.append(
                     f'<text x="{CX + ox:.1f}" y="{CY + oy:.1f}" '
-                    f'fill="#475569" font-size="10" text-anchor="middle" dominant-baseline="middle">{lbl}</text>'
+                    f'fill="#64748b" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" dominant-baseline="middle">{lbl}</text>'
                 )
             return "\n".join(out)
 
@@ -477,9 +535,15 @@ def main() -> None:
         track_amber = _zone_arc(35, 70,  "#f59e0b", 0.15)
         track_green = _zone_arc(70, 100, "#22c55e", 0.15)
         fill_arc    = _score_arc(score, needle_color)
+
+        # Needle dot at arc tip
+        _ndx, _ndy = _arc_pt(min(score, 99.9))
+        needle_dot  = (f'<circle cx="{_ndx:.1f}" cy="{_ndy:.1f}" r="11" '
+                       f'fill="#ffffff" stroke="{needle_color}" stroke-width="3" '
+                       f'filter="drop-shadow(0 0 5px {needle_color})"/>'
+                       if score > 0 else "")
         tick_labels = _tick_labels()
-        cta_html    = (f'<div style="margin-top:6px;font-size:0.75em;color:{severity_color};opacity:0.85;">{cta_text}</div>'
-                       if cta_text else "")
+        cta_html    = ""
         news_html   = (f'<div style="font-size:0.72em;color:#64748b;margin-top:6px;">'
                        f'{counts["news_only"]} assets: news coverage only</div>'
                        if counts.get("news_only", 0) > 0 else "")
@@ -488,21 +552,22 @@ def main() -> None:
         <!DOCTYPE html><html><head>
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Inter:wght@400;500;600&display=swap');
-          * {{ box-sizing:border-box; margin:0; padding:0; }}
+          * {{ box-sizing:border-box; margin:0; padding:0; text-decoration:none !important; }}
           body {{ background:transparent; font-family:'Inter',sans-serif; }}
 
           .panel {{
             background: linear-gradient(135deg,rgba(13,26,46,0.97) 0%,rgba(10,18,38,0.97) 100%);
             border: 1px solid rgba(71,85,105,0.4);
             border-radius: 16px;
-            padding: 24px 28px;
+            padding: 20px 24px;
             display: flex;
-            align-items: center;
-            gap: 32px;
+            align-items: flex-start;
+            gap: 28px;
           }}
           .gauge-side {{
             flex: 0 0 260px;
             text-align: center;
+            padding-top: 4px;
           }}
           .score-num {{
             font-family:'Outfit',sans-serif;
@@ -510,7 +575,7 @@ def main() -> None:
             color:{needle_color};
             line-height:1;
           }}
-          .score-unit {{ font-size:0.5em; font-weight:600; color:{needle_color}; opacity:0.8; }}
+          .score-unit {{ font-size:0.75em; font-weight:800; color:{needle_color}; vertical-align:super; }}
           .score-lbl {{ font-size:0.75em; color:#64748b; margin-top:4px; }}
           .ward-lbl  {{ font-size:0.65em; color:#475569; margin-top:2px; }}
           .severity-badge {{
@@ -528,27 +593,30 @@ def main() -> None:
           /* KPI grid */
           .kpi-side {{
             flex: 1;
+            min-width: 0;
           }}
           .kpi-header {{
-            font-size:0.65em; color:#64748b; font-weight:700;
+            font-size:0.62em; color:#64748b; font-weight:700;
             text-transform:uppercase; letter-spacing:0.08em;
-            margin-bottom:14px;
+            margin-bottom:10px;
           }}
           .kpi-grid {{
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 8px;
           }}
           .kpi-card {{
             background:rgba(15,23,42,0.7);
             border:1px solid rgba(71,85,105,0.3);
-            border-radius:12px;
-            padding:14px 16px;
+            border-radius:10px;
+            padding:10px 12px;
+            min-width: 0;
             transition: border-color 0.2s ease, transform 0.15s ease;
           }}
           .kpi-card:hover {{ border-color:rgba(249,115,22,0.3); transform:translateY(-2px); }}
-          .kpi-val  {{ font-family:'Outfit',sans-serif; font-size:2em; font-weight:800; line-height:1; }}
-          .kpi-name {{ font-size:0.7em; color:#64748b; margin-top:4px; font-weight:500; }}
+          .kpi-val  {{ font-family:'Outfit',sans-serif; font-size:1.7em; font-weight:800; line-height:1; }}
+          .kpi-name {{ font-size:0.68em; color:#64748b; margin-top:3px; font-weight:600;
+                       white-space:normal; line-height:1.3; }}
           {news_html and ".news-note { font-size:0.72em; color:#64748b; margin-top:12px; }" or ""}
         </style>
         </head><body>
@@ -561,19 +629,19 @@ def main() -> None:
               {track_amber}
               {track_green}
               {fill_arc}
+              {needle_dot}
               {tick_labels}
               <text x="{CX}" y="{CY - 10}" fill="{needle_color}"
                     font-family="Outfit,sans-serif" font-size="36" font-weight="800"
                     text-anchor="middle" dominant-baseline="middle">{score:.1f}<tspan font-size="18">%</tspan></text>
-              <text x="{CX}" y="{CY + 22}" fill="#64748b"
+              <text x="{CX}" y="{CY + 26}" fill="#64748b"
                     font-family="Inter,sans-serif" font-size="11"
                     text-anchor="middle">Delivery Score</text>
-              <text x="{CX}" y="{CY + 38}" fill="#475569"
-                    font-family="Inter,sans-serif" font-size="9.5"
-                    text-anchor="middle">{ward_name}</text>
             </svg>
-            <div class="severity-badge">{severity_label}</div>
-            <div class="band-text">{band_text}</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:4px;">
+              <div class="severity-badge">{"⚠ " if severity_label == "Critical" else ""}{severity_label}</div>
+              <div class="band-text" style="font-size:0.75em;">{band_text}</div>
+            </div>
             {cta_html}
           </div>
 
@@ -585,17 +653,20 @@ def main() -> None:
                 <div class="kpi-val" style="color:#f97316">{total}</div>
                 <div class="kpi-name">Total Assets</div>
               </div>
-              <div class="kpi-card">
+              <div class="kpi-card" title="Fully Verified — field proof accepted and cleared">
                 <div class="kpi-val" style="color:#22c55e">{counts["fully_verified"]}</div>
                 <div class="kpi-name">Fully Verified</div>
+                <div style="font-size:0.6em;color:#475569;margin-top:2px;line-height:1.3;">field proof accepted &amp; cleared</div>
               </div>
-              <div class="kpi-card">
+              <div class="kpi-card" title="Partial Proof — some documents uploaded, pending review">
                 <div class="kpi-val" style="color:#f59e0b">{counts["partially_verified"]}</div>
                 <div class="kpi-name">Partial Proof</div>
+                <div style="font-size:0.6em;color:#475569;margin-top:2px;line-height:1.3;">docs uploaded, pending review</div>
               </div>
-              <div class="kpi-card">
+              <div class="kpi-card" title="Unverified — no accepted proof uploaded yet">
                 <div class="kpi-val" style="color:#ef4444">{counts["unverified"]}</div>
                 <div class="kpi-name">Unverified</div>
+                <div style="font-size:0.6em;color:#475569;margin-top:2px;line-height:1.3;">no accepted proof uploaded yet</div>
               </div>
             </div>
             {news_html}
@@ -603,16 +674,43 @@ def main() -> None:
 
         </div>
         </body></html>
-        """, height=290)
+        """, height=280)
 
-        # ── Tabs — with count badges in labels ────────────────────────────────
+        if severity_label == "Critical" and counts["unverified"] > 0:
+            st.markdown(
+                f"<div style='margin:-6px 0 8px 0;'>"
+                f"<span style='background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);"
+                f"border-radius:8px;padding:6px 14px;font-size:0.82em;color:#ef4444;font-weight:700;"
+                f"display:inline-block;'>View {counts['unverified']} unverified assets ↓</span>"
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+
+        # ── Pre-fetch gaps (needed for accurate tab label) ────────────────────
+        try:
+            _gaps_resp = requests.get(f"{BASE_URL}/wards/{ward_id}/gaps", timeout=10)
+            gaps_data  = _gaps_resp.json().get("gaps", []) if _gaps_resp.status_code == 200 else []
+        except Exception:
+            gaps_data = []
+        n_actual_gaps = sum(1 for g in gaps_data if g.get("gap_type") not in ("complete", "no_assets"))
+
+        # Per-scheme proof breakdown (for stacked bar)
+        scheme_proof: dict = {}
+        for asset in breakdown:
+            sname = asset.get("scheme_name") or "Unknown"
+            ps    = asset.get("proof_status", "unverified")
+            if sname not in scheme_proof:
+                scheme_proof[sname] = {"fully_verified": 0, "partially_verified": 0, "unverified": 0}
+            bucket = ps if ps in ("fully_verified", "partially_verified") else "unverified"
+            scheme_proof[sname][bucket] += 1
+
+        # ── Tabs ──────────────────────────────────────────────────────────────
         n_schemes = len(scheme_bk)
-        n_gaps    = sum(1 for a in breakdown if a.get("proof_status", "unverified") in ("unverified", ""))
         tab_map, tab_assets, tab_scheme, tab_gaps = st.tabs([
             "Map View",
-            f"Assets & Proof  ·  {len(breakdown)}",
-            f"Scheme Breakdown  ·  {n_schemes}",
-            f"Delivery Gaps  ·  {n_gaps}",
+            f"Assets & Proof ({len(breakdown)})",
+            f"Scheme Breakdown ({n_schemes})",
+            f"Delivery Gaps ({n_actual_gaps})",
         ])
 
         # ── Scheme Breakdown ───────────────────────────────────────────────────
@@ -636,19 +734,27 @@ def main() -> None:
                     with cols[i % n_cols]:
                         st.metric(label=short, value=cnt, help=sname)
 
-                # Bar chart
-                if len(sorted_schemes) > 1:
-                    names  = [SCHEME_SHORT_NAMES.get(s, s).replace("\n", " ") for s, _ in sorted_schemes]
-                    values = [c for _, c in sorted_schemes]
-                    bar = go.Figure(go.Bar(
-                        x=names, y=values,
-                        marker_color=["#f97316", "#38bdf8", "#38bdf8", "#34d399"][:len(names)],
-                        text=values, textposition="outside",
-                    ))
+                # Stacked bar — verified / partial / unverified per scheme
+                if len(sorted_schemes) >= 1:
+                    names = [SCHEME_SHORT_NAMES.get(s, s).replace("\n", " ") for s, _ in sorted_schemes]
+                    fv = [scheme_proof.get(s, {}).get("fully_verified",    0) for s, _ in sorted_schemes]
+                    pv = [scheme_proof.get(s, {}).get("partially_verified", 0) for s, _ in sorted_schemes]
+                    uv = [scheme_proof.get(s, {}).get("unverified",         0) for s, _ in sorted_schemes]
+                    bar = go.Figure(data=[
+                        go.Bar(name="Fully Verified",    x=names, y=fv, marker_color="#22c55e",
+                               text=fv, textposition="inside", insidetextanchor="middle"),
+                        go.Bar(name="Partial Proof",     x=names, y=pv, marker_color="#f59e0b",
+                               text=pv, textposition="inside", insidetextanchor="middle"),
+                        go.Bar(name="Unverified",        x=names, y=uv, marker_color="#ef4444",
+                               text=uv, textposition="inside", insidetextanchor="middle"),
+                    ])
                     bar.update_layout(
-                        height=280, margin=dict(l=10, r=10, t=20, b=10),
+                        barmode="stack",
+                        height=300, margin=dict(l=10, r=10, t=10, b=10),
                         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                         font={"color": "#94a3b8", "size": 12},
+                        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=0.5,
+                                    font=dict(size=11), bgcolor="rgba(0,0,0,0)"),
                         xaxis=dict(showgrid=False, color="#475569"),
                         yaxis=dict(showgrid=True, gridcolor="rgba(71,85,105,0.3)", color="#475569"),
                     )
@@ -697,6 +803,18 @@ def main() -> None:
 
                 st.caption(f"Showing {len(filtered)} of {len(breakdown)} assets")
 
+                # Pre-compute which asset IDs are geographically outside the ward radius
+                _centroid = WARD_CENTROID.get(ward_id, (28.666, 77.296))
+                _outside_ids: set = set()
+                for _a in breakdown:
+                    try:
+                        _lat = float(_a.get("lat") or 0)
+                        _lng = float(_a.get("lon") or 0)
+                        if _lat and _lng and _haversine_km(_centroid[0], _centroid[1], _lat, _lng) > PIN_RADIUS_KM:
+                            _outside_ids.add(_a["asset_id"])
+                    except (ValueError, TypeError):
+                        pass
+
                 # Header row
                 h1, h2, h3, h4, h5 = st.columns([4, 2, 2, 2, 2])
                 for col, label in zip([h1, h2, h3, h4, h5], ["Asset", "Type", "Scheme", "Status", ""]):
@@ -709,19 +827,36 @@ def main() -> None:
                     bdg = badge_html(color_name, label)
                     s_name = asset.get("scheme_name") or "—"
                     short = SCHEME_SHORT_NAMES.get(s_name, s_name).replace("\n", " ")
+                    _is_outside = asset["asset_id"] in _outside_ids
+                    _outside_badge = (
+                        " <span style='font-size:0.65em;background:rgba(245,158,11,0.12);"
+                        "border:1px solid rgba(245,158,11,0.35);border-radius:4px;"
+                        "padding:1px 6px;color:#f59e0b;font-weight:600;'>⚠ Outside boundary</span>"
+                        if _is_outside else ""
+                    )
 
                     c1, c2, c3, c4, c5 = st.columns([4, 2, 2, 2, 2])
-                    c1.markdown(f"<div class='asset-name'>{asset['name']}</div>"
-                                f"<div class='asset-meta'>ID: {asset.get('asset_id','?')} · ₹{asset.get('cost','?')} lakh</div>",
+                    _cost = asset.get('cost') or 0
+                    _cost_str = f"₹{_cost:,.0f}" if _cost else "N/A"
+                    _status = (asset.get('status') or '—').replace('_', ' ').capitalize()
+                    c1.markdown(f"<div class='asset-name'>{asset['name']}{_outside_badge}</div>"
+                                f"<div class='asset-meta'>{_status} · {_cost_str} · <span style='color:#334155;font-family:monospace'>{asset['asset_id']}</span></div>",
                                 unsafe_allow_html=True)
-                    c2.write(asset.get("type", "—"))
+                    c2.write((asset.get("type") or "—").replace("_", " ").title())
                     c3.write(short)
                     c4.markdown(bdg, unsafe_allow_html=True)
-                    if c5.button("🔍 Proof chain", key=f"chain_{asset['asset_id']}"):
+                    if c5.button("View Proof Chain", key=f"chain_{asset['asset_id']}"):
                         st.session_state["selected_asset"] = asset["asset_id"]
                         st.session_state["ward_id"]        = ward_id
                         st.session_state["ward_name"]      = ward_name
                         st.switch_page("pages/02_Proof_Chain.py")
+
+                if _outside_ids:
+                    _outside_assets = [a for a in breakdown if a["asset_id"] in _outside_ids]
+                    with st.expander(f"🗺 {len(_outside_ids)} asset{'s' if len(_outside_ids)>1 else ''} outside ward boundary — possible mis-tag"):
+                        st.caption("These assets have coordinates outside the ward radius. They appear in the table above but are hidden from the map. Verify coordinates in assets.csv.")
+                        for _oa in _outside_assets:
+                            st.markdown(f"- **{_oa['name']}** `{_oa['asset_id']}` — lat: `{_oa.get('lat','?')}`, lon: `{_oa.get('lon','?')}`")
 
         # ── Map View ───────────────────────────────────────────────────────────
         with tab_map:
@@ -735,63 +870,103 @@ def main() -> None:
             """, unsafe_allow_html=True)
 
             try:
-                ward_lat, ward_lng = 28.6692, 77.2789
+                default_centroid = WARD_CENTROID.get(ward_id, (28.6692, 77.2789))
+                ward_lat, ward_lng = default_centroid
 
-                # Collect valid coordinates
-                points = []
+                # Collect ALL assets with valid coordinates.
+                # Outside-boundary assets are shown as gray pins (not hidden).
+                centroid_lat, centroid_lng = WARD_CENTROID.get(ward_id, (ward_lat, ward_lng))
+                points, outside_pins = [], 0
                 for asset in breakdown:
                     try:
                         lat = float(asset.get("lat") or 0)
                         lng = float(asset.get("lon") or 0)
-                        if lat and lng:
-                            points.append((lat, lng, asset))
+                        if not (lat and lng):
+                            continue
+                        dist = _haversine_km(centroid_lat, centroid_lng, lat, lng)
+                        is_outside = dist > PIN_RADIUS_KM
+                        if is_outside:
+                            outside_pins += 1
+                        points.append((lat, lng, asset, is_outside))
                     except (ValueError, TypeError):
                         pass
 
-                # Center map on asset centroid if we have coords, else ward default
-                if points:
-                    center_lat = sum(p[0] for p in points) / len(points)
-                    center_lng = sum(p[1] for p in points) / len(points)
-                else:
-                    center_lat, center_lng = ward_lat, ward_lng
+                if not points:
+                    st.info("No coordinate data available for this ward's assets. Reseed the database with updated assets.csv to see pins.")
+                elif outside_pins:
+                    st.caption(f"⚠ {outside_pins} asset(s) shown as gray pins — coordinates fall outside expected ward boundary (possible data mis-tag).")
+
+                # Center on ward boundary centroid, not asset centroid
+                center_lat, center_lng = centroid_lat, centroid_lng
 
                 m = folium.Map(
                     location=[center_lat, center_lng],
-                    zoom_start=14,
+                    zoom_start=13,
                     tiles="OpenStreetMap",
                 )
 
-                for lat, lng, asset in points:
+                # ── Ward boundary overlay ──────────────────────────────────────
+                boundary = WARD_BOUNDARIES.get(ward_id)
+                if boundary:
+                    folium.Polygon(
+                        locations=boundary,
+                        color="#f97316",
+                        weight=2.5,
+                        dash_array="8 4",
+                        fill=True,
+                        fill_color="#f97316",
+                        fill_opacity=0.06,
+                        tooltip=f"{ward_name} — Approximate Boundary",
+                    ).add_to(m)
+                    # Ward label marker at centroid
+                    folium.Marker(
+                        location=[centroid_lat, centroid_lng],
+                        icon=folium.DivIcon(
+                            html=f'<div style="font-size:11px;font-weight:700;color:#f97316;'
+                                 f'white-space:nowrap;text-shadow:0 0 4px #000;">{ward_name}</div>',
+                            icon_size=(200, 20),
+                            icon_anchor=(100, 10),
+                        ),
+                    ).add_to(m)
+
+                # ── Asset pins ─────────────────────────────────────────────────
+                for lat, lng, asset, is_outside in points:
                     ps        = asset.get("proof_status", "unverified")
-                    hex_color = get_map_color(ps)
+                    hex_color = "#94a3b8" if is_outside else get_map_color(ps)
                     label, _, _ = get_status_display(ps)
+                    outside_note = " ⚠ Outside boundary" if is_outside else ""
 
                     folium.CircleMarker(
                         [lat, lng],
-                        radius=10,
+                        radius=7 if is_outside else 10,
                         color="#ffffff",
-                        weight=2,
+                        weight=1 if is_outside else 2,
                         fill=True,
                         fill_color=hex_color,
-                        fill_opacity=0.9,
+                        fill_opacity=0.55 if is_outside else 0.9,
                         popup=folium.Popup(
-                            f"<b>{asset['name']}</b><br>"
-                            f"Type: {asset.get('type','?')}<br>"
-                            f"Status: {asset.get('status','?')}<br>"
+                            f"<b>{asset['name']}</b>{outside_note}<br>"
+                            f"Type: {(asset.get('type') or '?').replace('_',' ').title()}<br>"
+                            f"Status: {(asset.get('status') or '?').replace('_',' ').capitalize()}<br>"
                             f"Scheme: {asset.get('scheme_name','?')}<br>"
-                            f"Proof: {label}",
+                            f"Proof: {label}"
+                            + ("<br><i style='color:#f59e0b;'>Coordinates may be mis-tagged</i>" if is_outside else ""),
                             max_width=280,
                         ),
-                        tooltip=f"{asset['name']} — {label}",
+                        tooltip=f"{asset['name']} — {label}{outside_note}",
                     ).add_to(m)
 
-                # Fit map to all asset locations
-                if points:
+                # Fit to boundary if available, else to pins
+                if boundary:
+                    blats = [p[0] for p in boundary]
+                    blngs = [p[1] for p in boundary]
+                    m.fit_bounds([[min(blats), min(blngs)], [max(blats), max(blngs)]])
+                elif points:
                     lats = [p[0] for p in points]
                     lngs = [p[1] for p in points]
                     m.fit_bounds([[min(lats), min(lngs)], [max(lats), max(lngs)]])
 
-                st_folium(m, width=1100, height=520, returned_objects=[])
+                st_folium(m, width=None, height=440, returned_objects=[])
 
             except Exception as map_err:
                 st.warning(f"Map error: {map_err}")
@@ -799,23 +974,32 @@ def main() -> None:
         # ── Delivery Gaps ──────────────────────────────────────────────────────
         with tab_gaps:
             st.markdown(f"<p class='sec-label'>{icon('alert-triangle', '#94a3b8', 15)} Proof Gaps — Assets Missing Evidence</p>", unsafe_allow_html=True)
-            try:
-                gaps_resp = requests.get(f"{BASE_URL}/wards/{ward_id}/gaps", timeout=10)
-                gaps_data = gaps_resp.json().get("gaps", []) if gaps_resp.status_code == 200 else []
-            except Exception:
-                gaps_data = []
+            st.markdown(
+                "<div style='background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);"
+                "border-radius:8px;padding:8px 14px;font-size:0.78em;color:#94a3b8;margin-bottom:12px;'>"
+                "<b style='color:#38bdf8;'>ℹ Proven</b> here means the asset has at least one valid "
+                "evidence URL <em>or</em> a news article mentioning it — it's a broad coverage signal. "
+                "The Snapshot's <b>Fully Verified</b> count is stricter: it requires 2+ evidence items "
+                "or confirmed news + field photo. Both views are correct — they measure different proof depths."
+                "</div>",
+                unsafe_allow_html=True,
+            )
+            # gaps_data already fetched above before tab definition
 
             if not gaps_data:
                 st.success("No delivery gaps detected for this ward.")
             else:
                 for gap in gaps_data:
-                    scheme_name  = gap.get("scheme_name", "Unknown Scheme")
+                    if gap.get("gap_type") in ("complete", "no_assets"):
+                        continue
+                    _raw_name    = gap.get("scheme_name", "Unknown Scheme")
+                    scheme_name  = SCHEME_SHORT_NAMES.get(_raw_name, _raw_name)
                     gap_type     = gap.get("gap_type", "unknown")
                     linked       = gap.get("linked_assets", 0)
                     proven       = gap.get("proven_assets", 0)
                     unproven     = linked - proven
                     pct          = round(100 * proven / linked, 1) if linked else 0
-                    pct_unproven = 100 - pct
+                    pct_unproven = round(100 - pct, 1)
 
                     border_color = "#f59e0b" if gap_type == "partial" else "#ef4444"
                     badge_color  = "#facc15" if gap_type == "partial" else "#f87171"

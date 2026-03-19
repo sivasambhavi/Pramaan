@@ -92,21 +92,30 @@ def _get_countries() -> list[str]:
         return ["India"]
 
 
-def render_geo_selector(sidebar: bool = True, inline: bool = False) -> dict:
+def render_geo_selector(sidebar: bool = True) -> dict:
     """
     Renders cascading geography dropdowns and persists to session_state.
     Returns dict: country, state, city, zone, ward_name, ward_id, is_demo_ward.
-    If inline=True, renders all selectors in a horizontal column layout (sidebar ignored).
     """
-    if inline:
-        return _render_geo_inline()
     target = st.sidebar if sidebar else st
     ss = st.session_state
 
     # ── Sidebar header (only when rendering in sidebar) ───────
     if sidebar:
         target.markdown("""
-        <div style="padding:12px 4px 8px 4px;text-align:center;">
+        <style>
+        [data-testid="stSidebar"] { scrollbar-color: rgba(71,85,105,0.3) transparent !important; }
+        [data-testid="stSidebar"]::-webkit-scrollbar-thumb { background: rgba(71,85,105,0.3) !important; }
+        [data-testid="stSidebar"]::-webkit-scrollbar-track { background: transparent !important; }
+        /* Compact nav links — prevent sidebar overflow */
+        [data-testid="stSidebarNav"] a { padding-top: 5px !important; padding-bottom: 5px !important; }
+        [data-testid="stSidebarNavItems"] { padding-top: 2px !important; padding-bottom: 2px !important; }
+        /* Hide deploy button only */
+        [data-testid="stToolbar"] { display: none !important; }
+        [data-testid="stDeployButton"] { display: none !important; }
+        #MainMenu { visibility: hidden !important; }
+        </style>
+        <div style="padding:8px 4px 4px 4px;text-align:center;">
             <div style="font-family:'Outfit',sans-serif;font-size:1.15em;font-weight:800;
                         background:linear-gradient(90deg,#f97316,#38bdf8);
                         -webkit-background-clip:text;-webkit-text-fill-color:transparent;
@@ -114,21 +123,11 @@ def render_geo_selector(sidebar: bool = True, inline: bool = False) -> dict:
             <div style="font-size:0.65em;color:#475569;letter-spacing:0.05em;
                         text-transform:uppercase;font-weight:600;">Governance Proof Engine</div>
         </div>
-        <hr style="border-color:rgba(71,85,105,0.2);margin:0 0 10px 0;"/>
-        <div style="font-size:0.68em;color:#64748b;font-weight:700;text-transform:uppercase;
-                    letter-spacing:0.07em;margin-bottom:8px;">Location Filter</div>
+        <hr style="border-color:rgba(71,85,105,0.2);margin:0 0 8px 0;"/>
         """, unsafe_allow_html=True)
 
-    # ── Country (fixed to India) ──────────────────────────────
     ss["country"] = "India"
     country = "India"
-    target.markdown(
-        "<div style='background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.2);"
-        "border-radius:8px;padding:8px 12px;font-size:0.82em;color:#f97316;"
-        "font-weight:600;margin-bottom:10px;letter-spacing:0.03em;'>"
-        "&#127470;&#127475;&nbsp; India</div>",
-        unsafe_allow_html=True,
-    )
 
     # ── State ────────────────────────────────────────────────
     def_state = ss.get("state", DEFAULT_STATE)
@@ -213,76 +212,3 @@ def geo_breadcrumb() -> str:
     return " › ".join(p for p in parts if p)
 
 
-def _render_geo_inline() -> dict:
-    """
-    Renders geography selectors as a compact horizontal bar in the main content area.
-    Returns same dict as render_geo_selector.
-    """
-    ss = st.session_state
-    ss["country"] = "India"
-    country = "India"
-
-    st.markdown("""
-    <div style="background:rgba(13,26,46,0.95);border:1px solid rgba(71,85,105,0.5);
-                border-radius:12px;padding:12px 20px 6px 20px;margin-bottom:1.2rem;">
-        <div style="font-size:0.68em;color:#64748b;font-weight:700;text-transform:uppercase;
-                    letter-spacing:0.08em;margin-bottom:8px;">Location Filter</div>
-    """, unsafe_allow_html=True)
-
-    c_state, c_city, c_zone, c_ward = st.columns([2, 2, 2, 2])
-
-    # State
-    def_state = ss.get("state", DEFAULT_STATE)
-    if def_state not in INDIAN_STATES:
-        def_state = DEFAULT_STATE
-    state = c_state.selectbox("State / UT", INDIAN_STATES,
-                               index=INDIAN_STATES.index(def_state),
-                               label_visibility="visible")
-
-    # City
-    def_city = ss.get("city", DEFAULT_ULB)
-    if def_city not in DELHI_ULBS:
-        def_city = DEFAULT_ULB
-    city = c_city.selectbox("City / ULB", DELHI_ULBS,
-                             index=DELHI_ULBS.index(def_city),
-                             label_visibility="visible")
-
-    # Zone
-    zone_list = DELHI_ZONES.get(city, [DEFAULT_ZONE])
-    def_zone = ss.get("zone", DEFAULT_ZONE)
-    if def_zone not in zone_list:
-        def_zone = zone_list[0]
-    zone = c_zone.selectbox("Zone", zone_list,
-                             index=zone_list.index(def_zone),
-                             label_visibility="visible")
-
-    # Ward
-    ward_map = ZONE_WARDS.get(zone, {DEFAULT_WARD: "WARD45_SHAHDARA"})
-    ward_names = list(ward_map.keys())
-    def_ward = ss.get("ward_name", DEFAULT_WARD)
-    if def_ward not in ward_names:
-        def_ward = ward_names[0]
-    ward_name = c_ward.selectbox("Ward", ward_names,
-                                  index=ward_names.index(def_ward),
-                                  label_visibility="visible")
-    ward_id = ward_map[ward_name]
-
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    is_demo_ward = zone in NON_SHAHDARA_ZONES
-
-    if state != "Delhi (NCT)":
-        st.info(f"Showing Delhi demo data. **{state}** integration coming soon.")
-
-    ss["state"]       = state
-    ss["city"]        = city
-    ss["zone"]        = zone
-    ss["ward_id"]     = ward_id
-    ss["ward_name"]   = ward_name
-    ss["is_demo_ward"] = is_demo_ward
-
-    return {
-        "country": country, "state": state, "city": city,
-        "zone": zone, "ward_name": ward_name, "ward_id": ward_id,
-        "is_demo_ward": is_demo_ward,
-    }

@@ -9,14 +9,17 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import streamlit as st
 import requests
-from utils.geo_selector import render_geo_selector, geo_breadcrumb
 from utils.constants import ASSET_VERIFICATION_OVERRIDE
 from utils.icons import icon, icon_box
+from utils.session import init_session, get_ward_id, get_ward_name, get_breadcrumb
+from components.topnav import render_topnav
 
 BASE_API = "http://127.0.0.1:8000"
 
 def main():
     st.set_page_config(page_title="Micro Accountability | Pramaan", layout="wide", page_icon="🛡️")
+    render_topnav("Micro Accountability")
+    init_session()
 
     st.markdown("""
     <style>
@@ -89,7 +92,24 @@ def main():
         border: 1px solid rgba(71,85,105,0.5) !important;
         color: #e2e8f0 !important; border-radius: 8px !important;
     }
+    /* Visually distinct disabled textarea for locked steps */
+    [data-testid="stTextArea"] textarea:disabled {
+        opacity: 0.3 !important;
+        background: rgba(15,23,42,0.3) !important;
+        border: 1px dashed rgba(71,85,105,0.3) !important;
+        color: #475569 !important;
+        cursor: not-allowed !important;
+    }
     hr { border-color: rgba(71,85,105,0.4) !important; }
+    [data-testid="stToolbar"] { display:none !important; }
+    [data-testid="stDeployButton"] { display:none !important; }
+    [data-testid="stHeader"] { display:none !important; }
+    header { display:none !important; }
+    #MainMenu { visibility:hidden !important; }
+    * { scrollbar-width:thin; scrollbar-color:#f97316 #1a1f2e; }
+    *::-webkit-scrollbar { width:6px; height:6px; }
+    *::-webkit-scrollbar-track { background:#1a1f2e; }
+    *::-webkit-scrollbar-thumb { background:#f97316; border-radius:3px; }
 
     [data-testid="stSidebarNav"] a span { color:#94a3b8 !important; font-size:0.9em !important; font-weight:500 !important; }
     [data-testid="stSidebarNav"] a[aria-current="page"] span { color:#f97316 !important; font-weight:700 !important; }
@@ -113,12 +133,14 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    geo       = render_geo_selector(sidebar=True)
-    ward_id   = geo["ward_id"]
-    ward_name = geo["ward_name"]
+    ward_id   = get_ward_id()
+    ward_name = get_ward_name()
 
     _pin = icon("map-pin", "#64748b", 13)
-    st.markdown(f"<p style='color:#64748b;font-size:0.85em;margin-bottom:1rem;'>{_pin} {geo_breadcrumb()}</p>", unsafe_allow_html=True)
+    if not st.session_state.get("selected_ward"):
+        st.markdown("<p style='color:#64748b;font-size:0.82em;'>📍 No ward selected — <a href='/Ward_Map' target='_self' style='color:#FF6B35;'>go to Ward Map</a> to select a location.</p>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<p style='color:#64748b;font-size:0.85em;margin-bottom:1rem;'>{_pin} {get_breadcrumb()}</p>", unsafe_allow_html=True)
 
     # ── Step 1: Select a Verified Asset ──────────────────────────────────────
     st.markdown("<div class='step-header'>Step 1 — Select a Fully Verified Asset</div>", unsafe_allow_html=True)
@@ -145,6 +167,27 @@ def main():
         if not verified_assets:
             st.warning("⚠️ No fully verified assets found in this ward yet. "
                        "Complete verification steps in the Proof Chain to enable notifications.")
+            # ── Locked preview — all steps visible but greyed out ─────────
+            st.markdown("<div class='step-header' style='opacity:0.4;'>Step 2 — Configure Broadcast Message "
+                        "<span style='font-size:0.75em;color:#475569;font-weight:500;'>"
+                        "(locked — verify an asset first)</span></div>", unsafe_allow_html=True)
+            st.text_area("msg_locked", "🔒 Unlock by completing asset verification in the Proof Chain tab.",
+                         height=100, disabled=True, label_visibility="collapsed")
+            st.markdown("<hr/>", unsafe_allow_html=True)
+            st.markdown("<div class='step-header' style='opacity:0.4;'>Step 3 — Citizen Notification Preview "
+                        "<span style='font-size:0.75em;color:#475569;font-weight:500;'>"
+                        "(sample)</span></div>", unsafe_allow_html=True)
+            st.caption(f"47 opted-in residents in **{ward_name}** will receive this alert via WhatsApp once an asset is verified.")
+            mock_citizens_preview = [
+                {"Name": "Aarav Sharma",  "Phone": "+91-XXXXX-X789", "Locality": "Shahdara Gali No. 7",  "Opted In": "✅ Active"},
+                {"Name": "Priya Gupta",   "Phone": "+91-XXXXX-X123", "Locality": "Shahdara Block A",      "Opted In": "✅ Active"},
+                {"Name": "Rohan Verma",   "Phone": "+91-XXXXX-X456", "Locality": "Krishna Nagar Gali 3",  "Opted In": "✅ Active"},
+                {"Name": "Ananya Singh",  "Phone": "+91-XXXXX-X890", "Locality": "Shahdara Gali No. 12",  "Opted In": "✅ Active"},
+                {"Name": "Kabir Das",     "Phone": "+91-XXXXX-X321", "Locality": "Gandhi Nagar Block B",  "Opted In": "✅ Active"},
+                {"Name": "Ishani Jha",    "Phone": "+91-XXXXX-X654", "Locality": "Shahdara Main Road",    "Opted In": "✅ Active"},
+            ]
+            st.table(mock_citizens_preview)
+            st.caption("_Total: 47 opted-in citizens. Shown: 6 sample rows. Actual list stored in PRAMAAN citizen registry._")
             return
 
     except Exception as e:
@@ -170,9 +213,36 @@ def main():
         f"📸 View proof chain: https://pramaan.gov.in/chain/{asset_id}\n\n"
         f"_Sent by MCD {ward_name} — Powered by PRAMAAN Governance Engine_"
     )
-    msg_template = st.text_area("Message Template (auto-filled)", default_msg, height=150)
+    col_msg, col_preview = st.columns([3, 2])
+    with col_msg:
+        msg_template = st.text_area("Message Template (auto-filled)", default_msg, height=150)
+    with col_preview:
+        st.markdown(f"""
+        <div style="font-size:0.68em;color:#64748b;font-weight:700;text-transform:uppercase;
+                    letter-spacing:0.07em;margin-bottom:8px;">WhatsApp Preview</div>
+        <div style="background:#0a1628;border-radius:14px;padding:12px 14px;
+                    border:1px solid rgba(71,85,105,0.4);position:relative;">
+            <div style="background:#1e3a5f;border-radius:12px 12px 12px 2px;
+                        padding:10px 14px;max-width:90%;font-size:0.78em;
+                        line-height:1.6;color:#e2e8f0;">
+                <div style="font-weight:700;color:#25d366;margin-bottom:4px;font-size:0.85em;">
+                    MCD PRAMAAN Alert
+                </div>
+                🏗 Your local <b>{asset_display}</b> in {ward_name} has been
+                <b style="color:#25d366;">officially verified as completed ✅</b><br/><br/>
+                📸 <span style="color:#38bdf8;">pramaan.gov.in/chain/{asset_id}</span><br/><br/>
+                <span style="color:#64748b;font-size:0.85em;">Powered by PRAMAAN</span>
+            </div>
+            <div style="text-align:right;font-size:0.65em;color:#475569;margin-top:6px;">
+                ✓✓ Delivered · {ward_name}
+            </div>
+        </div>
+        <div style="font-size:0.65em;color:#334155;margin-top:6px;text-align:center;">
+            Preview · 47 recipients
+        </div>
+        """, unsafe_allow_html=True)
 
-    if st.button("🚀 Trigger Hyper-Local Notification", type="primary"):
+    if st.button("Trigger Hyper-Local Notification", type="primary"):
         with st.spinner("Dispatching WhatsApp messages to opted-in citizens..."):
             # Attempt real Twilio call, always show demo success for booth demo
             try:

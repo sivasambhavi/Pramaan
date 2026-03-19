@@ -40,9 +40,11 @@ ORDER BY a.name
 WARD_GAPS = """
 MATCH (s:Scheme)-[:FUNDS]->(a:Asset)-[:LOCATED_IN]->(w:Region {region_id: $ward_id})
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
+  WHERE e.url_or_path IS NOT NULL AND trim(e.url_or_path) <> '' AND e.url_or_path <> 'N/A'
+OPTIONAL MATCH (a)-[:MENTIONED_IN]->(n:NewsArticle)
 WITH s,
      count(DISTINCT a) AS asset_count,
-     count(DISTINCT CASE WHEN e IS NOT NULL THEN a END) AS proven_count
+     count(DISTINCT CASE WHEN (e IS NOT NULL OR n IS NOT NULL) THEN a END) AS proven_count
 RETURN s.scheme_id   AS scheme_id,
        s.name        AS scheme_name,
        CASE
