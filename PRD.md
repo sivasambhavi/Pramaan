@@ -901,37 +901,35 @@ Sets st.set_page_config, global layout, logo, and tagline.
 
 Provides navigation and context (e.g., selected ward).
 
-pages/01_🏙_Ward_Map.py – Ward Overview
+pages/01_Ward_Map.py – Ward Overview + Delivery Score
 
-pages/02_🧷_Proof_Chain.py – Asset proof chain viewer
+pages/02_Proof_Chain.py – Asset proof chain viewer (Scheme → Actor → Asset → Evidence → Beneficiary)
 
-pages/03_❓_Questions.py – NL questions (3 fixed)
+pages/03_Live_Ingestion.py – AI extraction + ingestion + voice input
 
-pages/04_⚡_Live_Ingestion.py – AI extraction + ingestion
-
-pages/05_🕸_Delivery_Graph.py – Delivery Graph Visualization
+pages/04_Micro_Accountability.py – WhatsApp/SMS notifications via Twilio
 
 Each page calls FastAPI endpoints via requests or httpx.
 
 7.3 Screen Designs
-7.3.1 Ward Overview (01_🏙_Ward_Map.py)
+7.3.1 Ward Overview (01_Ward_Map.py)
 Data Source: GET /wards.
 
 Layout:
 
-Top: Ward name + large Delivery Score metric.
+Top: Ward name + large Delivery Score gauge.
 
 Left: summary cards (# assets, # schemes, # assets with evidence).
 
 Center: table of assets (name, type, schemes, status, evidence flag).
 
-Optional: simple map or ward graphic.
+Map: Folium map with asset markers.
 
 Interactions:
 
 Clicking an asset row stores asset_id in st.session_state and navigates to Proof Chain Viewer.
 
-7.3.2 Proof Chain Viewer (02_🧷_Proof_Chain.py)
+7.3.2 Proof Chain Viewer (02_Proof_Chain.py)
 Data Source:
 
 Uses asset_id from state.
@@ -940,85 +938,42 @@ Calls GET /assets/{asset_id}/chain.
 
 Layout:
 
-Left: textual summary:
+Left: textual summary — asset name, type, location, schemes, cost, dates, contractor.
 
-Asset name, type, location, schemes, cost, dates, contractor.
+Middle: timeline — "Scheme sanctioned" → "Work started" → "Work completed" → "Evidence collected" → "Beneficiaries."
 
-Middle: timeline or vertical chain:
+Right: before/after evidence images with GPS, source attribution, and trust tier badge.
 
-“Scheme sanctioned” → “Work started” → “Work completed” → “Evidence collected” → “Beneficiaries.”
+Bottom: financial tracker, national context panels (AMRUT, PMAY), live news evidence.
 
-Right: evidence images:
+Goal: Give a story-like narrative of one asset's full delivery chain.
 
-Before photo (labelled, date).
-
-After photo (labelled, date).
-
-Goal: Give a story-like narrative of one asset’s delivery.
-
-7.3.3 Gap Analysis (could be part of Ward Overview or separate)
-Data Source: GET /wards/{ward_id}/gaps.
-
-Layout:
-
-Two sections:
-
-“Schemes announced, nothing visible”: list of schemes with no assets.
-
-“Assets with weak proof”: list of assets with no evidence.
-
-Color-coded:
-
-Green = full chain.
-
-Yellow = partial.
-
-Red = gap.
-
-Goal: Show where delivery chains break, not just where they exist.
-
-7.3.4 Delivery Graph Visualization (05_🕸_Delivery_Graph.py)
-Data Source:
-
-Either GET /assets/{asset_id}/chain or a dedicated graph endpoint.
-
-Layout:
-
-Center: network graph (using pyvis or similar) with:
-
-Node colors by type (scheme, asset, region, actor, beneficiary, evidence).
-
-Edge labels (FUNDS, LOCATED_IN, PROVES, etc.).
-
-Side panel: details of whichever node is clicked.
-
-Goal: Make PRAMAAÑ look and feel like a knowledge-graph intelligence console.
-
-7.3.5 Live Ingestion (04_⚡_Live_Ingestion.py)
-Data Source: ai_extraction.py + POST /ingest/entities.
+7.3.3 Live Ingestion (03_Live_Ingestion.py)
+Data Source: ai/llm_extractor.py + POST /ingest/entities.
 
 Flow:
 
-Paste PIB/news text into a text area.
+Auto-search news or paste PIB/news text into a text area (voice input supported via Groq Whisper).
 
-Click Extract & Preview:
+Click Extract & Preview: calls extract_governance_entities(text); shows extracted entities + relations.
 
-Calls extract_governance_entities(text); shows JSON / tables of proposed schemes, assets, regions, actors, events, evidence.
+Click Ingest into Graph: sends JSON to backend. Shows nodes/edges created.
 
-Click Ingest into Graph:
+Offline Mode: MD5 cache for main demo text — bypasses LLM call.
 
-Sends JSON to backend ingestion endpoint.
+7.3.4 Micro Accountability (04_Micro_Accountability.py)
+Data Source: POST /notify/whatsapp.
 
-Shows a small success summary (nodes/edges created).
+Flow:
 
-Offer a button to “View updated assets” which navigates back to Ward Overview.
+Select a verified asset.
 
-Offline Mode:
+Trigger WhatsApp/SMS notification to ward councillor or field officer via Twilio.
 
-For the main demo text, load a pre-computed JSON from disk instead of calling the LLM.
+Goal: Demonstrate hyper-local accountability loop — proof collected → official notified.
 
 7.4 AI Modules in Detail
-7.4.1 ai_extraction.py
+7.4.1 ai/llm_extractor.py (implemented as `extract_governance_entities`)
 Function:
 
 python
@@ -1062,7 +1017,7 @@ Optional: if you want, you can still call an LLM to rephrase outputs into natura
 7.5 Offline & Demo Resilience
 Cache extraction result for one main PIB text in e.g. ai/cache/demo_extraction.json.
 
-In ai_extraction.py, if offline_mode is on, return the cached JSON instead of calling the LLM.
+In `ai/llm_extractor.py`, if offline_mode is on, return the cached JSON instead of calling the LLM.
 
 For NL questions, you can completely bypass LLM and just map buttons → queries → human-written answer templates.
 

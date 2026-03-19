@@ -14,25 +14,19 @@
 
 ## PART 1 — UI STRUCTURE
 
-### Missing Pages
+### Current Active Pages (4 pages)
+```
+01_Ward_Map.py          — Ward overview, delivery score, asset map
+02_Proof_Chain.py       — Full proof chain: Scheme → Actor → Asset → Evidence → Beneficiary
+03_Live_Ingestion.py    — Auto-search news, AI extraction, one-click Neo4j ingest
+04_Micro_Accountability.py — WhatsApp/SMS notifications via Twilio
+```
+
+### Open UI Items
 | # | Item | Priority | Effort |
 |---|---|---|---|
-| 1.1 | `04_⚡_Live_Ingestion.py` — `hidden_Live_Ingestion.py` is fully built but sitting in `frontend/` not `frontend/pages/`. Not visible in sidebar. Moving it makes the entire demo story complete. | 🔴 Critical | 30 min |
-| 1.2 | `05_📊_Delivery_Graph.py` — PRD specified but skip entirely. Proof Chain already covers this visually. | ✅ Skip | — |
-
-### Page Restructure (6 → 3)
-| # | Item | Priority | Effort |
-|---|---|---|---|
-| 1.3 | **Remove Home page** (`app.py`) — pure navigation, wastes a click. Open on Dashboard by default. | 🟡 Important | 30 min |
-| 1.4 | **Merge Questions page into Proof Chain** — both explore the same asset truth. Put NL query box at bottom of Proof Chain. | 🟡 Important | 2 hrs |
-| 1.5 | **Hide or fix WhatsApp page** (`07_💬_Micro_Accountability.py`) — broken without live Twilio credentials. Demo risk. Either wire Twilio with a real demo number or move out of `pages/`. | 🔴 Critical | 30 min |
-
-### Ideal 3-Page Final Structure
-```
-Page 1: Intelligence Dashboard  (current Ward Map)
-Page 2: Proof Explorer          (Proof Chain + Questions merged)
-Page 3: Live Feed               (hidden_Live_Ingestion promoted)
-```
+| 1.3 | **Simplify Home page** (`app.py`) — acts as intro/landing; consider opening on Ward Map by default | 🟡 Important | 30 min |
+| 1.5 | **Ensure WhatsApp page works** (`04_Micro_Accountability.py`) — requires live Twilio credentials. Add graceful fallback if not configured. | 🔴 Critical | 30 min |
 
 ---
 
@@ -174,21 +168,20 @@ Region, Scheme, Actor, Asset, Beneficiary, Evidence, Event
 
 | # | Ref | What | Effort |
 |---|---|---|---|
-| 1 | 1.1 | Promote `hidden_Live_Ingestion.py` → `pages/04_⚡_Live_Ingestion.py` | 30 min |
-| 2 | 1.5 | Hide or fix WhatsApp page — demo risk without live Twilio | 30 min |
-| 3 | 4.2 | Store LLM confidence on nodes — already returned, just not saved | 30 min |
-| 4 | 8.1 | Fix `config.py` key mismatch (`app_env` vs `PRAMAAN_ENV`) | 30 min |
-| 5 | 3.1 | Expand seed data to 300+ nodes — PRD Go/No-Go gate | 2–3 hrs |
-| 6 | 4.1 | Add `source_type`, `ingested_at`, `ingested_by` to every ingest node | 2 hrs |
-| 7 | 4.3 | Show trust tier badge (Official / AI / Unverified) in Proof Chain UI | 1 hr |
-| 8 | 2.1 | Photo upload with EXIF GPS matching → auto-upgrade asset proof_status | 4–5 hrs |
-| 9 | 2.2 | Voice-to-text via Groq Whisper API | 2 hrs |
-| 10 | 2.4 | Wire offline cache mode fully in Live Ingestion | 1 hr |
-| 11 | 3.3 | Add real GPS lat/lon for all assets in CSV | 2 hrs |
-| 12 | 3.5 | Fix or remove hardcoded Financial Integrity Tracker bars in Proof Chain | 1 hr |
-| 13 | 8.2 | Implement `DELETE /ingest/demo-nodes` endpoint (called in UI, may not exist) | 1 hr |
-| 14 | 8.3 | Add rate limiting / debounce on LLM extract button | 1 hr |
-| 15 | 8.4 | Add safety check on `/questions/custom` — LLM Cypher runs directly on Neo4j | 1 hr |
+| 1 | 1.5 | Ensure WhatsApp page has graceful fallback without live Twilio credentials | 30 min |
+| 2 | 4.2 | Store LLM confidence on nodes — already returned, just not saved | 30 min |
+| 3 | 8.1 | Fix `config.py` key mismatch (`app_env` vs `PRAMAAN_ENV`) | 30 min |
+| 4 | 3.1 | Expand seed data to 300+ nodes — PRD Go/No-Go gate | 2–3 hrs |
+| 5 | 4.1 | Add `source_type`, `ingested_at`, `ingested_by` to every ingest node | 2 hrs |
+| 6 | 4.3 | Show trust tier badge (Official / AI / Unverified) in Proof Chain UI | 1 hr |
+| 7 | 2.1 | Photo upload with EXIF GPS matching → auto-upgrade asset proof_status | 4–5 hrs |
+| 8 | 2.2 | Voice-to-text via Groq Whisper API | 2 hrs |
+| 9 | 2.4 | Wire offline cache mode fully in Live Ingestion | 1 hr |
+| 10 | 3.3 | Add real GPS lat/lon for all assets in CSV | 2 hrs |
+| 11 | 3.5 | Fix or remove hardcoded Financial Integrity Tracker bars in Proof Chain | 1 hr |
+| 12 | 8.2 | Implement `DELETE /ingest/demo-nodes` endpoint (called in UI, may not exist) | 1 hr |
+| 13 | 8.3 | Add rate limiting / debounce on LLM extract button | 1 hr |
+| 14 | 8.4 | Add safety check on `/questions/custom` — LLM Cypher runs directly on Neo4j | 1 hr |
 
 ---
 
@@ -196,17 +189,16 @@ Region, Scheme, Actor, Asset, Beneficiary, Evidence, Event
 
 | # | Ref | What | Effort |
 |---|---|---|---|
-| 16 | 1.3 | Remove Home page — open on Dashboard by default | 30 min |
-| 17 | 1.4 | Merge Questions page into Proof Chain — NL query box at bottom | 2 hrs |
-| 18 | 3.2 | Wire real photo submission pipeline for Before/After evidence | Tied to 2.1 |
-| 19 | 3.4 | Replace `sbm_toilets.json` (pincode directory) with real SBM toilet data from data.gov.in | 1 hr |
-| 20 | 5.2 | Store extraction source text on every AI node — "why did AI extract this?" | 1 hr |
-| 21 | 5.3 | Store `ai_model` + `ai_prompt_version` on every AI-extracted node | 30 min |
-| 22 | 6.1 | Add `Claim` node type to ontology — atomic unit of intelligence engine | 2 hrs |
-| 23 | 6.2 | Add `Agreement` node type — treaties, MOUs, trade deals | 2 hrs |
-| 24 | 6.3 | Add `Technology` node type — weapon systems, AI models, chips, satellites | 2 hrs |
-| 25 | 6.4 | Add `Metric` node type — GDP, temperature, unemployment, defense spend | 2 hrs |
-| 26 | 6.5 | Add new edge types: `CONTRADICTS`, `RATIFIED_BY`, `ENABLES`, `SANCTIONS`, `COMPETES_WITH`, `INFLUENCES` | 2 hrs |
+| 15 | 1.3 | Simplify Home page — open on Ward Map by default | 30 min |
+| 16 | 3.2 | Wire real photo submission pipeline for Before/After evidence | Tied to 2.1 |
+| 17 | 3.4 | Replace `sbm_toilets.json` (pincode directory) with real SBM toilet data from data.gov.in | 1 hr |
+| 18 | 5.2 | Store extraction source text on every AI node — "why did AI extract this?" | 1 hr |
+| 19 | 5.3 | Store `ai_model` + `ai_prompt_version` on every AI-extracted node | 30 min |
+| 20 | 6.1 | Add `Claim` node type to ontology — atomic unit of intelligence engine | 2 hrs |
+| 21 | 6.2 | Add `Agreement` node type — treaties, MOUs, trade deals | 2 hrs |
+| 22 | 6.3 | Add `Technology` node type — weapon systems, AI models, chips, satellites | 2 hrs |
+| 23 | 6.4 | Add `Metric` node type — GDP, temperature, unemployment, defense spend | 2 hrs |
+| 24 | 6.5 | Add new edge types: `CONTRADICTS`, `RATIFIED_BY`, `ENABLES`, `SANCTIONS`, `COMPETES_WITH`, `INFLUENCES` | 2 hrs |
 
 ---
 
@@ -260,6 +252,7 @@ Region, Scheme, Actor, Asset, Beneficiary, Evidence, Event
 | — | Backend — `GET /regions/` endpoint added, returns full region hierarchy from Neo4j |
 | — | Live Ingestion — Ward: None display fixed; LIVE FEED badge made non-interactive; mic inside search box |
 | — | Proof Chain — badge sync race condition fixed; Ask the Graph button works; radio form fields update correctly; context articles differentiated |
+
 
 ---
 

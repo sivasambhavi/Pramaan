@@ -1,6 +1,8 @@
 event_id,name,event_type,date,asset_id
-EVT_DRAIN_GALI7_COMPLETION,Completion of drain in Gali No. 7,completion,2024-03-20,ASSET_DRAIN_GALI7
-EVT_ROAD_GALI7_COMPLETION,Completion of road resurfacing,completion,2024-04-15,ASSET_ROAD_GALI7
-EVT_TOILET_MARKET_INAUG,Inauguration of renovated public toilet,inauguration,2024-03-18,ASSET_TOILET_MARKET
-EVT_HOUSING_COLONYY_HANDOVER,Handover of PMAY housing units,handover,2024-03-10,ASSET_HOUSING_COLONYY
-EVT_LIGHTS_BLOCKA_SWITCHON,Switch-on ceremony for LED streetlights,inauguration,2024-04-12,ASSET_LIGHTS_BLOCKA
+EVT_W45_GALI7_DRAIN_COMPLETE,Drain construction completed — Gali No. 7,completion,2025-03-22,ASSET_W45_GALI7_DRAIN
+EVT_W45_GALI12_DRAIN_COMPLETE,Drain reconstruction completed — Gali No. 12,completion,2025-03-22,ASSET_W45_GALI12_DRAIN
+EVT_W45_PARK_INAUG,Community park inauguration — Ward 45,inauguration,2025-04-10,ASSET_W45_PARK
+EVT_W45_ROAD_GALI7_COMPLETE,Road resurfacing completed — Gali No. 7,completion,2024-04-20,ASSET_W45_ROAD_GALI7
+EVT_W45_TOILET_TENDER,Maintenance tender issued — Community Toilet,tender,2024-06-01,ASSET_W45_TOILET
+EVT_W45_PMAY_SANCTION,PMAY housing sanction — Colony Y Block A,sanction,2023-11-15,ASSET_W45_PMAY_HOUSING_A
+EVT_W45_STREETLIGHT_DEPLOY,Smart LED streetlight deployment — Gali No. 12,inauguration,2025-01-15,ASSET_W45_GALI12_STREETLIGHT

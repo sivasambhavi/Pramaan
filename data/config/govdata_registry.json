@@ -1,0 +1,85 @@
+{
+  "_comment": "Central registry of all data.gov.in datasets used by PRAMAAN.",
+  "_comment2": "UUID = index_name from the API response. active=false means UUID is unverified/wrong — skip fetch.",
+  "_how_to_find_uuid": "Go to data.gov.in → search dataset → open API tab → copy the UUID from the URL or response index_name field.",
+
+  "datasets": [
+    {
+      "name": "amrut_storm_water_drainage",
+      "uuid": "6e38d0c0-045e-4dce-81d0-eca39519bb07",
+      "title": "AMRUT Storm Water Drainage Projects — State/UT-wise Status",
+      "source_url": "https://data.gov.in/resource/6e38d0c0-045e-4dce-81d0-eca39519bb07",
+      "output_file": "amrut_storm_water_drainage.json",
+      "maps_to_entity": "Asset (drain)",
+      "active": true,
+      "verified": true,
+      "notes": "UUID confirmed from index_name in existing JSON. Delhi row used for demo."
+    },
+    {
+      "name": "pmay_housing_data",
+      "uuid": "634083c6-bfde-4f17-977c-5d8e32fd8ffc",
+      "title": "PMAY-U Completed and Occupied Houses — State/UT-wise",
+      "source_url": "https://data.gov.in/resource/634083c6-bfde-4f17-977c-5d8e32fd8ffc",
+      "output_file": "pmay_housing_data.json",
+      "maps_to_entity": "Asset (housing), Scheme (SCH_PMAY)",
+      "active": true,
+      "verified": true,
+      "notes": "UUID confirmed from index_name in existing JSON."
+    },
+    {
+      "name": "amrut_funds",
+      "uuid": "21a3ceaf-1725-41e9-9be9-a29d5b762cba",
+      "title": "AMRUT CS Funds Released — State/UT-wise (2018-19 to 2022-23)",
+      "source_url": "https://data.gov.in/resource/21a3ceaf-1725-41e9-9be9-a29d5b762cba",
+      "output_file": "amrut_funds.json",
+      "maps_to_entity": "Scheme (SCH_AMRUT) — financial proof",
+      "active": true,
+      "verified": false,
+      "notes": "UUID from amrut_funds.py script. Needs one live fetch to verify index_name."
+    },
+    {
+      "name": "statewise_allocation",
+      "uuid": "REPLACE_WITH_CORRECT_UUID",
+      "title": "AMRUT Statewise Fund Allocation (placeholder)",
+      "source_url": "https://data.gov.in/search?title=AMRUT+statewise+allocation",
+      "output_file": "statewise_allocation.json",
+      "maps_to_entity": "Scheme financial allocation",
+      "active": false,
+      "verified": false,
+      "notes": "WRONG UUID — current file fetches National Ayush Mission data, not AMRUT. Find correct UUID on data.gov.in before enabling."
+    },
+    {
+      "name": "sbm_toilets",
+      "uuid": "REPLACE_WITH_CORRECT_UUID",
+      "title": "SBM Urban Toilet Construction — State/UT-wise",
+      "source_url": "https://data.gov.in/search?title=SBM+urban+toilet",
+      "output_file": "sbm_toilets.json",
+      "maps_to_entity": "Asset (toilet), Scheme (SCH_SWACHH)",
+      "active": false,
+      "verified": false,
+      "notes": "WRONG UUID — current file fetches All India Pincode Directory. Find correct UUID on data.gov.in before enabling."
+    },
+    {
+      "name": "amrut_water_logging",
+      "uuid": "caadd339-a9a7-47bc-adbe-671bf57ad3fe",
+      "title": "AMRUT Cities where Water Logging Points Eliminated",
+      "source_url": "https://data.gov.in/resource/caadd339-a9a7-47bc-adbe-671bf57ad3fe",
+      "output_file": "amrut_water_logging.json",
+      "maps_to_entity": "Asset (drain) — waterlogging elimination proof",
+      "active": false,
+      "verified": false,
+      "notes": "UUID from amrut_water_logging.py (now deleted). Needs one live fetch to verify. Enable when correct UUID confirmed."
+    },
+    {
+      "name": "credit_guarantee_scheme",
+      "uuid": "63fd4393-ee70-4fc7-bf84-cc4d4d29fed5",
+      "title": "Credit Guarantee Scheme — Number and Amount of Guarantees",
+      "source_url": "https://data.gov.in/resource/63fd4393-ee70-4fc7-bf84-cc4d4d29fed5",
+      "output_file": "credit_guarantee_scheme.json",
+      "maps_to_entity": "Scheme (financial guarantee data)",
+      "active": false,
+      "verified": false,
+      "notes": "Last fetch returned empty response (no fields, no records). Verify UUID and retry."
+    }
+  ]
+}

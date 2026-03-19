@@ -45,7 +45,7 @@ The AI Mapper must output JSON that matches these 7 entity types:
 
 ## JSON Schema for AI Extraction Output
 
-The `ai_extraction.py` function must return JSON matching this structure:
+The `ai/llm_extractor.py` `extract_governance_entities()` function must return JSON matching this structure:
 
 ```json
 {
@@ -119,9 +119,9 @@ Before generating new IDs, the backend should:
 
 ## Implementation Files
 
-- **`ai/ai_extraction.py`**: LLM-based extraction function
+- **`ai/llm_extractor.py`**: LLM-based extraction function (Groq llama-3.3-70b)
 - **`backend/app/routers/ingest.py`**: ID filling and entity resolution logic
-- **`frontend/pages/04_⚡_Live_Ingestion.py`**: UI for pasting text and viewing extracted JSON
+- **`frontend/pages/03_Live_Ingestion.py`**: UI for pasting text and viewing extracted JSON
 
 ## Example Input/Output
 
@@ -157,6 +157,5 @@ was completed in March 2025. Before and after photos are available."
 
 ---
 
-**Status**: MVP Requirement (for Live Ingestion demo)  
-**Owner**: Sreenu (AI & Frontend Lead)  
-**Timeline**: Before March 10, 2026 submission
+**Status**: ✅ Implemented — Mar 19, 2026  
+**Owner**: Sreenu (AI & Frontend Lead)

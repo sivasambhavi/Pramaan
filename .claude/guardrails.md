@@ -6,10 +6,10 @@ PRAMAAN – **Proof-based Registry for Asset Mapping, Accountability & Nationwid
 
 - Loads governance delivery data for 1 Delhi ward into a **Neo4j** knowledge graph.
 - Exposes **FastAPI** endpoints for queries and ingestion.
-- Provides a **Streamlit** UI for ward overview, proof chains, gap analysis, and live ingestion.
-- Uses an **LLM** to extract entities/relations from one PIB/news text and map them into the ontology.
+- Provides a **Streamlit** UI for ward overview, proof chains, live ingestion, and micro-accountability.
+- Uses an **LLM** (Groq llama-3.3-70b) to extract entities/relations from PIB/news text and map them into the ontology.
 
-The goal is to ship a **stable MVP by 10 March** for the India Innovates 2026 submission.
+The goal is to ship a **stable demo** for the India Innovates 2026 submission (MVP delivered Mar 19, 2026).
 
 ---
 
@@ -29,6 +29,10 @@ Claude MUST respect this architecture unless explicitly told otherwise:
     - `routers/wards.py` – ward-related endpoints
     - `routers/assets.py` – asset-related endpoints
     - `routers/ingest.py` – ingestion endpoints
+    - `routers/scrape.py` – news scraping + AI extraction
+    - `routers/govdata.py` – static data.gov.in JSON endpoints
+    - `routers/notifications.py` – Twilio WhatsApp/SMS
+    - `routers/questions.py` – NL query routing
 
 - **Graph Layer**
   - DB: Neo4j (local)
@@ -41,13 +45,13 @@ Claude MUST respect this architecture unless explicitly told otherwise:
 
 - **AI**
   - Location: `ai/`
-  - `ai_extraction.py` – LLM-based entity extraction
+  - `llm_extractor.py` – Groq LLM entity extraction (`extract_governance_entities`)
   - `nl_query.py` – NL question → query-template mapping
 
 - **Data**
   - Location: `data/`
-  - CSVs: `regions.csv`, `schemes.csv`, `actors.csv`, `assets.csv`, `beneficiaries.csv`, `evidence.csv`, `events.csv`
-  - Loaded by `scripts/load_seed_data.py`
+  - Canonical CSVs in `data/resources/data/final_formalized/`
+  - Loaded by `backend/scripts/load_seed_data.py`
 
 Claude must NOT introduce new core frameworks (e.g., Django, Flask, full LangChain stack) or change this folder layout unless explicitly asked.
 

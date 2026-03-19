@@ -52,4 +52,4 @@ This document organizes our repository data into **4 Strategic Governance Layers
 2. **The Mapping:** "We normalize them onto the PRAMAAN Urban Ontology."
 3. **The Intelligence:** "Now we can ask: *'In wards with high poverty (Social), what is the water capacity (Infra) and which projects are currently being funded (Spending)?'*."
 
-**All core nodes are populated with REAL DATA. No mocking required.**
+**Most core nodes use REAL DATA. Beneficiaries are partially mocked for demo completeness. Thin domains (ClimateHazard, TechEvent, SocialEvent) are mocked pending real data sourcing.**

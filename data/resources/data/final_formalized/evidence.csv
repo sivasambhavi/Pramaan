@@ -1,56 +1,11 @@
-evidence_id,asset_id,region_id,type,url,before_or_after,capture_date
-EVD_DRAIN_GALI7_BEFORE,ASSET_DRAIN_GALI7,REG_W45_GALI7,image,http://127.0.0.1:8501/app/static/evidence/drain_before.png,before,2024-01-05
-EVD_DRAIN_GALI7_AFTER,ASSET_DRAIN_GALI7,REG_W45_GALI7,image,http://127.0.0.1:8501/app/static/evidence/drain_after.png,after,2024-03-22
-EVD_ROAD_GALI7_BEFORE,ASSET_ROAD_GALI7,REG_W45_GALI7,image,http://127.0.0.1:8501/app/static/evidence/road_before.png,before,2024-01-25
-EVD_ROAD_GALI7_AFTER,ASSET_ROAD_GALI7,REG_W45_GALI7,image,http://127.0.0.1:8501/app/static/evidence/road_after.png,after,2024-04-20
-EVD_WB_0_AFTER,ASSET_WB_272027,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_1_AFTER,ASSET_WB_272028,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_2_AFTER,ASSET_WB_272029,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_3_AFTER,ASSET_WB_272030,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_4_AFTER,ASSET_WB_272031,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_5_AFTER,ASSET_WB_272032,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_6_AFTER,ASSET_WB_272033,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_7_AFTER,ASSET_WB_272034,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_8_AFTER,ASSET_WB_272035,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_WB_9_AFTER,ASSET_WB_272036,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/e/e4/Mungeshpur_Drain%2C_Delhi.jpg,after,2024-03-01
-EVD_AUTO_100,ASSET_TOILET_MARKET,REG_W45_MARKET_ROAD,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_101,ASSET_HOUSING_COLONYY,REG_W45_COLONY_Y,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_102,ASSET_LIGHTS_BLOCKA,REG_W45_BLOCKA,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_103,ASSET_WB_272037,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_104,ASSET_WB_272038,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_105,ASSET_WB_272039,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_106,ASSET_WB_272040,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_107,ASSET_WB_272041,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_108,ASSET_WB_272042,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_109,ASSET_WB_272043,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_110,ASSET_WB_272044,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_111,ASSET_WB_272045,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_112,ASSET_WB_272046,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_113,ASSET_WB_272047,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_114,ASSET_WB_272048,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_115,ASSET_WB_272049,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_116,ASSET_WB_272050,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_117,ASSET_WB_272051,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_118,ASSET_WB_272052,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_119,ASSET_WB_272053,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_120,ASSET_WB_272054,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_121,ASSET_WB_272055,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_122,ASSET_WB_272056,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_123,ASSET_WB_272057,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_124,ASSET_WB_272058,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_125,ASSET_WB_272059,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_126,ASSET_WB_272060,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_127,ASSET_WB_272061,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_128,ASSET_WB_272062,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_129,ASSET_WB_272063,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_130,ASSET_WB_272064,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_131,ASSET_WB_272065,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_132,ASSET_WB_272066,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_133,ASSET_WB_272067,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_134,ASSET_WB_272068,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_135,ASSET_WB_272069,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_136,ASSET_WB_272070,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_137,ASSET_WB_272071,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_138,ASSET_WB_272072,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_139,ASSET_WB_272073,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
-EVD_AUTO_140,ASSET_WB_272074,REG_W45,image,https://upload.wikimedia.org/wikipedia/commons/4/4b/Street_in_Delhi.jpg,after,2024-05-15
+evidence_id,asset_id,region_id,type,before_or_after,capture_date,url,source
+EVD_W45_GALI7_DRAIN_BEFORE,ASSET_W45_GALI7_DRAIN,REG_W45_GALI7,image,before,2024-01-05,frontend/static/evidence/before_w45_gali7_drain.png,MCD Complaint Log #2024-SHD-0132
+EVD_W45_GALI7_DRAIN_AFTER,ASSET_W45_GALI7_DRAIN,REG_W45_GALI7,image,after,2025-03-22,frontend/static/evidence/after_w45_gali7_drain.png,MCD field inspector geo-tagged photo
+EVD_W45_GALI12_DRAIN_BEFORE,ASSET_W45_GALI12_DRAIN,REG_W45_GALI12,image,before,2024-01-10,frontend/static/evidence/before_w46_gali3_drain.png,MCD Complaint Log #2024-SHD-0147
+EVD_W45_GALI12_DRAIN_AFTER,ASSET_W45_GALI12_DRAIN,REG_W45_GALI12,image,after,2025-03-22,frontend/static/evidence/after_w46_gali3_drain.png,MCD field inspector geo-tagged photo
+EVD_W45_PARK_BEFORE,ASSET_W45_PARK,REG_W45,image,before,2023-11-01,frontend/static/evidence/before_w45_park.jpeg,MCD Inspection Report #2023-SHD-P04
+EVD_W45_PARK_AFTER,ASSET_W45_PARK,REG_W45,image,after,2025-04-10,frontend/static/evidence/after_w45_park.jpeg,AMRUT monitoring team photo
+EVD_W45_ROAD_GALI7_BEFORE,ASSET_W45_ROAD_GALI7,REG_W45_GALI7,image,before,2024-02-01,frontend/static/evidence/before_w45_gali7_road.jpeg,MCD Complaint Log #2024-SHD-R019
+EVD_W45_TOILET_BEFORE,ASSET_W45_TOILET,REG_W45_MARKET_ROAD,image,before,2024-03-01,frontend/static/evidence/before_w45_toilet.jpeg,MCD Sanitation Report #2024-SHD-T07
+EVD_W45_PMAY_BEFORE,ASSET_W45_PMAY_HOUSING_A,REG_W45_COLONY_Y,image,before,2023-11-15,frontend/static/evidence/before_w45_pmay.jpeg,DDA PMAY-U Sanction Report #2023-DDA-H45
+EVD_W45_STREETLIGHT_BEFORE,ASSET_W45_GALI12_STREETLIGHT,REG_W45_GALI12,image,before,2024-01-20,frontend/static/evidence/before_w45_gali12_streetlight.jpeg,MCD Complaint Log #2024-SHD-L023

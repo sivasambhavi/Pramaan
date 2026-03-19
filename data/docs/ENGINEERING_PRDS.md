@@ -46,11 +46,12 @@ Design and populate a clean, governance-focused ontology and seed dataset for 1 
 
 **4. Acceptance criteria**
 - [x] Ontology table (entities, properties, relationships) documented and agreed by team.
-- [x] `data/*.csv` present with:
-    - [x] ≥5 full chains.
+- [x] `data/resources/data/final_formalized/*.csv` present with:
+    - [x] ≥5 full chains (drain, road, toilet, housing, streetlight).
     - [x] No broken references.
 - [x] Delivery Score formula + gap definitions written in README or a short doc.
-- [x] Seed data loads cleanly into Neo4j (Person 2 confirms).
+- [x] Seed data loads cleanly into Neo4j via `backend/scripts/load_seed_data.py`.
+> ✅ **PRD 1 Complete** — Mar 19, 2026
 
 ---
 
@@ -72,7 +73,7 @@ Implement the Neo4j graph + FastAPI backend that powers all MVP features: ward o
     *   Implement schema creation:
         *   Labels: Region, Scheme, Actor, Asset, Beneficiary, Evidence, Event.
         *   Constraints: unique IDs per entity type, indexes on `ward_id`, `street_name` where useful.
-    *   Implement `scripts/load_seed_data.py` to ingest Person 1’s CSVs into Neo4j.
+    *   Implement `backend/scripts/load_seed_data.py` to ingest Person 1's CSVs into Neo4j.
 *   **Core Cypher queries**
     *   Implement parameterized queries for MVP:
         *   **Q1_WardAssets**: given `ward_id`, return all assets with their schemes, actors, evidence presence flags, and beneficiary counts.
@@ -106,10 +107,13 @@ Implement the Neo4j graph + FastAPI backend that powers all MVP features: ward o
     *   Handle errors gracefully (no crashes if ward or asset not found).
 
 **4. Acceptance criteria**
-- [x] `uvicorn backend.app.main:app` runs locally.
-- [x] Seed data loads via script without errors.
-- [x] All 4 GET endpoints return valid JSON and pass basic tests.
-- [x] `POST /ingest/entities` correctly creates/links at least one AI-ingested asset/event and can be seen in queries.
+- [x] `uvicorn backend.app.main:app --reload` runs locally.
+- [x] Seed data loads via `backend/scripts/load_seed_data.py` without errors.
+- [x] All core GET endpoints return valid JSON (wards, assets, chain, gaps, score).
+- [x] `POST /ingest/entities` correctly creates/links AI-ingested assets/events in Neo4j.
+- [x] 8 routers implemented: wards, assets, ingest, questions, scrape, notifications, govdata, beneficiaries.
+> ✅ **PRD 2 Complete** — Mar 19, 2026
+> ⚠️ **Open items:** `DELETE /ingest/demo-nodes` and `POST /assets/{id}/set-verified` endpoints still missing (→ 404)
 
 ---
 
@@ -127,65 +131,31 @@ Build the Streamlit UI and AI integration that make PRAMAAN feel intelligent and
 **3. Responsibilities**
 
 *   **Streamlit app structure**
-    *   Create `frontend/app.py` and `frontend/pages/`:
-        *   `01_🏙_Ward_Map.py`:
-            *   Calls `GET /wards`.
-            *   Shows ward(s) in a table or basic map-like view.
-            *   Clicking a ward sets selected ward in session state.
-        *   `02_🧷_Proof_Chain.py`:
-            *   Uses selected ward to call `GET /wards/{ward_id}/assets`.
-            *   Shows list of assets; click asset → call `GET /assets/{asset_id}/chain`.
-            *   Renders chain as:
-                *   Scheme, actors, region, beneficiaries.
-                *   Before/after evidence images.
-                *   Simple timeline or bullet-chain.
-        *   `03_❓_Questions.py`:
-            *   Text input + 3 buttons for fixed questions:
-                *   “What was built in Ward X?”
-                *   “For Gali Y, show full delivery chain.”
-                *   “Which schemes have low delivery scores?”
-            *   Map each button/question to a predefined call to backend queries.
-            *   Display answers with a short explanation and (if possible) a mini chain/graph view.
-        *   `04_⚡_Live_Ingestion.py`:
-            *   **Input**: Text area for reports OR a **News URL**.
-            *   **The "Evidence Trick"**: If a URL is provided, scrape the text using the **`newspaper3k`** library (more robust than requests).
-            *   **Verification Agent**: AI must check the scrappings against the Graph. (e.g., "MCD says Drain cleaned? News confirms? Yes/No").
-            *   **UI Result**: Show a "Verified by AI" badge next to the asset once ingested.
-            *   “Ingest” button: call `POST /ingest/entities`.
-            *   Then re-call relevant GET endpoints to show updated state.
+    *   `frontend/app.py` — global CSS, branding, page config.
+    *   `frontend/pages/01_Ward_Map.py` — ward overview, delivery score gauge, asset table, Folium map.
+    *   `frontend/pages/02_Proof_Chain.py` — asset selector, full proof chain (Scheme→Actor→Asset→Evidence→Beneficiary), before/after photos, financial tracker.
+    *   `frontend/pages/03_Live_Ingestion.py` — auto-search news, AI entity extraction (Groq), one-click Neo4j ingestion, voice input.
+    *   `frontend/pages/04_Micro_Accountability.py` — WhatsApp/SMS notifications via Twilio for verified assets.
 *   **Backend integration**
     *   Use `requests` or `httpx` to call FastAPI endpoints.
     *   Handle loading and error states cleanly (spinners, messages).
 *   **AI extraction module**
-    *   Implement `ai/ai_extraction.py`:
-        *   Function: `extract_governance_entities(text: str) -> dict`
-        *   Calls chosen LLM API with a prompt that asks for JSON with fields: schemes, regions, assets, events, actors, evidence references.
-        *   Parses and validates JSON.
-        *   Cache the response for the main demo text in a local file so you can bypass the LLM in offline mode.
+    *   `ai/llm_extractor.py` — `extract_governance_entities(text: str) -> dict` using Groq (llama-3.3-70b).
+    *   Parses and validates JSON. MD5 cache for offline demo mode.
 *   **NL query routing**
-    *   Implement `ai/nl_query.py`:
-        *   For MVP, handle only 3 query patterns:
-            *   Ward summary, gali chain, scheme gaps.
-        *   Either:
-            *   Use simple string matching/regex to decide which call to make, or
-            *   Use LLM to classify into one of `{WARD_SUMMARY, GALI_CHAIN, SCHEME_GAPS}` and extract ward/street names.
-        *   In Streamlit “Questions” page, call `nl_query` and then the appropriate backend endpoint.
+    *   `ai/nl_query.py` — routes 3 fixed query patterns (ward summary, proof chain, gap analysis) plus custom Cypher via LLM.
 *   **Demo polish**
-    *   Ensure UI is clean, with:
-        *   **Tagline**: "PRAMAAN: Tracing Government Promises to Ground Reality".
-        *   **Visual Delivery Score**: Show a gauge or progress bar for Ward performance (e.g., Karol Bagh: 63% ██████████░░░░░░).
-        *   Consistent colors and fonts.
-        *   **Prioritization**:
-            *   **Must-Have**: Seed data, Neo4j, Ward assets, Proof chain, Delivery Score.
-            *   **Nice-to-Have**: Automated news verification, full LLM query routing (fixed buttons are a safe fallback).
-        *   Make the 3–4 minute demo path obvious:
-            *   Ward → assets → one chain → question → live ingestion.
+    *   **Tagline**: "PRAMAAN: Tracing Government Promises to Ground Reality".
+    *   Visual Delivery Score gauge, glassmorphism cards, consistent dark-theme colors.
+    *   Demo path: Ward Map → Proof Chain → Live Ingestion → Micro Accountability.
 
 **4. Acceptance criteria**
 - [x] `streamlit run frontend/app.py` runs locally.
 - [x] From UI, user can:
-    - [x] See ward(s) and Delivery Score.
-    - [x] Click asset and view full chain with images.
-    - [x] Trigger each of the 3 fixed questions and see correct responses.
-    - [x] Paste demo PIB text, see extracted entities, ingest, and see updated data.
-- [x] LLM dependency is optional at demo time (thanks to cached responses).
+    - [x] See Ward 45 delivery score + asset breakdown (01_Ward_Map.py — 1,066 lines).
+    - [x] Select asset and view full proof chain with before/after images (02_Proof_Chain.py — 1,720 lines).
+    - [x] Auto-search news, extract entities with AI, and ingest to Neo4j (03_Live_Ingestion.py — 390 lines).
+    - [x] Trigger WhatsApp/SMS notifications for verified assets (04_Micro_Accountability.py — 285 lines).
+- [x] LLM dependency is optional (Groq API with MD5 cache for offline demo).
+- [x] Voice input utility added (`frontend/utils/voice_input.py`).
+> ✅ **PRD 3 Complete** — Mar 19, 2026

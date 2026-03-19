@@ -200,7 +200,7 @@ def main() -> None:
                                 if ingest_resp.status_code == 200:
                                     r = ingest_resp.json()
                                     st.success(f"Added {r.get('entities_created',0)} entities and {r.get('relations_created',0)} relations.")
-                                    st.page_link("pages/02_🧷_Proof_Chain.py", label="→ View in Proof Chain", icon="🧷")
+                                    st.page_link("pages/02_Proof_Chain.py", label="→ View in Proof Chain", icon="🧷")
                                 else:
                                     st.error(f"Ingestion failed: {ingest_resp.text}")
                             else:
