@@ -371,20 +371,20 @@ find . -name "*:Zone.Identifier" -delete
 [x] Fix PART_OF → CONTAINS in queries.py, wards.py — DONE Mar 20 ✅
 [x] Fix ward_population.py hardcoded values → Neo4j lookup — DONE Mar 20 ✅
 [x] Unified ai_service.py (merged llm_extractor + ai_service) — DONE Mar 20 ✅
-[ ] Delete 8 stale fetch scripts (Section 1): extract_amrut.py, amrut_funds.py, statewise_allocation.py, sbm_toilets.py, credit_guarantee_scheme.py, extract_pmay.py, api_test.py, amrut_water_logging.py
-[ ] Delete 2 inspection scripts (Section 2): inspect_excel.py, analyze_data_schemas.py
-[ ] Delete deep_data_extraction.py, generate_seed_data.py (Section 3)
+[x] Delete 8 stale fetch scripts (Section 1): extract_amrut.py, amrut_funds.py, statewise_allocation.py, sbm_toilets.py, credit_guarantee_scheme.py, extract_pmay.py, api_test.py, amrut_water_logging.py — DONE Mar 20 ✅
+[x] Delete 2 inspection scripts (Section 2): inspect_excel.py, analyze_data_schemas.py — DONE Mar 20 ✅
+[x] Delete deep_data_extraction.py, generate_seed_data.py (Section 3) — DONE Mar 20 ✅
 [x] Delete 3 wrong-data JSON files (Section 4) — DONE Mar 19 ✅
 [x] Delete 3 temp output files (Section 5) — DONE Mar 19 ✅
 [x] Delete stale PDF/CSVs + old ward CSVs (Section 6) — DONE Mar 19 ✅
-[ ] Delete 8 root-level stale CSVs + orphan resources/data/ dir (Section 8)
-[ ] Delete data/cache/last_autosearch.json (Section 9)
-[ ] Delete data/__pycache__/ (Section 10)
-[ ] Delete frontend stale files: .gitkeep, hidden_Live_Ingestion.py, 06_❓_Questions.py.bak (Section 11)
-[ ] Delete all frontend __pycache__/ folders (Section 11)
-[ ] Delete backend dead scripts (Section 12)
-[ ] Delete root-level diagnostic scripts (Section 13)
-[ ] Delete Windows Zone.Identifier files (Section 14)
-[ ] Run: python3 data/scripts/validate.py  — confirm 0 critical errors after cleanup
-[ ] git add -A && git commit -m "chore: cleanup stale scripts and dead files"
+[x] Delete 8 root-level stale CSVs + orphan resources/data/ dir (Section 8) — DONE Mar 20 ✅
+[x] Delete data/cache/last_autosearch.json (Section 9) — DONE Mar 20 ✅
+[x] Delete data/__pycache__/ (Section 10) — DONE Mar 20 ✅
+[x] Delete frontend stale files: .gitkeep, hidden_Live_Ingestion.py, 06_❓_Questions.py.bak (Section 11) — DONE Mar 20 ✅
+[x] Delete all frontend __pycache__/ folders (Section 11) — DONE Mar 20 ✅
+[x] Delete backend dead scripts (Section 12) — DONE Mar 20 ✅
+[x] Delete root-level diagnostic scripts (Section 13) — DONE Mar 20 ✅
+[x] Delete Windows Zone.Identifier files (Section 14) — DONE Mar 20 ✅
+[x] Run: python3 data/scripts/validate.py  — confirm 0 critical errors after cleanup — DONE Mar 20 ✅
+[x] git add -A && git commit -m "chore: cleanup stale scripts and dead files" — DONE Mar 20 ✅
 ```
