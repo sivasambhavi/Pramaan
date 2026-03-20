@@ -24,7 +24,7 @@ def _require(row: dict, *fields: str, source: str):
 
 def _validate_region(row: dict):
     _require(row, "region_id", "name", "type", source="regions")
-    if row["type"] not in ("state", "city", "zone", "ward", "street"):
+    if row["type"] not in ("country", "state", "district", "city", "zone", "ward", "street"):
         raise ValueError(f"[regions] Invalid type '{row['type']}' for region_id={row['region_id']}")
 
 
@@ -45,8 +45,8 @@ def _validate_asset(row: dict):
         raise ValueError(f"[assets] Invalid type '{row['type']}' for asset_id={row['asset_id']}")
     if row.get("lat") and row.get("lon"):
         lat, lon = float(row["lat"]), float(row["lon"])
-        if not (28.4 <= lat <= 28.9 and 76.8 <= lon <= 77.4):
-            raise ValueError(f"[assets] Coordinates ({lat},{lon}) outside Delhi bbox for asset_id={row['asset_id']}")
+        if not (6.0 <= lat <= 37.0 and 68.0 <= lon <= 98.0):
+            raise ValueError(f"[assets] Coordinates ({lat},{lon}) outside India bbox for asset_id={row['asset_id']}")
 
 
 def _validate_beneficiary(row: dict):
@@ -101,6 +101,11 @@ def main() -> None:
         print(f"❌ Staging directory not found: {DATA_DIR}")
         print("   Run transform_to_7_table_schema.py first.")
         sys.exit(1)
+
+    # ── Setup Neo4j constraints and indexes ───────────────────────────────────
+    print("\n── Setting up Neo4j schema ──────────────────────────────────────────")
+    from scripts.setup_constraints import setup
+    setup(get_driver())
 
     # ── Validate all CSVs before touching Neo4j ───────────────────────────────
     print("\n── Validating staging CSVs ──────────────────────────────────────────")
@@ -266,17 +271,6 @@ def main() -> None:
                             {"id": r["event_id"], "aid": r["asset_id"]})
 
     print("\nSUCCESS: Governance Knowledge Graph Ingested.")
-
-    # ── Cleanup staging CSVs ──────────────────────────────────────────────────
-    cleaned = []
-    for csv_file in DATA_DIR.glob("*.csv"):
-        try:
-            csv_file.unlink()
-            cleaned.append(csv_file.name)
-        except Exception as e:
-            print(f"  Could not delete {csv_file.name}: {e}")
-    if cleaned:
-        print(f"Cleaned up {len(cleaned)} staging CSVs: {', '.join(cleaned)}")
 
 
 if __name__ == "__main__":

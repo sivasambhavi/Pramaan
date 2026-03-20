@@ -44,7 +44,7 @@ class AuditFields(BaseModel):
 class RegionNode(AuditFields):
     region_id:        str                    # PK
     name:             str
-    type:             str                    # country | state | city | zone | ward | street
+    type:             str                    # country | state | district | city | zone | ward | street
     parent_region_id: Optional[str] = None  # FK -> Region.region_id
     lat:              Optional[float] = None  # geographic centroid written by load_seed_data
     lon:              Optional[float] = None
