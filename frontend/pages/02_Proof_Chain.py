@@ -7,7 +7,7 @@ import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.constants import (
-    ASSET_VERIFICATION_OVERRIDE,
+    # ASSET_VERIFICATION_OVERRIDE removed — proof_status read from Neo4j API
     ASSET_EVIDENCE_PHOTOS,
     NODE_ICONS     as _NODE_ICONS,
     TRUST_TIERS    as _TRUST_TIERS,
@@ -706,7 +706,8 @@ def main() -> None:
     # Asset-switch-only badge rerun — safe because asset_id changes only on selectbox change,
     # not on button clicks. Avoids killing button click events (unlike proof_status reruns).
     if st.session_state.get("_badge_asset_id") != asset_id:
-        _new_proof = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "")
+        # proof_status is loaded from the chain API below — start with cached value or default
+        _new_proof = st.session_state.get(f"_api_proof_{asset_id}", "")
         if not _new_proof and st.session_state.get(f"ev_{asset_id}"):
             _new_proof = "partially_verified"
         if not _new_proof:
@@ -761,12 +762,14 @@ def main() -> None:
         # Keep breadcrumb in sync with current asset name
         st.session_state["_crumb_asset_name"] = asset_name
 
-        # Update badge after chain loads — same logic as badge sync above
-        _proof_now = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "")
+        # Update badge after chain loads — read proof_status directly from Neo4j API response
+        _proof_now = asset.get("proof_status", "") or ""
         if not _proof_now and st.session_state.get(f"ev_{asset_id}"):
             _proof_now = "partially_verified"
         if not _proof_now:
             _proof_now = "unverified"
+        # Cache it so the pre-chain badge sync (above) can use it on rerun
+        st.session_state[f"_api_proof_{asset_id}"] = _proof_now
         st.session_state["last_proof_status"] = _proof_now
         # Rerun once if badge displayed stale status (e.g. "unverified" before ev_ was cached).
         # Safe for button clicks: _badge_proof is stable once set; button clicks don't change _proof_now.
@@ -912,8 +915,8 @@ def main() -> None:
                 render_node("📍", "Location", "Location metadata pending verification.", "#64748b")
             arrow()
 
-            # ── 5th Node: Evidence — driven by ASSET_VERIFICATION_OVERRIDE ────
-            _v_status = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "")
+            # ── 5th Node: Evidence — driven by proof_status from Neo4j API ────
+            _v_status = st.session_state.get(f"_api_proof_{asset_id}", "")
             # fallback: check cached news
             if not _v_status and st.session_state.get(f"ev_{asset_id}"):
                 _v_status = "partially_verified"
@@ -971,7 +974,7 @@ def main() -> None:
 
             # Accountability callout: completed claim but no verified evidence
             # Use same logic as badge: OVERRIDE first, then ev_ cache, then "unverified"
-            _cur_proof = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "")
+            _cur_proof = st.session_state.get(f"_api_proof_{asset_id}", "")
             if not _cur_proof and st.session_state.get(f"ev_{asset_id}"):
                 _cur_proof = "partially_verified"
             if not _cur_proof:
@@ -1121,7 +1124,7 @@ def main() -> None:
                     "#64748b", trust="official")
 
             # ── Evidence submission — shown for all unverified/partial assets ──
-            _cur_ev_status = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "unverified")
+            _cur_ev_status = st.session_state.get(f"_api_proof_{asset_id}", "unverified")
             if _cur_ev_status in ("unverified", "partially_verified"):
                 # Choose label/icon based on proof status (#10)
                 _submit_label = (
@@ -1232,7 +1235,7 @@ def main() -> None:
 
             # ── 📸 BEFORE / AFTER Photo Evidence ──────────────────────
             _photos = ASSET_EVIDENCE_PHOTOS.get(asset_id, {})
-            _v      = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "unverified")
+            _v      = st.session_state.get(f"_api_proof_{asset_id}", "unverified")
 
             # Only render if a before image actually exists for this asset
             _bp = _photos.get("before", "")
@@ -1414,7 +1417,7 @@ def main() -> None:
             coverage_pct = (count / ELIGIBLE_ESTIMATE) * 100 if ELIGIBLE_ESTIMATE > 0 else 0
 
             # Only inflate to 100% if BOTH status=completed AND evidence is verified
-            _cur_proof_impact = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "unverified")
+            _cur_proof_impact = st.session_state.get(f"_api_proof_{asset_id}", "unverified")
             _is_evidence_verified = _cur_proof_impact in ("fully_verified", "partially_verified")
             if "complet" in status.lower() and _is_evidence_verified and coverage_pct < 95:
                 coverage_pct = 100.0

@@ -6,3 +6,8 @@ EVT_W45_ROAD_GALI7_COMPLETE,Road resurfacing completed — Gali No. 7,completion
 EVT_W45_TOILET_TENDER,Maintenance tender issued — Community Toilet,tender,2024-06-01,ASSET_W45_TOILET
 EVT_W45_PMAY_SANCTION,PMAY housing sanction — Colony Y Block A,sanction,2023-11-15,ASSET_W45_PMAY_HOUSING_A
 EVT_W45_STREETLIGHT_DEPLOY,Smart LED streetlight deployment — Gali No. 12,inauguration,2025-01-15,ASSET_W45_GALI12_STREETLIGHT
+EVT_W12_DRAIN_COMPLETE,Drain renovation completed — Ward 12 main channel,completion,2025-02-15,ASSET_W12_DRAIN_MAIN
+EVT_W12_ROAD_COMPLETE,Road resurfacing completed — Sector 5 Ward 12,completion,2025-01-10,ASSET_W12_ROAD_SECTOR5
+EVT_W12_TOILET_INAUG,Community toilet block inauguration — Ward 12,inauguration,2025-03-05,ASSET_W12_TOILET_BLOCK
+EVT_W28_DRAIN_COMPLETE,Storm drain reconstruction completed — Ward 28 Block A,completion,2025-04-20,ASSET_W28_DRAIN_A
+EVT_W28_PARK_INAUG,Neighbourhood park inauguration — Ward 28,inauguration,2025-05-01,ASSET_W28_PARK

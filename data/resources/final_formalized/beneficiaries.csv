@@ -10,3 +10,12 @@ BEN_W45_PARK,ASSET_W45_PARK,SCH_AMRUT,REG_W45,62796,Ward 45 residents with acces
 BEN_DELHI_PMAY,ASSET_W45_PMAY_HOUSING_A,SCH_PMAY,REG_DELHI,17067,Houses occupied under PMAY-Urban in Delhi — source: data.gov.in
 BEN_DELHI_SBM,ASSET_W45_TOILET,SCH_SWACHH,REG_DELHI,28981,Toilets (IHHL + CT/PT) constructed in Delhi under SBM-Urban till Mar 2022 — source: data.gov.in
 BEN_DELHI_SVANIDHI,ASSET_W45_PARK,SCH_AMRUT,REG_DELHI,145160,Street vendors receiving PM SVANidhi loans in Delhi (cumulative 2020-24) — source: data.gov.in
+BEN_W12_DRAIN,ASSET_W12_DRAIN_MAIN,SCH_AMRUT,REG_W12,4170,Households protected from seasonal flooding — Ward 12 main drain
+BEN_W12_ROAD,ASSET_W12_ROAD_SECTOR5,SCH_SFC,REG_W12,3820,Residents using Sector 5 road — Ward 12
+BEN_W12_WATER,ASSET_W12_WATER_KIOSK,SCH_JJBY,REG_W12,1240,Families accessing safe drinking water — Ward 12 kiosk
+BEN_W12_TOILET,ASSET_W12_TOILET_BLOCK,SCH_SWACHH,REG_W12,2890,Daily users of community toilet block — Ward 12
+BEN_W12_LIGHTS,ASSET_W12_STREETLIGHT,SCH_LOCAL_LIGHTS,REG_W12,41703,Ward 12 total population with improved street lighting
+BEN_W28_DRAIN,ASSET_W28_DRAIN_A,SCH_AMRUT,REG_W28,3891,Households protected from waterlogging — Ward 28 Block A
+BEN_W28_ROAD,ASSET_W28_ROAD_MAIN,SCH_SFC,REG_W28,3250,Residents benefiting from main road repair — Ward 28
+BEN_W28_PARK,ASSET_W28_PARK,SCH_AMRUT,REG_W28,38912,Ward 28 population with access to neighbourhood park
+BEN_W28_TOILET,ASSET_W28_TOILET_BLOCK,SCH_SWACHH,REG_W28,2160,Daily users of Ward 28 public toilet complex

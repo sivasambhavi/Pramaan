@@ -182,31 +182,18 @@ SCHEME_SHORT_NAMES: dict[str, str] = {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 7. ASSET VERIFICATION OVERRIDE  (demo / booth mode)
+# 7. ASSET VERIFICATION OVERRIDE  — REMOVED
 # ─────────────────────────────────────────────────────────────────────────────
-# IDs must exactly match asset_id values in assets.csv and Neo4j.
-# Assets not listed here default to "unverified" (backend value is used).
+# proof_status is now read directly from Neo4j via the /assets/{id}/chain API.
+# The asset node carries proof_status set by load_seed_data.py and the
+# VerificationAgent (backend/app/services/verification_agent.py).
+# Do NOT hardcode status here — it creates a split-brain between the UI and DB.
+#
+# If you need to override a status for a demo, call:
+#   POST /assets/{asset_id}/set-verified
+# which writes directly to the graph and is visible everywhere.
 
-ASSET_VERIFICATION_OVERRIDE: dict[str, str] = {
-    # Core Shahdara infrastructure — field photos + completion data available
-    "ASSET_DRAIN_GALI7":        "fully_verified",     # drain: geo-tagged photo + MCD completion report
-    "ASSET_TOILET_MARKET":      "fully_verified",     # toilet: SBM-U ODF++ certificate + inspection photo
-    "ASSET_HOUSING_COLONYY":    "fully_verified",     # PMAY: possession letters + DDA sanction data
-    "ASSET_ROAD_GALI7":         "partially_verified", # road: news coverage only, no after-photo yet
-    "ASSET_LIGHTS_BLOCKA":      "partially_verified", # streetlight: tender closed, installation unconfirmed
-
-    # Water bodies — mix reflecting real-world monitoring gaps
-    "ASSET_WB_272027":          "fully_verified",     # BURARI: DDA survey + satellite imagery
-    "ASSET_WB_272030":          "fully_verified",     # TIMARPUR: MCD wetland audit completed
-    "ASSET_WB_272031":          "fully_verified",     # WAZIRABAD: Delhi Jal Board report filed
-    "ASSET_WB_272038":          "fully_verified",     # KHICHRIPUR: field inspection photo
-    "ASSET_WB_272028":          "partially_verified", # JHARODA MAZRA BURARI: news mention only
-    "ASSET_WB_272029":          "partially_verified", # JHARODA MAZRA BURARI: single site visit log
-    "ASSET_WB_272032":          "partially_verified", # CHILLA SARODA BANGAR: satellite data only
-    "ASSET_WB_272034":          "partially_verified", # DALLUPURA: SBM audit pending
-    "ASSET_WB_272043":          "partially_verified", # KOTLA: partial encroachment report
-    "ASSET_WB_272049":          "partially_verified", # KHUREJI KHAS: DDA note filed, photo missing
-}
+ASSET_VERIFICATION_OVERRIDE: dict[str, str] = {}   # intentionally empty — backend is source of truth
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 8. ASSET EVIDENCE PHOTOS

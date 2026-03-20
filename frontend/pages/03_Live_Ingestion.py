@@ -122,6 +122,86 @@ hr { border-color: rgba(71,85,105,0.4) !important; }
 </style>
 """
 
+def _render_delivery_chain(response_chain: dict | None) -> None:
+    """Render the governance delivery chain returned by /ingest/entities."""
+    if not response_chain:
+        return
+    st.markdown("---")
+    st.markdown(f"<p class='sec-label'>{icon('link', '#94a3b8', 15)} Governance Delivery Chain</p>", unsafe_allow_html=True)
+    st.caption("Complete traceability path for the asset extracted from the article.")
+
+    if response_chain.get("matched_existing"):
+        st.success(f"✅ Matched existing asset: **{response_chain['asset_name']}**")
+    else:
+        st.info(f"🆕 New asset added to graph: **{response_chain['asset_name']}**")
+
+    col1, col2 = st.columns([3, 2])
+    with col1:
+        _ico_scheme = icon("banknote",   "#60A5FA", 13)
+        _ico_actor  = icon("building-2", "#A78BFA", 13)
+        _ico_asset  = icon("building",   "#FCD34D", 13)
+        _ico_loc    = icon("map-pin",    "#34D399", 13)
+
+        scheme = response_chain.get("scheme") or {}
+        if scheme:
+            st.markdown(f"""
+            <div class="chain-node" style="background:rgba(56,130,246,0.08);border-color:#3B82F6;">
+                <div class="chain-node-label" style="color:#60A5FA;">{_ico_scheme} Scheme / Funding</div>
+                <div class="chain-node-value">{scheme.get('name','Unknown')}</div>
+                <div class="chain-node-meta">Ministry: {scheme.get('ministry','—')} · {scheme.get('category','—')}</div>
+            </div>""", unsafe_allow_html=True)
+        st.markdown('<div class="chain-arrow">↓</div>', unsafe_allow_html=True)
+
+        actor = response_chain.get("actor") or {}
+        if actor:
+            st.markdown(f"""
+            <div class="chain-node" style="background:rgba(139,92,246,0.08);border-color:#8B5CF6;">
+                <div class="chain-node-label" style="color:#A78BFA;">{_ico_actor} Implementing Agency</div>
+                <div class="chain-node-value">{actor.get('name','Unknown')}</div>
+                <div class="chain-node-meta">Type: {actor.get('type','—')}</div>
+            </div>""", unsafe_allow_html=True)
+        st.markdown('<div class="chain-arrow">↓</div>', unsafe_allow_html=True)
+
+        st.markdown(f"""
+        <div class="chain-node" style="background:rgba(245,158,11,0.08);border-color:#F59E0B;">
+            <div class="chain-node-label" style="color:#FCD34D;">{_ico_asset} Asset / Infrastructure</div>
+            <div class="chain-node-value">{response_chain.get('asset_name','Unknown')}</div>
+        </div>""", unsafe_allow_html=True)
+        st.markdown('<div class="chain-arrow">↓</div>', unsafe_allow_html=True)
+
+        region    = response_chain.get("region") or {}
+        ward_val  = region.get("ward") or "Not resolved"
+        loc_str   = f"Ward: {ward_val}"
+        if region.get("street"):
+            loc_str += f" · Street: {region['street']}"
+        st.markdown(f"""
+        <div class="chain-node" style="background:rgba(16,185,129,0.08);border-color:#10B981;">
+            <div class="chain-node-label" style="color:#34D399;">{_ico_loc} Location</div>
+            <div class="chain-node-value">{loc_str}</div>
+        </div>""", unsafe_allow_html=True)
+
+    with col2:
+        st.markdown(f"<p class='sec-label'>{icon('image', '#94a3b8', 14)} Evidence Found</p>", unsafe_allow_html=True)
+        for ev in response_chain.get("evidence", []):
+            lbl = "✅ AFTER" if ev.get("before_or_after") == "after" else "⏳ BEFORE"
+            st.markdown(f"**{lbl}** — {ev.get('capture_date', 'N/A')}")
+            url = ev.get("url", "")
+            if url.startswith("http"):
+                st.image(url, use_container_width=True)
+            else:
+                st.caption(f"📁 {url}")
+        if not response_chain.get("evidence"):
+            st.info("No photo evidence linked yet.")
+
+        st.markdown(f"<p class='sec-label'>{icon('users', '#94a3b8', 14)} People Served</p>", unsafe_allow_html=True)
+        people = response_chain.get("people_served")
+        if people:
+            st.metric("Households", f"{int(people):,}")
+            st.caption(response_chain.get("beneficiary_desc", ""))
+        else:
+            st.info("Beneficiary data pending.")
+
+
 def save_cache(data: dict):
     os.makedirs(CACHE_DIR, exist_ok=True)
     with open(CACHE_FILE, "w") as f:
@@ -208,151 +288,174 @@ def main() -> None:
                             st.error("Network unavailable and no offline cache found. Run a live search with internet first.")
                             return
 
-            articles = data.get('articles', [])
-            st.success(f"✅ Found {len(articles)} relevant news items.")
+            articles       = data.get("articles", [])
+            dropped_count  = data.get("articles_dropped", 0)
+            all_entities   = data.get("entities", [])
+            all_relations  = data.get("relations", [])
+
+            # ── scrape summary ──────────────────────────────────────────────
+            c1, c2, c3 = st.columns(3)
+            c1.metric("Articles kept",    len(articles))
+            c2.metric("Articles dropped (Unrelated)", dropped_count)
+            c3.metric("Entities extracted", len(all_entities))
+
+            if data.get("message"):
+                st.warning(data["message"])
 
             with st.expander("📄 View Scraped News Sources"):
                 for a in articles:
-                    st.markdown(f"**{a['title']}**")
+                    rel_badge = f"**[{a.get('relevance','?')}]**" if a.get('relevance') else ""
+                    conf_val  = a.get('confidence')
+                    conf_str  = f"  ·  confidence {conf_val:.0%}" if conf_val else ""
+                    st.markdown(f"{rel_badge} **{a['title']}**{conf_str}")
                     st.caption(f"Published: {a.get('published', 'N/A')}")
                     st.write(a.get('summary', ''))
                     st.divider()
 
-            # Show extracted knowledge map
-            st.markdown(f"<p class='sec-label'>{icon('git-branch', '#94a3b8', 15)} AI Extracted Knowledge Map</p>", unsafe_allow_html=True)
-            st.json({"entities": data.get("entities", []), "relations": data.get("relations", [])})
-
-            if data.get("entities"):
-                with st.spinner("Writing to Knowledge Graph..."):
-                    try:
-                        result = safe_post("/ingest/entities", json=data, timeout=15)
-                        if result:
-                            n_ent = result.get('entities_created', len(data.get('entities', [])))
-                            n_rel = result.get('relations_created', len(data.get('relations', [])))
-                            st.success(f"🚀 Successfully mapped **{n_ent} entities** and **{n_rel} relations** to the Knowledge Graph!")
-
-                            # NEW FEATURE: Delivery Chain
-                            response_chain = result.get("delivery_chain")
-                            if response_chain:
-                                st.markdown("---")
-                                st.markdown(f"<p class='sec-label'>{icon('link', '#94a3b8', 15)} Governance Delivery Chain</p>", unsafe_allow_html=True)
-                                st.caption("This is the complete traceability path for the asset extracted from the article.")
-                                
-                                if response_chain.get("matched_existing"):
-                                    st.success(f"✅ Matched existing asset: **{response_chain['asset_name']}**")
-                                else:
-                                    st.info(f"🆕 New asset added to graph: **{response_chain['asset_name']}**")
-                                
-                                col1, col2 = st.columns([3, 2])
-                                with col1:
-                                    scheme = response_chain.get("scheme", {})
-                                    _ico_scheme = icon("banknote", "#60A5FA", 13)
-                                    _ico_actor  = icon("building-2", "#A78BFA", 13)
-                                    _ico_asset  = icon("building", "#FCD34D", 13)
-                                    _ico_loc    = icon("map-pin", "#34D399", 13)
-                                    if scheme:
-                                        st.markdown(f"""
-                                        <div class="chain-node" style="background:rgba(56,130,246,0.08);border-color:#3B82F6;">
-                                            <div class="chain-node-label" style="color:#60A5FA;">{_ico_scheme} Scheme / Funding</div>
-                                            <div class="chain-node-value">{scheme.get('name','Unknown')}</div>
-                                            <div class="chain-node-meta">Ministry: {scheme.get('ministry','—')} · {scheme.get('category','—')}</div>
-                                        </div>
-                                        """, unsafe_allow_html=True)
-                                    st.markdown('<div class="chain-arrow">↓</div>', unsafe_allow_html=True)
-
-                                    actor = response_chain.get("actor", {})
-                                    if actor:
-                                        st.markdown(f"""
-                                        <div class="chain-node" style="background:rgba(139,92,246,0.08);border-color:#8B5CF6;">
-                                            <div class="chain-node-label" style="color:#A78BFA;">{_ico_actor} Implementing Agency</div>
-                                            <div class="chain-node-value">{actor.get('name','Unknown')}</div>
-                                            <div class="chain-node-meta">Type: {actor.get('type','—')}</div>
-                                        </div>
-                                        """, unsafe_allow_html=True)
-                                    st.markdown('<div class="chain-arrow">↓</div>', unsafe_allow_html=True)
-
-                                    st.markdown(f"""
-                                    <div class="chain-node" style="background:rgba(245,158,11,0.08);border-color:#F59E0B;">
-                                        <div class="chain-node-label" style="color:#FCD34D;">{_ico_asset} Asset / Infrastructure</div>
-                                        <div class="chain-node-value">{response_chain.get('asset_name','Unknown')}</div>
-                                    </div>
-                                    """, unsafe_allow_html=True)
-                                    st.markdown('<div class="chain-arrow">↓</div>', unsafe_allow_html=True)
-
-                                    region = response_chain.get("region", {})
-                                    _ward_val = region.get('ward')
-                                    if not _ward_val or str(_ward_val).lower() in ('none', 'null', ''):
-                                        _ward_val = "Not resolved — ward name not found in article"
-                                    loc_str = f"Ward: {_ward_val}"
-                                    if region.get('street'):
-                                        loc_str += f" · Street: {region.get('street')}"
-                                    st.markdown(f"""
-                                    <div class="chain-node" style="background:rgba(16,185,129,0.08);border-color:#10B981;">
-                                        <div class="chain-node-label" style="color:#34D399;">{_ico_loc} Location</div>
-                                        <div class="chain-node-value">{loc_str}</div>
-                                    </div>
-                                    """, unsafe_allow_html=True)
-                                
-                                with col2:
-                                    st.markdown(f"<p class='sec-label'>{icon('image', '#94a3b8', 14)} Evidence Found</p>", unsafe_allow_html=True)
-                                    evidence = response_chain.get("evidence", [])
-                                    if evidence:
-                                        for ev in evidence:
-                                            label = "✅ AFTER" if ev.get("before_or_after") == "after" else "⏳ BEFORE"
-                                            st.markdown(f"**{label}** — {ev.get('capture_date', 'N/A')}")
-                                            url = ev.get("url", "")
-                                            if url.startswith("http"):
-                                                st.image(url, use_container_width=True)
-                                            else:
-                                                st.caption(f"📁 Path: {url}")
-                                    else:
-                                        st.info("No photo evidence linked yet.")
-
-                                    st.markdown(f"<p class='sec-label'>{icon('users', '#94a3b8', 14)} People Served</p>", unsafe_allow_html=True)
-                                    people = response_chain.get("people_served")
-                                    if people:
-                                        st.metric("Households", f"{int(people):,}")
-                                        st.caption(response_chain.get("beneficiary_desc", ""))
-                                    else:
-                                        st.info("Beneficiary data pending.")
-                        else:
-                            st.error(f"Ingestion failed: {ingest_resp.text}")
-                    except Exception as e:
-                        st.error(f"Ingestion error: {e}")
-            else:
+            if not all_entities:
                 st.warning("The AI could not confidently identify specific governance entities in these headlines.")
+            else:
+                # ── Human review queue ──────────────────────────────────────
+                st.markdown(f"<p class='sec-label'>{icon('check-square', '#94a3b8', 15)} Human Review — Approve Entities Before Commit</p>", unsafe_allow_html=True)
+                st.caption("Tick the entities you want to add to the Knowledge Graph. Low-confidence or hallucinated ones are pre-deselected.")
+
+                _CONF_COLORS = {
+                    "high":   ("#22c55e", "✅"),
+                    "medium": ("#f59e0b", "⚠️"),
+                    "low":    ("#ef4444", "❌"),
+                }
+
+                approved_entities = []
+                for i, ent in enumerate(all_entities):
+                    conf = float(ent.get("properties", {}).get("confidence", 0.0))
+                    name = ent.get("properties", {}).get("name", ent.get("id", "?"))
+                    label = ent.get("label", "?")
+
+                    if conf >= 0.75:
+                        tier, badge = "high",   _CONF_COLORS["high"]
+                    elif conf >= 0.55:
+                        tier, badge = "medium", _CONF_COLORS["medium"]
+                    else:
+                        tier, badge = "low",    _CONF_COLORS["low"]
+
+                    color, emoji = badge
+                    # Pre-select high/medium; pre-deselect low
+                    default_checked = tier in ("high", "medium")
+
+                    checked = st.checkbox(
+                        f"{emoji} **{name}** `{label}` — confidence {conf:.0%}",
+                        value=default_checked,
+                        key=f"review_ent_{i}",
+                        help=f"ID: {ent.get('id')}  |  Properties: {ent.get('properties',{})}",
+                    )
+                    if checked:
+                        approved_entities.append(ent)
+
+                st.caption(f"{len(approved_entities)} of {len(all_entities)} entities selected for ingestion.")
+
+                if st.button("🚀 Commit Approved Entities to Knowledge Graph",
+                             disabled=len(approved_entities) == 0,
+                             type="primary"):
+                    commit_payload = {
+                        "entities":    approved_entities,
+                        "relations":   all_relations,
+                        "source_type": data.get("source_type", "unstructured_rss"),
+                    }
+                    with st.spinner("Writing approved entities to Knowledge Graph..."):
+                        result = safe_post("/ingest/entities", json=commit_payload, timeout=15)
+
+                    if result:
+                        n_ent = result.get("entities_created", 0)
+                        n_rel = result.get("relations_created", 0)
+                        n_low = result.get("skipped_low_confidence", 0)
+                        n_dup = result.get("skipped_duplicates", 0)
+                        n_hal = result.get("skipped_hallucinations", 0)
+
+                        st.success(f"🚀 Committed **{n_ent} entities** · **{n_rel} relations** to the Knowledge Graph!")
+
+                        # Validation telemetry
+                        if n_low or n_dup or n_hal:
+                            with st.expander("🛡️ Validation Report"):
+                                if n_low: st.warning(f"⚠️ {n_low} entity/ies rejected — confidence below threshold")
+                                if n_dup: st.info(f"ℹ️ {n_dup} entity/ies skipped — already exist in graph")
+                                if n_hal: st.error(f"❌ {n_hal} entity/ies blocked — hallucination detected (implausible cost/status)")
+                                v = result.get("validation_summary", {})
+                                if v.get("log"):
+                                    st.json(v["log"])
+
+                        # Delivery Chain
+                        _render_delivery_chain(result.get("delivery_chain"))
+                    else:
+                        st.error("Ingestion failed — backend unreachable.")
 
     # ── TAB 2: Manual Ingestion ─────────────────────────────────────────────
     with tab2:
         st.markdown(f"<p class='sec-label'>{icon('edit-3', '#94a3b8', 15)} Manual Text Ingestion</p>", unsafe_allow_html=True)
         manual_text = st.text_area("Paste news article or governance text here", height=200)
-        if st.button("🧠 Extract & Ingest"):
+        if st.button("🧠 Extract Entities (Review before commit)"):
             if manual_text.strip():
                 with st.spinner("Extracting governance entities with AI..."):
                     try:
                         data = safe_post("/scrape/analyze", json={"text": manual_text}, timeout=30)
-                        if data:
-                            if not data.get("success", True):
-                                st.error(f"❌ Analysis failed: {data.get('error')}")
-                                if data.get("raw"):
-                                    with st.expander("Raw AI response (for debugging)"):
-                                        st.code(data.get("raw"))
-                                st.stop()
-                                
-                            st.json({"entities": data.get("entities", []), "relations": data.get("relations", [])})
-                            if data.get("entities"):
-                                r = safe_post("/ingest/entities", json=data, timeout=15)
-                                if r:
-                                    st.success(f"Added {r.get('entities_created',0)} entities and {r.get('relations_created',0)} relations.")
-                                    st.page_link("pages/02_Proof_Chain.py", label="→ View in Proof Chain", icon="🔗")
-                                else:
-                                    st.error(f"Ingestion failed: {ingest_resp.text}")
-                            else:
-                                st.warning("No entities extracted.")
-                        else:
-                            st.error("Analysis failed network error.")
                     except Exception as e:
-                        st.error(f"Error: {e}")
+                        st.error(f"Extraction error: {e}")
+                        data = None
+
+                if data:
+                    if not data.get("success", True):
+                        st.error(f"❌ Analysis failed: {data.get('error')}")
+                        if data.get("raw"):
+                            with st.expander("Raw AI response"):
+                                st.code(data.get("raw"))
+                    elif not data.get("entities"):
+                        st.warning("No entities extracted from the text.")
+                    else:
+                        # ── Manual ingestion human review ───────────────────
+                        st.markdown(f"<p class='sec-label'>{icon('check-square','#94a3b8',15)} Review Extracted Entities</p>", unsafe_allow_html=True)
+                        st.caption("Tick the entities you want to commit. Low-confidence ones are pre-deselected.")
+
+                        approved_manual = []
+                        for i, ent in enumerate(data.get("entities", [])):
+                            conf  = float(ent.get("properties", {}).get("confidence", 0.0))
+                            name  = ent.get("properties", {}).get("name", ent.get("id", "?"))
+                            label = ent.get("label", "?")
+                            emoji = "✅" if conf >= 0.75 else ("⚠️" if conf >= 0.55 else "❌")
+                            default = conf >= 0.55
+                            if st.checkbox(
+                                f"{emoji} **{name}** `{label}` — confidence {conf:.0%}",
+                                value=default, key=f"manual_ent_{i}",
+                                help=str(ent.get("properties", {})),
+                            ):
+                                approved_manual.append(ent)
+
+                        st.caption(f"{len(approved_manual)} of {len(data.get('entities',[]))} selected.")
+
+                        if st.button("✅ Commit to Knowledge Graph",
+                                     disabled=len(approved_manual) == 0,
+                                     type="primary", key="manual_commit"):
+                            commit_data = {
+                                "entities":    approved_manual,
+                                "relations":   data.get("relations", []),
+                                "source_type": "unstructured_llm",
+                            }
+                            r = safe_post("/ingest/entities", json=commit_data, timeout=15)
+                            if r:
+                                n_ent = r.get("entities_created", 0)
+                                n_rel = r.get("relations_created", 0)
+                                n_low = r.get("skipped_low_confidence", 0)
+                                n_dup = r.get("skipped_duplicates", 0)
+                                n_hal = r.get("skipped_hallucinations", 0)
+                                st.success(f"Added **{n_ent} entities** · **{n_rel} relations** to the Knowledge Graph!")
+                                if n_low or n_dup or n_hal:
+                                    with st.expander("🛡️ Validation Report"):
+                                        if n_low: st.warning(f"⚠️ {n_low} rejected — low confidence")
+                                        if n_dup: st.info(f"ℹ️ {n_dup} skipped — already exist")
+                                        if n_hal: st.error(f"❌ {n_hal} blocked — hallucination guard")
+                                st.page_link("pages/02_Proof_Chain.py", label="→ View in Proof Chain", icon="🔗")
+                            else:
+                                st.error("Ingestion failed — backend unreachable.")
+                else:
+                    st.error("Analysis failed — network error.")
             else:
                 st.warning("Please paste some text first.")
 
