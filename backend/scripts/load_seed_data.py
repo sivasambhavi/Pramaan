@@ -118,16 +118,18 @@ def main() -> None:
     print("\n── Loading into Neo4j ───────────────────────────────────────────────")
     driver = get_driver()
     with driver.session() as session:
-
         print("Loading Regions...")
         for _, row in df_reg.iterrows():
             r = row.to_dict()
+            _lat = float(r["lat"]) if str(r.get("lat", "")).strip() else None
+            _lon = float(r["lon"]) if str(r.get("lon", "")).strip() else None
             session.run("""
                 MERGE (n:Region {region_id: $region_id})
                 SET n.name = $name, n.type = $type,
+                    n.lat  = $lat,  n.lon  = $lon,
                     n.population = $population,
                     n.source_type = 'structured_csv', n.confidence = 1.0, n.ingested_by = 'seed_script'
-            """, {**r, "population": r.get("population", "")})
+            """, {**r, "population": r.get("population", ""), "lat": _lat, "lon": _lon})
             if r["parent_region_id"]:
                 session.run("""
                     MATCH (parent:Region {region_id: $parent_region_id})

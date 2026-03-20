@@ -3,10 +3,14 @@ NewsService — PRAMAAN v3.1
 Guaranteed-working RSS scraper using Google News RSS + feedparser.
 No API key required. Uses multi-query fallback strategy.
 """
+import time
 import feedparser
 import urllib.parse
 from datetime import datetime
 from typing import List, Dict
+
+_RSS_RETRIES = 3
+_RSS_DELAY   = 2.0   # seconds between retries
 
 
 class NewsService:
@@ -100,44 +104,59 @@ class NewsService:
         for query in queries:
             encoded = urllib.parse.quote(query)
             rss_url = f"https://news.google.com/rss/search?q={encoded}&hl=en-IN&gl=IN&ceid=IN:en"
-            
-            try:
-                feed = feedparser.parse(rss_url)
-                entries = feed.entries or []
-                
-                valid_results = []
-                for entry in entries:
-                    title = entry.get("title", "").lower()
-                    snip  = entry.get("summary", "").lower()
-                    
-                    # Score relevance: how many check_words appear?
-                    match_count = sum(1 for word in check_words if word in title or word in snip)
-                    
-                    # RELEVANCE CRITERIA: 
-                    # If it's a specific query (q1/q2), we need at least 1 match.
-                    # If it's q3, we need at least 2 matches to be sure.
-                    required = 1 if query != q3 else 2
-                    
-                    if match_count >= required:
-                        valid_results.append({
-                            "title":       entry.get("title", ""),
-                            "url":         entry.get("link", ""),
-                            "snippet":     entry.get("summary", "")[:300],
-                            "source":      (entry.get("source") or {}).get("title", "News"),
-                            "date":        entry.get("published", datetime.now().strftime("%d %b %Y")),
-                            "relevance":   match_count,
-                            "query_used":  query
-                        })
-                    
-                    if len(valid_results) >= 3: break
-                
-                if valid_results:
-                    print(f"[NewsService] ✅ Found {len(valid_results)} relevant items for query: '{query}'")
-                    return valid_results
-                    
-            except Exception as e:
-                print(f"[NewsService] Query Error: {e}")
+
+            # ── Retry loop for each query ──────────────────────────────────
+            feed = None
+            for attempt in range(1, _RSS_RETRIES + 1):
+                try:
+                    feed = feedparser.parse(rss_url)
+                    # feedparser never raises — check bozo flag for hard errors
+                    if feed.bozo and not feed.entries:
+                        raise feed.bozo_exception
+                    break   # success
+                except Exception as e:
+                    if attempt < _RSS_RETRIES:
+                        print(f"[NewsService] RSS attempt {attempt} failed ({e}) — retrying in {_RSS_DELAY}s")
+                        time.sleep(_RSS_DELAY)
+                    else:
+                        print(f"[NewsService] RSS failed after {_RSS_RETRIES} attempts: {e}")
+                        feed = None
+
+            if feed is None:
                 continue
+
+            entries = feed.entries or []
+
+            valid_results = []
+            for entry in entries:
+                title = entry.get("title", "").lower()
+                snip  = entry.get("summary", "").lower()
+
+                # Score relevance: how many check_words appear?
+                match_count = sum(1 for word in check_words if word in title or word in snip)
+
+                # RELEVANCE CRITERIA:
+                # If it's a specific query (q1/q2), we need at least 1 match.
+                # If it's q3, we need at least 2 matches to be sure.
+                required = 1 if query != q3 else 2
+
+                if match_count >= required:
+                    valid_results.append({
+                        "title":      entry.get("title", ""),
+                        "url":        entry.get("link", ""),
+                        "snippet":    entry.get("summary", "")[:300],
+                        "source":     (entry.get("source") or {}).get("title", "News"),
+                        "date":       entry.get("published", datetime.now().strftime("%d %b %Y")),
+                        "relevance":  match_count,
+                        "query_used": query,
+                    })
+
+                if len(valid_results) >= 3:
+                    break
+
+            if valid_results:
+                print(f"[NewsService] ✅ Found {len(valid_results)} relevant items for query: '{query}'")
+                return valid_results
 
         print("[NewsService] No highly relevant evidence found.")
         return []

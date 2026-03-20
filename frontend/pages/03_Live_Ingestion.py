@@ -5,14 +5,13 @@ Premium UI: branded header · AI scraper · manual ingestion · delivery chain v
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import streamlit as st
-import requests
+from utils.api import safe_get, safe_post, safe_delete
 import json
 from utils.icons import icon, icon_box
 from utils.session import init_session, get_breadcrumb
 from utils.voice_input import voice_text_input
 from components.topnav import render_topnav
 
-BASE_URL = "http://127.0.0.1:8000"
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "cache")
 CACHE_FILE = os.path.join(CACHE_DIR, "last_autosearch.json")
 
@@ -194,9 +193,8 @@ def main() -> None:
             else:
                 with st.status("🔍 Scraping governance news...", expanded=True) as status:
                     try:
-                        scrape_resp = requests.get(f"{BASE_URL}/scrape/news", params={"q": search_query}, timeout=30)
-                        if scrape_resp.status_code == 200:
-                            data = scrape_resp.json()
+                        data = safe_get("/scrape/news", params={"q": search_query}, timeout=30)
+                        if data:
                             save_cache(data)
                         else:
                             st.error("Scraping service unavailable.")
@@ -227,10 +225,9 @@ def main() -> None:
             if data.get("entities"):
                 with st.spinner("Writing to Knowledge Graph..."):
                     try:
-                        ingest_resp = requests.post(f"{BASE_URL}/ingest/entities", json=data, timeout=15)
-                        if ingest_resp.status_code == 200:
-                            result = ingest_resp.json()
-                            n_ent = result.get('entities_created', len(data['entities']))
+                        result = safe_post("/ingest/entities", json=data, timeout=15)
+                        if result:
+                            n_ent = result.get('entities_created', len(data.get('entities', [])))
                             n_rel = result.get('relations_created', len(data.get('relations', [])))
                             st.success(f"🚀 Successfully mapped **{n_ent} entities** and **{n_rel} relations** to the Knowledge Graph!")
 
@@ -333,9 +330,8 @@ def main() -> None:
             if manual_text.strip():
                 with st.spinner("Extracting governance entities with AI..."):
                     try:
-                        resp = requests.post(f"{BASE_URL}/scrape/analyze", json={"text": manual_text}, timeout=30)
-                        if resp.status_code == 200:
-                            data = resp.json()
+                        data = safe_post("/scrape/analyze", json={"text": manual_text}, timeout=30)
+                        if data:
                             if not data.get("success", True):
                                 st.error(f"❌ Analysis failed: {data.get('error')}")
                                 if data.get("raw"):
@@ -345,9 +341,8 @@ def main() -> None:
                                 
                             st.json({"entities": data.get("entities", []), "relations": data.get("relations", [])})
                             if data.get("entities"):
-                                ingest_resp = requests.post(f"{BASE_URL}/ingest/entities", json=data, timeout=15)
-                                if ingest_resp.status_code == 200:
-                                    r = ingest_resp.json()
+                                r = safe_post("/ingest/entities", json=data, timeout=15)
+                                if r:
                                     st.success(f"Added {r.get('entities_created',0)} entities and {r.get('relations_created',0)} relations.")
                                     st.page_link("pages/02_Proof_Chain.py", label="→ View in Proof Chain", icon="🔗")
                                 else:
@@ -373,8 +368,8 @@ def main() -> None:
             with col1:
                 if st.button("✅ Confirm Clear"):
                     try:
-                        resp = requests.delete(f"{BASE_URL}/ingest/demo-nodes")
-                        if resp.status_code == 200:
+                        resp = safe_delete("/ingest/demo-nodes")
+                        if resp is not None:
                             st.success("Demo nodes cleared.")
                             st.session_state['confirm_clear'] = False
                         else:

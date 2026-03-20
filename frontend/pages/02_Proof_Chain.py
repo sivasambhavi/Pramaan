@@ -6,11 +6,19 @@ import sys, os
 # Add the project root to sys.path so 'backend...' imports work
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from utils.constants import ASSET_VERIFICATION_OVERRIDE, ASSET_EVIDENCE_PHOTOS
+from utils.constants import (
+    ASSET_VERIFICATION_OVERRIDE,
+    ASSET_EVIDENCE_PHOTOS,
+    NODE_ICONS     as _NODE_ICONS,
+    TRUST_TIERS    as _TRUST_TIERS,
+    SOURCE_TYPE_MAP,
+    NODE_KIND_DEFAULT_TRUST,
+)
 from utils.icons import icon_box, icon as svg_icon
 
 import streamlit as st
 import requests
+from utils.api import safe_get, safe_post
 import json
 import feedparser
 import urllib.parse
@@ -25,8 +33,7 @@ import sys
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[2] / "backend"))
 from app.services.ai_service import ai_service
 
-BASE_URL   = "http://127.0.0.1:8000"
-GROQ_KEY   = os.environ.get("GROQ_API_KEY", "")
+GROQ_KEY  = os.environ.get("GROQ_API_KEY", "")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -34,46 +41,14 @@ GROQ_KEY   = os.environ.get("GROQ_API_KEY", "")
 # ──────────────────────────────────────────────────────────────────────────────
 
 
-# icon name lookup for each node type
-_NODE_ICONS = {
-    "Scheme / Funding":        "banknote",
-    "Implementing Agency":     "building-2",
-    "Asset / Infrastructure":  "building",
-    "Location":                "map-pin",
-    "Evidence":                "check-circle",
-    "Evidence Status":         "eye",
-}
-
-_TRUST_TIERS = {
-    "official":     ("Official",      "#22c55e", "rgba(34,197,94,0.12)",  "rgba(34,197,94,0.35)"),
-    "verified":     ("Verified",      "#38bdf8", "rgba(56,189,248,0.12)", "rgba(56,189,248,0.35)"),
-    "ai_extracted": ("AI Extracted",  "#f59e0b", "rgba(245,158,11,0.12)", "rgba(245,158,11,0.35)"),
-    "unverified":   ("Unverified",    "#ef4444", "rgba(239,68,68,0.12)",  "rgba(239,68,68,0.35)"),
-}
-
 def _resolve_trust(source_type: str, node_kind: str = "") -> str:
-    """Map raw source_type strings (or empty) to a _TRUST_TIERS key."""
+    """Map raw source_type strings (or empty) to a TRUST_TIERS key."""
     s = (source_type or "").lower().strip()
     if s in _TRUST_TIERS:
         return s
-    # Map common source_type values stored in the DB
-    if s in ("official_csv", "data.gov.in", "government", "csv", "seed"):
-        return "official"
-    if s in ("geo_photo", "photo_exif", "cross_validated"):
-        return "verified"
-    if s in ("ai_extract", "ai_extracted", "llm", "news_rss", "rss", "news"):
-        return "ai_extracted"
-    if s in ("manual", "manual_paste", "flagged", ""):
-        # Fall back to sensible default by node type
-        defaults = {
-            "scheme":   "official",
-            "actor":    "official",
-            "asset":    "official",
-            "location": "official",
-            "evidence": "unverified",
-        }
-        return defaults.get(node_kind, "unverified")
-    return "unverified"
+    if s in SOURCE_TYPE_MAP:
+        return SOURCE_TYPE_MAP[s]
+    return NODE_KIND_DEFAULT_TRUST.get(node_kind, "unverified")
 
 
 def trust_badge(tier: str) -> str:
@@ -392,7 +367,7 @@ def get_og_image(article_url: str) -> str | None:
 def patch_asset_verified(asset_id: str):
     """Mark asset as verified in Neo4j via backend."""
     try:
-        requests.post(f"{BASE_URL}/assets/{asset_id}/set-verified", timeout=5)
+        safe_post(f"/assets/{asset_id}/set-verified", timeout=5, silent=True)
     except Exception:
         pass
 
@@ -698,10 +673,11 @@ def main() -> None:
 
     # ── Asset selector ────────────────────────────────────────────────────
     try:
-        resp = requests.get(f"{BASE_URL}/assets/list", params={"ward_region_id": ward_id}, timeout=5)
-        if resp.status_code != 200:
+        resp_data = safe_get("/assets/list", params={"ward_region_id": ward_id}, timeout=5)
+        if resp_data is None:
             st.error("Could not load assets from backend.")
             return
+        resp = type("R", (), {"status_code": 200, "json": lambda self=None: resp_data})()
         all_assets = resp.json().get("assets", [])
         if not all_assets:
             st.warning("No assets found for this ward.")
@@ -757,10 +733,11 @@ def main() -> None:
 
     # ── Load chain from Neo4j ─────────────────────────────────────────────
     try:
-        chain_resp = requests.get(f"{BASE_URL}/assets/{asset_id}/chain", timeout=10)
-        if chain_resp.status_code == 404:
+        chain_resp_data = safe_get(f"/assets/{asset_id}/chain", timeout=10)
+        if chain_resp_data is None:
             st.warning("No chain data found for this asset.")
             return
+        chain_resp = type("R", (), {"status_code": 200, "json": lambda self=None: chain_resp_data})()
         if chain_resp.status_code != 200:
             st.error("Failed to load chain data.")
             return
@@ -862,8 +839,8 @@ def main() -> None:
                 gov_label = ""
                 try:
                     if 'amrut' in scheme_name_lower:
-                        r = requests.get(f"{BASE_URL}/data/amrut-drainage", timeout=5)
-                        if r.status_code == 200:
+                        r = safe_get("/data/amrut-drainage", timeout=5)
+                        if r:
                             d = r.json()
                             state_row = _match_state(d.get('states', []), selected_state)
                             if state_row:
@@ -875,8 +852,8 @@ def main() -> None:
                                 }
                                 gov_label = f"AMRUT Storm-Water Drainage — {state_display} (data.gov.in)"
                     elif 'pmay' in scheme_name_lower or 'pradhan mantri awas' in scheme_name_lower:
-                        r = requests.get(f"{BASE_URL}/data/pmay-housing", timeout=5)
-                        if r.status_code == 200:
+                        r = safe_get("/data/pmay-housing", timeout=5)
+                        if r:
                             d = r.json()
                             state_row = _match_state(d.get('states', []), selected_state)
                             if state_row:
@@ -1413,8 +1390,8 @@ def main() -> None:
             scheme_id_val = scheme.get('scheme_id') if scheme else None
             if scheme_id_val:
                 try:
-                    ben_resp = requests.get(f"{BASE_URL}/beneficiaries/scheme/{scheme_id_val}", timeout=5)
-                    if ben_resp.status_code == 200:
+                    ben_resp = safe_get(f"/beneficiaries/scheme/{scheme_id_val}", timeout=5)
+                    if ben_resp:
                         metrics = ben_resp.json().get('metrics', [])
                         if metrics:
                             count = sum(m.get('beneficiary_count', 0) for m in metrics)
@@ -1517,8 +1494,8 @@ def main() -> None:
                 )
                 try:
                     with st.spinner("Loading AMRUT national data…"):
-                        amrut_resp = requests.get(f"{BASE_URL}/data/amrut-drainage", timeout=6)
-                    if amrut_resp.status_code == 200:
+                        amrut_resp = safe_get("/data/amrut-drainage", timeout=6)
+                    if amrut_resp:
                         amrut     = amrut_resp.json()
                         delhi_d   = amrut.get("delhi", {}) or {}
                         nat_total = amrut.get("grand_total", {}) or {}
@@ -1575,8 +1552,8 @@ def main() -> None:
                 )
                 try:
                     with st.spinner("Loading PMAY national data…"):
-                        pmay_resp = requests.get(f"{BASE_URL}/data/pmay-housing", timeout=6)
-                    if pmay_resp.status_code == 200:
+                        pmay_resp = safe_get("/data/pmay-housing", timeout=6)
+                    if pmay_resp:
                         pmay      = pmay_resp.json()
                         delhi_p   = pmay.get("delhi", {}) or {}
                         nat_total = pmay.get("national_total", {}) or {}

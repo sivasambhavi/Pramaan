@@ -12,37 +12,28 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 import math
 import streamlit as st
 import streamlit.components.v1 as components
-import requests
+import requests  # kept for requests.exceptions.ConnectionError in except block
+from utils.api import safe_get
 import folium
 from streamlit_folium import st_folium
 import plotly.graph_objects as go
 
-from utils.constants import SCHEME_SHORT_NAMES, ASSET_VERIFICATION_OVERRIDE
+from utils.constants import (
+    SCHEME_SHORT_NAMES,
+    ASSET_VERIFICATION_OVERRIDE,
+    WARD_BOUNDARIES,
+    WARD_CENTROID,
+    PIN_RADIUS_KM,
+    STATUS_CONFIG,
+    DEFAULT_STATE,
+    DEFAULT_CITY,
+    DEFAULT_WARD,
+    DEFAULT_WARD_ID,
+)
 from utils.icons import icon, icon_box
-from utils.geo_selector import _fetch_regions, _build_hierarchy, DEFAULT_STATE, DEFAULT_CITY, DEFAULT_WARD
+from utils.geo_selector import _fetch_regions, _build_hierarchy
 from utils.session import init_session, get_ward_id, get_ward_name, get_breadcrumb
 from components.topnav import render_topnav
-
-BASE_URL = "http://127.0.0.1:8000"
-
-# Approximate ward boundary polygons (lat/lon pairs, clockwise).
-# Used to draw the ward outline on the folium map.
-# Extend this dict as more wards are added.
-WARD_BOUNDARIES: dict[str, list[tuple[float, float]]] = {
-    "REG_W45": [
-        (28.677, 77.284), (28.677, 77.306),
-        (28.672, 77.313), (28.660, 77.309),
-        (28.655, 77.291), (28.659, 77.283),
-        (28.677, 77.284),  # close polygon
-    ],
-}
-
-# Ward centroid + max-radius (km) for pin sanity-filter.
-# Pins beyond the radius are almost certainly mis-tagged data.
-WARD_CENTROID: dict[str, tuple[float, float]] = {
-    "REG_W45": (28.666, 77.296),
-}
-PIN_RADIUS_KM = 18  # generous enough for Burari / Khureji Khas (~10 km away)
 
 
 def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -52,16 +43,6 @@ def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     dlon = math.radians(lon2 - lon1)
     a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2
     return R * 2 * math.asin(math.sqrt(a))
-
-STATUS_CONFIG = {
-    "fully_verified":     ("✅ Fully Verified",      "green",  "#10b981", "#22c55e"),
-    "partially_verified": ("⚠️ Partially Verified",  "orange", "#f59e0b", "#f59e0b"),
-    "unverified":         ("❌ Unverified",           "red",    "#ef4444", "#ef4444"),
-    "news_only":          ("📰 News Only",            "orange", "#f59e0b", "#f59e0b"),
-    "verified":           ("✅ Fully Verified",       "green",  "#10b981", "#22c55e"),
-    None:                 ("❌ Unverified",           "red",    "#ef4444", "#ef4444"),
-    "":                   ("❌ Unverified",           "red",    "#ef4444", "#ef4444"),
-}
 
 
 def apply_override(breakdown: list) -> list:
@@ -405,7 +386,7 @@ def main() -> None:
 
         # ── Build hierarchy from live API ──────────────────────────────────────
         _raw = _fetch_regions()
-        _states, _districts, _wards = _build_hierarchy(_raw) if _raw else ([DEFAULT_STATE], {DEFAULT_STATE: [DEFAULT_CITY]}, {DEFAULT_CITY: {DEFAULT_WARD: "REG_W45"}})
+        _states, _districts, _wards = _build_hierarchy(_raw) if _raw else ([DEFAULT_STATE], {DEFAULT_STATE: [DEFAULT_CITY]}, {DEFAULT_CITY: {DEFAULT_WARD: DEFAULT_WARD_ID}})
 
         fc1, fc2, fc3, fc4, fc5 = st.columns([1.5, 1.5, 2, 2.5, 0.5], vertical_alignment="bottom")
         with fc1:
@@ -429,7 +410,7 @@ def main() -> None:
             ss["zone"] = district
         with fc4:
             st.caption("WARD")
-            _ward_map   = _wards.get(district, {DEFAULT_WARD: "REG_W45"})
+            _ward_map   = _wards.get(district, {DEFAULT_WARD: DEFAULT_WARD_ID})
             _ward_names = list(_ward_map.keys())
             _def_ward   = ss.get("selected_ward", DEFAULT_WARD)
             if _def_ward not in _ward_names: _def_ward = _ward_names[0] if _ward_names else DEFAULT_WARD
@@ -456,10 +437,19 @@ def main() -> None:
         )
 
         # ── Load data ──────────────────────────────────────────────────────────
-        score_resp = requests.get(f"{BASE_URL}/wards/{ward_id}/score", timeout=10)
-        if score_resp.status_code != 200:
-            st.error(f"Backend error {score_resp.status_code} — could not load ward score.")
+        # Fetch ward centroid from backend (seeded from regions.csv lat/lon).
+        # Falls back to WARD_CENTROID constants when the region has no coordinates.
+        _region_data = safe_get(f"/regions/{ward_id}", silent=True)
+        if _region_data and _region_data.get("lat") and _region_data.get("lon"):
+            _api_centroid: tuple[float, float] = (float(_region_data["lat"]), float(_region_data["lon"]))
+        else:
+            _api_centroid = WARD_CENTROID.get(ward_id, (28.666, 77.296))  # fallback
+
+        score_resp_data = safe_get(f"/wards/{ward_id}/score", timeout=10)
+        if score_resp_data is None:
             st.stop()
+        # Wrap in a mock response-like dict for downstream code
+        score_resp = type("R", (), {"status_code": 200, "json": lambda self=None: score_resp_data})()
 
         sd         = score_resp.json()
         total      = sd.get("total_assets", 0)
@@ -698,8 +688,8 @@ def main() -> None:
 
         # ── Pre-fetch gaps (needed for accurate tab label) ────────────────────
         try:
-            _gaps_resp = requests.get(f"{BASE_URL}/wards/{ward_id}/gaps", timeout=10)
-            gaps_data  = _gaps_resp.json().get("gaps", []) if _gaps_resp.status_code == 200 else []
+            _gaps_data = safe_get(f"/wards/{ward_id}/gaps", timeout=10, silent=True)
+            gaps_data  = (_gaps_data or {}).get("gaps", [])
         except Exception:
             gaps_data = []
         n_actual_gaps = sum(1 for g in gaps_data if g.get("gap_type") not in ("complete", "no_assets"))
@@ -814,13 +804,12 @@ def main() -> None:
                 st.caption(f"Showing {len(filtered)} of {len(breakdown)} assets")
 
                 # Pre-compute which asset IDs are geographically outside the ward radius
-                _centroid = WARD_CENTROID.get(ward_id, (28.666, 77.296))
                 _outside_ids: set = set()
                 for _a in breakdown:
                     try:
                         _lat = float(_a.get("lat") or 0)
                         _lng = float(_a.get("lon") or 0)
-                        if _lat and _lng and _haversine_km(_centroid[0], _centroid[1], _lat, _lng) > PIN_RADIUS_KM:
+                        if _lat and _lng and _haversine_km(_api_centroid[0], _api_centroid[1], _lat, _lng) > PIN_RADIUS_KM:
                             _outside_ids.add(_a["asset_id"])
                     except (ValueError, TypeError):
                         pass
@@ -880,12 +869,13 @@ def main() -> None:
             """, unsafe_allow_html=True)
 
             try:
-                default_centroid = WARD_CENTROID.get(ward_id, (28.6692, 77.2789))
-                ward_lat, ward_lng = default_centroid
+                # Use API-supplied centroid (from regions.csv lat/lon seeded into Neo4j).
+                # _api_centroid is already resolved above with fallback to WARD_CENTROID.
+                centroid_lat, centroid_lng = _api_centroid
+                ward_lat, ward_lng = centroid_lat, centroid_lng
 
                 # Collect ALL assets with valid coordinates.
                 # Outside-boundary assets are shown as gray pins (not hidden).
-                centroid_lat, centroid_lng = WARD_CENTROID.get(ward_id, (ward_lat, ward_lng))
                 points, outside_pins = [], 0
                 for asset in breakdown:
                     try:

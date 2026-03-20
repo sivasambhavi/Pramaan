@@ -8,13 +8,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import streamlit as st
-import requests
+from utils.api import safe_get, safe_post
 from utils.constants import ASSET_VERIFICATION_OVERRIDE
 from utils.icons import icon, icon_box
 from utils.session import init_session, get_ward_id, get_ward_name, get_breadcrumb
 from components.topnav import render_topnav
-
-BASE_API = "http://127.0.0.1:8000"
 
 def main():
     st.set_page_config(page_title="Micro Accountability | Pramaan", layout="wide", page_icon="🛡️")
@@ -146,8 +144,8 @@ def main():
     st.markdown("<div class='step-header'>Step 1 — Select a Fully Verified Asset</div>", unsafe_allow_html=True)
 
     try:
-        resp = requests.get(f"{BASE_API}/assets/list", params={"ward_region_id": ward_id}, timeout=5)
-        if resp.status_code != 200:
+        resp = safe_get("/assets/list", params={"ward_region_id": ward_id}, timeout=5)
+        if not resp:
             st.error("Could not load assets from backend.")
             return
         all_assets = resp.json().get("assets", [])
@@ -247,9 +245,8 @@ def main():
             # Attempt real Twilio call, always show demo success for booth demo
             try:
                 payload = {"asset_id": asset_id, "message_template": msg_template}
-                res = requests.post(f"{BASE_API}/notifications/trigger",
-                                    json=payload, timeout=5)
-                api_ok = res.status_code == 200 and res.json().get("success", False)
+                res = safe_post("/api/v1/notifications/trigger", json=payload, timeout=5)
+                api_ok = res is not None and res.get("success", False)
             except Exception:
                 api_ok = False
 

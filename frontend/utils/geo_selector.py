@@ -5,13 +5,14 @@ Falls back to empty lists with a warning if API is unavailable.
 """
 import requests
 import streamlit as st
-
-BASE_URL = "http://127.0.0.1:8000"
-
-DEFAULT_STATE = "Delhi"
-DEFAULT_CITY  = "East Delhi"
-DEFAULT_ZONE  = "East Delhi"
-DEFAULT_WARD  = "Ward 45 Shahdara"
+from utils.constants import (
+    API_BASE_URL  as BASE_URL,
+    DEFAULT_STATE,
+    DEFAULT_CITY,
+    DEFAULT_ZONE,
+    DEFAULT_WARD,
+    DEFAULT_WARD_ID,
+)
 
 # Keep INDIAN_STATES for any imports that still reference it — built dynamically below
 INDIAN_STATES  = []
@@ -98,7 +99,7 @@ def render_geo_selector(sidebar: bool = True) -> dict:
     if not raw_regions:
         target.warning("Could not load regions from API — backend may be offline.")
         return {"state": DEFAULT_STATE, "district": DEFAULT_CITY,
-                "ward_name": DEFAULT_WARD, "ward_id": "REG_W45", "is_demo_ward": False}
+                "ward_name": DEFAULT_WARD, "ward_id": DEFAULT_WARD_ID, "is_demo_ward": False}
 
     states, districts, wards = _build_hierarchy(raw_regions)
 
@@ -126,7 +127,7 @@ def render_geo_selector(sidebar: bool = True) -> dict:
                                 index=district_list.index(def_district), key="sel_district_geo")
 
     # ── Ward ──────────────────────────────────────────────────
-    ward_map   = wards.get(district, {DEFAULT_WARD: "REG_W45"})
+    ward_map   = wards.get(district, {DEFAULT_WARD: DEFAULT_WARD_ID})
     ward_names = list(ward_map.keys())
     def_ward   = ss.get("ward_name", DEFAULT_WARD)
     if def_ward not in ward_names:

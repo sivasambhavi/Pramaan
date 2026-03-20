@@ -18,6 +18,7 @@ import json
 import logging
 from groq import Groq
 from app.config import settings
+from app.utils.retry import retryable
 
 logger = logging.getLogger(__name__)
 
@@ -124,15 +125,19 @@ Rules:
 - Omit unknown fields rather than guessing.
 - Return ONLY the JSON object. Nothing else.
 """
-        try:
-            resp = self.client.chat.completions.create(
+        @retryable(retries=3, delay=2.0, backoff=2.0, label="Groq.extract_governance_ontology")
+        def _call():
+            return self.client.chat.completions.create(
                 messages=[{"role": "user", "content": prompt}],
                 model="llama-3.3-70b-versatile",
                 temperature=0.0,
                 response_format={"type": "json_object"},
             )
-            raw = resp.choices[0].message.content.strip()
 
+        try:
+            chat = _call()
+            raw = chat.choices[0].message.content.strip()
+            # Strip markdown fences if the model adds them despite instructions
             if raw.startswith("```"):
                 raw = raw.split("```")[1]
                 if raw.startswith("json"):
@@ -152,7 +157,7 @@ Rules:
                     "error": f"LLM returned invalid JSON: {e}",
                     "entities": [], "relations": []}
         except Exception as e:
-            logger.error(f"extract_ontology failed: {e}")
+            logger.error(f"Groq extraction failed after retries: {e}")
             return {"success": False, "source_type": source_type,
                     "error": str(e), "entities": [], "relations": []}
 
@@ -199,16 +204,20 @@ Return ONLY valid JSON — no markdown, no explanation:
   "confidence": 0.95
 }}
 """
-        try:
-            resp = self.client.chat.completions.create(
+        @retryable(retries=3, delay=2.0, backoff=2.0, label="Groq.analyze_evidence")
+        def _call():
+            return self.client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1,
                 response_format={"type": "json_object"},
             )
+
+        try:
+            resp = _call()
             return json.loads(resp.choices[0].message.content.strip())
         except Exception as e:
-            logger.error(f"score_evidence failed: {e}")
+            logger.error(f"analyze_evidence failed after retries: {e}")
             return {
                 "key_fact":   f"Fallback: Found mention of {asset_name}.",
                 "relevance":  "Context Match",
