@@ -16,13 +16,17 @@ Validation layer (6 gates):
 """
 
 import logging
+import uuid
 from datetime import datetime, timezone
-from fastapi import APIRouter, HTTPException
+from pathlib import Path
+
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from app.neo4j_client import get_session
 from app.models import IngestPayload, IngestResponse, ValidationEntry, ValidationSummary
 from app.queries import build_merge_entity_query, build_merge_relation_query, SOURCE_CONFIDENCE, DETECT_CONFLICTS
 from app.services.verification_agent import VerificationAgent
 from app.services.entity_resolver import resolve_entity_id, invalidate_cache
+import exifread
 
 logger = logging.getLogger(__name__)
 
@@ -141,11 +145,20 @@ def resolve_canonical_id(entity_id: str, entity_name: str = "") -> str:
     return entity_id
 
 
-def _audit_stamp(confidence: float | None = None, source_type: str = "ai_extract") -> dict:
+def _audit_stamp(
+    confidence: float | None = None,
+    source_type: str = "ai_extract",
+    source_text: str | None = None,
+    ai_model: str | None = None,
+    ai_prompt_version: str | None = None,
+) -> dict:
     """Return properties stamped on every ingested node for full data lineage."""
     return {
         "source":       "live_ingestion",
         "source_type":  source_type,
+        "source_text":  source_text or "",
+        "ai_model":     ai_model or "",
+        "ai_prompt_version": ai_prompt_version or "",
         "confidence":   round(float(confidence), 3) if confidence is not None else 0.7,
         "ingested_at":  datetime.now(timezone.utc).isoformat(),
         "ingested_by":  "pramaan_live_ingestion",
@@ -257,7 +270,13 @@ def ingest_entities(payload: IngestPayload):
 
                 # ── Write to Neo4j ──────────────────────────────────────────
                 try:
-                    stamp = _audit_stamp(conf, source_type=payload_source_type)
+                    stamp = _audit_stamp(
+                        conf,
+                        source_type=payload_source_type,
+                        source_text=getattr(payload, "source_text", None),
+                        ai_model=getattr(payload, "ai_model", None),
+                        ai_prompt_version=getattr(payload, "ai_prompt_version", None),
+                    )
                     props = {**entity.properties, **stamp}
                     props["confidence"] = round(max(conf, stamp["confidence"]), 3)
 
@@ -414,3 +433,111 @@ def delete_demo_nodes():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+def _exif_to_decimal(tags: dict, ref_key: str, val_key: str) -> float | None:
+    """Convert EXIF GPS rationals to signed decimal degrees."""
+    ref = tags.get(ref_key)
+    val = tags.get(val_key)
+    if not ref or not val:
+        return None
+    try:
+        d = float(val.values[0].num) / float(val.values[0].den)
+        m = float(val.values[1].num) / float(val.values[1].den)
+        s = float(val.values[2].num) / float(val.values[2].den)
+        out = d + (m / 60.0) + (s / 3600.0)
+        if str(ref).upper() in {"S", "W"}:
+            out = -out
+        return out
+    except Exception:
+        return None
+
+
+@router.post("/photo-evidence", summary="Upload photo, parse EXIF GPS, and link to nearest asset")
+async def ingest_photo_evidence(
+    photo: UploadFile = File(...),
+    ward_id: str | None = Form(default=None),
+    radius_meters: float = Form(default=200.0),
+):
+    import io
+
+    content = await photo.read()
+    try:
+        tags = exifread.process_file(io.BytesIO(content))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Could not parse EXIF data: {e}")
+
+    lat = _exif_to_decimal(tags, "GPS GPSLatitudeRef", "GPS GPSLatitude")
+    lon = _exif_to_decimal(tags, "GPS GPSLongitudeRef", "GPS GPSLongitude")
+    if lat is None or lon is None:
+        raise HTTPException(status_code=400, detail="No GPS EXIF data found in uploaded photo.")
+
+    uploads_dir = Path(__file__).resolve().parents[3] / "frontend" / "static" / "evidence" / "uploads"
+    uploads_dir.mkdir(parents=True, exist_ok=True)
+    suffix = Path(photo.filename or "").suffix or ".jpg"
+    filename = f"upload_{uuid.uuid4().hex}{suffix}"
+    fpath = uploads_dir / filename
+    fpath.write_bytes(content)
+    rel_url = f"frontend/static/evidence/uploads/{filename}"
+
+    with get_session() as session:
+        query = """
+            MATCH (a:Asset)
+            WHERE a.lat IS NOT NULL AND a.lon IS NOT NULL
+              AND ($ward_id IS NULL OR a.region_id = $ward_id OR EXISTS {
+                  MATCH (r:Region {region_id: a.region_id}) WHERE r.parent_region_id = $ward_id
+              })
+            WITH a, point({latitude: toFloat(a.lat), longitude: toFloat(a.lon)}) AS p,
+                 point({latitude: $lat, longitude: $lon}) AS q
+            RETURN a.asset_id AS asset_id, a.name AS asset_name, distance(p, q) AS meters
+            ORDER BY meters ASC
+            LIMIT 1
+        """
+        rec = session.run(query, lat=lat, lon=lon, ward_id=ward_id).single()
+        if not rec:
+            raise HTTPException(status_code=404, detail="No nearby asset with coordinates found.")
+
+        asset_id = rec["asset_id"]
+        meters = float(rec["meters"])
+        if meters > radius_meters:
+            raise HTTPException(status_code=422, detail=f"Nearest asset is {meters:.1f}m away (> {radius_meters}m radius).")
+
+        evidence_id = f"EV_UP_{uuid.uuid4().hex[:10].upper()}"
+        session.run(
+            """
+            MATCH (a:Asset {asset_id: $asset_id})
+            MERGE (e:Evidence {evidence_id: $evidence_id})
+            SET e.type='image',
+                e.url=$url,
+                e.before_or_after='after',
+                e.capture_date=date().toString(),
+                e.source='photo_exif_upload',
+                e.source_type='photo_exif',
+                e.confidence=0.95,
+                e.ingested_at=$now,
+                e.ingested_by='photo_exif_uploader',
+                e.lat=$lat,
+                e.lon=$lon
+            MERGE (e)-[:PROVES]->(a)
+            SET a.proof_status='fully_verified',
+                a.verified=true
+            """,
+            asset_id=asset_id,
+            evidence_id=evidence_id,
+            url=rel_url,
+            now=datetime.now(timezone.utc).isoformat(),
+            lat=lat,
+            lon=lon,
+        )
+
+    return {
+        "success": True,
+        "asset_id": asset_id,
+        "asset_name": rec["asset_name"],
+        "distance_meters": round(meters, 2),
+        "evidence_id": evidence_id,
+        "stored_path": rel_url,
+        "lat": lat,
+        "lon": lon,
+        "message": "Photo evidence linked and asset marked fully_verified.",
+    }

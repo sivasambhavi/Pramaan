@@ -120,6 +120,7 @@ def safe_post(
     path: str,
     json: dict | None = None,
     data: dict | None = None,
+    files: dict | None = None,
     timeout: int = _TIMEOUT,
     silent: bool = False,
 ) -> dict | None:
@@ -129,7 +130,7 @@ def safe_post(
     Returns parsed JSON dict on success.
     Returns None on failure and shows st.warning() (unless silent=True).
     """
-    resp = _retry_request("POST", path, json=json, data=data, timeout=timeout)
+    resp = _retry_request("POST", path, json=json, data=data, files=files, timeout=timeout)
     if resp is None:
         if not silent:
             st.warning(

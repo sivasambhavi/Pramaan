@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
-from app.routers import wards, assets, ingest, scrape, questions, govdata, beneficiaries, notifications, regions
+from app.routers import wards, assets, ingest, scrape, questions, govdata, beneficiaries, notifications, regions, agents
 from app.services.scheduler import start_scheduler, stop_scheduler
 
 log = logging.getLogger("pramaan.startup")
@@ -72,6 +72,7 @@ app.include_router(govdata.router)
 app.include_router(beneficiaries.router, prefix="/beneficiaries", tags=["beneficiaries"])
 app.include_router(notifications.router, prefix="/notifications", tags=["notifications"])
 app.include_router(regions.router, prefix="/regions", tags=["regions"])
+app.include_router(agents.router)
 
 
 @app.get("/health")
