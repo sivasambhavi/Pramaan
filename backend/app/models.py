@@ -258,6 +258,9 @@ class IngestPayload(BaseModel):
     entities:    list[IngestEntity]   = []
     relations:   list[IngestRelation] = []
     source_type: Literal["unstructured_llm", "unstructured_rss"] = "unstructured_llm"
+    source_text: Optional[str] = None
+    ai_model: Optional[str] = None
+    ai_prompt_version: Optional[str] = None
 
 
 # ---------------------------------------------------------------------------

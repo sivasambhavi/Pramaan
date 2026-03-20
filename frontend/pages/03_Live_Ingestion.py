@@ -3,6 +3,7 @@ Live Ingestion — PRAMAAN v5.0
 Premium UI: branded header · AI scraper · manual ingestion · delivery chain viewer
 """
 import sys, os
+import time
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import streamlit as st
 from utils.api import safe_get, safe_post, safe_delete
@@ -217,6 +218,21 @@ def load_cache():
             return json.load(f)
     return None
 
+
+def _rate_limit_ok(action_key: str, cooldown_seconds: int = 8) -> bool:
+    """
+    Simple per-action cooldown to prevent accidental API spamming from rapid clicks.
+    """
+    now = time.time()
+    k = f"_last_action_{action_key}"
+    last = float(st.session_state.get(k, 0.0))
+    remaining = cooldown_seconds - (now - last)
+    if remaining > 0:
+        st.warning(f"⏳ Please wait {remaining:.1f}s before trying again.")
+        return False
+    st.session_state[k] = now
+    return True
+
 def main() -> None:
     st.set_page_config(page_title="Live Ingestion | Pramaan", layout="wide", page_icon="🛡️")
     render_topnav("Live Ingestion")
@@ -262,6 +278,8 @@ def main() -> None:
                                     help="Load the last successful scrape result instead of running a live search")
 
         if st.button("🔍 Auto-Search & Map to Graph"):
+            if not _rate_limit_ok("auto_search", cooldown_seconds=6):
+                return
             if use_cache:
                 cached = load_cache()
                 if cached:
@@ -356,10 +374,18 @@ def main() -> None:
                 if st.button("🚀 Commit Approved Entities to Knowledge Graph",
                              disabled=len(approved_entities) == 0,
                              type="primary"):
+                    if not _rate_limit_ok("auto_commit", cooldown_seconds=5):
+                        return
+                    source_text = "\n\n".join(
+                        [f"{a.get('title','')}\n{a.get('summary','')}" for a in articles]
+                    )
                     commit_payload = {
                         "entities":    approved_entities,
                         "relations":   all_relations,
                         "source_type": data.get("source_type", "unstructured_rss"),
+                        "source_text": source_text[:12000],
+                        "ai_model": "groq-llama3-via-ai_service",
+                        "ai_prompt_version": "extract_ontology_v2",
                     }
                     with st.spinner("Writing approved entities to Knowledge Graph..."):
                         result = safe_post("/ingest/entities", json=commit_payload, timeout=15)
@@ -393,6 +419,8 @@ def main() -> None:
         st.markdown(f"<p class='sec-label'>{icon('edit-3', '#94a3b8', 15)} Manual Text Ingestion</p>", unsafe_allow_html=True)
         manual_text = st.text_area("Paste news article or governance text here", height=200)
         if st.button("🧠 Extract Entities (Review before commit)"):
+            if not _rate_limit_ok("manual_extract", cooldown_seconds=6):
+                return
             if manual_text.strip():
                 with st.spinner("Extracting governance entities with AI..."):
                     try:
@@ -433,10 +461,15 @@ def main() -> None:
                         if st.button("✅ Commit to Knowledge Graph",
                                      disabled=len(approved_manual) == 0,
                                      type="primary", key="manual_commit"):
+                            if not _rate_limit_ok("manual_commit", cooldown_seconds=5):
+                                return
                             commit_data = {
                                 "entities":    approved_manual,
                                 "relations":   data.get("relations", []),
                                 "source_type": "unstructured_llm",
+                                "source_text": manual_text[:12000],
+                                "ai_model": "groq-llama3-via-ai_service",
+                                "ai_prompt_version": "extract_ontology_v2",
                             }
                             r = safe_post("/ingest/entities", json=commit_data, timeout=15)
                             if r:
@@ -459,7 +492,51 @@ def main() -> None:
             else:
                 st.warning("Please paste some text first.")
 
+        st.markdown("---")
+        st.markdown(f"<p class='sec-label'>{icon('camera', '#94a3b8', 15)} Photo Evidence (EXIF GPS)</p>", unsafe_allow_html=True)
+        st.caption("Upload a geo-tagged photo. Backend extracts GPS EXIF, finds nearest asset, links Evidence, and marks asset fully verified.")
+        photo_file = st.file_uploader(
+            "Upload geo-tagged image",
+            type=["jpg", "jpeg", "png"],
+            key="live_ingestion_photo_upload",
+            accept_multiple_files=False,
+        )
+        if st.button("📷 Upload & Link Photo Evidence", key="upload_photo_btn"):
+            if not _rate_limit_ok("photo_upload", cooldown_seconds=4):
+                return
+            if not photo_file:
+                st.warning("Please choose an image file first.")
+            else:
+                ward_id = st.session_state.get("selected_ward") or None
+                files = {"photo": (photo_file.name, photo_file.getvalue(), photo_file.type or "image/jpeg")}
+                form_data = {"ward_id": ward_id or "", "radius_meters": "250"}
+                resp = safe_post("/ingest/photo-evidence", data=form_data, files=files, timeout=30)
+                if resp:
+                    st.success(
+                        f"✅ Linked to **{resp.get('asset_name', resp.get('asset_id'))}** "
+                        f"({resp.get('distance_meters', 'N/A')}m). Evidence ID: {resp.get('evidence_id')}"
+                    )
+                else:
+                    st.error("Photo evidence upload failed. Ensure the image has GPS EXIF metadata.")
+
     st.divider()
+    st.markdown(f"<p class='sec-label'>{icon('shield-check', '#94a3b8', 15)} Verification Agent</p>", unsafe_allow_html=True)
+    col_va, col_vb = st.columns([1, 2])
+    with col_va:
+        if st.button("🤖 Verify All Assets (Agent Sweep)", key="verify_all_assets_btn"):
+            if _rate_limit_ok("verify_all_assets", cooldown_seconds=10):
+                sweep = safe_post("/agents/verify-all", data={"default_confidence": "0.7"}, timeout=45)
+                if sweep:
+                    st.success(
+                        f"Sweep complete: total={sweep.get('total_assets', 0)}, "
+                        f"corroborated={sweep.get('corroborated', 0)}, "
+                        f"conflicts={sweep.get('conflicts', 0)}, failed={sweep.get('failed', 0)}"
+                    )
+                else:
+                    st.error("Agent sweep failed.")
+    with col_vb:
+        st.caption("Runs Bayesian verification over all assets and flags contradictions.")
+
     with st.expander("Advanced Settings"):
         st.warning("**Danger zone.** These actions modify or clear the Knowledge Graph.")
         if st.button("🗑 Clear Demo Nodes (AI-ingested only)"):
