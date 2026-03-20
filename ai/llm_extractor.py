@@ -1,94 +1,98 @@
+"""
+llm_extractor.py — PRAMAAN Evidence Extractor (Frontend delegate)
+
+Fix 4 applied: This module no longer maintains its own Groq client.
+All LLM calls are delegated to the backend's unified AIService via
+  POST http://127.0.0.1:8000/scrape/analyze-evidence
+
+This gives the project ONE LLM code path:
+  frontend (02_Proof_Chain.py)
+      → llm_extractor.DeepDataExtractor.process_document()
+          → POST /scrape/analyze-evidence
+              → ai_service.AIService.analyze_evidence()
+                  → Groq API
+
+Benefits:
+  - Single prompt to maintain
+  - Single API key / client
+  - Backend can be updated without touching frontend code
+  - Works even if GROQ_API_KEY is not set on the frontend side
+"""
+
 import os
 import json
 import logging
-from typing import List, Dict, Any
+import requests
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
-# Fallback AI setup if Groq library isn't available
-try:
-    from groq import Groq
-    HAS_GROQ = True
-except ImportError:
-    HAS_GROQ = False
-    try:
-        from openai import OpenAI
-        HAS_OPENAI = True
-    except ImportError:
-        HAS_OPENAI = False
+# Allow override via env var for non-standard deployments
+_BACKEND_URL = os.environ.get("PRAMAAN_BACKEND_URL", "http://127.0.0.1:8000")
+_ENDPOINT    = f"{_BACKEND_URL}/scrape/analyze-evidence"
+_TIMEOUT     = 15   # seconds
+
 
 class DeepDataExtractor:
-    def __init__(self):
-        self.api_key = os.environ.get("GROQ_API_KEY", "")
-        if not self.api_key:
-            logger.warning("GROQ_API_KEY not found in environment. AI extractor will use mock fallback.")
-            
-        self.client = None
-        if self.api_key:
-            if HAS_GROQ:
-                self.client = Groq(api_key=self.api_key)
-            elif HAS_OPENAI:
-                self.client = OpenAI(
-                    api_key=self.api_key,
-                    base_url="https://api.groq.com/openai/v1"
-                )
+    """
+    Thin wrapper around the backend /scrape/analyze-evidence endpoint.
+    Preserves the existing interface so 02_Proof_Chain.py needs no changes:
 
-    def process_document(self, text: str, asset_name: str, ward_name: str) -> Dict[str, Any]:
+        extractor = DeepDataExtractor()
+        result    = extractor.process_document(text, asset_name, ward_name)
+        # result = {"key_fact": "...", "relevance": "...", "confidence": 0.9}
+    """
+
+    def process_document(
+        self,
+        text: str,
+        asset_name: str,
+        ward_name: str,
+    ) -> Dict[str, Any]:
         """
-        Use Llama 3 (via Groq) to analyze news text and extract key structural mapping info.
-        Returns a dict with 'key_fact', 'relevance', 'confidence'.
+        Delegate evidence analysis to the backend AI service.
+
+        Returns:
+            dict with keys: key_fact (str), relevance (str), confidence (float)
         """
-        if not self.client:
+        try:
+            resp = requests.post(
+                _ENDPOINT,
+                json={
+                    "text":       text,
+                    "asset_name": asset_name,
+                    "ward_name":  ward_name,
+                },
+                timeout=_TIMEOUT,
+            )
+            resp.raise_for_status()
+            return resp.json()
+
+        except requests.exceptions.ConnectionError:
+            # Backend not running — provide a graceful mock so Proof Chain
+            # still renders without crashing.
+            logger.warning(
+                "Backend not reachable at %s — returning mock evidence result.",
+                _BACKEND_URL,
+            )
             return {
-                "key_fact": f"AI Mock Extraction: Identified references to {asset_name} in {ward_name}.",
-                "relevance": "Direct Match",
-                "confidence": 0.85
+                "key_fact":   f"[Offline] Reference to {asset_name} found in news.",
+                "relevance":  "Context Match",
+                "confidence": 0.5,
             }
 
-        prompt = f"""
-You are a governance data extraction AI.
-Analyze the following news snippet and determine its relevance to a specific infrastructure project.
-Asset Name: {asset_name}
-Location: {ward_name}
-
-News Snippet:
-{text}
-
-Extract the most critical 'key_fact' regarding the completion, budget, or status of this asset.
-Determine the 'relevance' (e.g., "Direct Match", "Zone Context", "National Context").
-Give a confidence score between 0.0 and 1.0.
-
-Respond strictly with valid JSON. Do not include markdown formatting or explanations.
-Format:
-{{
-    "key_fact": "string",
-    "relevance": "string",
-    "confidence": 0.95
-}}
-"""
-        try:
-            if HAS_GROQ:
-                resp = self.client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1,
-                    response_format={"type": "json_object"}
-                )
-                content = resp.choices[0].message.content.strip()
-            else:
-                resp = self.client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1,
-                    response_format={"type": "json_object"}
-                )
-                content = resp.choices[0].message.content.strip()
-
-            return json.loads(content)
-        except Exception as e:
-            logger.error(f"AI Extraction failed: {e}")
+        except requests.exceptions.Timeout:
+            logger.warning("analyze-evidence request timed out after %ds", _TIMEOUT)
             return {
-                "key_fact": f"Fallback Parse: Found mention of project {asset_name}.",
-                "relevance": "Context Match",
-                "confidence": 0.5
+                "key_fact":   f"[Timeout] Analysis took too long for {asset_name}.",
+                "relevance":  "Unknown",
+                "confidence": 0.4,
+            }
+
+        except Exception as e:
+            logger.error("DeepDataExtractor.process_document failed: %s", e)
+            return {
+                "key_fact":   f"[Error] Could not analyse snippet for {asset_name}.",
+                "relevance":  "Unknown",
+                "confidence": 0.0,
             }
