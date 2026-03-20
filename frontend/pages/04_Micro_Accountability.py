@@ -247,7 +247,7 @@ def main():
             # Attempt real Twilio call, always show demo success for booth demo
             try:
                 payload = {"asset_id": asset_id, "message_template": msg_template}
-                res = requests.post(f"{BASE_API}/api/v1/notifications/trigger",
+                res = requests.post(f"{BASE_API}/notifications/trigger",
                                     json=payload, timeout=5)
                 api_ok = res.status_code == 200 and res.json().get("success", False)
             except Exception:

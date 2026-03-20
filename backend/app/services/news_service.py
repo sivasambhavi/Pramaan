@@ -12,6 +12,25 @@ from typing import List, Dict
 class NewsService:
 
     @staticmethod
+    def fetch_rss(url: str) -> List[Dict]:
+        """Fetch any RSS feed URL directly. Used by scheduler for config-driven feeds."""
+        try:
+            feed = feedparser.parse(url)
+            return [
+                {
+                    "title":   e.get("title", ""),
+                    "summary": e.get("summary", "")[:400],
+                    "url":     e.get("link", ""),
+                    "date":    e.get("published", ""),
+                    "source":  (e.get("source") or {}).get("title", "RSS"),
+                }
+                for e in (feed.entries or [])[:10]
+            ]
+        except Exception as exc:
+            print(f"[NewsService] fetch_rss error for {url}: {exc}")
+            return []
+
+    @staticmethod
     def fetch_google_news(query: str) -> List[Dict]:
         """
         Legacy method — wraps scrape_news_for_asset with a single query.

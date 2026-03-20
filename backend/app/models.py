@@ -167,6 +167,7 @@ class IngestRelation(BaseModel):
 class IngestPayload(BaseModel):
     entities: list[IngestEntity] = []
     relations: list[IngestRelation] = []
+    source_type: str = "unstructured_llm"   # unstructured_llm | unstructured_rss
 
 
 class IngestResponse(BaseModel):

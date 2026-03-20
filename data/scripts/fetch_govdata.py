@@ -25,7 +25,7 @@ from datetime import datetime
 # ── Paths ─────────────────────────────────────────────────────────────────────
 _SCRIPT_DIR   = Path(__file__).resolve().parent
 _PROJECT_ROOT = _SCRIPT_DIR.parents[1]                          # Pramaan/
-_RESOURCES_DIR = _PROJECT_ROOT / "data" / "resources"           # where JSONs land
+_RESOURCES_DIR = _PROJECT_ROOT / "data" / "resources" / "structured" / "govdata"
 _REGISTRY_FILE = _PROJECT_ROOT / "data" / "config" / "govdata_registry.json"  # UUID registry
 
 # ── Load .env manually (no python-dotenv dependency needed) ───────────────────

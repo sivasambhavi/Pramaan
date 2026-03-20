@@ -9,12 +9,11 @@ from fastapi import APIRouter, HTTPException
 
 router = APIRouter(prefix="/data", tags=["govdata"])
 
-DATA_DIR = os.path.join(
+DATA_DIR = os.path.abspath(os.path.join(
     os.path.dirname(__file__),          # .../backend/app/routers/
     "..", "..", "..",                   # -> .../Pramaan/
-    "data", "resources"
-)
-DATA_DIR = os.path.abspath(DATA_DIR)
+    "data", "resources", "structured", "govdata"
+))
 
 
 def _load(filename: str) -> dict:

@@ -1,0 +1,220 @@
+{
+    "index_name": "2029b46f-154e-4fb3-b5fb-2dde336e52c4",
+    "title": "State/UTs-wise Details of Eligible beneficiary Families and Ayushman Cards Issued under Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB-PMJAY) (in reply to Unstarred Question on 20 December, 2022)",
+    "desc": "State/UTs-wise Details of Eligible beneficiary Families and Ayushman Cards Issued under Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB-PMJAY) (in reply to Unstarred Question on 20 December, 2022)",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "d1045b41-4c31-4225-8afa-390b454c2498",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1700475846,
+    "updated": 1700478612,
+    "created_date": "2023-11-20T11:24:06Z",
+    "updated_date": "2023-11-20T16:40:12Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "d1045b41-4c31-4225-8afa-390b454c2498",
+        "field": "2029b46f-154e-4fb3-b5fb-2dde336e52c4"
+    },
+    "field": [
+        {
+            "id": "state_ut",
+            "name": "State/UT",
+            "type": "keyword"
+        },
+        {
+            "id": "eligible_beneficiary_families",
+            "name": "Eligible Beneficiary Families",
+            "type": "double"
+        },
+        {
+            "id": "total_individual_ayushman_card_issued",
+            "name": "Total Individual Ayushman Card Issued",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 33,
+    "count": 33,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "state_ut": "Andaman and Nicobar Islands",
+            "eligible_beneficiary_families": 21399,
+            "total_individual_ayushman_card_issued": 40322
+        },
+        {
+            "state_ut": "Andhra Pradesh",
+            "eligible_beneficiary_families": 5530825,
+            "total_individual_ayushman_card_issued": 7242181
+        },
+        {
+            "state_ut": "Arunachal Pradesh",
+            "eligible_beneficiary_families": 88928,
+            "total_individual_ayushman_card_issued": 76470
+        },
+        {
+            "state_ut": "Assam",
+            "eligible_beneficiary_families": 2701795,
+            "total_individual_ayushman_card_issued": 882304
+        },
+        {
+            "state_ut": "Bihar",
+            "eligible_beneficiary_families": 10895571,
+            "total_individual_ayushman_card_issued": 7717612
+        },
+        {
+            "state_ut": "Chandigarh",
+            "eligible_beneficiary_families": 71278,
+            "total_individual_ayushman_card_issued": 106685
+        },
+        {
+            "state_ut": "Chhattisgarh",
+            "eligible_beneficiary_families": 3729027,
+            "total_individual_ayushman_card_issued": 16039977
+        },
+        {
+            "state_ut": "Dadra and Nagar Haveli and Daman and Diu",
+            "eligible_beneficiary_families": 42805,
+            "total_individual_ayushman_card_issued": 424255
+        },
+        {
+            "state_ut": "Goa",
+            "eligible_beneficiary_families": 36975,
+            "total_individual_ayushman_card_issued": 26457
+        },
+        {
+            "state_ut": "Gujarat",
+            "eligible_beneficiary_families": 4485330,
+            "total_individual_ayushman_card_issued": 16452087
+        },
+        {
+            "state_ut": "Haryana",
+            "eligible_beneficiary_families": 1551798,
+            "total_individual_ayushman_card_issued": 6153508
+        },
+        {
+            "state_ut": "Himachal Pradesh",
+            "eligible_beneficiary_families": 478985,
+            "total_individual_ayushman_card_issued": 1128077
+        },
+        {
+            "state_ut": "Jammu and Kashmir",
+            "eligible_beneficiary_families": 602793,
+            "total_individual_ayushman_card_issued": 7997894
+        },
+        {
+            "state_ut": "Jharkhand",
+            "eligible_beneficiary_families": 2805753,
+            "total_individual_ayushman_card_issued": 9599846
+        },
+        {
+            "state_ut": "Karnataka",
+            "eligible_beneficiary_families": 6209073,
+            "total_individual_ayushman_card_issued": 12107053
+        },
+        {
+            "state_ut": "Kerala",
+            "eligible_beneficiary_families": 2157077,
+            "total_individual_ayushman_card_issued": 7069088
+        },
+        {
+            "state_ut": "Ladakh",
+            "eligible_beneficiary_families": 10904,
+            "total_individual_ayushman_card_issued": 138994
+        },
+        {
+            "state_ut": "Lakshadweep",
+            "eligible_beneficiary_families": 1465,
+            "total_individual_ayushman_card_issued": 25783
+        },
+        {
+            "state_ut": "Madhya Pradesh",
+            "eligible_beneficiary_families": 8392162,
+            "total_individual_ayushman_card_issued": 33684245
+        },
+        {
+            "state_ut": "Maharashtra",
+            "eligible_beneficiary_families": 8363664,
+            "total_individual_ayushman_card_issued": 8148735
+        },
+        {
+            "state_ut": "Manipur",
+            "eligible_beneficiary_families": 277018,
+            "total_individual_ayushman_card_issued": 472046
+        },
+        {
+            "state_ut": "Meghalaya",
+            "eligible_beneficiary_families": 347013,
+            "total_individual_ayushman_card_issued": 1763345
+        },
+        {
+            "state_ut": "Mizoram",
+            "eligible_beneficiary_families": 194856,
+            "total_individual_ayushman_card_issued": 427793
+        },
+        {
+            "state_ut": "Nagaland",
+            "eligible_beneficiary_families": 233438,
+            "total_individual_ayushman_card_issued": 299078
+        },
+        {
+            "state_ut": "Puducherry",
+            "eligible_beneficiary_families": 103434,
+            "total_individual_ayushman_card_issued": 400748
+        },
+        {
+            "state_ut": "Punjab",
+            "eligible_beneficiary_families": 1498065,
+            "total_individual_ayushman_card_issued": 7968900
+        },
+        {
+            "state_ut": "Rajasthan",
+            "eligible_beneficiary_families": 5971496,
+            "total_individual_ayushman_card_issued": 2642551
+        },
+        {
+            "state_ut": "Sikkim",
+            "eligible_beneficiary_families": 39791,
+            "total_individual_ayushman_card_issued": 51809
+        },
+        {
+            "state_ut": "Tamil Nadu",
+            "eligible_beneficiary_families": 7770928,
+            "total_individual_ayushman_card_issued": 1026622
+        },
+        {
+            "state_ut": "Telangana",
+            "eligible_beneficiary_families": 2611424,
+            "total_individual_ayushman_card_issued": 34520
+        },
+        {
+            "state_ut": "Tripura",
+            "eligible_beneficiary_families": 494422,
+            "total_individual_ayushman_card_issued": 1304062
+        },
+        {
+            "state_ut": "Uttar Pradesh",
+            "eligible_beneficiary_families": 11807068,
+            "total_individual_ayushman_card_issued": 23343444
+        },
+        {
+            "state_ut": "Uttarakhand",
+            "eligible_beneficiary_families": 537721,
+            "total_individual_ayushman_card_issued": 4916062
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-19T19:58:54.528012Z",
+    "_pramaan_dataset_name": "ayushman_bharat_pmjay_cards"
+}

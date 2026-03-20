@@ -5,7 +5,7 @@ router = APIRouter()
 
 LIST_REGIONS = """
 MATCH (r:Region)
-OPTIONAL MATCH (r)-[:PART_OF]->(parent:Region)
+OPTIONAL MATCH (parent:Region)-[:CONTAINS]->(r)
 RETURN r.region_id  AS region_id,
        r.name       AS name,
        r.type       AS type,

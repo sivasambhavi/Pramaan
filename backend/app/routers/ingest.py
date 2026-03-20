@@ -2,9 +2,23 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException
 from app.neo4j_client import get_session
 from app.models import IngestPayload, IngestResponse
-from app.queries import build_merge_entity_query, build_merge_relation_query
+from app.queries import build_merge_entity_query, build_merge_relation_query, SOURCE_CONFIDENCE, DETECT_CONFLICTS
 
 router = APIRouter()
+
+
+@router.delete("/demo-nodes", summary="Delete all AI-ingested demo nodes")
+def delete_demo_nodes():
+    with get_session() as session:
+        result = session.run("""
+            MATCH (n)
+            WHERE n.ingested_by = 'pramaan_live_ingestion'
+            DETACH DELETE n
+            RETURN count(n) AS deleted
+        """)
+        record = result.single()
+    deleted = record["deleted"] if record else 0
+    return {"deleted": deleted, "message": f"Removed {deleted} demo-ingested node(s)"}
 
 
 @router.post("/entities", summary="Ingest entities and relations", response_model=IngestResponse)
@@ -15,37 +29,45 @@ def ingest_entities(payload: IngestPayload):
 
     try:
         with get_session() as session:
-            # Always ingest entities first
+            valid_source_types = {"unstructured_llm", "unstructured_rss"}
+            if payload.source_type not in valid_source_types:
+                raise HTTPException(status_code=422, detail=f"Invalid source_type '{payload.source_type}'. Must be one of: {valid_source_types}")
+
             stamp = {
-                "source_type":  "ai_extract",
+                "source_type":  payload.source_type,
                 "ingested_at":  datetime.now(timezone.utc).isoformat(),
                 "ingested_by":  "pramaan_live_ingestion",
             }
             for entity in payload.entities:
                 try:
-                    props = {**entity.properties, **stamp}
-                    # Don't overwrite confidence if LLM already set it
+                    # LLM confidence from entity.properties takes precedence — never overwrite it
+                    props = {**stamp, **entity.properties}
                     if "confidence" not in props:
-                        props["confidence"] = 0.7
+                        raise ValueError(f"Entity {entity.id!r} has no confidence score — LLM must set it")
                     query = build_merge_entity_query(entity.label)
                     session.run(query, id=entity.id, properties=props)
                     entities_created += 1
                 except (ValueError, Exception) as e:
                     print(f"Skipping entity {entity.id!r}: {e}")
 
-            # Ingest relations, skipping any with unknown/invalid types
+            # Ingest relations with confidence scoring
+            base_confidence = SOURCE_CONFIDENCE.get(payload.source_type, 0.6)
+            now = stamp["ingested_at"]
             for relation in payload.relations:
                 try:
                     query = build_merge_relation_query(
                         relation.type,
                         from_label=relation.from_label,
-                        to_label=relation.to_label
+                        to_label=relation.to_label,
                     )
                     session.run(
                         query,
                         from_id=relation.from_id,
                         to_id=relation.to_id,
                         properties=getattr(relation, 'properties', {}),
+                        source_type=payload.source_type,
+                        now=now,
+                        base_confidence=base_confidence,
                     )
                     relations_created += 1
                 except ValueError as e:
@@ -88,3 +110,24 @@ def ingest_entities(payload: IngestPayload):
         relations_created=relations_created,
         delivery_chain=delivery_chain
     )
+
+
+@router.get("/conflicts", summary="Detect relationship conflicts (multi-actor BUILT_BY or multi-scheme FUNDS)")
+def get_conflicts():
+    """
+    Returns assets where the same relationship type is asserted by more than one party.
+    E.g. two actors claiming BUILT_BY the same asset, or two schemes FUNDS the same asset.
+    Useful for auditing contradictory AI-ingested data against seed data.
+    """
+    with get_session() as session:
+        result = session.run(DETECT_CONFLICTS)
+        conflicts = [
+            {
+                "asset_id":            rec["asset_id"],
+                "asset_name":          rec["asset_name"],
+                "conflict_type":       rec["conflict_type"],
+                "conflicting_parties": [dict(p) for p in rec["conflicting_parties"]],
+            }
+            for rec in result
+        ]
+    return {"total": len(conflicts), "conflicts": conflicts}

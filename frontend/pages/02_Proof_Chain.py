@@ -21,11 +21,12 @@ from utils.voice_input import voice_text_input
 from components.topnav import render_topnav
 from backend.ward_population import get_beneficiary_count
 from backend.app.neo4j_client import get_session
-from ai.llm_extractor import DeepDataExtractor
+import sys
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[2] / "backend"))
+from app.services.ai_service import ai_service
 
 BASE_URL   = "http://127.0.0.1:8000"
 GROQ_KEY   = os.environ.get("GROQ_API_KEY", "")
-extractor  = DeepDataExtractor()
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -329,7 +330,7 @@ def fetch_best_news(asset_name: str, asset_type: str, ward_name: str) -> list[di
                 
                 # LLM based extraction mapping
                 news_snippet = entry.title + " - " + getattr(entry, "description", "")
-                ai_extracted = extractor.process_document(news_snippet, clean_name, ward_name)
+                ai_extracted = ai_service.score_evidence(news_snippet, clean_name, ward_name)
 
                 results.append({
                     "title": entry.title,

@@ -1,0 +1,50 @@
+{
+  "_comment": "Registry of external datasets used by PRAMAAN (non data.gov.in sources).",
+  "_comment2": "Supports CKAN API (opencity.in) and direct CSV/JSON downloads.",
+  "_how_to_fetch": "Run: python3 data/scripts/fetch_external.py",
+
+  "datasets": [
+    {
+      "name": "delhi_ward_population_2011",
+      "source": "opencity.in",
+      "format": "ckan_csv",
+      "resource_id": "372c35ad-ae9e-418f-a2e6-faa3351de767",
+      "ckan_base_url": "https://data.opencity.in/api/3/action/datastore_search",
+      "download_url": "https://data.opencity.in/dataset/c41aec9d-04a1-4a33-9254-4f7d50c7f8fa/resource/372c35ad-ae9e-418f-a2e6-faa3351de767/download/c16ccda1-eb93-40d9-8f78-b2f0327fcaca.csv",
+      "title": "Delhi Ward-wise Population - Census 2011 (MCD Area)",
+      "output_file": "delhi_ward_population_2011.json",
+      "fields": ["wardno", "ward", "total_population", "sc_population"],
+      "granularity": "ward",
+      "notes": "250 wards. Used to enrich Region nodes with population field.",
+      "active": true
+    },
+    {
+      "name": "delhi_water_bodies_census",
+      "source": "opencity.in",
+      "format": "ckan_csv",
+      "resource_id": "REPLACE_WITH_RESOURCE_ID",
+      "ckan_base_url": "https://data.opencity.in/api/3/action/datastore_search",
+      "download_url": "",
+      "title": "Delhi Water Bodies Census",
+      "output_file": "delhi_water_bodies_census.json",
+      "fields": [],
+      "granularity": "city",
+      "notes": "UUID not verified yet. Check opencity.in catalog.",
+      "active": false
+    },
+    {
+      "name": "delhi_annual_births_deaths",
+      "source": "opencity.in",
+      "format": "ckan_csv",
+      "resource_id": "REPLACE_WITH_RESOURCE_ID",
+      "ckan_base_url": "https://data.opencity.in/api/3/action/datastore_search",
+      "download_url": "",
+      "title": "Delhi Annual Births and Deaths Statistics",
+      "output_file": "delhi_births_deaths.json",
+      "fields": [],
+      "granularity": "district",
+      "notes": "UUID not verified yet. District-level only — lower priority.",
+      "active": false
+    }
+  ]
+}

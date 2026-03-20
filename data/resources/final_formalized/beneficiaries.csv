@@ -1,0 +1,12 @@
+beneficiary_id,asset_id,scheme_id,region_id,count,description
+BEN_W45_GALI7_DRAIN,ASSET_W45_GALI7_DRAIN,SCH_SFC,REG_W45_GALI7,784,Households protected from waterlogging — Gali No. 7 (~5% of Ward 45 households)
+BEN_W45_GALI12_DRAIN,ASSET_W45_GALI12_DRAIN,SCH_AMRUT,REG_W45_GALI12,713,Households benefiting from drain — Gali No. 12
+BEN_W45_GALI3_DRAIN,ASSET_W45_GALI3_DRAIN,SCH_SFC,REG_W45_GALI3,627,Households on Gali No. 3 drain project
+BEN_W45_ROAD_GALI7,ASSET_W45_ROAD_GALI7,SCH_SFC,REG_W45_GALI7,872,Households benefiting from road resurfacing — Gali No. 7
+BEN_W45_TOILET,ASSET_W45_TOILET,SCH_SWACHH,REG_W45_MARKET_ROAD,7849,Daily users of community toilet — Shahdara Market (~12% of ward pop)
+BEN_W45_PMAY,ASSET_W45_PMAY_HOUSING_A,SCH_PMAY,REG_W45_COLONY_Y,120,Residents in 30 PMAY units — Colony Y (4 persons/unit)
+BEN_W45_LIGHTS,ASSET_W45_GALI12_STREETLIGHT,SCH_LOCAL_LIGHTS,REG_W45_GALI12,1569,Households with improved night lighting — Gali No. 12
+BEN_W45_PARK,ASSET_W45_PARK,SCH_AMRUT,REG_W45,62796,Ward 45 residents with access to community park (census pop: 62796)
+BEN_DELHI_PMAY,ASSET_W45_PMAY_HOUSING_A,SCH_PMAY,REG_DELHI,17067,Houses occupied under PMAY-Urban in Delhi — source: data.gov.in
+BEN_DELHI_SBM,ASSET_W45_TOILET,SCH_SWACHH,REG_DELHI,28981,Toilets (IHHL + CT/PT) constructed in Delhi under SBM-Urban till Mar 2022 — source: data.gov.in
+BEN_DELHI_SVANIDHI,ASSET_W45_PARK,SCH_AMRUT,REG_DELHI,145160,Street vendors receiving PM SVANidhi loans in Delhi (cumulative 2020-24) — source: data.gov.in

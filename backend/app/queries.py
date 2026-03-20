@@ -26,7 +26,7 @@ ORDER BY w.name
 
 WARD_ASSETS = """
 MATCH (w:Region {region_id: $ward_id})
-MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)<-[:CONTAINS*0..3]-(w)
 RETURN DISTINCT a.asset_id  AS asset_id,
        a.name      AS name,
        a.type      AS type,
@@ -60,7 +60,7 @@ ORDER BY proven_count ASC
 
 LIST_WARD_ASSETS = """
 MATCH (w:Region {region_id: $ward_id})
-MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)<-[:CONTAINS*0..3]-(w)
 OPTIONAL MATCH (s:Scheme)-[:FUNDS]->(a)
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
 RETURN a.asset_id AS id, a.name AS name, a.type AS type, collect(s.name) AS schemes, count(e) > 0 AS verified, a.status AS status
@@ -68,7 +68,7 @@ RETURN a.asset_id AS id, a.name AS name, a.type AS type, collect(s.name) AS sche
 
 LIST_ALL_ASSETS = """
 MATCH (w:Region {region_id: $ward_region_id})
-MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)<-[:CONTAINS*0..3]-(w)
 RETURN DISTINCT a.asset_id AS asset_id, a.name AS name, a.type AS type, a.status AS status, a.cost AS cost,
        r.region_id as region_id, r.name as region_name
 ORDER BY a.type, a.name
@@ -90,7 +90,7 @@ PK_MAP = {
 
 WARD_ASSET_DETAIL = """
 MATCH (w:Region {region_id: $ward_id})
-MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)-[:PART_OF*0..3]->(w)
+MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)<-[:CONTAINS*0..3]-(w)
 OPTIONAL MATCH (s:Scheme)-[:FUNDS]->(a)
 OPTIONAL MATCH (a)-[:BUILT_BY]->(act:Actor)
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
@@ -192,19 +192,81 @@ def build_merge_entity_query(label: str) -> str:
     """
 
 
+# Base confidence per source type — used for relationship scoring
+SOURCE_CONFIDENCE = {
+    "structured_csv":      1.0,
+    "semi_structured_kml": 0.95,
+    "semi_structured_xlsx": 0.9,
+    "unstructured_llm":    0.7,
+    "unstructured_rss":    0.6,
+    "scheduler":           0.6,
+}
+
+
 def build_merge_relation_query(rel_type: str, from_label: str, to_label: str) -> str:
-    """Return a MERGE query for a whitelisted relationship type between specific labels."""
-    # Normalize AI-generated variants to canonical types
+    """Return a scored MERGE query for a whitelisted relationship type.
+
+    Callers must supply params: from_id, to_id, properties, source_type, now, base_confidence.
+
+    ON CREATE: stamps confidence, first_seen, source_types.
+    ON MATCH:  increments asserted_count, boosts confidence by +0.1 per corroboration (cap 1.0),
+               appends new source_type to source_types list.
+    """
     rel_type = REL_TYPE_NORMALIZER.get(rel_type, rel_type)
     if rel_type not in ALLOWED_REL_TYPES:
         raise ValueError(f"Unknown relationship type: {rel_type!r}")
-    
+
     from_pk = PK_MAP.get(from_label, "id")
-    to_pk = PK_MAP.get(to_label, "id")
+    to_pk   = PK_MAP.get(to_label,   "id")
 
     return f"""
     MATCH (a:{from_label} {{{from_pk}: $from_id}}), (b:{to_label} {{{to_pk}: $to_id}})
     MERGE (a)-[r:{rel_type}]->(b)
+    ON CREATE SET
+        r.asserted_count = 1,
+        r.confidence     = $base_confidence,
+        r.first_seen     = $now,
+        r.last_seen      = $now,
+        r.source_types   = [$source_type]
+    ON MATCH SET
+        r.asserted_count = coalesce(r.asserted_count, 0) + 1,
+        r.confidence     = CASE
+            WHEN r.confidence IS NULL THEN $base_confidence
+            ELSE min(1.0, r.confidence + 0.1)
+        END,
+        r.last_seen      = $now,
+        r.source_types   = CASE
+            WHEN $source_type IN coalesce(r.source_types, []) THEN coalesce(r.source_types, [])
+            ELSE coalesce(r.source_types, []) + [$source_type]
+        END
     SET r += $properties
     RETURN r
     """
+
+
+# Detect relationship conflicts:
+# An asset with 2+ distinct BUILT_BY actors or 2+ funding schemes signals a conflict.
+DETECT_CONFLICTS = """
+MATCH (a:Asset)-[r:BUILT_BY]->(act:Actor)
+WITH a, collect({actor_id: act.actor_id, name: act.name,
+                 confidence: r.confidence, sources: r.source_types,
+                 asserted: r.asserted_count}) AS builders
+WHERE size(builders) > 1
+RETURN a.asset_id   AS asset_id,
+       a.name       AS asset_name,
+       'BUILT_BY'   AS conflict_type,
+       builders     AS conflicting_parties
+
+UNION
+
+MATCH (s:Scheme)-[r:FUNDS]->(a:Asset)
+WITH a, collect({scheme_id: s.scheme_id, name: s.name,
+                 confidence: r.confidence, sources: r.source_types,
+                 asserted: r.asserted_count}) AS funders
+WHERE size(funders) > 1
+RETURN a.asset_id   AS asset_id,
+       a.name       AS asset_name,
+       'FUNDS'      AS conflict_type,
+       funders      AS conflicting_parties
+ORDER BY asset_id
+"""

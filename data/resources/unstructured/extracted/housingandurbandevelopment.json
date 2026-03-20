@@ -1,0 +1,73 @@
+{
+  "entities": [
+    {
+      "id": "housingandurbandevel_NULM",
+      "label": "Scheme",
+      "properties": {
+        "name": "NULM",
+        "type": "scheme",
+        "confidence": 0.9,
+        "ministry": "Housing and Urban Development",
+        "category": "urban development",
+        "status": "in_progress",
+        "cost": null
+      }
+    },
+    {
+      "id": "housingandurbandevel_SBMO",
+      "label": "Scheme",
+      "properties": {
+        "name": "Swachh Bharat Mission (Urban)",
+        "type": "scheme",
+        "confidence": 0.9,
+        "ministry": "Housing and Urban Development",
+        "category": "urban development",
+        "status": "in_progress",
+        "cost": null
+      }
+    },
+    {
+      "id": "housingandurbandevel_SBMO_2",
+      "label": "Scheme",
+      "properties": {
+        "name": "SBM (U) 2.0",
+        "type": "scheme",
+        "confidence": 0.9,
+        "ministry": "Housing and Urban Development",
+        "category": "urban development",
+        "status": "planned",
+        "cost": null
+      }
+    },
+    {
+      "id": "housingandurbandevel_Swachh_Bharat_Mission",
+      "label": "Event",
+      "properties": {
+        "name": "Swachh Bharat Mission (Urban)",
+        "type": "event",
+        "confidence": 0.7,
+        "ministry": "Housing and Urban Development",
+        "category": "urban development",
+        "status": "completed",
+        "cost": null
+      }
+    },
+    {
+      "id": "housingandurbandevel_October_2021",
+      "label": "Event",
+      "properties": {
+        "name": "01 October, 2021",
+        "type": "event",
+        "confidence": 0.7,
+        "ministry": "Housing and Urban Development",
+        "category": "urban development",
+        "status": "completed",
+        "cost": null
+      }
+    }
+  ],
+  "relations": [],
+  "source_file": "housingandurbandevelopment.pdf",
+  "source_type": "unstructured_llm",
+  "source_subdir": "pdfs"
+}

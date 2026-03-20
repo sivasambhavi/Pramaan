@@ -1,0 +1,1742 @@
+{
+    "records": [
+        {
+            "_id": 1,
+            "Sl No": "1",
+            "Ward": "DMC Ward No - 1",
+            "Population": "55512"
+        },
+        {
+            "_id": 2,
+            "Sl No": "2",
+            "Ward": "DMC Ward No - 2",
+            "Population": "37929"
+        },
+        {
+            "_id": 3,
+            "Sl No": "3",
+            "Ward": "DMC Ward No - 9",
+            "Population": "60531"
+        },
+        {
+            "_id": 4,
+            "Sl No": "4",
+            "Ward": "DMC Ward No - 10",
+            "Population": "70476"
+        },
+        {
+            "_id": 5,
+            "Sl No": "5",
+            "Ward": "DMC Ward No - 11",
+            "Population": "38211"
+        },
+        {
+            "_id": 6,
+            "Sl No": "6",
+            "Ward": "DMC Ward No - 11",
+            "Population": "14604"
+        },
+        {
+            "_id": 7,
+            "Sl No": "7",
+            "Ward": "DMC Ward No - 12",
+            "Population": "41703"
+        },
+        {
+            "_id": 8,
+            "Sl No": "8",
+            "Ward": "DMC Ward No - 12",
+            "Population": "254"
+        },
+        {
+            "_id": 9,
+            "Sl No": "9",
+            "Ward": "DMC Ward No - 13",
+            "Population": "46578"
+        },
+        {
+            "_id": 10,
+            "Sl No": "10",
+            "Ward": "DMC Ward No - 14",
+            "Population": "50721"
+        },
+        {
+            "_id": 11,
+            "Sl No": "11",
+            "Ward": "DMC Ward No - 15",
+            "Population": "4839"
+        },
+        {
+            "_id": 12,
+            "Sl No": "12",
+            "Ward": "DMC Ward No - 15",
+            "Population": "38749"
+        },
+        {
+            "_id": 13,
+            "Sl No": "13",
+            "Ward": "DMC Ward No - 16",
+            "Population": "47002"
+        },
+        {
+            "_id": 14,
+            "Sl No": "14",
+            "Ward": "DMC Ward No - 17",
+            "Population": "55747"
+        },
+        {
+            "_id": 15,
+            "Sl No": "15",
+            "Ward": "DMC Ward No - 21",
+            "Population": "66482"
+        },
+        {
+            "_id": 16,
+            "Sl No": "16",
+            "Ward": "DMC Ward No - 21",
+            "Population": "25950"
+        },
+        {
+            "_id": 17,
+            "Sl No": "17",
+            "Ward": "DMC Ward No - 22",
+            "Population": "52541"
+        },
+        {
+            "_id": 18,
+            "Sl No": "18",
+            "Ward": "DMC Ward No - 23",
+            "Population": "94843"
+        },
+        {
+            "_id": 19,
+            "Sl No": "19",
+            "Ward": "DMC Ward No - 24",
+            "Population": "77614"
+        },
+        {
+            "_id": 20,
+            "Sl No": "20",
+            "Ward": "DMC Ward No - 26",
+            "Population": "5993"
+        },
+        {
+            "_id": 21,
+            "Sl No": "21",
+            "Ward": "DMC Ward No - 38",
+            "Population": "41674"
+        },
+        {
+            "_id": 22,
+            "Sl No": "22",
+            "Ward": "DMC Ward No - 41",
+            "Population": "51975"
+        },
+        {
+            "_id": 23,
+            "Sl No": "23",
+            "Ward": "DMC Ward No - 42",
+            "Population": "44150"
+        },
+        {
+            "_id": 24,
+            "Sl No": "24",
+            "Ward": "DMC Ward No - 45",
+            "Population": "62796"
+        },
+        {
+            "_id": 25,
+            "Sl No": "25",
+            "Ward": "DMC Ward No - 46",
+            "Population": "60882"
+        },
+        {
+            "_id": 26,
+            "Sl No": "26",
+            "Ward": "DMC Ward No - 47",
+            "Population": "55177"
+        },
+        {
+            "_id": 27,
+            "Sl No": "27",
+            "Ward": "DMC Ward No - 48",
+            "Population": "45206"
+        },
+        {
+            "_id": 28,
+            "Sl No": "28",
+            "Ward": "DMC Ward No - 49",
+            "Population": "39841"
+        },
+        {
+            "_id": 29,
+            "Sl No": "29",
+            "Ward": "DMC Ward No - 49",
+            "Population": "33739"
+        },
+        {
+            "_id": 30,
+            "Sl No": "30",
+            "Ward": "DMC Ward No - 50",
+            "Population": "58558"
+        },
+        {
+            "_id": 31,
+            "Sl No": "31",
+            "Ward": "DMC Ward No - 51",
+            "Population": "48118"
+        },
+        {
+            "_id": 32,
+            "Sl No": "32",
+            "Ward": "DMC Ward No - 52",
+            "Population": "49787"
+        },
+        {
+            "_id": 33,
+            "Sl No": "33",
+            "Ward": "DMC Ward No - 53",
+            "Population": "51528"
+        },
+        {
+            "_id": 34,
+            "Sl No": "34",
+            "Ward": "DMC Ward No - 54",
+            "Population": "56149"
+        },
+        {
+            "_id": 35,
+            "Sl No": "35",
+            "Ward": "DMC Ward No - 55",
+            "Population": "59383"
+        },
+        {
+            "_id": 36,
+            "Sl No": "36",
+            "Ward": "DMC Ward No - 56",
+            "Population": "25529"
+        },
+        {
+            "_id": 37,
+            "Sl No": "37",
+            "Ward": "DMC Ward No - 56",
+            "Population": "21641"
+        },
+        {
+            "_id": 38,
+            "Sl No": "38",
+            "Ward": "DMC Ward No - 57",
+            "Population": "55273"
+        },
+        {
+            "_id": 39,
+            "Sl No": "39",
+            "Ward": "DMC Ward No - 58",
+            "Population": "42423"
+        },
+        {
+            "_id": 40,
+            "Sl No": "40",
+            "Ward": "DMC Ward No - 59",
+            "Population": "10377"
+        },
+        {
+            "_id": 41,
+            "Sl No": "41",
+            "Ward": "DMC Ward No - 59",
+            "Population": "45964"
+        },
+        {
+            "_id": 42,
+            "Sl No": "42",
+            "Ward": "DMC Ward No - 60",
+            "Population": "1677"
+        },
+        {
+            "_id": 43,
+            "Sl No": "43",
+            "Ward": "DMC Ward No - 60",
+            "Population": "41941"
+        },
+        {
+            "_id": 44,
+            "Sl No": "44",
+            "Ward": "DMC Ward No - 61",
+            "Population": "51984"
+        },
+        {
+            "_id": 45,
+            "Sl No": "45",
+            "Ward": "DMC Ward No - 62",
+            "Population": "10546"
+        },
+        {
+            "_id": 46,
+            "Sl No": "46",
+            "Ward": "DMC Ward No - 62",
+            "Population": "44741"
+        },
+        {
+            "_id": 47,
+            "Sl No": "47",
+            "Ward": "DMC Ward No - 63",
+            "Population": "51105"
+        },
+        {
+            "_id": 48,
+            "Sl No": "48",
+            "Ward": "DMC Ward No - 64",
+            "Population": "49006"
+        },
+        {
+            "_id": 49,
+            "Sl No": "49",
+            "Ward": "DMC Ward No - 65",
+            "Population": "52609"
+        },
+        {
+            "_id": 50,
+            "Sl No": "50",
+            "Ward": "DMC Ward No - 65",
+            "Population": "3832"
+        },
+        {
+            "_id": 51,
+            "Sl No": "51",
+            "Ward": "DMC Ward No - 66",
+            "Population": "34708"
+        },
+        {
+            "_id": 52,
+            "Sl No": "52",
+            "Ward": "DMC Ward No - 66",
+            "Population": "12642"
+        },
+        {
+            "_id": 53,
+            "Sl No": "53",
+            "Ward": "DMC Ward No - 67",
+            "Population": "50316"
+        },
+        {
+            "_id": 54,
+            "Sl No": "54",
+            "Ward": "DMC Ward No - 68",
+            "Population": "54212"
+        },
+        {
+            "_id": 55,
+            "Sl No": "55",
+            "Ward": "DMC Ward No - 69",
+            "Population": "44888"
+        },
+        {
+            "_id": 56,
+            "Sl No": "56",
+            "Ward": "DMC Ward No - 70",
+            "Population": "25578"
+        },
+        {
+            "_id": 57,
+            "Sl No": "57",
+            "Ward": "DMC Ward No - 70",
+            "Population": "22284"
+        },
+        {
+            "_id": 58,
+            "Sl No": "58",
+            "Ward": "DMC Ward No - 71",
+            "Population": "49447"
+        },
+        {
+            "_id": 59,
+            "Sl No": "59",
+            "Ward": "DMC Ward No - 72",
+            "Population": "39032"
+        },
+        {
+            "_id": 60,
+            "Sl No": "60",
+            "Ward": "DMC Ward No - 73",
+            "Population": "17396"
+        },
+        {
+            "_id": 61,
+            "Sl No": "61",
+            "Ward": "DMC Ward No - 73",
+            "Population": "41081"
+        },
+        {
+            "_id": 62,
+            "Sl No": "62",
+            "Ward": "DMC Ward No - 74",
+            "Population": "30385"
+        },
+        {
+            "_id": 63,
+            "Sl No": "63",
+            "Ward": "DMC Ward No - 74",
+            "Population": "20885"
+        },
+        {
+            "_id": 64,
+            "Sl No": "64",
+            "Ward": "DMC Ward No - 74",
+            "Population": "1503"
+        },
+        {
+            "_id": 65,
+            "Sl No": "65",
+            "Ward": "DMC Ward No - 75",
+            "Population": "58471"
+        },
+        {
+            "_id": 66,
+            "Sl No": "66",
+            "Ward": "DMC Ward No - 76",
+            "Population": "6181"
+        },
+        {
+            "_id": 67,
+            "Sl No": "67",
+            "Ward": "DMC Ward No - 76",
+            "Population": "43758"
+        },
+        {
+            "_id": 68,
+            "Sl No": "68",
+            "Ward": "DMC Ward No - 77",
+            "Population": "5051"
+        },
+        {
+            "_id": 69,
+            "Sl No": "69",
+            "Ward": "DMC Ward No - 77",
+            "Population": "9961"
+        },
+        {
+            "_id": 70,
+            "Sl No": "70",
+            "Ward": "DMC Ward No - 77",
+            "Population": "276"
+        },
+        {
+            "_id": 71,
+            "Sl No": "71",
+            "Ward": "DMC Ward No - 78",
+            "Population": "40401"
+        },
+        {
+            "_id": 72,
+            "Sl No": "72",
+            "Ward": "DMC Ward No - 78",
+            "Population": "8200"
+        },
+        {
+            "_id": 73,
+            "Sl No": "73",
+            "Ward": "DMC Ward No - 79",
+            "Population": "50068"
+        },
+        {
+            "_id": 74,
+            "Sl No": "74",
+            "Ward": "DMC Ward No - 79",
+            "Population": "384"
+        },
+        {
+            "_id": 75,
+            "Sl No": "75",
+            "Ward": "DMC Ward No - 80",
+            "Population": "1978"
+        },
+        {
+            "_id": 76,
+            "Sl No": "76",
+            "Ward": "DMC Ward No - 80",
+            "Population": "36296"
+        },
+        {
+            "_id": 77,
+            "Sl No": "77",
+            "Ward": "DMC Ward No - 81",
+            "Population": "35513"
+        },
+        {
+            "_id": 78,
+            "Sl No": "78",
+            "Ward": "DMC Ward No - 82",
+            "Population": "47334"
+        },
+        {
+            "_id": 79,
+            "Sl No": "79",
+            "Ward": "DMC Ward No - 83",
+            "Population": "41723"
+        },
+        {
+            "_id": 80,
+            "Sl No": "80",
+            "Ward": "DMC Ward No - 84",
+            "Population": "46770"
+        },
+        {
+            "_id": 81,
+            "Sl No": "81",
+            "Ward": "DMC Ward No - 85",
+            "Population": "13679"
+        },
+        {
+            "_id": 82,
+            "Sl No": "82",
+            "Ward": "DMC Ward No - 85",
+            "Population": "20448"
+        },
+        {
+            "_id": 83,
+            "Sl No": "83",
+            "Ward": "DMC Ward No - 85",
+            "Population": "9707"
+        },
+        {
+            "_id": 84,
+            "Sl No": "84",
+            "Ward": "DMC Ward No - 86",
+            "Population": "18477"
+        },
+        {
+            "_id": 85,
+            "Sl No": "85",
+            "Ward": "DMC Ward No - 86",
+            "Population": "22324"
+        },
+        {
+            "_id": 86,
+            "Sl No": "86",
+            "Ward": "DMC Ward No - 87",
+            "Population": "307"
+        },
+        {
+            "_id": 87,
+            "Sl No": "87",
+            "Ward": "DMC Ward No - 87",
+            "Population": "47996"
+        },
+        {
+            "_id": 88,
+            "Sl No": "88",
+            "Ward": "DMC Ward No - 87",
+            "Population": "187"
+        },
+        {
+            "_id": 89,
+            "Sl No": "89",
+            "Ward": "DMC Ward No - 88",
+            "Population": "12240"
+        },
+        {
+            "_id": 90,
+            "Sl No": "90",
+            "Ward": "DMC Ward No - 88",
+            "Population": "45843"
+        },
+        {
+            "_id": 91,
+            "Sl No": "91",
+            "Ward": "DMC Ward No - 89",
+            "Population": "47987"
+        },
+        {
+            "_id": 92,
+            "Sl No": "92",
+            "Ward": "DMC Ward No - 90",
+            "Population": "45718"
+        },
+        {
+            "_id": 93,
+            "Sl No": "93",
+            "Ward": "DMC Ward No - 90",
+            "Population": "1819"
+        },
+        {
+            "_id": 94,
+            "Sl No": "94",
+            "Ward": "DMC Ward No - 91",
+            "Population": "17781"
+        },
+        {
+            "_id": 95,
+            "Sl No": "95",
+            "Ward": "DMC Ward No - 91",
+            "Population": "29250"
+        },
+        {
+            "_id": 96,
+            "Sl No": "96",
+            "Ward": "DMC Ward No - 91",
+            "Population": "4146"
+        },
+        {
+            "_id": 97,
+            "Sl No": "97",
+            "Ward": "DMC Ward No - 92",
+            "Population": "52078"
+        },
+        {
+            "_id": 98,
+            "Sl No": "98",
+            "Ward": "DMC Ward No - 93",
+            "Population": "48514"
+        },
+        {
+            "_id": 99,
+            "Sl No": "99",
+            "Ward": "DMC Ward No - 94",
+            "Population": "63810"
+        },
+        {
+            "_id": 100,
+            "Sl No": "100",
+            "Ward": "DMC Ward No - 95",
+            "Population": "3162"
+        },
+        {
+            "_id": 101,
+            "Sl No": "101",
+            "Ward": "DMC Ward No - 95",
+            "Population": "53234"
+        },
+        {
+            "_id": 102,
+            "Sl No": "102",
+            "Ward": "DMC Ward No - 96",
+            "Population": "53541"
+        },
+        {
+            "_id": 103,
+            "Sl No": "103",
+            "Ward": "DMC Ward No - 97",
+            "Population": "46805"
+        },
+        {
+            "_id": 104,
+            "Sl No": "104",
+            "Ward": "DMC Ward No - 97",
+            "Population": "6693"
+        },
+        {
+            "_id": 105,
+            "Sl No": "105",
+            "Ward": "DMC Ward No - 98",
+            "Population": "48877"
+        },
+        {
+            "_id": 106,
+            "Sl No": "106",
+            "Ward": "DMC Ward No - 99",
+            "Population": "16525"
+        },
+        {
+            "_id": 107,
+            "Sl No": "107",
+            "Ward": "DMC Ward No - 99",
+            "Population": "35330"
+        },
+        {
+            "_id": 108,
+            "Sl No": "108",
+            "Ward": "DMC Ward No - 100",
+            "Population": "49621"
+        },
+        {
+            "_id": 109,
+            "Sl No": "109",
+            "Ward": "DMC Ward No - 101",
+            "Population": "39261"
+        },
+        {
+            "_id": 110,
+            "Sl No": "110",
+            "Ward": "DMC Ward No - 101",
+            "Population": "19653"
+        },
+        {
+            "_id": 111,
+            "Sl No": "111",
+            "Ward": "DMC Ward No - 102",
+            "Population": "62412"
+        },
+        {
+            "_id": 112,
+            "Sl No": "112",
+            "Ward": "DMC Ward No - 103",
+            "Population": "49968"
+        },
+        {
+            "_id": 113,
+            "Sl No": "113",
+            "Ward": "DMC Ward No - 104",
+            "Population": "48748"
+        },
+        {
+            "_id": 114,
+            "Sl No": "114",
+            "Ward": "DMC Ward No - 105",
+            "Population": "43740"
+        },
+        {
+            "_id": 115,
+            "Sl No": "115",
+            "Ward": "DMC Ward No - 106",
+            "Population": "27002"
+        },
+        {
+            "_id": 116,
+            "Sl No": "116",
+            "Ward": "DMC Ward No - 106",
+            "Population": "18060"
+        },
+        {
+            "_id": 117,
+            "Sl No": "117",
+            "Ward": "DMC Ward No - 107",
+            "Population": "58408"
+        },
+        {
+            "_id": 118,
+            "Sl No": "118",
+            "Ward": "DMC Ward No - 108",
+            "Population": "29100"
+        },
+        {
+            "_id": 119,
+            "Sl No": "119",
+            "Ward": "DMC Ward No - 108",
+            "Population": "29872"
+        },
+        {
+            "_id": 120,
+            "Sl No": "120",
+            "Ward": "DMC Ward No - 109",
+            "Population": "36168"
+        },
+        {
+            "_id": 121,
+            "Sl No": "121",
+            "Ward": "DMC Ward No - 109",
+            "Population": "11038"
+        },
+        {
+            "_id": 122,
+            "Sl No": "122",
+            "Ward": "DMC Ward No - 110",
+            "Population": "16529"
+        },
+        {
+            "_id": 123,
+            "Sl No": "123",
+            "Ward": "DMC Ward No - 110",
+            "Population": "28618"
+        },
+        {
+            "_id": 124,
+            "Sl No": "124",
+            "Ward": "DMC Ward No - 111",
+            "Population": "39943"
+        },
+        {
+            "_id": 125,
+            "Sl No": "125",
+            "Ward": "DMC Ward No - 111",
+            "Population": "12403"
+        },
+        {
+            "_id": 126,
+            "Sl No": "126",
+            "Ward": "DMC Ward No - 112",
+            "Population": "46251"
+        },
+        {
+            "_id": 127,
+            "Sl No": "127",
+            "Ward": "DMC Ward No - 113",
+            "Population": "46141"
+        },
+        {
+            "_id": 128,
+            "Sl No": "128",
+            "Ward": "DMC Ward No - 114",
+            "Population": "12918"
+        },
+        {
+            "_id": 129,
+            "Sl No": "129",
+            "Ward": "DMC Ward No - 114",
+            "Population": "36153"
+        },
+        {
+            "_id": 130,
+            "Sl No": "130",
+            "Ward": "DMC Ward No - 115",
+            "Population": "57655"
+        },
+        {
+            "_id": 131,
+            "Sl No": "131",
+            "Ward": "DMC Ward No - 116",
+            "Population": "45179"
+        },
+        {
+            "_id": 132,
+            "Sl No": "132",
+            "Ward": "DMC Ward No - 117",
+            "Population": "20475"
+        },
+        {
+            "_id": 133,
+            "Sl No": "133",
+            "Ward": "DMC Ward No - 117",
+            "Population": "29997"
+        },
+        {
+            "_id": 134,
+            "Sl No": "134",
+            "Ward": "DMC Ward No - 118",
+            "Population": "12151"
+        },
+        {
+            "_id": 135,
+            "Sl No": "135",
+            "Ward": "DMC Ward No - 118",
+            "Population": "28488"
+        },
+        {
+            "_id": 136,
+            "Sl No": "136",
+            "Ward": "DMC Ward No - 119",
+            "Population": "65247"
+        },
+        {
+            "_id": 137,
+            "Sl No": "137",
+            "Ward": "DMC Ward No - 120",
+            "Population": "64252"
+        },
+        {
+            "_id": 138,
+            "Sl No": "138",
+            "Ward": "DMC Ward No - 123",
+            "Population": "52975"
+        },
+        {
+            "_id": 139,
+            "Sl No": "139",
+            "Ward": "DMC Ward No - 124",
+            "Population": "30336"
+        },
+        {
+            "_id": 140,
+            "Sl No": "140",
+            "Ward": "DMC Ward No - 125",
+            "Population": "110469"
+        },
+        {
+            "_id": 141,
+            "Sl No": "141",
+            "Ward": "DMC Ward No - 126",
+            "Population": "41164"
+        },
+        {
+            "_id": 142,
+            "Sl No": "142",
+            "Ward": "DMC Ward No - 127",
+            "Population": "11910"
+        },
+        {
+            "_id": 143,
+            "Sl No": "143",
+            "Ward": "DMC Ward No - 127",
+            "Population": "41545"
+        },
+        {
+            "_id": 144,
+            "Sl No": "144",
+            "Ward": "DMC Ward No - 128",
+            "Population": "71443"
+        },
+        {
+            "_id": 145,
+            "Sl No": "145",
+            "Ward": "DMC Ward No - 129",
+            "Population": "59691"
+        },
+        {
+            "_id": 146,
+            "Sl No": "146",
+            "Ward": "DMC Ward No - 130",
+            "Population": "48946"
+        },
+        {
+            "_id": 147,
+            "Sl No": "147",
+            "Ward": "DMC Ward No - 131",
+            "Population": "54383"
+        },
+        {
+            "_id": 148,
+            "Sl No": "148",
+            "Ward": "DMC Ward No - 132",
+            "Population": "50837"
+        },
+        {
+            "_id": 149,
+            "Sl No": "149",
+            "Ward": "DMC Ward No - 135",
+            "Population": "107229"
+        },
+        {
+            "_id": 150,
+            "Sl No": "150",
+            "Ward": "DMC Ward No - 136",
+            "Population": "26828"
+        },
+        {
+            "_id": 151,
+            "Sl No": "151",
+            "Ward": "DMC Ward No - 136",
+            "Population": "80856"
+        },
+        {
+            "_id": 152,
+            "Sl No": "152",
+            "Ward": "DMC Ward No - 136",
+            "Population": "35640"
+        },
+        {
+            "_id": 153,
+            "Sl No": "153",
+            "Ward": "DMC Ward No - 137",
+            "Population": "13942"
+        },
+        {
+            "_id": 154,
+            "Sl No": "154",
+            "Ward": "DMC Ward No - 138",
+            "Population": "66582"
+        },
+        {
+            "_id": 155,
+            "Sl No": "155",
+            "Ward": "DMC Ward No - 139",
+            "Population": "36947"
+        },
+        {
+            "_id": 156,
+            "Sl No": "156",
+            "Ward": "DMC Ward No - 141",
+            "Population": "17344"
+        },
+        {
+            "_id": 157,
+            "Sl No": "157",
+            "Ward": "DMC Ward No - 141",
+            "Population": "45584"
+        },
+        {
+            "_id": 158,
+            "Sl No": "158",
+            "Ward": "DMC Ward No - 142",
+            "Population": "64506"
+        },
+        {
+            "_id": 159,
+            "Sl No": "159",
+            "Ward": "DMC Ward No - 143",
+            "Population": "9579"
+        },
+        {
+            "_id": 160,
+            "Sl No": "160",
+            "Ward": "DMC Ward No - 144",
+            "Population": "140"
+        },
+        {
+            "_id": 161,
+            "Sl No": "161",
+            "Ward": "DMC Ward No - 144",
+            "Population": "39923"
+        },
+        {
+            "_id": 162,
+            "Sl No": "162",
+            "Ward": "DMC Ward No - 145",
+            "Population": "49331"
+        },
+        {
+            "_id": 163,
+            "Sl No": "163",
+            "Ward": "DMC Ward No - 146",
+            "Population": "52171"
+        },
+        {
+            "_id": 164,
+            "Sl No": "164",
+            "Ward": "DMC Ward No - 147",
+            "Population": "83031"
+        },
+        {
+            "_id": 165,
+            "Sl No": "165",
+            "Ward": "DMC Ward No - 148",
+            "Population": "64186"
+        },
+        {
+            "_id": 166,
+            "Sl No": "166",
+            "Ward": "DMC Ward No - 149",
+            "Population": "50290"
+        },
+        {
+            "_id": 167,
+            "Sl No": "167",
+            "Ward": "DMC Ward No - 149",
+            "Population": "1057"
+        },
+        {
+            "_id": 168,
+            "Sl No": "168",
+            "Ward": "DMC Ward No - 150",
+            "Population": "30004"
+        },
+        {
+            "_id": 169,
+            "Sl No": "169",
+            "Ward": "DMC Ward No - 150",
+            "Population": "19959"
+        },
+        {
+            "_id": 170,
+            "Sl No": "170",
+            "Ward": "DMC Ward No - 151",
+            "Population": "48836"
+        },
+        {
+            "_id": 171,
+            "Sl No": "171",
+            "Ward": "DMC Ward No - 152",
+            "Population": "51921"
+        },
+        {
+            "_id": 172,
+            "Sl No": "172",
+            "Ward": "DMC Ward No - 153",
+            "Population": "12341"
+        },
+        {
+            "_id": 173,
+            "Sl No": "173",
+            "Ward": "DMC Ward No - 153",
+            "Population": "13238"
+        },
+        {
+            "_id": 174,
+            "Sl No": "174",
+            "Ward": "DMC Ward No - 154",
+            "Population": "29450"
+        },
+        {
+            "_id": 175,
+            "Sl No": "175",
+            "Ward": "DMC Ward No - 154",
+            "Population": "3999"
+        },
+        {
+            "_id": 176,
+            "Sl No": "176",
+            "Ward": "DMC Ward No - 154",
+            "Population": "2876"
+        },
+        {
+            "_id": 177,
+            "Sl No": "177",
+            "Ward": "DMC Ward No - 155",
+            "Population": "41421"
+        },
+        {
+            "_id": 178,
+            "Sl No": "178",
+            "Ward": "DMC Ward No - 156",
+            "Population": "46724"
+        },
+        {
+            "_id": 179,
+            "Sl No": "179",
+            "Ward": "DMC Ward No - 157",
+            "Population": "40384"
+        },
+        {
+            "_id": 180,
+            "Sl No": "180",
+            "Ward": "DMC Ward No - 158",
+            "Population": "47706"
+        },
+        {
+            "_id": 181,
+            "Sl No": "181",
+            "Ward": "DMC Ward No - 159",
+            "Population": "46561"
+        },
+        {
+            "_id": 182,
+            "Sl No": "182",
+            "Ward": "DMC Ward No - 159",
+            "Population": "187"
+        },
+        {
+            "_id": 183,
+            "Sl No": "183",
+            "Ward": "DMC Ward No - 160",
+            "Population": "37467"
+        },
+        {
+            "_id": 184,
+            "Sl No": "184",
+            "Ward": "DMC Ward No - 160",
+            "Population": "162"
+        },
+        {
+            "_id": 185,
+            "Sl No": "185",
+            "Ward": "DMC Ward No - 161",
+            "Population": "35888"
+        },
+        {
+            "_id": 186,
+            "Sl No": "186",
+            "Ward": "DMC Ward No - 162",
+            "Population": "37426"
+        },
+        {
+            "_id": 187,
+            "Sl No": "187",
+            "Ward": "DMC Ward No - 163",
+            "Population": "12864"
+        },
+        {
+            "_id": 188,
+            "Sl No": "188",
+            "Ward": "DMC Ward No - 163",
+            "Population": "34223"
+        },
+        {
+            "_id": 189,
+            "Sl No": "189",
+            "Ward": "DMC Ward No - 164",
+            "Population": "27377"
+        },
+        {
+            "_id": 190,
+            "Sl No": "190",
+            "Ward": "DMC Ward No - 164",
+            "Population": "9911"
+        },
+        {
+            "_id": 191,
+            "Sl No": "191",
+            "Ward": "DMC Ward No - 165",
+            "Population": "20147"
+        },
+        {
+            "_id": 192,
+            "Sl No": "192",
+            "Ward": "DMC Ward No - 166",
+            "Population": "42344"
+        },
+        {
+            "_id": 193,
+            "Sl No": "193",
+            "Ward": "DMC Ward No - 167",
+            "Population": "45640"
+        },
+        {
+            "_id": 194,
+            "Sl No": "194",
+            "Ward": "DMC Ward No - 168",
+            "Population": "45217"
+        },
+        {
+            "_id": 195,
+            "Sl No": "195",
+            "Ward": "DMC Ward No - 169",
+            "Population": "35627"
+        },
+        {
+            "_id": 196,
+            "Sl No": "196",
+            "Ward": "DMC Ward No - 170",
+            "Population": "59348"
+        },
+        {
+            "_id": 197,
+            "Sl No": "197",
+            "Ward": "DMC Ward No - 171",
+            "Population": "35354"
+        },
+        {
+            "_id": 198,
+            "Sl No": "198",
+            "Ward": "DMC Ward No - 172",
+            "Population": "34761"
+        },
+        {
+            "_id": 199,
+            "Sl No": "199",
+            "Ward": "DMC Ward No - 179",
+            "Population": "16733"
+        },
+        {
+            "_id": 200,
+            "Sl No": "200",
+            "Ward": "DMC Ward No - 180",
+            "Population": "56234"
+        },
+        {
+            "_id": 201,
+            "Sl No": "201",
+            "Ward": "DMC Ward No - 181",
+            "Population": "61066"
+        },
+        {
+            "_id": 202,
+            "Sl No": "202",
+            "Ward": "DMC Ward No - 182",
+            "Population": "45365"
+        },
+        {
+            "_id": 203,
+            "Sl No": "203",
+            "Ward": "DMC Ward No - 183",
+            "Population": "49123"
+        },
+        {
+            "_id": 204,
+            "Sl No": "204",
+            "Ward": "DMC Ward No - 184",
+            "Population": "43613"
+        },
+        {
+            "_id": 205,
+            "Sl No": "205",
+            "Ward": "DMC Ward No - 185",
+            "Population": "44896"
+        },
+        {
+            "_id": 206,
+            "Sl No": "206",
+            "Ward": "DMC Ward No - 185",
+            "Population": "10616"
+        },
+        {
+            "_id": 207,
+            "Sl No": "207",
+            "Ward": "DMC Ward No - 186",
+            "Population": "52705"
+        },
+        {
+            "_id": 208,
+            "Sl No": "208",
+            "Ward": "DMC Ward No - 187",
+            "Population": "53377"
+        },
+        {
+            "_id": 209,
+            "Sl No": "209",
+            "Ward": "DMC Ward No - 188",
+            "Population": "2556"
+        },
+        {
+            "_id": 210,
+            "Sl No": "210",
+            "Ward": "DMC Ward No - 188",
+            "Population": "52908"
+        },
+        {
+            "_id": 211,
+            "Sl No": "211",
+            "Ward": "DMC Ward No - 189",
+            "Population": "34169"
+        },
+        {
+            "_id": 212,
+            "Sl No": "212",
+            "Ward": "DMC Ward No - 190",
+            "Population": "30446"
+        },
+        {
+            "_id": 213,
+            "Sl No": "213",
+            "Ward": "DMC Ward No - 190",
+            "Population": "19700"
+        },
+        {
+            "_id": 214,
+            "Sl No": "214",
+            "Ward": "DMC Ward No - 191",
+            "Population": "61669"
+        },
+        {
+            "_id": 215,
+            "Sl No": "215",
+            "Ward": "DMC Ward No - 192",
+            "Population": "13289"
+        },
+        {
+            "_id": 216,
+            "Sl No": "216",
+            "Ward": "DMC Ward No - 192",
+            "Population": "134"
+        },
+        {
+            "_id": 217,
+            "Sl No": "217",
+            "Ward": "DMC Ward No - 192",
+            "Population": "26280"
+        },
+        {
+            "_id": 218,
+            "Sl No": "218",
+            "Ward": "DMC Ward No - 193",
+            "Population": "47010"
+        },
+        {
+            "_id": 219,
+            "Sl No": "219",
+            "Ward": "DMC Ward No - 193",
+            "Population": "1404"
+        },
+        {
+            "_id": 220,
+            "Sl No": "220",
+            "Ward": "DMC Ward No - 194",
+            "Population": "21704"
+        },
+        {
+            "_id": 221,
+            "Sl No": "221",
+            "Ward": "DMC Ward No - 194",
+            "Population": "16189"
+        },
+        {
+            "_id": 222,
+            "Sl No": "222",
+            "Ward": "DMC Ward No - 195",
+            "Population": "53579"
+        },
+        {
+            "_id": 223,
+            "Sl No": "223",
+            "Ward": "DMC Ward No - 196",
+            "Population": "49746"
+        },
+        {
+            "_id": 224,
+            "Sl No": "224",
+            "Ward": "DMC Ward No - 197",
+            "Population": "43643"
+        },
+        {
+            "_id": 225,
+            "Sl No": "225",
+            "Ward": "DMC Ward No - 199",
+            "Population": "42508"
+        },
+        {
+            "_id": 226,
+            "Sl No": "226",
+            "Ward": "DMC Ward No - 200",
+            "Population": "43609"
+        },
+        {
+            "_id": 227,
+            "Sl No": "227",
+            "Ward": "DMC Ward No - 203",
+            "Population": "47129"
+        },
+        {
+            "_id": 228,
+            "Sl No": "228",
+            "Ward": "DMC Ward No - 205",
+            "Population": "74750"
+        },
+        {
+            "_id": 229,
+            "Sl No": "229",
+            "Ward": "DMC Ward No - 206",
+            "Population": "86392"
+        },
+        {
+            "_id": 230,
+            "Sl No": "230",
+            "Ward": "DMC Ward No - 207",
+            "Population": "77258"
+        },
+        {
+            "_id": 231,
+            "Sl No": "231",
+            "Ward": "DMC Ward No - 208",
+            "Population": "19918"
+        },
+        {
+            "_id": 232,
+            "Sl No": "232",
+            "Ward": "DMC Ward No - 208",
+            "Population": "16197"
+        },
+        {
+            "_id": 233,
+            "Sl No": "233",
+            "Ward": "DMC Ward No - 209",
+            "Population": "38587"
+        },
+        {
+            "_id": 234,
+            "Sl No": "234",
+            "Ward": "DMC Ward No - 213",
+            "Population": "48771"
+        },
+        {
+            "_id": 235,
+            "Sl No": "235",
+            "Ward": "DMC Ward No - 214",
+            "Population": "7167"
+        },
+        {
+            "_id": 236,
+            "Sl No": "236",
+            "Ward": "DMC Ward No - 217",
+            "Population": "58964"
+        },
+        {
+            "_id": 237,
+            "Sl No": "237",
+            "Ward": "DMC Ward No - 218",
+            "Population": "49753"
+        },
+        {
+            "_id": 238,
+            "Sl No": "238",
+            "Ward": "DMC Ward No - 219",
+            "Population": "66322"
+        },
+        {
+            "_id": 239,
+            "Sl No": "239",
+            "Ward": "DMC Ward No - 220",
+            "Population": "9143"
+        },
+        {
+            "_id": 240,
+            "Sl No": "240",
+            "Ward": "DMC Ward No - 221",
+            "Population": "61165"
+        },
+        {
+            "_id": 241,
+            "Sl No": "241",
+            "Ward": "DMC Ward No - 222",
+            "Population": "42499"
+        },
+        {
+            "_id": 242,
+            "Sl No": "242",
+            "Ward": "DMC Ward No - 223",
+            "Population": "80196"
+        },
+        {
+            "_id": 243,
+            "Sl No": "243",
+            "Ward": "DMC Ward No - 224",
+            "Population": "52854"
+        },
+        {
+            "_id": 244,
+            "Sl No": "244",
+            "Ward": "DMC Ward No - 225",
+            "Population": "54339"
+        },
+        {
+            "_id": 245,
+            "Sl No": "245",
+            "Ward": "DMC Ward No - 226",
+            "Population": "52133"
+        },
+        {
+            "_id": 246,
+            "Sl No": "246",
+            "Ward": "DMC Ward No - 227",
+            "Population": "61930"
+        },
+        {
+            "_id": 247,
+            "Sl No": "247",
+            "Ward": "DMC Ward No - 228",
+            "Population": "8856"
+        },
+        {
+            "_id": 248,
+            "Sl No": "248",
+            "Ward": "DMC Ward No - 228",
+            "Population": "44422"
+        },
+        {
+            "_id": 249,
+            "Sl No": "249",
+            "Ward": "DMC Ward No - 229",
+            "Population": "59503"
+        },
+        {
+            "_id": 250,
+            "Sl No": "250",
+            "Ward": "DMC Ward No - 230",
+            "Population": "65237"
+        },
+        {
+            "_id": 251,
+            "Sl No": "251",
+            "Ward": "DMC Ward No - 231",
+            "Population": "47538"
+        },
+        {
+            "_id": 252,
+            "Sl No": "252",
+            "Ward": "DMC Ward No - 231",
+            "Population": "22421"
+        },
+        {
+            "_id": 253,
+            "Sl No": "253",
+            "Ward": "DMC Ward No - 232",
+            "Population": "59500"
+        },
+        {
+            "_id": 254,
+            "Sl No": "254",
+            "Ward": "DMC Ward No - 233",
+            "Population": "19427"
+        },
+        {
+            "_id": 255,
+            "Sl No": "255",
+            "Ward": "DMC Ward No - 233",
+            "Population": "23981"
+        },
+        {
+            "_id": 256,
+            "Sl No": "256",
+            "Ward": "DMC Ward No - 234",
+            "Population": "41179"
+        },
+        {
+            "_id": 257,
+            "Sl No": "257",
+            "Ward": "DMC Ward No - 235",
+            "Population": "62376"
+        },
+        {
+            "_id": 258,
+            "Sl No": "258",
+            "Ward": "DMC Ward No - 236",
+            "Population": "39404"
+        },
+        {
+            "_id": 259,
+            "Sl No": "259",
+            "Ward": "DMC Ward No - 236",
+            "Population": "8411"
+        },
+        {
+            "_id": 260,
+            "Sl No": "260",
+            "Ward": "DMC Ward No - 236",
+            "Population": "2478"
+        },
+        {
+            "_id": 261,
+            "Sl No": "261",
+            "Ward": "DMC Ward No - 237",
+            "Population": "54093"
+        },
+        {
+            "_id": 262,
+            "Sl No": "262",
+            "Ward": "DMC Ward No - 238",
+            "Population": "58291"
+        },
+        {
+            "_id": 263,
+            "Sl No": "263",
+            "Ward": "DMC Ward No - 239",
+            "Population": "20194"
+        },
+        {
+            "_id": 264,
+            "Sl No": "264",
+            "Ward": "DMC Ward No - 239",
+            "Population": "28226"
+        },
+        {
+            "_id": 265,
+            "Sl No": "265",
+            "Ward": "DMC Ward No - 240",
+            "Population": "55045"
+        },
+        {
+            "_id": 266,
+            "Sl No": "266",
+            "Ward": "DMC Ward No - 241",
+            "Population": "50557"
+        },
+        {
+            "_id": 267,
+            "Sl No": "267",
+            "Ward": "DMC Ward No - 242",
+            "Population": "61730"
+        },
+        {
+            "_id": 268,
+            "Sl No": "268",
+            "Ward": "DMC Ward No - 243",
+            "Population": "10713"
+        },
+        {
+            "_id": 269,
+            "Sl No": "269",
+            "Ward": "DMC Ward No - 244",
+            "Population": "68639"
+        },
+        {
+            "_id": 270,
+            "Sl No": "270",
+            "Ward": "DMC Ward No - 245",
+            "Population": "39582"
+        },
+        {
+            "_id": 271,
+            "Sl No": "271",
+            "Ward": "DMC Ward No - 245",
+            "Population": "5212"
+        },
+        {
+            "_id": 272,
+            "Sl No": "272",
+            "Ward": "DMC Ward No - 246",
+            "Population": "50424"
+        },
+        {
+            "_id": 273,
+            "Sl No": "273",
+            "Ward": "DMC Ward No - 247",
+            "Population": "59448"
+        },
+        {
+            "_id": 274,
+            "Sl No": "274",
+            "Ward": "DMC Ward No - 248",
+            "Population": "59802"
+        },
+        {
+            "_id": 275,
+            "Sl No": "275",
+            "Ward": "DMC Ward No - 249",
+            "Population": "29435"
+        },
+        {
+            "_id": 276,
+            "Sl No": "276",
+            "Ward": "DMC Ward No - 250",
+            "Population": "39820"
+        },
+        {
+            "_id": 277,
+            "Sl No": "277",
+            "Ward": "DMC Ward No - 251",
+            "Population": "58009"
+        },
+        {
+            "_id": 278,
+            "Sl No": "278",
+            "Ward": "DMC Ward No - 252",
+            "Population": "65412"
+        },
+        {
+            "_id": 279,
+            "Sl No": "279",
+            "Ward": "DMC Ward No - 253",
+            "Population": "54676"
+        },
+        {
+            "_id": 280,
+            "Sl No": "280",
+            "Ward": "DMC Ward No - 254",
+            "Population": "64804"
+        },
+        {
+            "_id": 281,
+            "Sl No": "281",
+            "Ward": "DMC Ward No - 255",
+            "Population": "59681"
+        },
+        {
+            "_id": 282,
+            "Sl No": "282",
+            "Ward": "DMC Ward No - 256",
+            "Population": "39740"
+        },
+        {
+            "_id": 283,
+            "Sl No": "283",
+            "Ward": "DMC Ward No - 257",
+            "Population": "56775"
+        },
+        {
+            "_id": 284,
+            "Sl No": "284",
+            "Ward": "DMC Ward No - 258",
+            "Population": "30094"
+        },
+        {
+            "_id": 285,
+            "Sl No": "285",
+            "Ward": "DMC Ward No - 258",
+            "Population": "5682"
+        },
+        {
+            "_id": 286,
+            "Sl No": "286",
+            "Ward": "DMC Ward No - 259",
+            "Population": "45600"
+        },
+        {
+            "_id": 287,
+            "Sl No": "287",
+            "Ward": "DMC Ward No - 260",
+            "Population": "18680"
+        },
+        {
+            "_id": 288,
+            "Sl No": "288",
+            "Ward": "DMC Ward No - 263",
+            "Population": "53707"
+        },
+        {
+            "_id": 289,
+            "Sl No": "289",
+            "Ward": "DMC Ward No - 264",
+            "Population": "35244"
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-19T20:00:42.691539Z",
+    "_pramaan_dataset_name": "delhi_ward_population_2011",
+    "_pramaan_source": "opencity.in",
+    "_pramaan_record_count": 289
+}

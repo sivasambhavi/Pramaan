@@ -1030,7 +1030,10 @@ def main() -> None:
                         <div style="display:flex;gap:28px;font-size:0.83em;margin-bottom:12px;">
                             <div><span style="color:#64748b;font-size:0.85em;text-transform:uppercase;letter-spacing:0.05em;">Total</span><br>
                                  <strong style="color:#f1f5f9;font-size:1.15em;font-family:'Outfit',sans-serif;">{linked}</strong></div>
-                            <div><span style="color:#64748b;font-size:0.85em;text-transform:uppercase;letter-spacing:0.05em;">Proven</span><br>
+                            <div><span style="color:#64748b;font-size:0.85em;text-transform:uppercase;letter-spacing:0.05em;">Proven
+                                <span title="Proven = at least one valid evidence document OR a news mention. Broader than 'Fully Verified' in the Snapshot (which requires 2+ evidence items or confirmed news + field photo)."
+                                      style="cursor:help;color:#38bdf8;font-size:0.9em;margin-left:3px;">ℹ</span>
+                                </span><br>
                                  <strong style="color:#22c55e;font-size:1.15em;font-family:'Outfit',sans-serif;">{proven}</strong></div>
                             <div><span style="color:#64748b;font-size:0.85em;text-transform:uppercase;letter-spacing:0.05em;">Missing</span><br>
                                  <strong style="color:#ef4444;font-size:1.15em;font-family:'Outfit',sans-serif;">{unproven}</strong></div>

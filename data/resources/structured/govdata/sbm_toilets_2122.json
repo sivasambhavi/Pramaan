@@ -1,0 +1,358 @@
+{
+    "index_name": "18621e31-7e6d-429e-86b4-fa80894e6eb3",
+    "title": "State/UTs-wise Details of the Toilets Constructed under SBM (Swachh Bharat Mission) in Urban Areas during 2021-22",
+    "desc": "State/UTs-wise Details of the Toilets Constructed under SBM (Swachh Bharat Mission) in Urban Areas during 2021-22",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "65b21f96-6c7a-4410-9f5f-d8f10a79d842",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1673547854,
+    "updated": 1673584057,
+    "created_date": "2023-01-12T19:24:14Z",
+    "updated_date": "2023-01-13T09:57:37Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "65b21f96-6c7a-4410-9f5f-d8f10a79d842",
+        "field": "18621e31-7e6d-429e-86b4-fa80894e6eb3"
+    },
+    "field": [
+        {
+            "id": "_s_no",
+            "name": "S.No",
+            "type": "keyword"
+        },
+        {
+            "id": "states__uts",
+            "name": "States/ UTs",
+            "type": "keyword"
+        },
+        {
+            "id": "total_no__of_ihhls_constructed_till_march_2021",
+            "name": "Total No. of IHHLs Constructed till March 2021",
+            "type": "double"
+        },
+        {
+            "id": "no__of_ihhls_constructed_during_april_2021___march_2022",
+            "name": "No. of IHHLs Constructed During April 2021 - March 2022",
+            "type": "double"
+        },
+        {
+            "id": "total_no__of_ct_pt_constructed_till_march_2021",
+            "name": "Total No. of CT/PT Constructed till March 2021",
+            "type": "double"
+        },
+        {
+            "id": "no__of_ct_pt_constructed_during_april_2021___march_2022",
+            "name": "No. of CT/PT Constructed during April 2021 - March 2022",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 36,
+    "count": 36,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "_s_no": "1",
+            "states__uts": "Andhra Pradesh",
+            "total_no__of_ihhls_constructed_till_march_2021": 243764,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 17797,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "2",
+            "states__uts": "Andaman and Nicobar Islands",
+            "total_no__of_ihhls_constructed_till_march_2021": 336,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 603,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "3",
+            "states__uts": "Arunachal Pradesh",
+            "total_no__of_ihhls_constructed_till_march_2021": 9743,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 46,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "4",
+            "states__uts": "Assam",
+            "total_no__of_ihhls_constructed_till_march_2021": 73747,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 669,
+            "total_no__of_ct_pt_constructed_till_march_2021": 3350,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 6
+        },
+        {
+            "_s_no": "5",
+            "states__uts": "Bihar",
+            "total_no__of_ihhls_constructed_till_march_2021": 393613,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 20878,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 5575
+        },
+        {
+            "_s_no": "6",
+            "states__uts": "Chandigarh",
+            "total_no__of_ihhls_constructed_till_march_2021": 6117,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 2512,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "7",
+            "states__uts": "Chhattisgarh",
+            "total_no__of_ihhls_constructed_till_march_2021": 325050,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 18832,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "8",
+            "states__uts": "Dadra and Nagar Haveli and Daman and Diu",
+            "total_no__of_ihhls_constructed_till_march_2021": 2378,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 615,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "9",
+            "states__uts": "Delhi",
+            "total_no__of_ihhls_constructed_till_march_2021": 725,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 28256,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "10",
+            "states__uts": "Goa",
+            "total_no__of_ihhls_constructed_till_march_2021": 3741,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 59,
+            "total_no__of_ct_pt_constructed_till_march_2021": 847,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 15
+        },
+        {
+            "_s_no": "11",
+            "states__uts": "Gujarat",
+            "total_no__of_ihhls_constructed_till_march_2021": 560046,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 24149,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "12",
+            "states__uts": "Haryana",
+            "total_no__of_ihhls_constructed_till_march_2021": 66427,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 11374,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "13",
+            "states__uts": "Himachal Pradesh",
+            "total_no__of_ihhls_constructed_till_march_2021": 6687,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 16,
+            "total_no__of_ct_pt_constructed_till_march_2021": 1567,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 133
+        },
+        {
+            "_s_no": "14",
+            "states__uts": "Jammu and Kashmir",
+            "total_no__of_ihhls_constructed_till_march_2021": 51235,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 11,
+            "total_no__of_ct_pt_constructed_till_march_2021": 3329,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "15",
+            "states__uts": "Jharkhand",
+            "total_no__of_ihhls_constructed_till_march_2021": 218576,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 75,
+            "total_no__of_ct_pt_constructed_till_march_2021": 8732,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "16",
+            "states__uts": "Karnataka",
+            "total_no__of_ihhls_constructed_till_march_2021": 393278,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 36556,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "17",
+            "states__uts": "Kerala",
+            "total_no__of_ihhls_constructed_till_march_2021": 37207,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 2803,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "18",
+            "states__uts": "Ladakh",
+            "total_no__of_ihhls_constructed_till_march_2021": 400,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 194,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "19",
+            "states__uts": "Madhya Pradesh",
+            "total_no__of_ihhls_constructed_till_march_2021": 577437,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 1825,
+            "total_no__of_ct_pt_constructed_till_march_2021": 19732,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 494
+        },
+        {
+            "_s_no": "20",
+            "states__uts": "Maharashtra",
+            "total_no__of_ihhls_constructed_till_march_2021": 711353,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 733,
+            "total_no__of_ct_pt_constructed_till_march_2021": 166465,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "21",
+            "states__uts": "Manipur",
+            "total_no__of_ihhls_constructed_till_march_2021": 37593,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 477,
+            "total_no__of_ct_pt_constructed_till_march_2021": 512,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "22",
+            "states__uts": "Meghalaya",
+            "total_no__of_ihhls_constructed_till_march_2021": 1604,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 152,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "23",
+            "states__uts": "Mizoram",
+            "total_no__of_ihhls_constructed_till_march_2021": 9724,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 1475,
+            "total_no__of_ct_pt_constructed_till_march_2021": 581,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 26
+        },
+        {
+            "_s_no": "24",
+            "states__uts": "Nagaland",
+            "total_no__of_ihhls_constructed_till_march_2021": 19847,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 235,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "25",
+            "states__uts": "Odisha",
+            "total_no__of_ihhls_constructed_till_march_2021": 140301,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 656,
+            "total_no__of_ct_pt_constructed_till_march_2021": 11999,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 47
+        },
+        {
+            "_s_no": "26",
+            "states__uts": "Puducherry",
+            "total_no__of_ihhls_constructed_till_march_2021": 5162,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 836,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "27",
+            "states__uts": "Punjab",
+            "total_no__of_ihhls_constructed_till_march_2021": 103683,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 11388,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 123
+        },
+        {
+            "_s_no": "28",
+            "states__uts": "Rajasthan",
+            "total_no__of_ihhls_constructed_till_march_2021": 367974,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 541,
+            "total_no__of_ct_pt_constructed_till_march_2021": 31300,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "29",
+            "states__uts": "Sikkim",
+            "total_no__of_ihhls_constructed_till_march_2021": 1066,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 115,
+            "total_no__of_ct_pt_constructed_till_march_2021": 163,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "30",
+            "states__uts": "Tamil Nadu",
+            "total_no__of_ihhls_constructed_till_march_2021": 508562,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 92744,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "31",
+            "states__uts": "Telangana",
+            "total_no__of_ihhls_constructed_till_march_2021": 156043,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 1122,
+            "total_no__of_ct_pt_constructed_till_march_2021": 10209,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 5256
+        },
+        {
+            "_s_no": "32",
+            "states__uts": "Tripura",
+            "total_no__of_ihhls_constructed_till_march_2021": 20269,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 159,
+            "total_no__of_ct_pt_constructed_till_march_2021": 1073,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 16
+        },
+        {
+            "_s_no": "33",
+            "states__uts": "Uttar Pradesh",
+            "total_no__of_ihhls_constructed_till_march_2021": 896492,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 1205,
+            "total_no__of_ct_pt_constructed_till_march_2021": 69292,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 7
+        },
+        {
+            "_s_no": "34",
+            "states__uts": "Uttarakhand",
+            "total_no__of_ihhls_constructed_till_march_2021": 23545,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 4642,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "35",
+            "states__uts": "West Bengal",
+            "total_no__of_ihhls_constructed_till_march_2021": 282542,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": "0",
+            "total_no__of_ct_pt_constructed_till_march_2021": 5746,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": "0"
+        },
+        {
+            "_s_no": "Total",
+            "states__uts": "Total",
+            "total_no__of_ihhls_constructed_till_march_2021": 6256267,
+            "no__of_ihhls_constructed_during_april_2021___march_2022": 9138,
+            "total_no__of_ct_pt_constructed_till_march_2021": 609509,
+            "no__of_ct_pt_constructed_during_april_2021___march_2022": 11698
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-19T19:58:53.237379Z",
+    "_pramaan_dataset_name": "sbm_toilets_urban_2021_22"
+}

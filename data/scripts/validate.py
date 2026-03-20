@@ -29,7 +29,7 @@ from pathlib import Path
 # ── Paths ─────────────────────────────────────────────────────────────────────
 _SCRIPT_DIR    = Path(__file__).resolve().parent
 _PROJECT_ROOT  = _SCRIPT_DIR.parents[1]
-_FORMALIZED    = _PROJECT_ROOT / "data" / "resources" / "data" / "final_formalized"
+_FORMALIZED    = _PROJECT_ROOT / "data" / "resources" / "final_formalized"
 
 # ── Delhi bounding box (approx) ────────────────────────────────────────────────
 DELHI_LAT = (28.40, 28.90)
