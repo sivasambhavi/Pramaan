@@ -49,3 +49,10 @@ pillow==10.3.0
 exifread==3.0.0
 python-multipart==0.0.9
 aiofiles==23.2.1
+
+# Agentic Ingestion Pipeline
+crawl4ai
+lxml
+fastkml
+openpyxl
+markdown
