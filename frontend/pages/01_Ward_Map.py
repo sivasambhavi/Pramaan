@@ -20,7 +20,6 @@ import plotly.graph_objects as go
 
 from utils.constants import (
     SCHEME_SHORT_NAMES,
-    ASSET_VERIFICATION_OVERRIDE,
     WARD_BOUNDARIES,
     WARD_CENTROID,
     PIN_RADIUS_KM,
@@ -46,10 +45,8 @@ def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 
 
 def apply_override(breakdown: list) -> list:
-    for asset in breakdown:
-        aid = asset.get("asset_id", "")
-        if aid in ASSET_VERIFICATION_OVERRIDE:
-            asset["proof_status"] = ASSET_VERIFICATION_OVERRIDE[aid]
+    # proof_status is now the backend's source of truth (set by load_seed_data + VerificationAgent).
+    # This function is kept as a no-op so call-sites don't need updating.
     return breakdown
 
 

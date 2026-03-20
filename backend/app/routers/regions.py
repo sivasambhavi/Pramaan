@@ -5,7 +5,7 @@ router = APIRouter()
 
 LIST_REGIONS = """
 MATCH (r:Region)
-OPTIONAL MATCH (r)-[:LOCATED_IN]->(parent:Region)
+OPTIONAL MATCH (parent:Region)-[:CONTAINS]->(r)
 RETURN r.region_id  AS region_id,
        r.name       AS name,
        r.type       AS type,
@@ -19,7 +19,7 @@ ORDER BY r.type, r.name
 
 GET_REGION = """
 MATCH (r:Region {region_id: $region_id})
-OPTIONAL MATCH (r)-[:LOCATED_IN]->(parent:Region)
+OPTIONAL MATCH (parent:Region)-[:CONTAINS]->(r)
 RETURN r.region_id  AS region_id,
        r.name       AS name,
        r.type       AS type,

@@ -7,7 +7,7 @@ import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.constants import (
-    ASSET_VERIFICATION_OVERRIDE,
+    # ASSET_VERIFICATION_OVERRIDE removed — proof_status read from Neo4j API
     ASSET_EVIDENCE_PHOTOS,
     NODE_ICONS     as _NODE_ICONS,
     TRUST_TIERS    as _TRUST_TIERS,
@@ -706,7 +706,8 @@ def main() -> None:
     # Asset-switch-only badge rerun — safe because asset_id changes only on selectbox change,
     # not on button clicks. Avoids killing button click events (unlike proof_status reruns).
     if st.session_state.get("_badge_asset_id") != asset_id:
-        _new_proof = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "")
+        # proof_status is loaded from the chain API below — start with cached value or default
+        _new_proof = st.session_state.get(f"_api_proof_{asset_id}", "")
         if not _new_proof and st.session_state.get(f"ev_{asset_id}"):
             _new_proof = "partially_verified"
         if not _new_proof:
@@ -761,12 +762,36 @@ def main() -> None:
         # Keep breadcrumb in sync with current asset name
         st.session_state["_crumb_asset_name"] = asset_name
 
-        # Update badge after chain loads — same logic as badge sync above
-        _proof_now = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "")
+        # ── Quick actions: agent verify + manual full verify ────────────────
+        qa1, qa2, qa3 = st.columns([1, 1, 2])
+        with qa1:
+            if st.button("🤖 Verify This Asset (Agent)", key=f"agent_verify_{asset_id}"):
+                vr = safe_post(f"/agents/verify/{asset_id}", json={"confidence": 0.7}, timeout=15)
+                if vr:
+                    st.success(
+                        f"Agent result: {vr.get('action', 'N/A')} · "
+                        f"confidence {vr.get('new_conf', 'N/A')} · "
+                        f"tier {vr.get('trust_tier', 'N/A')}"
+                    )
+                    st.rerun()
+                else:
+                    st.error("Agent verification failed.")
+        with qa2:
+            if st.button("✅ Mark Fully Verified", key=f"manual_verify_{asset_id}"):
+                patch_asset_verified(asset_id)
+                st.success("Asset marked fully_verified.")
+                st.rerun()
+        with qa3:
+            st.caption("Agent verify does Bayesian corroboration + contradiction checks. Manual verify directly sets proof_status to fully_verified.")
+
+        # Update badge after chain loads — read proof_status directly from Neo4j API response
+        _proof_now = asset.get("proof_status", "") or ""
         if not _proof_now and st.session_state.get(f"ev_{asset_id}"):
             _proof_now = "partially_verified"
         if not _proof_now:
             _proof_now = "unverified"
+        # Cache it so the pre-chain badge sync (above) can use it on rerun
+        st.session_state[f"_api_proof_{asset_id}"] = _proof_now
         st.session_state["last_proof_status"] = _proof_now
         # Rerun once if badge displayed stale status (e.g. "unverified" before ev_ was cached).
         # Safe for button clicks: _badge_proof is stable once set; button clicks don't change _proof_now.
@@ -912,8 +937,8 @@ def main() -> None:
                 render_node("📍", "Location", "Location metadata pending verification.", "#64748b")
             arrow()
 
-            # ── 5th Node: Evidence — driven by ASSET_VERIFICATION_OVERRIDE ────
-            _v_status = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "")
+            # ── 5th Node: Evidence — driven by proof_status from Neo4j API ────
+            _v_status = st.session_state.get(f"_api_proof_{asset_id}", "")
             # fallback: check cached news
             if not _v_status and st.session_state.get(f"ev_{asset_id}"):
                 _v_status = "partially_verified"
@@ -941,37 +966,17 @@ def main() -> None:
             # ── Budget Card ────────────────────────────────────────────────
             sanctioned = asset.get('cost', 0) or 0
             _status_lc = status.lower().replace(" ", "_")
-            if _status_lc in ("completed", "complete"):
-                disbursed = sanctioned
-                pending_amt = 0
-            elif _status_lc in ("in_progress", "ongoing", "in progress"):
-                disbursed = int(sanctioned * 0.6) if sanctioned else 0
-                pending_amt = sanctioned - disbursed if sanctioned else 0
-            else:
-                disbursed = 0
-                pending_amt = sanctioned
 
             st.markdown(f'<div class="sec-label">{svg_icon("banknote","#94a3b8",14)} Budget &amp; Status</div>', unsafe_allow_html=True)
-            b1, b2, b3, b4 = st.columns(4)
+            b1, b2 = st.columns(2)
             b1.metric("Sanctioned Cost",
                       f"₹{sanctioned:,.0f}" if sanctioned else "N/A",
-                      help="As recorded in scheme allocation CSV. If multiple assets show "
-                           "identical costs, the seed data may not yet reflect per-asset "
-                           "actuals — reseed from updated assets.csv to get asset-specific figures.")
-            b2.metric("Disbursed (Est.)",
-                      f"₹{disbursed:,.0f}" if sanctioned else "N/A",
-                      help="Estimated from delivery status — not confirmed actual disbursement. "
-                           "Completed → 100% assumed disbursed. In-progress → ~60%. "
-                           "Verify with MCD/DDA financial records for actual figures.")
-            b3.metric("Pending Release",
-                      f"₹{pending_amt:,.0f}" if sanctioned else "N/A",
-                      delta=f"-₹{pending_amt:,.0f}" if pending_amt else None,
-                      delta_color="inverse")
-            b4.metric("Delivery Status", status.replace("_", " ").capitalize() if status else "Unknown")
+                      help="As recorded in structured source data (asset row / scheme allocation).")
+            b2.metric("Delivery Status", status.replace("_", " ").capitalize() if status else "Unknown")
 
             # Accountability callout: completed claim but no verified evidence
             # Use same logic as badge: OVERRIDE first, then ev_ cache, then "unverified"
-            _cur_proof = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "")
+            _cur_proof = st.session_state.get(f"_api_proof_{asset_id}", "")
             if not _cur_proof and st.session_state.get(f"ev_{asset_id}"):
                 _cur_proof = "partially_verified"
             if not _cur_proof:
@@ -981,10 +986,9 @@ def main() -> None:
                     "<div style='background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.3);"
                     "border-left:4px solid #ef4444;border-radius:8px;padding:10px 14px;margin-top:10px;"
                     "font-size:0.82em;color:#fca5a5;'>"
-                    "<b>⚠ Accountability gap:</b> This asset is marked <b>Completed</b> and funds are "
-                    "shown as disbursed, but <b>no verified field evidence exists</b>. The disbursed "
-                    "amount is an estimate based on status — actual disbursement is unconfirmed until "
-                    "field proof is submitted."
+                    "<b>⚠ Accountability gap:</b> This asset is marked <b>Completed</b>, but "
+                    "<b>no verified field evidence exists</b> yet. Completion claim needs field proof "
+                    "or completion certificate."
                     "</div>",
                     unsafe_allow_html=True,
                 )
@@ -993,10 +997,9 @@ def main() -> None:
                     "<div style='background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.3);"
                     "border-left:4px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-top:10px;"
                     "font-size:0.82em;color:#fde68a;'>"
-                    "<b>📋 Disbursement estimated:</b> This asset is marked <b>Completed</b> with partial "
-                    "news evidence. The ₹{:,.0f} disbursement figure is an estimate based on status — "
-                    "field photo or completion certificate needed to confirm actual spend."
-                    "</div>".format(sanctioned),
+                    "<b>📋 Partial verification:</b> This asset is marked <b>Completed</b> with partial "
+                    "news evidence. Field photo or completion certificate is needed for full verification."
+                    "</div>",
                     unsafe_allow_html=True
                 )
 
@@ -1021,6 +1024,29 @@ def main() -> None:
             )
             # Evidence is pre-fetched above before tabs — just read the cache
             live_articles = st.session_state.get(f"ev_{asset_id}", [])
+
+            st.markdown(f'<div class="sec-label">{svg_icon("camera","#94a3b8",14)} Upload Geo-Tagged Photo</div>', unsafe_allow_html=True)
+            _photo = st.file_uploader(
+                "Upload field photo (JPG/PNG with GPS EXIF)",
+                type=["jpg", "jpeg", "png"],
+                key=f"proof_photo_{asset_id}",
+                accept_multiple_files=False,
+            )
+            if st.button("📷 Link Photo to This Asset", key=f"proof_photo_submit_{asset_id}"):
+                if not _photo:
+                    st.warning("Please select a photo first.")
+                else:
+                    _files = {"photo": (_photo.name, _photo.getvalue(), _photo.type or "image/jpeg")}
+                    _data = {"ward_id": (ward.get("region_id") if ward else ""), "radius_meters": "250"}
+                    _up = safe_post("/ingest/photo-evidence", data=_data, files=_files, timeout=30)
+                    if _up:
+                        st.success(
+                            f"Photo linked to { _up.get('asset_name', _up.get('asset_id')) } "
+                            f"({ _up.get('distance_meters', 'N/A') }m)."
+                        )
+                        st.rerun()
+                    else:
+                        st.error("Upload failed. Ensure the photo has GPS EXIF metadata.")
 
             if live_articles:
                 # Patch asset as verified
@@ -1121,7 +1147,7 @@ def main() -> None:
                     "#64748b", trust="official")
 
             # ── Evidence submission — shown for all unverified/partial assets ──
-            _cur_ev_status = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "unverified")
+            _cur_ev_status = st.session_state.get(f"_api_proof_{asset_id}", "unverified")
             if _cur_ev_status in ("unverified", "partially_verified"):
                 # Choose label/icon based on proof status (#10)
                 _submit_label = (
@@ -1232,7 +1258,7 @@ def main() -> None:
 
             # ── 📸 BEFORE / AFTER Photo Evidence ──────────────────────
             _photos = ASSET_EVIDENCE_PHOTOS.get(asset_id, {})
-            _v      = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "unverified")
+            _v      = st.session_state.get(f"_api_proof_{asset_id}", "unverified")
 
             # Only render if a before image actually exists for this asset
             _bp = _photos.get("before", "")
@@ -1414,7 +1440,7 @@ def main() -> None:
             coverage_pct = (count / ELIGIBLE_ESTIMATE) * 100 if ELIGIBLE_ESTIMATE > 0 else 0
 
             # Only inflate to 100% if BOTH status=completed AND evidence is verified
-            _cur_proof_impact = ASSET_VERIFICATION_OVERRIDE.get(asset_id, "unverified")
+            _cur_proof_impact = st.session_state.get(f"_api_proof_{asset_id}", "unverified")
             _is_evidence_verified = _cur_proof_impact in ("fully_verified", "partially_verified")
             if "complet" in status.lower() and _is_evidence_verified and coverage_pct < 95:
                 coverage_pct = 100.0

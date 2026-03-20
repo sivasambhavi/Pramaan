@@ -1651,3 +1651,12 @@ ASSET_PARK_SNZ_747,Gokalpur Village (Jagat Wali Dairy),park,REG_W239,SCH_AMRUT,A
 ASSET_PARK_SNZ_748,Chauhan Pur Park,park,REG_W241,SCH_AMRUT,ACT_SUP_MUKESH,,completed,28.723196,77.268366,,Area: 0.25 acres,MCD,,semi_structured_xlsx,0.9
 ASSET_PARK_SNZ_749,Park at Ashoka Colour Mill Karawal Nagar,park,REG_W242,SCH_AMRUT,ACT_SUP_MUKESH,,completed,28.440532,77.1636515,,Area: 0.34 acres,MCD,,semi_structured_xlsx,0.9
 ASSET_PARK_SNZ_750,Sabha Pur Park,park,REG_W250,SCH_AMRUT,ACT_SUP_MUKESH,,completed,28.747208,77.247407,,Area: 0.12 acres,MCD,,semi_structured_xlsx,0.9
+ASSET_W12_DRAIN_MAIN,Main Channel Drain Renovation — Ward 12,drain,REG_W12,SCH_AMRUT,ACT_W12_WORKS_DEPT,1450000.0,completed,28.6878,77.2411,,,,,,
+ASSET_W12_ROAD_SECTOR5,Road Resurfacing — Sector 5 Ward 12,road,REG_W12,SCH_SFC,ACT_W12_WORKS_DEPT,1100000.0,completed,28.6891,77.2435,,,,,,
+ASSET_W12_WATER_KIOSK,Community Water Kiosk — Ward 12,water_body,REG_W12,SCH_JJBY,ACT_W12_WORKS_DEPT,350000.0,in_progress,28.6872,77.2422,,,,,,
+ASSET_W12_TOILET_BLOCK,Community Toilet Block — Ward 12,toilet,REG_W12,SCH_SWACHH,ACT_MCD_SHAHDARA_WORKS,480000.0,completed,28.6865,77.2409,,,,,,
+ASSET_W12_STREETLIGHT,LED Streetlight Upgrade — Ward 12,streetlight,REG_W12,SCH_LOCAL_LIGHTS,ACT_W12_WORKS_DEPT,620000.0,completed,28.6883,77.2428,,,,,,
+ASSET_W28_DRAIN_A,Storm Drain Reconstruction — Block A Ward 28,drain,REG_W28,SCH_AMRUT,ACT_W28_SANITATION_DEPT,1080000.0,completed,28.6548,77.2774,,,,,,
+ASSET_W28_ROAD_MAIN,Main Road Repair — Ward 28,road,REG_W28,SCH_SFC,ACT_W28_SANITATION_DEPT,920000.0,in_progress,28.6535,77.2761,,,,,,
+ASSET_W28_PARK,Neighbourhood Park — Ward 28,park,REG_W28,SCH_AMRUT,ACT_W28_COUNCILLOR,730000.0,completed,28.6542,77.2769,,,,,,
+ASSET_W28_TOILET_BLOCK,Public Toilet Complex — Ward 28,toilet,REG_W28,SCH_SWACHH,ACT_W28_SANITATION_DEPT,510000.0,completed,28.6555,77.2781,,,,,,

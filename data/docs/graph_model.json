@@ -51,8 +51,11 @@
       "properties": {
         "region_id": "String — PK",
         "name": "String",
-        "type": "String  (city|zone|ward|street)",
-        "parent_region_id": "String — FK → Region.region_id"
+        "type": "String  (country|state|district|city|zone|ward|street)",
+        "parent_region_id": "String — FK → Region.region_id",
+        "lat": "Float — centroid latitude",
+        "lon": "Float — centroid longitude",
+        "lgd_code": "String — LGD portal code"
       },
       "style": { "node-color": "#2E86AB" }
     },
@@ -146,10 +149,10 @@
   ],
   "relationships": [
     {
-      "id": "r_region_located_in",
+      "id": "r_region_contains",
       "fromId": "n_region",
       "toId": "n_region",
-      "type": "LOCATED_IN",
+      "type": "CONTAINS",
       "properties": {},
       "style": {}
     },

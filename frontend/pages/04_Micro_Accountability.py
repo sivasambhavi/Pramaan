@@ -1,7 +1,7 @@
 """
 Micro-Accountability — PRAMAAN v4.6.3
 Trigger Hyper-Local WhatsApp notifications for FULLY VERIFIED assets only.
-Uses ASSET_VERIFICATION_OVERRIDE as single source of truth.
+proof_status is read directly from Neo4j via the backend API.
 """
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import streamlit as st
 from utils.api import safe_get, safe_post
-from utils.constants import ASSET_VERIFICATION_OVERRIDE
+# proof_status is now read from Neo4j API — no frontend override dict needed
 from utils.icons import icon, icon_box
 from utils.session import init_session, get_ward_id, get_ward_name, get_breadcrumb
 from components.topnav import render_topnav
@@ -153,12 +153,8 @@ def main():
             st.warning("No assets found for this ward.")
             return
 
-        # Apply override — only fully_verified assets can trigger notifications (PRD FR-7.3)
-        for a in all_assets:
-            aid = a.get("asset_id", "")
-            if aid in ASSET_VERIFICATION_OVERRIDE:
-                a["proof_status"] = ASSET_VERIFICATION_OVERRIDE[aid]
-
+        # proof_status comes from Neo4j directly — no client-side override
+        # The backend sets proof_status via load_seed_data.py + VerificationAgent
         verified_assets = [a for a in all_assets
                            if a.get("proof_status") in ("fully_verified", "verified")]
 

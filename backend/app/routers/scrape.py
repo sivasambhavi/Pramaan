@@ -5,32 +5,79 @@ Fix 4 applied: Added POST /scrape/analyze-evidence endpoint so that
                llm_extractor.py (frontend) can delegate to the unified
                AIService instead of maintaining its own Groq client.
                Now there is ONE LLM client in the entire codebase.
+
+Validation Gate 4: /scrape/news now scores each article's relevance before
+               extraction. Articles scoring "Unrelated" are dropped before
+               any entity extraction, reducing hallucination risk upstream.
 """
 
+import logging
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from app.services.news_service import news_service
 from app.services.ai_service import ai_service
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/scrape", tags=["scrape"])
+
+# Relevance values considered useful for ingestion
+_INGESTIBLE_RELEVANCE = {"Direct Match", "Zone Context", "National Context"}
 
 # ─── GET /scrape/news ─────────────────────────────────────────────────────────
 
 @router.get("/news")
 async def scrape_and_analyze(q: str = Query(..., description="Governance news search query")):
-    """Scrape Google News RSS for a query and return AI-extracted ontology. source_type=unstructured_rss."""
+    """
+    Scrape Google News RSS, pre-filter Unrelated articles (Gate 4),
+    then extract governance ontology from the relevant ones only.
+    Returns extracted entities, relations, kept articles, and dropped count.
+    source_type=unstructured_rss
+    """
     try:
         articles = news_service.fetch_google_news(q)
         if not articles:
-            return {"entities": [], "relations": [], "articles": [], "source_type": "unstructured_rss"}
+            return {
+                "entities": [], "relations": [], "articles": [],
+                "source_type": "unstructured_rss",
+                "articles_dropped": 0,
+            }
 
+        # ── Gate 4: score each article for relevance before extraction ───────
+        relevant_articles = []
+        dropped = 0
+        for article in articles:
+            snippet = f"{article.get('title', '')} {article.get('summary', '')}"
+            scored  = ai_service.score_evidence(
+                text=snippet,
+                asset_name=q,          # query as proxy asset name
+                ward_name="Delhi",
+            )
+            relevance = scored.get("relevance", "")
+            if relevance in _INGESTIBLE_RELEVANCE:
+                article["relevance"]  = relevance
+                article["confidence"] = scored.get("confidence", 0.5)
+                relevant_articles.append(article)
+            else:
+                dropped += 1
+                logger.info("[scrape] DROPPED article (relevance=%r): %s", relevance, article.get("title", "")[:80])
+
+        if not relevant_articles:
+            return {
+                "entities": [], "relations": [],
+                "articles": [], "articles_dropped": dropped,
+                "source_type": "unstructured_rss",
+                "message": "All articles were Unrelated to the query — nothing ingested.",
+            }
+
+        # ── Extract ontology only from relevant articles ───────────────────
         combined_text = "\n\n".join(
-            [f"Headline: {a['title']}\nSummary: {a['summary']}" for a in articles]
+            [f"Headline: {a['title']}\nSummary: {a['summary']}" for a in relevant_articles]
         )
-        # Using the unified method that supports source_type
         extracted = ai_service.extract_ontology(combined_text, source_type="unstructured_rss")
-        extracted["articles"] = articles
+        extracted["articles"]         = relevant_articles
+        extracted["articles_dropped"] = dropped
         return extracted
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

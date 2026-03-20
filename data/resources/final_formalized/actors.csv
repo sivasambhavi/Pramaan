@@ -44,3 +44,7 @@ ACT_SUP_RAJVEER,"Rajveer (Park Supervisor, Shahdara North)",government,REG_SHAHD
 ACT_SUP_MUKESH,"Mukesh (Park Supervisor, Shahdara North)",government,REG_SHAHDARA_NORTH
 ACT_SUP_TEJ_PAL_SHARMA,"Tej Pal Sharma (Park Supervisor, Shahdara North)",government,REG_SHAHDARA_NORTH
 ACT_SUP_RAJENDER_PAL_RANA,"Rajender Pal Rana (Park Supervisor, Shahdara North)",government,REG_SHAHDARA_NORTH
+ACT_W12_COUNCILLOR,Ward 12 Councillor,elected_rep,REG_W12
+ACT_W12_WORKS_DEPT,MCD Ward 12 Works Department,government,REG_W12
+ACT_W28_COUNCILLOR,Ward 28 Councillor,elected_rep,REG_W28
+ACT_W28_SANITATION_DEPT,MCD Ward 28 Sanitation Department,government,REG_W28
