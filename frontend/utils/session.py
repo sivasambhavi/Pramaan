@@ -20,6 +20,7 @@ from utils.constants import (
     DEFAULT_ZONE,
     DEFAULT_WARD,
     DEFAULT_WARD_ID,
+    DEFAULT_STATE_ID,
 )
 
 
@@ -30,10 +31,11 @@ def init_session() -> None:
     overwritten by real API data as soon as the Ward Map or geo_selector runs.
     """
     ss = st.session_state
-    ss.setdefault("selected_state", DEFAULT_STATE)
-    ss.setdefault("selected_city",  DEFAULT_CITY)
-    ss.setdefault("selected_zone",  DEFAULT_ZONE)
-    ss.setdefault("selected_ward",  DEFAULT_WARD)
+    ss.setdefault("selected_state", "—")
+    ss.setdefault("selected_city",  "—")
+    ss.setdefault("selected_zone",  "—")
+    ss.setdefault("selected_ward",  "—")
+    ss.setdefault("ward_id",        "")
     # ward_id is intentionally NOT pre-filled here;
     # it is written by Ward Map / geo_selector from live API data.
 
@@ -68,16 +70,18 @@ def get_ward_id() -> str:
 
 
 def get_ward_name() -> str:
-    return st.session_state.get("selected_ward", DEFAULT_WARD)
+    v = st.session_state.get("sel_ward", "—")
+    return v if v != "—" else DEFAULT_WARD
 
 
 def get_breadcrumb() -> str:
-    ss = st.session_state
+    ss  = st.session_state
+    _PH = "—"
     parts = [
         "India",
-        ss.get("selected_state", DEFAULT_STATE),
-        ss.get("selected_city",  DEFAULT_CITY),
-        ss.get("selected_zone",  DEFAULT_ZONE),
-        ss.get("selected_ward",  DEFAULT_WARD),
+        ss.get("sel_state",    ""),
+        ss.get("sel_city",     ""),
+        ss.get("sel_district", ""),
+        ss.get("sel_ward",     ""),
     ]
-    return " \u203a ".join(p for p in parts if p)
+    return " \u203a ".join(p for p in parts if p and p != _PH)

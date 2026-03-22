@@ -80,6 +80,31 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/stats", tags=["meta"])
+def stats():
+    """Live graph statistics for the landing page."""
+    try:
+        from app.neo4j_client import get_session
+        with get_session() as session:
+            rec = session.run("""
+                CALL { MATCH (n)          RETURN count(n)  AS total_nodes }
+                CALL { MATCH (a:Asset)    RETURN count(a)  AS assets      }
+                CALL { MATCH (s:Scheme)   RETURN count(s)  AS schemes     }
+                CALL { MATCH (e:Evidence) RETURN count(e)  AS evidence    }
+                RETURN total_nodes, assets, schemes, evidence
+            """).single()
+            if rec:
+                return {
+                    "assets":      rec["assets"],
+                    "schemes":     rec["schemes"],
+                    "evidence":    rec["evidence"],
+                    "total_nodes": rec["total_nodes"],
+                }
+    except Exception as e:
+        log.warning("[stats] Neo4j query failed: %s", e)
+    return {"assets": 0, "schemes": 0, "evidence": 0, "total_nodes": 0}
+
+
 @app.get("/scheduler/status", tags=["scheduler"])
 def scheduler_status():
     """List scheduled jobs and their next run times."""

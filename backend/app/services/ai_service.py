@@ -17,6 +17,7 @@ import os
 import json
 import logging
 from groq import Groq
+import google.generativeai as genai
 from app.config import settings
 from app.utils.retry import retryable
 
@@ -62,29 +63,57 @@ this list and is not a synonym/alias for any entry above.
 
 class AIService:
     def __init__(self):
+        # ── Primary: Groq ─────────────────────────────────────────────────────
         self.client = None
-        key = settings.groq_api_key or os.environ.get("GROQ_API_KEY", "")
-        if key:
+        groq_key = settings.groq_api_key or os.environ.get("GROQ_API_KEY", "")
+        if groq_key:
             try:
-                self.client = Groq(api_key=key)
+                self.client = Groq(api_key=groq_key)
+                logger.info("AIService: Groq client initialised (primary)")
             except Exception as e:
                 logger.warning(f"Could not init Groq client: {e}")
         else:
-            logger.warning("GROQ_API_KEY not set — AI service will return mock data.")
+            logger.warning("GROQ_API_KEY not set — will fall back to Gemini if available")
+
+        # ── Fallback: Gemini ──────────────────────────────────────────────────
+        self.gemini = None
+        gemini_key = settings.google_api_key or os.environ.get("GOOGLE_API_KEY", "")
+        if gemini_key:
+            try:
+                genai.configure(api_key=gemini_key)
+                self.gemini = genai.GenerativeModel("gemini-1.5-flash")
+                logger.info("AIService: Gemini client initialised (fallback)")
+            except Exception as e:
+                logger.warning(f"Could not init Gemini client: {e}")
+
+    def _is_rate_limit_error(self, e: Exception) -> bool:
+        err = str(e)
+        return "429" in err or "rate_limit_exceeded" in err or "quota" in err.lower()
+
+    def _call_gemini(self, prompt: str) -> str:
+        """Call Gemini Flash and return raw text response."""
+        resp = self.gemini.generate_content(
+            prompt,
+            generation_config=genai.GenerationConfig(
+                temperature=0.0,
+                response_mime_type="application/json",
+            ),
+        )
+        return resp.text.strip()
 
     # ── 1. Entity + relation extraction ──────────────────────────────────────
     def extract_ontology(self, text: str, source_type: str = "unstructured_llm") -> dict:
         """
         Extract governance entities and relations from raw text.
+        Tries Groq first; falls back to Gemini on rate limit.
         Returns a dict with: entities, relations, source_type, success.
-        Every entity's properties include a confidence score set by the LLM.
         """
         if source_type not in VALID_SOURCE_TYPES:
             raise ValueError(f"Invalid source_type '{source_type}'. Must be one of: {VALID_SOURCE_TYPES}")
-        if not self.client:
+        if not self.client and not self.gemini:
             return {
                 "success": False,
-                "error": "Groq API key not configured",
+                "error": "No AI provider configured (set GROQ_API_KEY or GOOGLE_API_KEY)",
                 "source_type": source_type,
                 "entities": [],
                 "relations": [],
@@ -125,41 +154,59 @@ Rules:
 - Omit unknown fields rather than guessing.
 - Return ONLY the JSON object. Nothing else.
 """
-        @retryable(retries=3, delay=2.0, backoff=2.0, label="Groq.extract_governance_ontology")
-        def _call():
-            return self.client.chat.completions.create(
-                messages=[{"role": "user", "content": prompt}],
-                model="llama-3.3-70b-versatile",
-                temperature=0.0,
-                response_format={"type": "json_object"},
-            )
-
-        try:
-            chat = _call()
-            raw = chat.choices[0].message.content.strip()
-            # Strip markdown fences if the model adds them despite instructions
+        def _parse(raw: str) -> dict:
             if raw.startswith("```"):
                 raw = raw.split("```")[1]
                 if raw.startswith("json"):
                     raw = raw[4:]
-            raw = raw.strip()
-
-            result = json.loads(raw)
+            result = json.loads(raw.strip())
             result["source_type"] = source_type
             result["success"]     = True
             result.setdefault("entities",  [])
             result.setdefault("relations", [])
             return result
 
-        except json.JSONDecodeError as e:
-            logger.error(f"JSONDecodeError in extract_ontology: {e}")
-            return {"success": False, "source_type": source_type,
-                    "error": f"LLM returned invalid JSON: {e}",
-                    "entities": [], "relations": []}
-        except Exception as e:
-            logger.error(f"Groq extraction failed after retries: {e}")
-            return {"success": False, "source_type": source_type,
-                    "error": str(e), "entities": [], "relations": []}
+        # ── Try Groq first ────────────────────────────────────────────────────
+        if self.client:
+            @retryable(retries=2, delay=2.0, backoff=2.0, label="Groq.extract_governance_ontology")
+            def _call_groq():
+                return self.client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model="llama-3.3-70b-versatile",
+                    temperature=0.0,
+                    response_format={"type": "json_object"},
+                )
+            try:
+                chat = _call_groq()
+                return _parse(chat.choices[0].message.content)
+            except json.JSONDecodeError as e:
+                logger.error(f"Groq JSON parse error: {e}")
+                return {"success": False, "source_type": source_type,
+                        "error": f"LLM returned invalid JSON: {e}",
+                        "entities": [], "relations": []}
+            except Exception as e:
+                if self._is_rate_limit_error(e) and self.gemini:
+                    logger.warning("Groq rate-limited — falling back to Gemini")
+                else:
+                    logger.error(f"Groq extraction failed: {e}")
+                    return {"success": False, "source_type": source_type,
+                            "error": str(e), "entities": [], "relations": []}
+
+        # ── Fallback: Gemini ──────────────────────────────────────────────────
+        if self.gemini:
+            try:
+                raw = self._call_gemini(prompt)
+                logger.info("Gemini fallback used for extract_ontology")
+                return _parse(raw)
+            except json.JSONDecodeError as e:
+                logger.error(f"Gemini JSON parse error: {e}")
+                return {"success": False, "source_type": source_type,
+                        "error": f"Gemini returned invalid JSON: {e}",
+                        "entities": [], "relations": []}
+            except Exception as e:
+                logger.error(f"Gemini extraction also failed: {e}")
+                return {"success": False, "source_type": source_type,
+                        "error": str(e), "entities": [], "relations": []}
 
     # ── Backward-compat alias (remove once all callers updated) ───────────────
     def extract_governance_ontology(self, text: str) -> dict:
@@ -204,25 +251,38 @@ Return ONLY valid JSON — no markdown, no explanation:
   "confidence": 0.95
 }}
 """
-        @retryable(retries=3, delay=2.0, backoff=2.0, label="Groq.analyze_evidence")
-        def _call():
-            return self.client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.1,
-                response_format={"type": "json_object"},
-            )
+        _fallback = {"key_fact": f"Fallback: Found mention of {asset_name}.",
+                     "relevance": "Context Match", "confidence": 0.5}
 
-        try:
-            resp = _call()
-            return json.loads(resp.choices[0].message.content.strip())
-        except Exception as e:
-            logger.error(f"analyze_evidence failed after retries: {e}")
-            return {
-                "key_fact":   f"Fallback: Found mention of {asset_name}.",
-                "relevance":  "Context Match",
-                "confidence": 0.5,
-            }
+        # ── Try Groq ──────────────────────────────────────────────────────────
+        if self.client:
+            @retryable(retries=2, delay=2.0, backoff=2.0, label="Groq.analyze_evidence")
+            def _call_groq():
+                return self.client.chat.completions.create(
+                    model="llama-3.3-70b-versatile",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.1,
+                    response_format={"type": "json_object"},
+                )
+            try:
+                resp = _call_groq()
+                return json.loads(resp.choices[0].message.content.strip())
+            except Exception as e:
+                if self._is_rate_limit_error(e) and self.gemini:
+                    logger.warning("Groq rate-limited — falling back to Gemini for score_evidence")
+                else:
+                    logger.error(f"score_evidence Groq failed: {e}")
+                    return _fallback
+
+        # ── Fallback: Gemini ──────────────────────────────────────────────────
+        if self.gemini:
+            try:
+                raw = self._call_gemini(prompt)
+                return json.loads(raw)
+            except Exception as e:
+                logger.error(f"score_evidence Gemini also failed: {e}")
+
+        return _fallback
 
     def analyze_evidence(self, text: str, asset_name: str = "", ward_name: str = "") -> dict:
         return self.score_evidence(text, asset_name, ward_name)

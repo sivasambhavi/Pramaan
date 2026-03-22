@@ -1,0 +1,7578 @@
+{
+  "parks": [
+    {
+      "sno": "1",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. A-29, Vivek Vihar.",
+      "area_acres": 1.24,
+      "lat": 28.67258,
+      "lon": 77.317301,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "2",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. A-135, Vivek Vihar.",
+      "area_acres": 0.57,
+      "lat": 28.672849,
+      "lon": 77.319192,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "3",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. A-114, Vivek Vihar.",
+      "area_acres": 0.43,
+      "lat": 28.67181,
+      "lon": 77.319929,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "4",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Vivek  Vihar Nursery-1",
+      "area_acres": 0.54,
+      "lat": 28.672794,
+      "lon": 77.319315,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "5",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Vivek  Vihar H. No.-A/76, 77, Vivek Vihar, Store",
+      "area_acres": 0.47,
+      "lat": 28.672592,
+      "lon": 77.318213,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "6",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. A-77, Vivek  Vihar.",
+      "area_acres": 0.47,
+      "lat": 28.672592,
+      "lon": 77.319192,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "7",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-190, Vivek Vihar.",
+      "area_acres": 0.84,
+      "lat": 28.671058,
+      "lon": 77.319891,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "8",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-224, Vivek Vihar.",
+      "area_acres": 0.32,
+      "lat": 28.670738,
+      "lon": 77.321127,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "9",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-75, Vivek Vihar.",
+      "area_acres": 0.68,
+      "lat": 28.669342,
+      "lon": 77.320893,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "10",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-63, Vivek Vihar.",
+      "area_acres": 0.5,
+      "lat": 28.668897,
+      "lon": 77.320737,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "11",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-40, Vivek Vihar.",
+      "area_acres": 0.59,
+      "lat": 28.669721,
+      "lon": 77.318997,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "12",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-163, Vivek Vihar.",
+      "area_acres": 0.37,
+      "lat": 28.670287,
+      "lon": 77.31889,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "13",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. C-100, 109, Vivek Vihar.",
+      "area_acres": 0.43,
+      "lat": 28.669587,
+      "lon": 77.317573,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "14",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. C-126, Vivek Vihar.",
+      "area_acres": 0.57,
+      "lat": 28.66987,
+      "lon": 77.316501,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "15",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. C-174 Vivek Vihar.",
+      "area_acres": 0.92,
+      "lat": 28.669601,
+      "lon": 77.315679,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "16",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. C-190, 231 Vivek Vihar.",
+      "area_acres": 0.57,
+      "lat": 28.668467,
+      "lon": 77.315364,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "17",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. C-281, Vivek Vihar.",
+      "area_acres": 0.38,
+      "lat": 28.667379,
+      "lon": 77.315703,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "18",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Mahavir Vatika, Cent. Park, Vivek Vihar C-Block.",
+      "area_acres": 1.89,
+      "lat": 28.667674,
+      "lon": 77.318759,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "19",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near F. NO. 162, 204,  Janta Flat. Vivek  Vihar.",
+      "area_acres": 0.08,
+      "lat": 28.672638,
+      "lon": 77.321518,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "20",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "A-Block  Near H. NO. 41, Janta Flat Vivek  Vihar.",
+      "area_acres": 0.22,
+      "lat": 28.672482,
+      "lon": 77.321184,
+      "supervisor": "Mukesh Kumar"
+    },
+    {
+      "sno": "21",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park  Near H.NO.A-5/10, Jhilmil  Ind. Area.",
+      "area_acres": 0.75,
+      "lat": 28.674788,
+      "lon": 77.312525,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "22",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park  Near H.NO. B-12/2 Jhilmil  Ind. Area.",
+      "area_acres": 2.25,
+      "lat": 28.675,
+      "lon": 77.319524,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "23",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H. No. A-1 to 42 Jhilmil Colony.",
+      "area_acres": 0.36,
+      "lat": 28.671356,
+      "lon": 77.306944,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "24",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H. No. A-85 to 126, Jhilmil Colony.",
+      "area_acres": 0.26,
+      "lat": 28.670537,
+      "lon": 77.30747,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "25",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H. No. A-130 To 168 Jhilmil Colony.",
+      "area_acres": 0.22,
+      "lat": 28.670537,
+      "lon": 77.307358,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "26",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H. No. A-170 to 210 Jhilmil Colony.",
+      "area_acres": 0.35,
+      "lat": 28.669746,
+      "lon": 77.30843,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "27",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H. NO. A-211 to 252 Jhilmil Colony.",
+      "area_acres": 0.27,
+      "lat": 28.670506,
+      "lon": 77.308626,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "28",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Opp. H. NO. A-29 Jhilmil  Colony.",
+      "area_acres": 0.06,
+      "lat": 28.670957,
+      "lon": 77.307452,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "29",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "park A-44 to A-84, Jhilmil, Guru dawara wala",
+      "area_acres": 0.35,
+      "lat": 28.671346,
+      "lon": 77.307868,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "30",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park  Community center,  Jhilmil  Colony, A-Block",
+      "area_acres": 0.19,
+      "lat": 28.669604,
+      "lon": 77.309903,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "31",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H.NO. B-1 to 42 Jhilmil Colony.",
+      "area_acres": 0.35,
+      "lat": 28.671682,
+      "lon": 77.311407,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "32",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H.NO. B-43 to 84 Jhilmil Colony.",
+      "area_acres": 0.35,
+      "lat": 28.671264,
+      "lon": 77.311879,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "33",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-85 to  126 Jhilmil  Colony.",
+      "area_acres": 0.29,
+      "lat": 28.670737,
+      "lon": 77.311219,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "34",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-130 to 168 Jhilmil Colony.",
+      "area_acres": 0.34,
+      "lat": 28.669945,
+      "lon": 77.311644,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "35",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H.NO. B-169 to 210 Jhilmil Colony",
+      "area_acres": 0.34,
+      "lat": 28.669995,
+      "lon": 77.312121,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "36",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near H.NO. B-211 to 252  Jhilmil Colony.",
+      "area_acres": 0.23,
+      "lat": 28.670565,
+      "lon": 77.312468,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "37",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Between  H.NO. B-29 & D.S.I.D.C Jhilmil Colony.",
+      "area_acres": 0.05,
+      "lat": 28.670724,
+      "lon": 77.311571,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "38",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.NO. 35 Govind Khand  Jhilmil  Colony (Sotre Wala Park)",
+      "area_acres": 0.26,
+      "lat": 28.64017,
+      "lon": 77.290682,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "39",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H.NO. 65 to 66Govind Khand  Jhilmil  Colony.",
+      "area_acres": 0.17,
+      "lat": 28.67236,
+      "lon": 77.310627,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "40",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H.NO. 113, Govind Khand  Jhilmil  Colony.",
+      "area_acres": 0.37,
+      "lat": 28.672435,
+      "lon": 77.311129,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "41",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H.NO. 242 Govind Khand  Jhilmil  Colony.",
+      "area_acres": 0.39,
+      "lat": 28.672289,
+      "lon": 77.311447,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "42",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H.NO. 72 Govind Khand  Jhilmil  Colony.",
+      "area_acres": 0.09,
+      "lat": 28.671139,
+      "lon": 77.310706,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "43",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Park Near  H.NO. 156 Govind Khand  Jhilmil  Colony.",
+      "area_acres": 0.18,
+      "lat": 28.679829,
+      "lon": 77.311805,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "44",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.No.87, Shiva Khand",
+      "area_acres": 0.54,
+      "lat": 28.672327,
+      "lon": 77.303962,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "45",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.No.117, Shiva Khand",
+      "area_acres": 0.29,
+      "lat": 28.672042,
+      "lon": 77.304811,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "46",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.No.205, Shiva Khand",
+      "area_acres": 0.29,
+      "lat": 28.671589,
+      "lon": 77.306693,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "47",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "229, Shiva Khand ,",
+      "area_acres": 0.35,
+      "lat": 28.672367,
+      "lon": 77.305842,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "48",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "131, Shivakhand. Jhilmil Colony",
+      "area_acres": 0.13,
+      "lat": 28.671727,
+      "lon": 77.30466,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "49",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "156, Shivakhand,Jhilmil Colony",
+      "area_acres": 0.2,
+      "lat": 28.671555,
+      "lon": 77.30568,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "50",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "29, Pratap Khand",
+      "area_acres": 0.4,
+      "lat": 28.672514,
+      "lon": 77.30419,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "51",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "41, 44, Pratap Khand",
+      "area_acres": 0.13,
+      "lat": 28.672677,
+      "lon": 77.305253,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "52",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "32, Pratap Khand",
+      "area_acres": 0.5,
+      "lat": 28.672453,
+      "lon": 77.304192,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "53",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "C-BLK, H.No. 1 to 42, Jhilmil Colony.",
+      "area_acres": 0.3,
+      "lat": 28.669497,
+      "lon": 77.310857,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "54",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "C-BLK, H.No. 43to 84, Jhilmil Colony.",
+      "area_acres": 0.35,
+      "lat": 28.669478,
+      "lon": 77.311495,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "55",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "C-BLK, H.No. 85 to126, Jhilmil Colony.",
+      "area_acres": 0.26,
+      "lat": 28.668755,
+      "lon": 77.310276,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "56",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "C-BLK,H.NO.127 to 168, Jhilmil Colony.",
+      "area_acres": 0.35,
+      "lat": 28.66796,
+      "lon": 77.310639,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "57",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "C-BLK, H.No.211-252 Jhilmil Colony.",
+      "area_acres": 0.28,
+      "lat": 28.668788,
+      "lon": 77.311416,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "58",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "C-BLK, H.No. 172 to 210, Jhilmil Colony.",
+      "area_acres": 0.36,
+      "lat": 28.66807,
+      "lon": 77.311609,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "59",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "C-29, Jhilmil Colony",
+      "area_acres": 0.06,
+      "lat": 28.667133,
+      "lon": 77.311265,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "60",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "C-225,  Jhilmil Colony",
+      "area_acres": 0.03,
+      "lat": 28.67015,
+      "lon": 77.311881,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "61",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "D-BLK, H.No.212 to250, Jhilmil Colony.",
+      "area_acres": 0.26,
+      "lat": 28.668823,
+      "lon": 77.31007,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "62",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "D-BLK, H.No. 1 to 42, Jhilmil Colony.",
+      "area_acres": 0.15,
+      "lat": 28.669451,
+      "lon": 77.308804,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "63",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "D-BLK, H.No. 43 to 83, Jhilmil Colony.",
+      "area_acres": 0.36,
+      "lat": 28.669443,
+      "lon": 77.309555,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "64",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "D-130 TO 170, Jhilmil Colony",
+      "area_acres": 0.36,
+      "lat": 28.667976,
+      "lon": 77.308712,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "65",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "D-29, 99, Jhilmil Colony",
+      "area_acres": 0.06,
+      "lat": 28.668605,
+      "lon": 77.309033,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "66",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "D-225, Jhilmil Colony",
+      "area_acres": 0.03,
+      "lat": 28.668051,
+      "lon": 77.310029,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "67",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "D-85 to 126 Jhilmil Colony",
+      "area_acres": 0.22,
+      "lat": 28.66871,
+      "lon": 77.30849,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "68",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "D-170 to 210 Jhilmil Colony",
+      "area_acres": 0.36,
+      "lat": 28.668041,
+      "lon": 77.309454,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "69",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "E -Block 1 to 42 Jhilmil Colony",
+      "area_acres": 0.28,
+      "lat": 28.668314,
+      "lon": 77.306801,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "70",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "E-43 to 84 Jhilmil Colony",
+      "area_acres": 0.37,
+      "lat": 28.668211,
+      "lon": 77.307567,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "71",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "E-85 to 127 Jhilmil Colony",
+      "area_acres": 0.27,
+      "lat": 28.667561,
+      "lon": 77.306485,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "72",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "E-127 to 168 Jhilmil Colony",
+      "area_acres": 0.21,
+      "lat": 28.667557,
+      "lon": 77.307796,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "73",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "E-141 Jhilmil Colony",
+      "area_acres": 0.03,
+      "lat": 28.667118,
+      "lon": 77.307853,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "74",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "E-29 Jhilmil Colony",
+      "area_acres": 0.06,
+      "lat": 28.667815,
+      "lon": 77.307047,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "75",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "E -Block Krishna Market",
+      "area_acres": 0.35,
+      "lat": 28.669429,
+      "lon": 77.306972,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "76",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.No.216 D.D.A FLT., Jhilmil Colony. Satyam Enclave",
+      "area_acres": 0.33,
+      "lat": 28.667081,
+      "lon": 77.305614,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "77",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "205, D.D.A Flt, Jhilmil Colony, Satyam Enclave",
+      "area_acres": 0.21,
+      "lat": 28.667871,
+      "lon": 77.305689,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "78",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "142, D.D.A FLT, Jhilmil Colony, Satyam Enclave",
+      "area_acres": 0.21,
+      "lat": 28.667347,
+      "lon": 77.305144,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "79",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "56, D.D.A Flt., Jhilmil Colony, Satyam Enclave",
+      "area_acres": 0.34,
+      "lat": 28.66685,
+      "lon": 77.304508,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "80",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.NO.122, D.D.A Flt, Jhilmil Colony, Satyam Enclave",
+      "area_acres": 0.27,
+      "lat": 28.668084,
+      "lon": 77.304879,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "81",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.NO.49, D.D.A Flt, Jhilmil Colony, Satyam Enclave",
+      "area_acres": 0.57,
+      "lat": 28.667832,
+      "lon": 77.304037,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "82",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.No.50-B Vivek  Vihar-II",
+      "area_acres": 0.44,
+      "lat": 28.671987,
+      "lon": 77.301826,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "83",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.No. 30, A Block Vivek Vihar",
+      "area_acres": 0.08,
+      "lat": 28.670575,
+      "lon": 77.305466,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "84",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "H.No. 62, 123,  A Block Vivek Vihar Ph-II",
+      "area_acres": 0.93,
+      "lat": 28.669021,
+      "lon": 77.305323,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "85",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "8-B, D.D.A Flt. Vivek Vihar -II",
+      "area_acres": 0.08,
+      "lat": 28.671208,
+      "lon": 77.302272,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "86",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "15B, D.D.A Flt. Vivek  Vihar -II",
+      "area_acres": 0.28,
+      "lat": 28.67058,
+      "lon": 77.301556,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "87",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "20B, D.D.A Flt. Vivek  Vihar -II",
+      "area_acres": 0.18,
+      "lat": 28.67058,
+      "lon": 77.301556,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "88",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "9-B, D.D.A Flt. Vivek  Vihar -II",
+      "area_acres": 0.08,
+      "lat": 28.671217,
+      "lon": 77.301642,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "89",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "36-B, D.D.A Flt. Vivek  Vihar -II",
+      "area_acres": 0.14,
+      "lat": 28.670092,
+      "lon": 77.302389,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "90",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Shamshan Ghat I",
+      "area_acres": 0.35,
+      "lat": 28.670674,
+      "lon": 77.300991,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "91",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Shamshan Ghat  Park",
+      "area_acres": 0.37,
+      "lat": 28.677055,
+      "lon": 77.301358,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "92",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Indira Park, Jwala Nagar",
+      "area_acres": 1.55,
+      "lat": 28.670117,
+      "lon": 77.298398,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "93",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Mukesh Nagar Park I",
+      "area_acres": 0.24,
+      "lat": 28.671392,
+      "lon": 77.296318,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "94",
+      "ward_no": 216,
+      "region_id": "REG_W216",
+      "park_name": "Mukesh Nagar Park II (Mini Stadium)",
+      "area_acres": 1.3,
+      "lat": 28.671392,
+      "lon": 77.296318,
+      "supervisor": "Mahesh"
+    },
+    {
+      "sno": "95",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Pocket Near H.NO. 60-A Dilshad Garden.",
+      "area_acres": 0.74,
+      "lat": 28.680779,
+      "lon": 77.315605,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "96",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Pkt. Near H.NO. 101-A Dilshad Garden.",
+      "area_acres": 0.1,
+      "lat": 28.680164,
+      "lon": 77.315018,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "97",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park  B-Pkt. H.NO.-138, 139-A Dilshad Garden.",
+      "area_acres": 0.74,
+      "lat": 28.680016,
+      "lon": 77.315785,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "98",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-PKT. Near H.NO. 8-A Dilshad Garden.",
+      "area_acres": 0.27,
+      "lat": 28.681272,
+      "lon": 77.31484,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "99",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Pocket A-31, Dilshad Garden, Store wala Park",
+      "area_acres": 0.54,
+      "lat": 28.680866,
+      "lon": 77.315206,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "100",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park E-Pkt. Near H.NO. 172-A Dilshad Garden.",
+      "area_acres": 0.26,
+      "lat": 28.681778,
+      "lon": 77.317358,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "101",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park E-Pkt. Near H.NO. 181-A, 183,  Dilshad  Garden.",
+      "area_acres": 0.49,
+      "lat": 28.680687,
+      "lon": 77.317662,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "102",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park E-Pkt.Near H.NO. 65-A Dilshad Garden.",
+      "area_acres": 0.08,
+      "lat": 28.682025,
+      "lon": 77.31641,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "103",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park E-Pkt.Near H.NO. 128-A Dilshad Garden.",
+      "area_acres": 0.18,
+      "lat": 28.681327,
+      "lon": 77.31759,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "104",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park E-Pkt.Near H.NO. 68-A Dilshad Garden, Lokesh Park",
+      "area_acres": 0.36,
+      "lat": 28.682285,
+      "lon": 77.316637,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "105",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park E-Pkt.Near H.NO. 152-A Dilshad Garden.",
+      "area_acres": 0.08,
+      "lat": 28.674057,
+      "lon": 77.316771,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "106",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park E-Pkt.Near H.NO. 13-A Dilshad Garden.",
+      "area_acres": 0.1,
+      "lat": 28.682459,
+      "lon": 77.317318,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "107",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park F-Pkt.Near H.NO. 208-A Dilshad Garden.",
+      "area_acres": 1.72,
+      "lat": 28.679952,
+      "lon": 77.318555,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "108",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park H-Pkt.Near H.NO. 42-A Dilshad Garden.",
+      "area_acres": 0.37,
+      "lat": 28.681128,
+      "lon": 77.320076,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "109",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park H-Pkt.Near H.NO. 195-A Dilshad Garden.",
+      "area_acres": 0.16,
+      "lat": 28.680995,
+      "lon": 77.317825,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "110",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park H-Pkt.Near H.NO. 30-A Dilshad Garden.",
+      "area_acres": 0.25,
+      "lat": 28.680644,
+      "lon": 77.319617,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "111",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park A-Block H.NO. 14/G-3, Dilshad Garden.",
+      "area_acres": 0.25,
+      "lat": 28.679963,
+      "lon": 77.314101,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "112",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park A-Block H.NO. 21-A/G2, Dilshad  Garden.",
+      "area_acres": 1.98,
+      "lat": 28.679139,
+      "lon": 77.313511,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "113",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park A-Block H.NO. A-20/G2 Dilshad Garden.",
+      "area_acres": 0.05,
+      "lat": 28.678878,
+      "lon": 77.313398,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "114",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park  A-Block Opp . H.NO. A-3/G-2, Dilshad Garden.",
+      "area_acres": 0.46,
+      "lat": 28.678536,
+      "lon": 77.313495,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "115",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park A-Block H.NO. A-30/G-3, Dilshad Garden.",
+      "area_acres": 0.09,
+      "lat": 28.680343,
+      "lon": 77.313207,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "116",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park A-Block H.NO. A-20/G-1, Dilshad Garden.",
+      "area_acres": 0.12,
+      "lat": 28.679818,
+      "lon": 77.313314,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "117",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Block H.NO. B-11/G-2, Dilshad Garden.",
+      "area_acres": 0.19,
+      "lat": 28.678293,
+      "lon": 77.311341,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "118",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Block H.NO. B-43/G-2, Dilshad  Garden.",
+      "area_acres": 0.47,
+      "lat": 28.678717,
+      "lon": 77.310884,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "119",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Block H.NO. B-44, Dilshad Garden.",
+      "area_acres": 0.85,
+      "lat": 28.678233,
+      "lon": 77.310647,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "120",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park  B-Block H.NO. B-1/G2,  Dilshad Garden.",
+      "area_acres": 0.02,
+      "lat": 28.678223,
+      "lon": 77.311796,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "121",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Block H.NO. B-30 G-2,Dilshad Garden.",
+      "area_acres": 0.35,
+      "lat": 28.67923,
+      "lon": 77.310958,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "122",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Block H.NO. B-19/G-2, Dilshad  Garden.",
+      "area_acres": 0.07,
+      "lat": 28.678685,
+      "lon": 77.311855,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "123",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Block H.NO. B-51/ G-2Dilshad  Garden.",
+      "area_acres": 0.31,
+      "lat": 28.6787,
+      "lon": 77.309327,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "124",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park B-Block H.NO. B-7/ G-2Dilshad  Garden.",
+      "area_acres": 0.26,
+      "lat": 28.678169,
+      "lon": 77.311348,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "125",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block alongwith H.NO. 15-A Dilshad Garden",
+      "area_acres": 0.56,
+      "lat": 28.677133,
+      "lon": 77.309826,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "126",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Behind H.NO. R-9 Dogra Park, Dilshad  Garden.",
+      "area_acres": 0.08,
+      "lat": 28.676773,
+      "lon": 77.309139,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "127",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Behind H.NO. R-12 Dilshad Garden",
+      "area_acres": 0.07,
+      "lat": 28.676436,
+      "lon": 77.308835,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "128",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Behind H.NO. R-19 Dilshad Garden.",
+      "area_acres": 0.09,
+      "lat": 28.677086,
+      "lon": 77.310782,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "129",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block H.NO. R-72-A Dilshad  Garden.",
+      "area_acres": 0.08,
+      "lat": 28.677159,
+      "lon": 77.312879,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "130",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Behind H.NO. R-61-A Dilshad Garden",
+      "area_acres": 0.08,
+      "lat": 28.677908,
+      "lon": 77.312065,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "131",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Behind H.No. 40, Dilshad Garden.",
+      "area_acres": 0.07,
+      "lat": 28.678015,
+      "lon": 77.311065,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "132",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Behind H.NO. 33A, Dilshad Garden.",
+      "area_acres": 0.08,
+      "lat": 28.677079,
+      "lon": 77.311237,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "133",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Behind H.NO. 29 B. Dilshad Garden.",
+      "area_acres": 0.07,
+      "lat": 28.677898,
+      "lon": 77.310746,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "134",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Behind H.NO. 45-A. Dilshad Garden.",
+      "area_acres": 0.09,
+      "lat": 28.678227,
+      "lon": 77.311897,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "135",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block Green Belt H.O. 78-A, Dilshad  Garden.",
+      "area_acres": 0.23,
+      "lat": 28.677906,
+      "lon": 77.312895,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "136",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block with H.NO. 75-A, Dilshad Garden Green Belt.",
+      "area_acres": 0.02,
+      "lat": 28.676967,
+      "lon": 77.312391,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "137",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park R-Block  H.NO. 54, Dilshad  Garden.",
+      "area_acres": 0.07,
+      "lat": 28.677007,
+      "lon": 77.311757,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "138",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Totlot at R block, Dilshad Garden (3 no. Parks)",
+      "area_acres": 1.97,
+      "lat": 28.677042,
+      "lon": 77.314341,
+      "supervisor": "Brijbir"
+    },
+    {
+      "sno": "139",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 1, Dilshad Garden",
+      "area_acres": 0.32,
+      "lat": 28.680607,
+      "lon": 77.320795,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "140",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.8–9, Dilshad Garden",
+      "area_acres": 0.5,
+      "lat": 28.680564,
+      "lon": 77.321638,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "141",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 16-17, Dilshad Garden",
+      "area_acres": 0.5,
+      "lat": 28.681003,
+      "lon": 77.322218,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "142",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.22-21, Dilshad Garden",
+      "area_acres": 0.5,
+      "lat": 28.681154,
+      "lon": 77.321564,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "143",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.29-30, Dilshad Garden",
+      "area_acres": 0.5,
+      "lat": 28.680513,
+      "lon": 77.321084,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "144",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 35-36, Dilshad Garden",
+      "area_acres": 0.22,
+      "lat": 28.680106,
+      "lon": 77.321052,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "145",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.41-42, Dilshad Garden",
+      "area_acres": 0.22,
+      "lat": 28.680271,
+      "lon": 77.322178,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "146",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.60-61, Dilshad Garden",
+      "area_acres": 0.81,
+      "lat": 28.688016,
+      "lon": 77.322269,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "147",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.63, Dilshad Garden",
+      "area_acres": 0.22,
+      "lat": 28.679828,
+      "lon": 77.322073,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "148",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 38-39, Dilshad Garden",
+      "area_acres": 0.12,
+      "lat": 28.679991,
+      "lon": 77.32198,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "149",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.69-70, Dilshad Garden",
+      "area_acres": 0.53,
+      "lat": 28.680195,
+      "lon": 77.322155,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "150",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.49-50, Dilshad Garden",
+      "area_acres": 0.53,
+      "lat": 28.67964,
+      "lon": 77.321254,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "151",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.75-76, Dilshad Garden",
+      "area_acres": 0.22,
+      "lat": 28.679693,
+      "lon": 77.321695,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "152",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 94-95, Dilshad Garden",
+      "area_acres": 1.83,
+      "lat": 28.679822,
+      "lon": 77.322489,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "153",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 93-9, Dilshad Garden",
+      "area_acres": 0.5,
+      "lat": 28.679143,
+      "lon": 77.322456,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "154",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 47-48, Dilshad Garden",
+      "area_acres": 0.12,
+      "lat": 28.679872,
+      "lon": 77.321423,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "155",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No.82, Dilshad Garden",
+      "area_acres": 0.05,
+      "lat": 28.679748,
+      "lon": 77.322,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "156",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 97, Dilshad Garden",
+      "area_acres": 0.12,
+      "lat": 28.67964,
+      "lon": 77.32278,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "157",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 125, Dilshad Garden",
+      "area_acres": 0.12,
+      "lat": 28.679622,
+      "lon": 77.322698,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "158",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 120, Dilshad Garden",
+      "area_acres": 0.05,
+      "lat": 28.679597,
+      "lon": 77.322973,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "159",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 111, Dilshad Garden",
+      "area_acres": 0.47,
+      "lat": 28.679898,
+      "lon": 77.322029,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "160",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park I – H.No. 115, Dilshad Garden",
+      "area_acres": 0.47,
+      "lat": 28.680449,
+      "lon": 77.328109,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "161",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 389, Dilshad Garden",
+      "area_acres": 0.03,
+      "lat": 28.681929,
+      "lon": 77.32294,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "162",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 390, Dilshad Garden",
+      "area_acres": 0.14,
+      "lat": 28.681752,
+      "lon": 77.323884,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "163",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No.382, Dilshad Garden",
+      "area_acres": 0.14,
+      "lat": 28.682504,
+      "lon": 77.324601,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "164",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 366-368, Dilshad Garden",
+      "area_acres": 0.16,
+      "lat": 28.682678,
+      "lon": 77.32546,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "165",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 355-354, Dilshad Garden",
+      "area_acres": 0.16,
+      "lat": 28.68333,
+      "lon": 77.326376,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "166",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 255-305, Dilshad Garden",
+      "area_acres": 2.41,
+      "lat": 28.683078,
+      "lon": 77.326462,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "167",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 213-214, Dilshad Garden",
+      "area_acres": 0.14,
+      "lat": 28.681249,
+      "lon": 77.324713,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "168",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 194-195, Dilshad Garden",
+      "area_acres": 0.22,
+      "lat": 28.681098,
+      "lon": 77.324598,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "169",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 223-224, Dilshad Garden",
+      "area_acres": 0.13,
+      "lat": 28.681474,
+      "lon": 77.325814,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "170",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 181-182, Dilshad Garden",
+      "area_acres": 0.13,
+      "lat": 28.681926,
+      "lon": 77.325287,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "171",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 235-236, Dilshad Garden",
+      "area_acres": 0.13,
+      "lat": 28.68195,
+      "lon": 77.326231,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "172",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 252-236, Dilshad Garden",
+      "area_acres": 0.13,
+      "lat": 28.682702,
+      "lon": 77.326804,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "173",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 172, Dilshad Garden",
+      "area_acres": 0.13,
+      "lat": 28.681956,
+      "lon": 77.325903,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "174",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 109-140, Dilshad Garden",
+      "area_acres": 2.27,
+      "lat": 28.681417,
+      "lon": 77.325641,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "175",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 41-42, Dilshad Garden",
+      "area_acres": 0.04,
+      "lat": 28.681687,
+      "lon": 77.328092,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "176",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 56-57, Dilshad Garden",
+      "area_acres": 0.92,
+      "lat": 28.680996,
+      "lon": 77.326286,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "177",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 66-67, Dilshad Garden",
+      "area_acres": 0.37,
+      "lat": 28.680915,
+      "lon": 77.326001,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "178",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 101-103, Dilshad Garden",
+      "area_acres": 0.13,
+      "lat": 28.680311,
+      "lon": 77.325661,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "179",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 85-86, Dilshad Garden",
+      "area_acres": 0.13,
+      "lat": 28.680409,
+      "lon": 77.325053,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "180",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 78-79, Dilshad Garden",
+      "area_acres": 0.35,
+      "lat": 28.679955,
+      "lon": 77.324037,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "181",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J & K H.No. 1-34, Dilshad Garden",
+      "area_acres": 2.27,
+      "lat": 28.680266,
+      "lon": 77.325501,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "182",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park G– Block H.No. 16 , Dilshad colony",
+      "area_acres": 0.63,
+      "lat": 28.681745,
+      "lon": 77.328576,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "183",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park G– Block Mandir Wala Park, H.No.  214 Old Seemapuri  Dilshad colony",
+      "area_acres": 1.13,
+      "lat": 28.683127,
+      "lon": 77.329887,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "184",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park-G Block H. No. 43-45 & 70,Dilshad colony Durga mata Mandir",
+      "area_acres": 1.03,
+      "lat": 28.683025,
+      "lon": 77.328808,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "185",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park Near Masjid, G– Block H.No. 168 , Dilshad colony",
+      "area_acres": 1.05,
+      "lat": 28.6833,
+      "lon": 77.331118,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "186",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park F– Block H.No. 16 , Dilshad colony",
+      "area_acres": 0.84,
+      "lat": 28.680462,
+      "lon": 77.327902,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "187",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "ParkE-Block, Market + Park Dilshad colony",
+      "area_acres": 0.79,
+      "lat": 28.684634,
+      "lon": 77.329089,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "188",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park H.No. 290 & 291 , B Block, Sabji Mandi  Old Seempuri-110095",
+      "area_acres": 0.3,
+      "lat": 28.686006,
+      "lon": 77.329987,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "189",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "DDA Mkt.J-Bl Shop No.100, Park-1,Old Seemapuri",
+      "area_acres": 0.1,
+      "lat": 28.680624,
+      "lon": 77.327721,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "190",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "DDA Mkt.J-Bl Shop No.100-101, Park-2,Old Seemapuri",
+      "area_acres": 0.1,
+      "lat": 28.680624,
+      "lon": 77.327721,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "191",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "DDA Mkt.J-Bl Shop No.100-101, Park-3,Old Seemapuri",
+      "area_acres": 0.1,
+      "lat": 28.680624,
+      "lon": 77.327721,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "192",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park J- Block Near H.No. 273, Old Seema Puri",
+      "area_acres": 0.61,
+      "lat": 28.680941,
+      "lon": 77.326989,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "193",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park G-Block school , Old seema  puri",
+      "area_acres": 0.57,
+      "lat": 28.681183,
+      "lon": 77.331273,
+      "supervisor": "Nishant"
+    },
+    {
+      "sno": "194",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park L-Pocket, H.No.-13-A Dilshad Garden",
+      "area_acres": 0.38,
+      "lat": 28.681751,
+      "lon": 77.321697,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "195",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park L-Pocket, H.No.-152/A Dilshad Garden",
+      "area_acres": 0.38,
+      "lat": 28.681773,
+      "lon": 77.323078,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "196",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park L-Pocket, H.No.-162/A Dilshad Garden",
+      "area_acres": 0.2,
+      "lat": 28.683056,
+      "lon": 77.323576,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "197",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park L-Pocket, H.No.174-A Dilshad Garden",
+      "area_acres": 0.1,
+      "lat": 28.682102,
+      "lon": 77.322727,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "198",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park SG Pocket, H.No. 23 A Dilshad Garden",
+      "area_acres": 0.2,
+      "lat": 28.683811,
+      "lon": 77.323443,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "199",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park SG Pocket, H.No. 58 A Dilshad Garden",
+      "area_acres": 0.38,
+      "lat": 28.68387,
+      "lon": 77.324624,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "200",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park SG Pocket, H.No. 33 A Dilshad Garden",
+      "area_acres": 0.21,
+      "lat": 28.684472,
+      "lon": 77.3241,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "201",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park M Pocket H.No. M14/A 5, Dilshad Garden",
+      "area_acres": 0.19,
+      "lat": 28.68416,
+      "lon": 77.324959,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "202",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park M Pocket H.No. 30A, Dilshad Garden",
+      "area_acres": 0.52,
+      "lat": 28.684548,
+      "lon": 77.325128,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "203",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park M Pocket H.No. 20/A2, Dilshad Garden",
+      "area_acres": 0.17,
+      "lat": 28.684412,
+      "lon": 77.325715,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "204",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park N Pocket H.No. N3/A4, Dilshad Garden",
+      "area_acres": 0.2,
+      "lat": 28.685711,
+      "lon": 77.325231,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "205",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park N Pocket H.No. 24/A5, Dilshad Garden",
+      "area_acres": 0.19,
+      "lat": 28.684785,
+      "lon": 77.324385,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "206",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park N Pocket H.No. N7/A3 Dilshad Garden",
+      "area_acres": 0.32,
+      "lat": 28.686141,
+      "lon": 77.324478,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "207",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park N Pocket H.No. 21 & 32,A 2, Dilshad Garden",
+      "area_acres": 0.32,
+      "lat": 28.685716,
+      "lon": 77.323854,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "208",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "ParkN Pocket H.No. 26/A4, Dilshad Garden",
+      "area_acres": 0.16,
+      "lat": 28.685654,
+      "lon": 77.323506,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "209",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park N Pocket H.No.  N29/A 5, Dilshad Garden",
+      "area_acres": 1.21,
+      "lat": 28.685181,
+      "lon": 77.324322,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "210",
+      "ward_no": 217,
+      "region_id": "REG_W217",
+      "park_name": "Park N Pocket H.No. N3/A4, Dilshad Garden",
+      "area_acres": 0.14,
+      "lat": 28.685332,
+      "lon": 77.324836,
+      "supervisor": "Jai Prakash"
+    },
+    {
+      "sno": "211",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park H-Block, In Sunder Nagari",
+      "area_acres": 0.59,
+      "lat": 28.695768,
+      "lon": 77.319784,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "212",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-1, H.No.-47 Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "213",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-1,  H.No.-225 Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "214",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-1,  H.No. 241 Sunder Nagari",
+      "area_acres": 0.41,
+      "lat": 28.697337,
+      "lon": 77.317798,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "215",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-1, H.No. 170  Sunder Nagari",
+      "area_acres": 0.57,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "216",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "K-Block,Park Sunder Nagari",
+      "area_acres": 0.46,
+      "lat": 28.697017,
+      "lon": 77.317715,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "217",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-1,  H.No.386 Sunder Nagari",
+      "area_acres": 0.57,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "218",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-1, H.No. 373 Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "219",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-1, H.No. 116  Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "220",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2, H.No. 312  Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "221",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2,  H.No. 395,Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "222",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2, H.No. 447,Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "223",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2,H.No.56,Sunder Nagari",
+      "area_acres": 0.07,
+      "lat": 28.720588,
+      "lon": 77.332922,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "224",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2,H.No.381,Sunder Nagari",
+      "area_acres": 0.45,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "225",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2, H.No. 359,Sunder Nagari",
+      "area_acres": 0.56,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "226",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2, H.No. 221Sunder Nagari",
+      "area_acres": 0.41,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "227",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2, H.No. 246 Sunder Nagari",
+      "area_acres": 0.64,
+      "lat": 28.719908,
+      "lon": 77.331911,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "228",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2, H.No. 187 Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "229",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2, H.No. 152 Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "230",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-2, H.No. 78 Sunder Nagari",
+      "area_acres": 0.42,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "231",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "M-Block, Sunder Nargi-110093",
+      "area_acres": 0.1,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "232",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "I-Block ,  Ambedkar Park Sunder Nagari",
+      "area_acres": 0.67,
+      "lat": 28.715731,
+      "lon": 77.326654,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "233",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "M-Block , H.No. - 110, Sunder Nagari",
+      "area_acres": 3.09,
+      "lat": 28.718518,
+      "lon": 77.326684,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "234",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "M-Block, H. No.- 283, Sunder Nagari",
+      "area_acres": 0.5,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "235",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "M-Block , Dhobi Ghat Sunder Nagari",
+      "area_acres": 0.2,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "236",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "N-Block, H.No. 442 Sunder Nagari",
+      "area_acres": 0.94,
+      "lat": 28.721016,
+      "lon": 77.33237,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "237",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "O- Block , Park, H.No. 33, Sunder Nagari",
+      "area_acres": 0.52,
+      "lat": 28.719687,
+      "lon": 77.327712,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "238",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "O- Block ,Park, H.No. 297 Sunder Nagari",
+      "area_acres": 0.03,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "239",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "O- Block , Park, H.No. 430 Sunder Nagari",
+      "area_acres": 0.05,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "240",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "J-Block, Park Sunder Nagari",
+      "area_acres": 0.48,
+      "lat": 28.693366,
+      "lon": 77.323984,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "241",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "K-Block,ParkSunder Nagari",
+      "area_acres": 0.48,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "242",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.Block, 10-11, No.- 85, Sunder Nagari",
+      "area_acres": 1.2,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "243",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.Block, 3-4, No. 42, Sunder Nagari",
+      "area_acres": 0.7,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "244",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.Block, 2-3, No. 21-40,, Sunder Nagari",
+      "area_acres": 0.45,
+      "lat": 28.719063,
+      "lon": 77.327063,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "245",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.- Block, L/2, Flat No. 26-27, Sunder Nagari",
+      "area_acres": 0.77,
+      "lat": 28.694713,
+      "lon": 77.322951,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "246",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.- Block,L/7, Flat No. 125,, Sunder Nagari",
+      "area_acres": 0.51,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "247",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.- Block, L/8, Flat No, 148, Sunder Nagari",
+      "area_acres": 0.39,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "248",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.- Block, L/7, Flat No, 122, Sunder Nagari",
+      "area_acres": 0.41,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "249",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.- Block,L/6, flat No. 6-7, Sunder Nagari",
+      "area_acres": 0.51,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "250",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "S.K.F.- Block, L/5, Flat No. 82-83,, Sunder Nagari",
+      "area_acres": 0.44,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "251",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "L-Block , Sundar Nagari-110093",
+      "area_acres": 0.48,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "252",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "E Block Near Depot , New Seemapuri",
+      "area_acres": 0.98,
+      "lat": 28.687685,
+      "lon": 77.328436,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "253",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park A- Block N. No. 1-26 , New Seemapuri DLF Modh 70 Foota",
+      "area_acres": 0.7,
+      "lat": 28.690716,
+      "lon": 77.327582,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "254",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park A-Block H. No. 21-26, New Seemapuri",
+      "area_acres": 0.62,
+      "lat": 28.684718,
+      "lon": 77.313666,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "255",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park B-Block H.No. 30-31,442 New Seemapuri",
+      "area_acres": 0.7,
+      "lat": 28.691317,
+      "lon": 77.328033,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "256",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park B-Block H.No. 30-31, New Seemapuri",
+      "area_acres": 0.64,
+      "lat": 28.689581,
+      "lon": 77.328447,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "257",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Park F-Block near Police Both. New Seemapuri",
+      "area_acres": 0.06,
+      "lat": 28.687594,
+      "lon": 77.328367,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "258",
+      "ward_no": 218,
+      "region_id": "REG_W218",
+      "park_name": "Green area at  (Ambedkar Park New Seema Puri",
+      "area_acres": 1.07,
+      "lat": 28.4129947,
+      "lon": 77.1940521,
+      "supervisor": "Kripal Singh"
+    },
+    {
+      "sno": "259",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG Pocket Opp. H.No. 137,  (Pooja Park) G.T.B. Enclave",
+      "area_acres": 1.01,
+      "lat": 28.6888,
+      "lon": 77.310849,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "260",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG Pocket Opp. H.No. 353, (Chanayak Park) G.T.B. Enclave",
+      "area_acres": 1.05,
+      "lat": 28.688533,
+      "lon": 77.310052,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "261",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG Pocket Opp. H.No.81-A, G.T.B. Enclave (Neta Ji Subhash Chand Park)",
+      "area_acres": 0.87,
+      "lat": 28.687194,
+      "lon": 77.311423,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "262",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG Pocket Opp. H.No. 18-A, (Luthra Park) G.T.B. Enclave",
+      "area_acres": 0.38,
+      "lat": 28.68767,
+      "lon": 77.309908,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "263",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG Pocket Opp. H.No. 221-A, (Lab Garg Park) G.T.B. Enclave",
+      "area_acres": 0.8,
+      "lat": 28.687959,
+      "lon": 77.309557,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "264",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG Pocket Opp. Near Mother Dairy , G.T.B. Enclave",
+      "area_acres": 0.18,
+      "lat": 28.687419,
+      "lon": 77.310519,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "265",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG E-Pocket, H.No. 262-291 (Rama Krishana Park)  G.T.B. Enclave",
+      "area_acres": 0.91,
+      "lat": 28.688304,
+      "lon": 77.309655,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "266",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG E- Pocket H.No. 185-142A, Store G.T.B. Enclave",
+      "area_acres": 1.49,
+      "lat": 28.687421,
+      "lon": 77.310764,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "267",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 239+240, Park No. 1 G.T.B. Enclave",
+      "area_acres": 0.02,
+      "lat": 28.674216,
+      "lon": 77.31096,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "268",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No.137-138, Park No. 2 G.T.B. Enclave",
+      "area_acres": 0.18,
+      "lat": 28.683809,
+      "lon": 77.312135,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "269",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 129-130, Park No. 3 G.T.B. Enclave",
+      "area_acres": 0.1,
+      "lat": 28.684452,
+      "lon": 77.312857,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "270",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No.191-192, Park No.4  G.T.B. Enclave",
+      "area_acres": 0.49,
+      "lat": 28.686339,
+      "lon": 77.313054,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "271",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 233-234, Park No.5 G.T.B. Enclave",
+      "area_acres": 0.02,
+      "lat": 28.684533,
+      "lon": 77.311553,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "272",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 231-243 A, Park No. 6 G.T.B. Enclave",
+      "area_acres": 0.02,
+      "lat": 28.684666,
+      "lon": 77.311543,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "273",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 141-132, Park No. 7 G.T.B. Enclave",
+      "area_acres": 0.1,
+      "lat": 28.684263,
+      "lon": 77.312378,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "274",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "MIG, Park No. 08 F-Pocket  G.T.B. Enclave",
+      "area_acres": 0.11,
+      "lat": 28.68395,
+      "lon": 77.312585,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "275",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 239+240, Park No. 1 G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.683655,
+      "lon": 77.312279,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "276",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "MIG Park No. 10 F-Pocket H. No. 175 A, G.T.B Enclave",
+      "area_acres": 0.44,
+      "lat": 28.68463,
+      "lon": 77.31261,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "277",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 173A , Park No. 11 G.T.B. Enclave",
+      "area_acres": 0.43,
+      "lat": 28.68817,
+      "lon": 77.312933,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "278",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 87A, Park No. 12 G.T.B. Enclave",
+      "area_acres": 1.32,
+      "lat": 28.686186,
+      "lon": 77.313028,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "279",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 127, Park No. 13 G.T.B. Enclave",
+      "area_acres": 0.4,
+      "lat": 28.685001,
+      "lon": 77.312335,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "280",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 221, Park No.14 G.T.B. Enclave",
+      "area_acres": 0.02,
+      "lat": 28.685433,
+      "lon": 77.313295,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "281",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 201, Park No. 15 G.T.B. Enclave",
+      "area_acres": 0.16,
+      "lat": 28.688707,
+      "lon": 77.313216,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "282",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 121, Park No. 16 G.T.B. Enclave",
+      "area_acres": 0.1,
+      "lat": 28.684932,
+      "lon": 77.313654,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "283",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 109, Park No. 17 G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.684639,
+      "lon": 77.313317,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "284",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No.205 Park No. 18 G.T.B. Enclave",
+      "area_acres": 0.01,
+      "lat": 28.685246,
+      "lon": 77.31309,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "285",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 167, Park No. 19 G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.68519,
+      "lon": 77.313293,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "286",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 157, Park No. 20 G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.685267,
+      "lon": 77.313349,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "287",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No.113, Park No. 21 G.T.B. Enclave",
+      "area_acres": 0.01,
+      "lat": 28.684587,
+      "lon": 77.31334,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "288",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket Park No. 22 G.T.B. Enclave",
+      "area_acres": 0.32,
+      "lat": 28.687721,
+      "lon": 77.315367,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "289",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No.90, Park No. 23 G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.684198,
+      "lon": 77.31346,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "290",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 40, Park No. 24 G.T.B. Enclave",
+      "area_acres": 0.89,
+      "lat": 28.686665,
+      "lon": 77.310393,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "291",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 95, Park No. 25 G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.682713,
+      "lon": 77.312164,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "292",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 1-2, Park No. 26 G.T.B. Enclave",
+      "area_acres": 0.01,
+      "lat": 28.682717,
+      "lon": 77.311887,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "293",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket Green Belt , Park No. 27 G.T.B. Enclave",
+      "area_acres": 0.54,
+      "lat": 28.685832,
+      "lon": 77.314711,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "294",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 9-10A, Park No. 28 G.T.B. Enclave",
+      "area_acres": 0.42,
+      "lat": 28.682827,
+      "lon": 77.3129,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "295",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 15, Park No. 29 G.T.B. Enclave",
+      "area_acres": 0.39,
+      "lat": 28.68325,
+      "lon": 77.313674,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "296",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 57-58, Park No. 30 G.T.B. Enclave",
+      "area_acres": 0.01,
+      "lat": 28.683987,
+      "lon": 77.313032,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "297",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 31-32, Park No. 31 G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.684302,
+      "lon": 77.31388,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "298",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 19-20, Park No. 32 G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.683699,
+      "lon": 77.31375,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "299",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket , Park No. 33 G.T.B. Enclave",
+      "area_acres": 0.24,
+      "lat": 28.686611,
+      "lon": 77.314347,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "300",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 65, Park No.34 G.T.B. Enclave",
+      "area_acres": 0.02,
+      "lat": 28.684418,
+      "lon": 77.314477,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "301",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 67, Park No. 35 G.T.B. Enclave",
+      "area_acres": 0.48,
+      "lat": 28.684163,
+      "lon": 77.31451,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "302",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 69, Park No. 36 G.T.B. Enclave",
+      "area_acres": 0.5,
+      "lat": 28.687364,
+      "lon": 77.315135,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "303",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 72, Park No. 37 G.T.B. Enclave",
+      "area_acres": 0.01,
+      "lat": 28.684277,
+      "lon": 77.314066,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "304",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  Green Belt  H.No. 97 G.T.B. Enclave",
+      "area_acres": 0.41,
+      "lat": 28.683206,
+      "lon": 77.311969,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "305",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  Green Belt  G.T.B. Enclave",
+      "area_acres": 0.04,
+      "lat": 28.682978,
+      "lon": 77.311811,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "306",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, F- Pocket  H.No. 185, G.T.B. Enclave",
+      "area_acres": 0.03,
+      "lat": 28.683586,
+      "lon": 77.311904,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "307",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Mahila Park C-Block, H.No. C-69X2  Dilshad Garden",
+      "area_acres": 0.67,
+      "lat": 28.68053,
+      "lon": 77.308867,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "308",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Store Park C-68X4 Dilshad Garnden",
+      "area_acres": 1.19,
+      "lat": 28.68038,
+      "lon": 77.308838,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "309",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C-68X2 Park Dilshad Garnden",
+      "area_acres": 0.51,
+      "lat": 28.677395,
+      "lon": 77.30481,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "310",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C-63X3 Park Dilshad Garnden",
+      "area_acres": 2.04,
+      "lat": 28.68038,
+      "lon": 77.308638,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "311",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C-68X3 Park Dilshad Garnden",
+      "area_acres": 0.49,
+      "lat": 28.677665,
+      "lon": 77.305521,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "312",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C-51X4 Park Dilshad Garnden",
+      "area_acres": 0.42,
+      "lat": 28.680731,
+      "lon": 77.308953,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "313",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C 53X1  Park Dilshad Garnden",
+      "area_acres": 0.43,
+      "lat": 28.677834,
+      "lon": 77.307085,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "314",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C 62Y2 Park Dilshad Garnden",
+      "area_acres": 0.23,
+      "lat": 28.677421,
+      "lon": 77.305585,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "315",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Golchakar Park Dilshad Garnden",
+      "area_acres": 0.25,
+      "lat": 28.677742,
+      "lon": 77.307063,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "316",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No.  C–2/G-2 Park Dilshad Garnden",
+      "area_acres": 0.16,
+      "lat": 28.68043,
+      "lon": 77.308867,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "317",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C–9 Park Dilshad Garnden",
+      "area_acres": 0.54,
+      "lat": 28.680656,
+      "lon": 77.308867,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "318",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C–6 Park Dilshad Garnden",
+      "area_acres": 0.86,
+      "lat": 28.680555,
+      "lon": 77.308524,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "319",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C–18X1 Park Dilshad Garnden",
+      "area_acres": 0.07,
+      "lat": 28.679755,
+      "lon": 77.309381,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "320",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C–19X1 Park Dilshad Garnden",
+      "area_acres": 0.02,
+      "lat": 28.679905,
+      "lon": 77.309295,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "321",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C–19X1 Park Dilshad Garnden",
+      "area_acres": 0.04,
+      "lat": 28.679811,
+      "lon": 77.309316,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "322",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C–28Y1 Park Dilshad Garnden",
+      "area_acres": 0.47,
+      "lat": 28.680508,
+      "lon": 77.301776,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "323",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Opp. H.No. C–40 Park Dilshad Garnden",
+      "area_acres": 0.13,
+      "lat": 28.681015,
+      "lon": 77.308544,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "324",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "C-Block Central Park,  H.No. C-23 (Maharaja Surjmal) Dilshad Garnden,-110095",
+      "area_acres": 3.14,
+      "lat": 28.680563,
+      "lon": 77.310049,
+      "supervisor": "Sanjeev Kumar"
+    },
+    {
+      "sno": "325",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Central Park A-Pocket , Opp. H.No. 40A. Dilshal Garden",
+      "area_acres": 0.4,
+      "lat": 28.666639,
+      "lon": 77.320664,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "326",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Opp. Store Park A-Pocket , Opp. H.No. 154A. Dilshal Garden",
+      "area_acres": 0.25,
+      "lat": 28.683388,
+      "lon": 77.313711,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "327",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park A-Pocket , Opp. H.No. 81A. Dilshal Garden",
+      "area_acres": 0.06,
+      "lat": 28.681342,
+      "lon": 77.313086,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "328",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Tikona Big Park A-Pocket , Opp. H.No. 6A. Dilshal Garden",
+      "area_acres": 0.6,
+      "lat": 28.681393,
+      "lon": 77.314093,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "329",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Tikona Small Park A-Pocket , Opp. H.No. 16A. Dilshal Garden",
+      "area_acres": 0.46,
+      "lat": 28.681734,
+      "lon": 77.314503,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "330",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park D-Pocket Opp. H.No. 547, Dilshad Garden",
+      "area_acres": 0.51,
+      "lat": 28.684146,
+      "lon": 77.317085,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "331",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park D-Pocket Opp. H.No. 781, Dilshad Garden",
+      "area_acres": 0.1,
+      "lat": 28.68272,
+      "lon": 77.317541,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "332",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park D-Pocket Opp. H.No. 866, Dilshad Garden",
+      "area_acres": 0.03,
+      "lat": 28.682805,
+      "lon": 77.317412,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "333",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park D-Pocket Opp. H.No. 266, Dilshad Garden",
+      "area_acres": 0.44,
+      "lat": 28.682986,
+      "lon": 77.315736,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "334",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park D-Pocket Opp. H.No.525,(Goyal Park) Dilshad Garden",
+      "area_acres": 0.2,
+      "lat": 28.684681,
+      "lon": 77.316443,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "335",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park R-Pocket Opp. H.No. 24A, Dilshad Garden",
+      "area_acres": 0.25,
+      "lat": 28.684912,
+      "lon": 77.318496,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "336",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park R-Pocket Opp. H.No. 54A, Dilshad Garden",
+      "area_acres": 0.49,
+      "lat": 28.684792,
+      "lon": 77.318421,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "337",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Q-Pocket Opp. H.No. 303, Dilshad Garden",
+      "area_acres": 0.65,
+      "lat": 28.686218,
+      "lon": 77.321053,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "338",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Q-Pocket Opp. H.No. 554, Dilshad Garden",
+      "area_acres": 0.03,
+      "lat": 28.685109,
+      "lon": 77.319252,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "339",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Q-Pocket Opp. H.No.2014& 213, Dilshad Garden",
+      "area_acres": 0.12,
+      "lat": 28.684682,
+      "lon": 77.320007,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "340",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Q-Pocket Opp. H.No. 322, Dilshad Garden",
+      "area_acres": 0.3,
+      "lat": 28.685296,
+      "lon": 77.321169,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "341",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Q-Pocket Opp. H.No. 392, Dilshad Garden",
+      "area_acres": 0.58,
+      "lat": 28.686216,
+      "lon": 77.32073,
+      "supervisor": "Dinesh"
+    },
+    {
+      "sno": "342",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Store Park Swami Dayanand  Hospital",
+      "area_acres": 0.11,
+      "lat": 28.678558,
+      "lon": 77.304586,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "343",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Swami Dayanand Hospital Opp. Blood Bank",
+      "area_acres": 0.1,
+      "lat": 28.678605,
+      "lon": 77.304588,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "344",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Swami Dayanand Hospital Behind of Kitchen",
+      "area_acres": 0.07,
+      "lat": 28.679,
+      "lon": 77.304951,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "345",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Swami Dayanand Hospital inside the ward",
+      "area_acres": 0.13,
+      "lat": 28.67883,
+      "lon": 77.304654,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "346",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Swami Dayanand Hospital Park opp. Police Room",
+      "area_acres": 0.27,
+      "lat": 28.67841,
+      "lon": 77.303801,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "347",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Swami Dayanand Hospital Park opp. Emergency",
+      "area_acres": 0.14,
+      "lat": 28.678138,
+      "lon": 77.303972,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "348",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park of Bustar Pump, Swami Dayanand Hospital",
+      "area_acres": 0.13,
+      "lat": 28.678319,
+      "lon": 77.303138,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "349",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Green Belt Opp. C.T.Scane, Swami Dayanand Hospital",
+      "area_acres": 0.06,
+      "lat": 28.678906,
+      "lon": 77.30338,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "350",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Ayurvedic, Swami Dayanand Hospital",
+      "area_acres": 0.04,
+      "lat": 28.679287,
+      "lon": 77.303954,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "351",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Pak Opp. MS. Office, Dayanand Park",
+      "area_acres": 0.17,
+      "lat": 28.679733,
+      "lon": 77.303588,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "352",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Behind . Ms. Office , Dayanand Park",
+      "area_acres": 0.14,
+      "lat": 28.678963,
+      "lon": 77.302419,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "353",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park (Patti) Child Infornt Privete Ward., Dayanand Hospital",
+      "area_acres": 0.1,
+      "lat": 28.679416,
+      "lon": 77.303659,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "354",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park, Dr. Quarter wala, Dayanand Hospital",
+      "area_acres": 0.17,
+      "lat": 28.677195,
+      "lon": 77.303075,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "355",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Works Division, Dayanand Park",
+      "area_acres": 0.03,
+      "lat": 28.678548,
+      "lon": 77.302225,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "356",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park of Staff Quarter, Pump wala, Dayanand Hospital -110095",
+      "area_acres": 0.07,
+      "lat": 28.679043,
+      "lon": 77.302498,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "357",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park of Staff Quarter, Dayanand Hospital -110095",
+      "area_acres": 0.19,
+      "lat": 28.67965,
+      "lon": 77.301467,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "358",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Homeopathic, Dayanand Hospital -110095",
+      "area_acres": 0.41,
+      "lat": 28.679161,
+      "lon": 77.301673,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "359",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Infornt of Narsing Collage, Dayanand Hospital -110095",
+      "area_acres": 0.51,
+      "lat": 28.672873,
+      "lon": 77.303125,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "360",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Infornt of Gate No. 2, Dayanand Hospital -110095",
+      "area_acres": 0.5,
+      "lat": 28.677781,
+      "lon": 77.303502,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "361",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Record Room, Dayanand Hospital -110095",
+      "area_acres": 0.12,
+      "lat": 28.679012,
+      "lon": 77.305143,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "362",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Janta Flat, H.No. 138,",
+      "area_acres": 2.19,
+      "lat": 28.691279,
+      "lon": 77.310894,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "363",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Janta Flat, H.No. 111,",
+      "area_acres": 0.3,
+      "lat": 28.689968,
+      "lon": 77.310602,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "364",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Janta Flat, H.No. 498,",
+      "area_acres": 0.34,
+      "lat": 28.690421,
+      "lon": 77.310369,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "365",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Janta Flat, H.No. 810",
+      "area_acres": 0.29,
+      "lat": 28.688404,
+      "lon": 77.311988,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "366",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Janta Flat, H.No. 1530",
+      "area_acres": 0.34,
+      "lat": 28.689925,
+      "lon": 77.313252,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "367",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Janta Flat, H.No.1264",
+      "area_acres": 0.28,
+      "lat": 28.690493,
+      "lon": 77.314874,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "368",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Janta Flat, H.No. 2044",
+      "area_acres": 0.34,
+      "lat": 28.692446,
+      "lon": 77.312938,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "369",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Opp. Janta Flat, H.No. 1805",
+      "area_acres": 0.34,
+      "lat": 28.69171,
+      "lon": 77.313136,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "370",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, A-Pocket Opp. H.No. 59, G.T.B. Enclave",
+      "area_acres": 0.44,
+      "lat": 28.693149,
+      "lon": 77.315124,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "371",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, A-Pocket Opp. H.No. 55, G.T.B. Enclave",
+      "area_acres": 0.3,
+      "lat": 28.69333,
+      "lon": 77.315035,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "372",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, A-Pocket Opp. H.No. 51, G.T.B. Enclave",
+      "area_acres": 0.14,
+      "lat": 28.692602,
+      "lon": 77.315011,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "373",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, A-Pocket Opp. H.No.18 G.T.B. Enclave",
+      "area_acres": 0.14,
+      "lat": 28.691858,
+      "lon": 77.316379,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "374",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, A-Pocket Opp. H.No. 36, G.T.B. Enclave",
+      "area_acres": 0.3,
+      "lat": 28.691766,
+      "lon": 77.316113,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "375",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park MIG, A-Pocket Opp. H.No. 30, G.T.B. Enclave",
+      "area_acres": 0.47,
+      "lat": 28.69138,
+      "lon": 77.316417,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "376",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG,B- Pocket Opp. H. No. 126, G.T.B.V Enclave -110095",
+      "area_acres": 0.47,
+      "lat": 28.693641,
+      "lon": 77.314719,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "377",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG,B- Pocket Opp. H. No.82, G.T.B.V Enclave -110095",
+      "area_acres": 0.28,
+      "lat": 28.693359,
+      "lon": 77.314483,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "378",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG,B- Pocket Opp. H. No.42 , G.T.B.V Enclave -110095",
+      "area_acres": 0.14,
+      "lat": 28.692918,
+      "lon": 77.313831,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "379",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park LIG, C–Pocket, Ambedkar park , G.T.B. Inclave  -110095",
+      "area_acres": 0.62,
+      "lat": 28.69247,
+      "lon": 77.312939,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "380",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Parl LIG, C– Pocket Opp. H.No. 74 , G.T.B. Enclave",
+      "area_acres": 0.12,
+      "lat": 28.692181,
+      "lon": 77.312396,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "381",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Parl LIG, C– Pocket Opp. H.No. 2 , G.T.B. Enclave",
+      "area_acres": 0.2,
+      "lat": 28.692145,
+      "lon": 77.312104,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "382",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Parl LIG, D– Pocket Opp. H.No.64 , G.T.B. Enclave",
+      "area_acres": 0.25,
+      "lat": 28.690297,
+      "lon": 77.310427,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "383",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Parl LIG, D– Pocket Opp. H.No. 46, G.T.B. Enclave",
+      "area_acres": 0.1,
+      "lat": 28.690912,
+      "lon": 77.310308,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "384",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Parl LIG, D– Pocket Opp. H.No. 67 , G.T.B. Enclave",
+      "area_acres": 0.47,
+      "lat": 28.690698,
+      "lon": 77.309473,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "385",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park P-Pkt. Opp. H.No. P 7/4A, (Central Park) Dilshad Garden",
+      "area_acres": 0.63,
+      "lat": 28.686901,
+      "lon": 77.329815,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "386",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park P-Pkt. Opp. H.No.P14/A2, (Cow wala) Dilshad Garden",
+      "area_acres": 0.21,
+      "lat": 28.686801,
+      "lon": 77.321528,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "387",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park P-Pkt. Opp. H.No. P35, Dilshad Garden",
+      "area_acres": 0.08,
+      "lat": 28.686762,
+      "lon": 77.321599,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "388",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park O-Pkt. Opp. H.No. O-28/A2, Dilshad Garden",
+      "area_acres": 0.26,
+      "lat": 28.687115,
+      "lon": 77.323486,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "389",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park O-Pkt. Opp. H.No. O-18/A2, Dilshad Garden",
+      "area_acres": 0.11,
+      "lat": 28.686504,
+      "lon": 77.322841,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "390",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park O-Pkt. Opp. H.No. O.34/A3, Dilshad Garden",
+      "area_acres": 0.15,
+      "lat": 28.687408,
+      "lon": 77.323655,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "391",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park O-Pkt. Opp. H.No.O.23/A4 Dilshad Garden",
+      "area_acres": 0.12,
+      "lat": 28.696168,
+      "lon": 77.292893,
+      "supervisor": "Nabab"
+    },
+    {
+      "sno": "392",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Subhash Park , Kushtha Ashram, Dilshad Garden",
+      "area_acres": 0.25,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "393",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Main Road Tahirpur-110095 (Ahilaya Bai)",
+      "area_acres": 0.53,
+      "lat": 28.653451,
+      "lon": 77.380026,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "394",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park Inforent Mpl School Laproshi Home , Tahirpur-110095",
+      "area_acres": 0.16,
+      "lat": 28.692325,
+      "lon": 77.321222,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "395",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park H.No.18 ,417 Main road , Mandir wala , Tahirpur-110095",
+      "area_acres": 0.54,
+      "lat": 28.688237,
+      "lon": 77.319572,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "396",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Green Belt  No. 1 Tahirpur  (Ambedker Park)",
+      "area_acres": 0.45,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "397",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Green Belt  Tahirpur (Bhagat Singh Park)",
+      "area_acres": 0.77,
+      "lat": 28.687777,
+      "lon": 77.317626,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "398",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "A & B - Block , Near Desu, Dilshad colony (Near Surkhsa Nursing Home)",
+      "area_acres": 1.35,
+      "lat": 28.689519,
+      "lon": 77.32531,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "399",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park DDA  Flat H. No. 292 & 294  New Seemapuri",
+      "area_acres": 0.06,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "400",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park DDA  Flat H. No.143 & 173  New Seemapuri",
+      "area_acres": 0.53,
+      "lat": 28.690449,
+      "lon": 77.32509,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "401",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park E-Block, Mkt. Park, Dilshard Garden",
+      "area_acres": 0.79,
+      "lat": 28.687325,
+      "lon": 77.32482,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "402",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Green Area,Near Dilshad Colony (3 No. Gate) New SeemaPuri-110095",
+      "area_acres": 2.79,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "403",
+      "ward_no": 219,
+      "region_id": "REG_W219",
+      "park_name": "Park & Water Body at New Seemapuri",
+      "area_acres": 1.86,
+      "lat": 28.68957,
+      "lon": 77.319118,
+      "supervisor": "Kalu Ram"
+    },
+    {
+      "sno": "404",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park A-1 H.No. 141, Nand Nagari",
+      "area_acres": 0.66,
+      "lat": 28.689938,
+      "lon": 77.307896,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "405",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park A-2 Market Wala , Nand Nagari",
+      "area_acres": 0.48,
+      "lat": 28.690538,
+      "lon": 77.3093,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "406",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park A-2 Inside, H.No. 141, Nand Nagari",
+      "area_acres": 0.16,
+      "lat": 28.690619,
+      "lon": 77.3093,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "407",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park A-2, Subhash Souchalaya Wala, Nand Nagari",
+      "area_acres": 1.08,
+      "lat": 28.690038,
+      "lon": 77.307811,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "408",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park A-3, Near, H.No. 391, Nand Nagari",
+      "area_acres": 0.27,
+      "lat": 28.693958,
+      "lon": 77.303827,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "409",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park A-4, H.No. 249, Behind School, Nand Nagari",
+      "area_acres": 0.86,
+      "lat": 28.690675,
+      "lon": 77.309031,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "410",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park A-4, H.No. 391. Nand Nagari",
+      "area_acres": 0.66,
+      "lat": 28.689897,
+      "lon": 77.307507,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "411",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-1, Near H.No. 391, Nand Nagari",
+      "area_acres": 0.28,
+      "lat": 28.689748,
+      "lon": 77.307521,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "412",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-2, Mkt. Wala , H. No. 250, Nand Nagari",
+      "area_acres": 0.48,
+      "lat": 28.689871,
+      "lon": 77.307097,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "413",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-2, H. No. 430, Nand Nagari",
+      "area_acres": 0.23,
+      "lat": 28.691261,
+      "lon": 77.307923,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "414",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-2, Community Wala, Nand Nagari",
+      "area_acres": 0.66,
+      "lat": 28.694193,
+      "lon": 77.304289,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "415",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-2, Sulabh Souchalaya Wala Nand Nagari",
+      "area_acres": 0.8,
+      "lat": 28.690432,
+      "lon": 77.309278,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "416",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-3, near H.No. 141, Nand Nagari",
+      "area_acres": 0.7,
+      "lat": 28.690433,
+      "lon": 77.309252,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "417",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-4, Inside H.No. 359, Nand Nagari",
+      "area_acres": 0.29,
+      "lat": 28.690475,
+      "lon": 77.309232,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "418",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-4, Market Wala , H.No. 244, Nand Nagari",
+      "area_acres": 0.48,
+      "lat": 28.690439,
+      "lon": 77.308919,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "419",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-5, H.No. 349, Nand Nagari",
+      "area_acres": 0.59,
+      "lat": 28.691209,
+      "lon": 77.306889,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "420",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park Between B-5 & B-6, Wala Nand Nagari",
+      "area_acres": 0.36,
+      "lat": 28.699809,
+      "lon": 77.30709,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "421",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-6, in Side, Nand Nagari",
+      "area_acres": 0.56,
+      "lat": 28.691772,
+      "lon": 77.306648,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "422",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park D-1, Near Mandir, Nand Nagari",
+      "area_acres": 0.27,
+      "lat": 28.69167,
+      "lon": 77.306697,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "423",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park D1, Indira Park, Near Mkt, Nand Nagari",
+      "area_acres": 0.33,
+      "lat": 28.691743,
+      "lon": 77.306627,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "424",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park D-2, Nand Nagari",
+      "area_acres": 0.24,
+      "lat": 28.691745,
+      "lon": 77.30667,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "425",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park near D-3, Nand Nagari",
+      "area_acres": 0.52,
+      "lat": 28.690473,
+      "lon": 77.30883,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "426",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park B-5, H.No.252 Green Belt, Nand Nagari",
+      "area_acres": 0.81,
+      "lat": 28.691769,
+      "lon": 77.307843,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "427",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park near B-5, Nursery, Nand Nagari",
+      "area_acres": 0.33,
+      "lat": 28.691663,
+      "lon": 77.308039,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "428",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park near B-6,H.No 239 Near Nursery Green Belt, Nand Nagari",
+      "area_acres": 0.33,
+      "lat": 28.690169,
+      "lon": 77.308926,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "429",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park E-1, , Gagan Cinema  Nand Nagari",
+      "area_acres": 1.04,
+      "lat": 28.690211,
+      "lon": 77.308909,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "430",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park E-1, (Sadbhawana Park) Nand Nagari",
+      "area_acres": 0.32,
+      "lat": 28.690309,
+      "lon": 77.308809,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "431",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park E-2,  (Mahila Park)  Nand Nagari",
+      "area_acres": 0.61,
+      "lat": 28.696824,
+      "lon": 77.310724,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "432",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park E-Block, Flat No,. 121 Nand Nagari",
+      "area_acres": 0.47,
+      "lat": 28.690329,
+      "lon": 77.308846,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "433",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park E-, Flat No, 221, Nand Nagari",
+      "area_acres": 0.94,
+      "lat": 28.697626,
+      "lon": 77.311441,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "434",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park E-Block , Park No. -3, Nand Nagari",
+      "area_acres": 1.03,
+      "lat": 28.691741,
+      "lon": 77.3066,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "435",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park E-3, Central Park Nand Nagari",
+      "area_acres": 0.43,
+      "lat": 28.691723,
+      "lon": 77.306584,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "436",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Park E-4, Central Park Nand Nagari",
+      "area_acres": 0.53,
+      "lat": 28.4145193,
+      "lon": 77.1831218,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "437",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "Green area at Kanchipura Village Nand Nagari",
+      "area_acres": 1.5,
+      "lat": 28.4139725,
+      "lon": 77.1834251,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "438",
+      "ward_no": 220,
+      "region_id": "REG_W220",
+      "park_name": "NHP Kanchipura - Nand Nagari",
+      "area_acres": 0.93,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "439",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No. 243, Sunil Dariy, GIL",
+      "area_acres": 0.48,
+      "lat": 28.696168,
+      "lon": 77.292893,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "440",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No. 1761, Pal Wala Loni Road",
+      "area_acres": 0.2,
+      "lat": 28.696189,
+      "lon": 77.293147,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "441",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No. 240, Budh Mandir Wala Loni Road",
+      "area_acres": 0.07,
+      "lat": 28.695187,
+      "lon": 77.292618,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "442",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "D.A.V. School Wala H. No. 168-145, Loni Road",
+      "area_acres": 0.1,
+      "lat": 28.695783,
+      "lon": 77.292411,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "443",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Behind Jal Board, Loni Road",
+      "area_acres": 2.99,
+      "lat": 28.695,
+      "lon": 77.292831,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "444",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Behind Jal Board,Choti Pkt,, H.No. 65/80  Loni Road",
+      "area_acres": 0.51,
+      "lat": 28.695429,
+      "lon": 77.292347,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "445",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Store Wala Park,  , LIG Flat,Loni Road",
+      "area_acres": 0.02,
+      "lat": 28.697219,
+      "lon": 77.29669,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "446",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Kikar Wala Park, , LIG Flat Loni Road",
+      "area_acres": 0.29,
+      "lat": 28.695395,
+      "lon": 77.295902,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "447",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Solanki Wala Park, Loni, H.No. 978 Loni Road",
+      "area_acres": 0.51,
+      "lat": 28.695102,
+      "lon": 77.296058,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "448",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Mahila Park, H.No. 116, Loni Road",
+      "area_acres": 0.33,
+      "lat": 28.697184,
+      "lon": 77.296756,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "449",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Gulab Vatika 593, Loni Road",
+      "area_acres": 0.25,
+      "lat": 28.697052,
+      "lon": 77.296928,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "450",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Shishu Vatika Loni Road",
+      "area_acres": 0.26,
+      "lat": 28.696995,
+      "lon": 77.293368,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "451",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Pradhan Wala Park, H.No. 733,Loni Road",
+      "area_acres": 0.32,
+      "lat": 28.696319,
+      "lon": 77.295217,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "452",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Sandeep Thekedar Wala Park, H.No. 881 Loni Road",
+      "area_acres": 2.21,
+      "lat": 28.696227,
+      "lon": 77.295378,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "453",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Chhoti Pkt. H.No. 802  Loni Road",
+      "area_acres": 0.49,
+      "lat": 28.695951,
+      "lon": 77.295444,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "454",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Green Belt along with Shiv Mandir Loni Road",
+      "area_acres": 0.78,
+      "lat": 28.694507,
+      "lon": 77.29415,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "455",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "DDA Mkt. LIG Flat 4 Nos. Chhoti Pkt.Loni Road",
+      "area_acres": 0.73,
+      "lat": 28.694808,
+      "lon": 77.294279,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "456",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 195 MIG Flat, Loni Road",
+      "area_acres": 0.64,
+      "lat": 28.69705,
+      "lon": 77.296534,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "457",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No.202 MIG Flat, Loni Road",
+      "area_acres": 0.02,
+      "lat": 28.699942,
+      "lon": 77.292795,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "458",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 210 MIG Flat, Loni Road",
+      "area_acres": 0.02,
+      "lat": 28.700132,
+      "lon": 77.292867,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "459",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 17 & 19 MIG Flat, Loni Road",
+      "area_acres": 0.43,
+      "lat": 28.70006,
+      "lon": 77.29224,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "460",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 33-35 MIG Flat, Loni Road",
+      "area_acres": 0.56,
+      "lat": 28.699547,
+      "lon": 77.292231,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "461",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 49-50 MIG Flat, Loni Road",
+      "area_acres": 0.5,
+      "lat": 28.698892,
+      "lon": 77.292356,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "462",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 65-66 MIG Flat, Loni Road",
+      "area_acres": 0.41,
+      "lat": 28.698792,
+      "lon": 77.292138,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "463",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 89-90 MIG Flat, Loni Road",
+      "area_acres": 0.41,
+      "lat": 28.698141,
+      "lon": 77.292441,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "464",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No.113-114 MIG Flat, Loni Road",
+      "area_acres": 0.51,
+      "lat": 28.697201,
+      "lon": 77.29647,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "465",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 281 MIG Flat, Loni Road",
+      "area_acres": 0.6,
+      "lat": 28.696881,
+      "lon": 77.296427,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "466",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 265 MIG Flat, Loni Road",
+      "area_acres": 0.51,
+      "lat": 28.699647,
+      "lon": 77.292815,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "467",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 233-234 MIG Flat, Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.699934,
+      "lon": 77.29257,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "468",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 411-412 MIG Flat, Loni Road",
+      "area_acres": 0.5,
+      "lat": 28.699603,
+      "lon": 77.293602,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "469",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 433 MIG Flat, Loni Road",
+      "area_acres": 0.5,
+      "lat": 28.700052,
+      "lon": 77.293101,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "470",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 385 MIG Flat, Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.698856,
+      "lon": 77.293615,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "471",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 457 MIG Flat, Loni Road",
+      "area_acres": 0.02,
+      "lat": 28.699033,
+      "lon": 77.293528,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "472",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 361 MIG Flat, Loni Road",
+      "area_acres": 0.5,
+      "lat": 28.698748,
+      "lon": 77.293233,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "473",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No.481 MIG Flat, Loni Road",
+      "area_acres": 0.5,
+      "lat": 28.698717,
+      "lon": 77.293694,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "474",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 505 MIG Flat, Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.698343,
+      "lon": 77.293663,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "475",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 337 MIG Flat, Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.697955,
+      "lon": 77.293502,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "476",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 657 MIG Flat, Loni Road",
+      "area_acres": 0.53,
+      "lat": 28.698049,
+      "lon": 77.293913,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "477",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 649 MIG Flat, Loni Road",
+      "area_acres": 0.86,
+      "lat": 28.698744,
+      "lon": 77.295524,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "478",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No.617 MIG Flat, Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.698855,
+      "lon": 77.293989,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "479",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 601MIG Flat, Loni Road",
+      "area_acres": 0.39,
+      "lat": 28.698051,
+      "lon": 77.2939,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "480",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No.745 MIG Flat, Loni Road",
+      "area_acres": 0.45,
+      "lat": 28.699846,
+      "lon": 77.294732,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "481",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 721 MIG Flat, Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.699105,
+      "lon": 77.294374,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "482",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No. 769 MIG Flat, Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.698769,
+      "lon": 77.29485,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "483",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park H.No.697 MIG Flat, Loni Road",
+      "area_acres": 0.11,
+      "lat": 28.698158,
+      "lon": 77.29495,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "484",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No. 793, MIG Flat, Loni Road",
+      "area_acres": 0.22,
+      "lat": 28.6986,
+      "lon": 77.29517,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "485",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No.817, MIG Flat, Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.69802,
+      "lon": 77.295111,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "486",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No 673, MIG Flat, Loni Road",
+      "area_acres": 0.71,
+      "lat": 28.698181,
+      "lon": 77.29516,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "487",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No.865, MIG Flat, Loni Road (Store wala)",
+      "area_acres": 0.71,
+      "lat": 28.696769,
+      "lon": 77.29575,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "488",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No. 889, MIG Flat, Loni Road",
+      "area_acres": 0.34,
+      "lat": 28.697201,
+      "lon": 77.296361,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "489",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No. 108/109, MIG Flat, Loni Road",
+      "area_acres": 0.9,
+      "lat": 28.698892,
+      "lon": 77.295075,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "490",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.NO. 1009, MIG Flat Loni Road",
+      "area_acres": 0.83,
+      "lat": 28.698405,
+      "lon": 77.29537,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "491",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.NO. 1067, MIG Flat Loni Road",
+      "area_acres": 0.69,
+      "lat": 28.699123,
+      "lon": 77.296106,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "492",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Park Near H.No.1100, MIG Flat, Loni Road",
+      "area_acres": 0.71,
+      "lat": 28.699591,
+      "lon": 77.295942,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "493",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "DDA Flat, Pocket-I,  H.No. 835 MIG Loni Road",
+      "area_acres": 0.4,
+      "lat": 28.698267,
+      "lon": 77.29574,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "494",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "DDA Flat, Pocket-II,  H.No. 586 MIG Loni Road",
+      "area_acres": 0.32,
+      "lat": 28.699337,
+      "lon": 77.293774,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "495",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "DDA Flat, Pocket-III,  H.No. 418 MIG Loni Road",
+      "area_acres": 0.12,
+      "lat": 28.698707,
+      "lon": 77.293808,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "496",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "DDA Flat, Pocket-IV,  H.No. 470 MIG Loni Road",
+      "area_acres": 0.15,
+      "lat": 28.698434,
+      "lon": 77.293344,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "497",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "DDA Flat,Pocket-V,  H.No. 370 MIG Loni Road",
+      "area_acres": 0.2,
+      "lat": 28.698824,
+      "lon": 77.293539,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "498",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "MIG Flate ,Pocket-I,  H.No. 706 MIG Loni Road",
+      "area_acres": 0.7,
+      "lat": 28.698417,
+      "lon": 77.294976,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "499",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "MIG Flate ,Pocket-II,  H.No. 790 MIG Loni Road",
+      "area_acres": 0.8,
+      "lat": 28.698346,
+      "lon": 77.295124,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "500",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "MIG Flate ,Pocket-III,  H.No. 790 MIG Loni Road",
+      "area_acres": 0.6,
+      "lat": 28.698134,
+      "lon": 77.29558,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "501",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "MIG Flate Pocket-IV,   Ashok Nagar-110018",
+      "area_acres": 0.6,
+      "lat": 28.697581,
+      "lon": 77.29546,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "502",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Ram Park West  Jyoti Nagar-110094",
+      "area_acres": 0.87,
+      "lat": 28.691962,
+      "lon": 77.293731,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "503",
+      "ward_no": 221,
+      "region_id": "REG_W221",
+      "park_name": "Green belt at Wazirabad Road  Ashok Nagar-110018",
+      "area_acres": 0.55,
+      "lat": 28.4157915,
+      "lon": 77.1746461,
+      "supervisor": "Lokender"
+    },
+    {
+      "sno": "504",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park C-1, Near H. No. 399, Nand Nagari",
+      "area_acres": 0.27,
+      "lat": 28.691696,
+      "lon": 77.306741,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "505",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park C-2, Near H. No. 141, Nand Nagari",
+      "area_acres": 0.27,
+      "lat": 28.691746,
+      "lon": 77.306664,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "506",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park C-3, Near H. No. 580, Nand Nagari",
+      "area_acres": 0.58,
+      "lat": 28.691769,
+      "lon": 77.306659,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "507",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Near nathu Colony (Barat ghar), Nand Nagari",
+      "area_acres": 0.54,
+      "lat": 28.691822,
+      "lon": 77.304106,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "508",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park C-3, H.No. 189 Near Masjid,  Nand Nagari",
+      "area_acres": 0.7,
+      "lat": 28.691764,
+      "lon": 77.306843,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "509",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park C-3, sulabh souchalaya Wala , Nand Nagari",
+      "area_acres": 0.81,
+      "lat": 28.691865,
+      "lon": 77.304501,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "510",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park C-3, Near Police Station, Nand Nagari",
+      "area_acres": 0.9,
+      "lat": 28.691846,
+      "lon": 77.30671,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "511",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Near State Bank , Nand Nagari",
+      "area_acres": 3.72,
+      "lat": 28.691761,
+      "lon": 77.306694,
+      "supervisor": "Shakti Singh"
+    },
+    {
+      "sno": "512",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 402,DDA Flats, M.S Park-110032",
+      "area_acres": 0.04,
+      "lat": 28.682422,
+      "lon": 77.2982,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "513",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 388,DDA Flats, M.S Park-110032",
+      "area_acres": 0.03,
+      "lat": 28.682481,
+      "lon": 77.297603,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "514",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 258,DDA Flats, M.S Park-110032",
+      "area_acres": 0.04,
+      "lat": 28.68271,
+      "lon": 77.297498,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "515",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 291,DDA Flats, M.S Park-110032",
+      "area_acres": 0.22,
+      "lat": 28.683118,
+      "lon": 77.297214,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "516",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Satsang DDA Flats, M.S. Park, -110032",
+      "area_acres": 0.34,
+      "lat": 28.682783,
+      "lon": 77.298174,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "517",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Kunj Bihari Vatika DDA Flats, M.S.Park",
+      "area_acres": 0.4,
+      "lat": 28.681608,
+      "lon": 77.297675,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "518",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 81,DDA Flats, M.S Park-110032",
+      "area_acres": 0.07,
+      "lat": 28.683118,
+      "lon": 77.297214,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "519",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 194,DDA Flats, M.S Park-110032",
+      "area_acres": 0.26,
+      "lat": 28.681865,
+      "lon": 77.297383,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "520",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 288,DDA Flats, M.S Park-110032",
+      "area_acres": 0.22,
+      "lat": 28.683277,
+      "lon": 77.297265,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "521",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No.66,DDA Flats, M.S Park-110032",
+      "area_acres": 0.39,
+      "lat": 28.683365,
+      "lon": 77.298681,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "522",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 56,DDA Flats, M.S Park-110032",
+      "area_acres": 0.05,
+      "lat": 28.681554,
+      "lon": 77.298972,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "523",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 37A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.16,
+      "lat": 28.682262,
+      "lon": 77.299226,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "524",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 34,DDA Flats, M.S Park-110032",
+      "area_acres": 0.15,
+      "lat": 28.681927,
+      "lon": 77.298361,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "525",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 4A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.05,
+      "lat": 28.683701,
+      "lon": 77.299681,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "526",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 102,DDA Flats, M.S Park-110032",
+      "area_acres": 0.56,
+      "lat": 28.68342,
+      "lon": 77.299879,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "527",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 22A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.04,
+      "lat": 28.682747,
+      "lon": 77.299529,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "528",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 91A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.04,
+      "lat": 28.682814,
+      "lon": 77.299928,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "529",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No.93A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.04,
+      "lat": 28.682826,
+      "lon": 77.300477,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "530",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No.118A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.22,
+      "lat": 28.683655,
+      "lon": 77.300528,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "531",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No.131A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.04,
+      "lat": 28.68297,
+      "lon": 77.300884,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "532",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 134,DDA Flats, M.S Park-110032",
+      "area_acres": 0.04,
+      "lat": 28.682691,
+      "lon": 77.30079,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "533",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 143A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.24,
+      "lat": 28.681914,
+      "lon": 77.300888,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "534",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 154A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.41,
+      "lat": 28.681724,
+      "lon": 77.300584,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "535",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 162A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.52,
+      "lat": 28.681328,
+      "lon": 77.300391,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "536",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Green Belt Opp. Satsang Park, H.No 450DDA Flats, M.S Park-110032",
+      "area_acres": 0.56,
+      "lat": 28.683262,
+      "lon": 77.297626,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "537",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 70A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.15,
+      "lat": 28.681496,
+      "lon": 77.298097,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "538",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 72A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.52,
+      "lat": 28.682129,
+      "lon": 77.300272,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "539",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Opp. H.No. 88A,DDA Flats, M.S Park-110032",
+      "area_acres": 0.52,
+      "lat": 28.683561,
+      "lon": 77.300446,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "540",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park Near Mother Dairy MS. Park-110032",
+      "area_acres": 0.36,
+      "lat": 28.676389,
+      "lon": 77.298885,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "541",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Green area at Nova Mill Ram Nagar-110032 Ahinsha Vatika",
+      "area_acres": 0.85,
+      "lat": 28.679269,
+      "lon": 77.294318,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "542",
+      "ward_no": 222,
+      "region_id": "REG_W222",
+      "park_name": "Park at Rolling Mill Ram Nagar. Ram Park",
+      "area_acres": 1.84,
+      "lat": 28.4048129,
+      "lon": 77.1740095,
+      "supervisor": "Jai Veer"
+    },
+    {
+      "sno": "543",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Tikona Park, Loni Road",
+      "area_acres": 1.05,
+      "lat": 28.677943,
+      "lon": 77.2921,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "544",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Park H.No. 1/6254, Gali No 4, East Rohtash Nagar",
+      "area_acres": 0.4,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "545",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Shiwaji Park, Gol park",
+      "area_acres": 0.23,
+      "lat": 28.68226,
+      "lon": 77.286988,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "546",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Park H.No. 278, Shri Ram Nagar Colony",
+      "area_acres": 0.1,
+      "lat": 28.675015,
+      "lon": 77.2956,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "547",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "H.No. 1/6124, Sanjeevani Vatika, Rohtash Nagar",
+      "area_acres": 0.46,
+      "lat": 28.679729,
+      "lon": 77.291606,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "548",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Kabool Nagar, Opp. Ho.No. 1/5969 D.K. Jain -II",
+      "area_acres": 0.45,
+      "lat": 28.69693,
+      "lon": 77.292227,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "549",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Kabool Nagar, Near- Pipal Tree H.No. 4/26",
+      "area_acres": 0.44,
+      "lat": 28.697917,
+      "lon": 77.293109,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "550",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Double Story Guru Dwara park, K. Nagar H.No. 1/6635",
+      "area_acres": 0.13,
+      "lat": 28.697624,
+      "lon": 77.290098,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "551",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Kabool Nagar, Opp. H.No.  223 Ghode wala",
+      "area_acres": 0.43,
+      "lat": 28.677398,
+      "lon": 77.2904,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "552",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Taxi Stand Park, H.No. 3/64 Kabool Nagar",
+      "area_acres": 0.41,
+      "lat": 28.675487,
+      "lon": 77.291079,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "553",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Kabool Nagar , Opp. H. No. 113 (Shishu Vatika)",
+      "area_acres": 0.48,
+      "lat": 28.677566,
+      "lon": 77.2902,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "554",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Kabool Nagar, Double Story, H.No. 305",
+      "area_acres": 0.44,
+      "lat": 28.677089,
+      "lon": 77.2903,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "555",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Kabool Nagar Double Story, H.No. 261",
+      "area_acres": 0.41,
+      "lat": 28.673231,
+      "lon": 77.291442,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "556",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Double Story, Near D.K. Jain Park H.No. 1/5955",
+      "area_acres": 0.48,
+      "lat": 28.677244,
+      "lon": 77.292018,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "557",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Kabool Nagar, Double Story, H.No.339",
+      "area_acres": 0.48,
+      "lat": 28.675854,
+      "lon": 77.291336,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "558",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Tikona Park, Dwarkapuri",
+      "area_acres": 0.21,
+      "lat": 28.676406,
+      "lon": 77.281229,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "559",
+      "ward_no": 223,
+      "region_id": "REG_W223",
+      "park_name": "Green land G.D. Rath Mill Loni Road Shahdara",
+      "area_acres": 1.94,
+      "lat": 28.405365,
+      "lon": 77.173081,
+      "supervisor": "Omkar"
+    },
+    {
+      "sno": "560",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Parshu Ram Park, P.S. Garden",
+      "area_acres": 0.25,
+      "lat": 28.672406,
+      "lon": 77.277324,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "561",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Near MPL School, P.S. Garden Anurag Vatika -110032",
+      "area_acres": 0.09,
+      "lat": 28.677566,
+      "lon": 77.284112,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "562",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Radha Swami Park, P.S. Garden",
+      "area_acres": 0.17,
+      "lat": 28.67844,
+      "lon": 77.282452,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "563",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Malaria Wala Park",
+      "area_acres": 0.09,
+      "lat": 28.67776,
+      "lon": 77.281508,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "564",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Subhash Park, P.S. Garden",
+      "area_acres": 0.2,
+      "lat": 28.676223,
+      "lon": 77.286972,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "565",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Maszid Wala Park, Kabooter Market",
+      "area_acres": 0.9,
+      "lat": 28.679125,
+      "lon": 77.274842,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "566",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "H.No. JB-92 Bhagat Singh park, Welcome Market  -110032",
+      "area_acres": 0.18,
+      "lat": 28.676791,
+      "lon": 77.27505,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "567",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "H.No. JB-10 Ravi Das Park,",
+      "area_acres": 0.65,
+      "lat": 28.675717,
+      "lon": 77.275372,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "568",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Park A-1 / 20  Near Mother Dairy Welcome  -110032",
+      "area_acres": 0.03,
+      "lat": 28.674788,
+      "lon": 77.274999,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "569",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "H.No. S-70 Amer Singh Rothor Park Welcome",
+      "area_acres": 0.3,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "570",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "JB-6/59 Imambada Welcome",
+      "area_acres": 0.89,
+      "lat": 28.676981,
+      "lon": 77.275639,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "571",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Park Z-Block, Near H.No. 174",
+      "area_acres": 0.25,
+      "lat": 28.676452,
+      "lon": 77.274271,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "572",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "H.No. Z-109 Kabristan Welcome",
+      "area_acres": 0.13,
+      "lat": 28.676786,
+      "lon": 77.273327,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "573",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Photo Chock, Y-Block, H.NO. 7",
+      "area_acres": 0.68,
+      "lat": 28.67748,
+      "lon": 77.272816,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "574",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Park  H.No. Z-II/325 ZA Khan wala",
+      "area_acres": 0.89,
+      "lat": 28.679528,
+      "lon": 77.274939,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "575",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "C-5, Welcome  Park.",
+      "area_acres": 0.15,
+      "lat": 28.678263,
+      "lon": 77.273764,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "576",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "C-1/82, Pipla Mandir Welcome  Park.",
+      "area_acres": 0.15,
+      "lat": 28.772795,
+      "lon": 77.275679,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "577",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "H.No. A-1/23 Opp. Welcome",
+      "area_acres": 0.15,
+      "lat": 28.764711,
+      "lon": 77.275196,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "578",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "H.No. B-1/1 Opp. Welcome",
+      "area_acres": 0.23,
+      "lat": 28.776744,
+      "lon": 77.275192,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "579",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "F& F Garden-",
+      "area_acres": 32.0,
+      "lat": 28.674305,
+      "lon": 77.275984,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "580",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Small Park, Opp. Bagh Wali Masjid",
+      "area_acres": 0.12,
+      "lat": 28.67781,
+      "lon": 77.275008,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "581",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Rahman Building Small Park",
+      "area_acres": 0.13,
+      "lat": 28.675802,
+      "lon": 77.289079,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "582",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Rahman Building Big Park",
+      "area_acres": 0.42,
+      "lat": 28.675762,
+      "lon": 77.282896,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "583",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Park H Block Chatri Wala Park",
+      "area_acres": 0.6,
+      "lat": 28.677173,
+      "lon": 77.283229,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "584",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Park Anda  Park Naveen Shahdara",
+      "area_acres": 0.21,
+      "lat": 28.675722,
+      "lon": 77.285143,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "585",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "Park Fuwara Wala G.T.Road",
+      "area_acres": 0.12,
+      "lat": 28.676257,
+      "lon": 77.276982,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "586",
+      "ward_no": 224,
+      "region_id": "REG_W224",
+      "park_name": "G.T. Road P.S. Green Belt (Pkt.-6)",
+      "area_acres": 0.71,
+      "lat": 28.674247,
+      "lon": 77.285546,
+      "supervisor": "Ravinder"
+    },
+    {
+      "sno": "587",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Tikona Park, Near Welcome P.S.",
+      "area_acres": 0.33,
+      "lat": 28.674607,
+      "lon": 77.273539,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "588",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "N-Block, Welcome H.No. 10 (Ramlial Park)",
+      "area_acres": 0.86,
+      "lat": 28.674911,
+      "lon": 77.272814,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "589",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Loha Market, Welcome Shop No.  4",
+      "area_acres": 0.07,
+      "lat": 28.676192,
+      "lon": 77.271161,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "590",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Razia Sultana Park",
+      "area_acres": 0.2,
+      "lat": 28.675012,
+      "lon": 77.272963,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "591",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Double Story  Park H. No. 194",
+      "area_acres": 0.51,
+      "lat": 28.677046,
+      "lon": 77.266506,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "592",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Double Story Park H. No. 198",
+      "area_acres": 0.48,
+      "lat": 28.677318,
+      "lon": 77.267229,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "593",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Double Story Park, Mandir Wala",
+      "area_acres": 0.41,
+      "lat": 28.67714,
+      "lon": 77.26751,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "594",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "New Seelampur, B-Block, Park",
+      "area_acres": 0.14,
+      "lat": 28.676766,
+      "lon": 77.268128,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "595",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "C-Block, H. No. 71",
+      "area_acres": 0.52,
+      "lat": 28.67762,
+      "lon": 77.268639,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "596",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "C-Block, H. No. 20",
+      "area_acres": 0.05,
+      "lat": 28.677453,
+      "lon": 77.267894,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "597",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "D-Block, H.No.- 122",
+      "area_acres": 0.11,
+      "lat": 28.675604,
+      "lon": 77.269789,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "598",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "D-Block, H.No.- 145",
+      "area_acres": 0.26,
+      "lat": 28.67447,
+      "lon": 77.267687,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "599",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "D-Block, Small Park",
+      "area_acres": 0.51,
+      "lat": 28.678076,
+      "lon": 77.26818,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "600",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "E-Block, Small Park",
+      "area_acres": 0.41,
+      "lat": 28.678116,
+      "lon": 77.270542,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "601",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Hanipudin Central Park",
+      "area_acres": 0.95,
+      "lat": 28.675852,
+      "lon": 77.270333,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "602",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "F-Block, Near Desu Office",
+      "area_acres": 0.4,
+      "lat": 28.673988,
+      "lon": 77.269294,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "603",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "CPJ-Park, Mandir Wala",
+      "area_acres": 0.51,
+      "lat": 28.673756,
+      "lon": 77.265672,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "604",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "CPJ-Park, Small-I",
+      "area_acres": 0.41,
+      "lat": 28.673101,
+      "lon": 77.266421,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "605",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "CPJ-Park, Small-II",
+      "area_acres": 0.02,
+      "lat": 28.673156,
+      "lon": 77.266344,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "606",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "OPQR Block, Welcome",
+      "area_acres": 0.31,
+      "lat": 28.675234,
+      "lon": 77.274243,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "607",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Old Orachard at Seelam Pur",
+      "area_acres": 0.95,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Amresh"
+    },
+    {
+      "sno": "608",
+      "ward_no": 225,
+      "region_id": "REG_W225",
+      "park_name": "Green area at Seelampur.(Opp. Petrol Pump)",
+      "area_acres": 2.5,
+      "lat": 28.40167,
+      "lon": 77.161555,
+      "supervisor": "Shahdara South Zone"
+    },
+    {
+      "sno": "609",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "Park alongwith Nala, B.S.Mohalla   Usmanpur",
+      "area_acres": 0.36,
+      "lat": 28.683651,
+      "lon": 77.262574,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "610",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "Small Park, B.S.Mohalla   Usmanpur",
+      "area_acres": 0.65,
+      "lat": 28.683301,
+      "lon": 77.262425,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "611",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "Nadia Park, B.S.Mohalla   Usmanpur",
+      "area_acres": 0.45,
+      "lat": 28.68236,
+      "lon": 77.260967,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "612",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "C-Block , MCD Flat, No. 202,Usmanpur",
+      "area_acres": 0.77,
+      "lat": 28.681823,
+      "lon": 77.260279,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "613",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "C-Block MCD Flat , No. 241   Usmanpur-110053",
+      "area_acres": 0.61,
+      "lat": 28.682199,
+      "lon": 77.260427,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "614",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "C-Block MCD Flat , No. 360   Usmanpur-110053",
+      "area_acres": 0.07,
+      "lat": 28.680367,
+      "lon": 77.260946,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "615",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "D-Block H.No. 18 MCD Flat No. 4   Usmanpur-110053",
+      "area_acres": 0.46,
+      "lat": 28.680712,
+      "lon": 77.258809,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "616",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "A-Block H. No. 81 , MCD Flat No. 4   Usmanpur-110053",
+      "area_acres": 0.65,
+      "lat": 28.680712,
+      "lon": 77.258809,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "617",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "A-Block H. No. 65 , MCD Flat No. 4   Usmanpur-110053",
+      "area_acres": 0.65,
+      "lat": 28.680787,
+      "lon": 77.25846,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "618",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "Park of Kaith Wara   Usmanpur",
+      "area_acres": 0.8,
+      "lat": 28.686938,
+      "lon": 77.259251,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "619",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "D-Block Mahila Park   Usmanpur",
+      "area_acres": 1.01,
+      "lat": 28.682166,
+      "lon": 77.25987,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "620",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "D-34, MCD Flat NO.  Usmanpur",
+      "area_acres": 0.75,
+      "lat": 28.680668,
+      "lon": 77.258654,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "621",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "B-336, MCD Flat No. Usamanpur",
+      "area_acres": 0.69,
+      "lat": 28.679757,
+      "lon": 77.261195,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "622",
+      "ward_no": 226,
+      "region_id": "REG_W226",
+      "park_name": "A Block, Behind Mpl School",
+      "area_acres": 0.65,
+      "lat": 28.680325,
+      "lon": 77.259743,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "623",
+      "ward_no": 228,
+      "region_id": "REG_W228",
+      "park_name": "Village Maujpur Park",
+      "area_acres": 0.25,
+      "lat": 28.690174,
+      "lon": 77.27536,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "624",
+      "ward_no": 228,
+      "region_id": "REG_W228",
+      "park_name": "Panchwati Park at Ghonda Chowk",
+      "area_acres": 2.6,
+      "lat": 28.4124092,
+      "lon": 77.1613479,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "625",
+      "ward_no": 230,
+      "region_id": "REG_W230",
+      "park_name": "Park Gamri Village",
+      "area_acres": 0.75,
+      "lat": 28.695678,
+      "lon": 77.253031,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "626",
+      "ward_no": 230,
+      "region_id": "REG_W230",
+      "park_name": "Green area Children Memorial Park at Ghari Mandu",
+      "area_acres": 1.16,
+      "lat": 28.426958,
+      "lon": 77.159328,
+      "supervisor": "Rakesh Kashyap"
+    },
+    {
+      "sno": "627",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-1/303, Green Belt Park Yamuna Vihar",
+      "area_acres": 0.3,
+      "lat": 28.700996,
+      "lon": 77.270671,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "628",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-1/105, Green Belt Park Yamuna Vihar",
+      "area_acres": 0.3,
+      "lat": 28.701322,
+      "lon": 77.271243,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "629",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-1/282, Singla Wala  Park  Yamuna Vihar",
+      "area_acres": 0.29,
+      "lat": 28.701122,
+      "lon": 77.270385,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "630",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-1/83, Park (Choti Poket)  Yamuna Vihar",
+      "area_acres": 0.43,
+      "lat": 28.701949,
+      "lon": 77.271372,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "631",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-1 & B-2 ke Bich Geeta Bhawan Park (Harbal Park)  Yamuna Vihar",
+      "area_acres": 0.4,
+      "lat": 28.701222,
+      "lon": 77.270743,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "632",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2/254, Green Belt Park  Yamuna Vihar",
+      "area_acres": 0.14,
+      "lat": 28.701333,
+      "lon": 77.269323,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "633",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2/281, Faware Wala, park   Yamuna Vihar",
+      "area_acres": 0.25,
+      "lat": 28.701135,
+      "lon": 77.269065,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "634",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2/410 Park   Yamuna Vihar",
+      "area_acres": 0.36,
+      "lat": 28.701422,
+      "lon": 77.269642,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "635",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2/8 Park (Choti Poket)  Yamuna Vihar",
+      "area_acres": 0.11,
+      "lat": 28.702032,
+      "lon": 77.268705,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "636",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2/28 Park (Choti Poket)  Yamuna Vihar",
+      "area_acres": 0.43,
+      "lat": 28.702039,
+      "lon": 77.268468,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "637",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2/361 Maharaja Agrsain Park  Yamuna Vihar",
+      "area_acres": 2.37,
+      "lat": 28.701096,
+      "lon": 77.269614,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "638",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2 & B-3 ke bich Shivaji Park  Yamuna Vihar",
+      "area_acres": 0.75,
+      "lat": 28.701361,
+      "lon": 77.267791,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "639",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2/380 behind  Maharaja Agrsain Park  Yamuna Vihar",
+      "area_acres": 0.15,
+      "lat": 28.701156,
+      "lon": 77.26871,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "640",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-2/115 Goyal Wala Park  Yamuna Vihar",
+      "area_acres": 0.11,
+      "lat": 28.701426,
+      "lon": 77.268049,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "641",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-3/103 Park  Yamuna Vihar",
+      "area_acres": 1.9,
+      "lat": 28.701887,
+      "lon": 77.266972,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "642",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-3/148, Ram,Janki Park Yamuna Vihar",
+      "area_acres": 0.37,
+      "lat": 28.701472,
+      "lon": 77.266309,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "643",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-3/156, Mahender Singh Vatika Park   Yamuna Vihar",
+      "area_acres": 0.41,
+      "lat": 28.70143,
+      "lon": 77.266354,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "644",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-4/81, Pram Hans ji Maharaj Vatika Park  Yamuna Vihar",
+      "area_acres": 0.74,
+      "lat": 28.699708,
+      "lon": 77.266687,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "645",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-4/82, Mahila Park  Yamuna Vihar",
+      "area_acres": 0.39,
+      "lat": 28.699394,
+      "lon": 77.266756,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "646",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-4/156, Park  Yamuna Vihar",
+      "area_acres": 0.26,
+      "lat": 28.699939,
+      "lon": 77.26613,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "647",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-4/75, Park   Yamuna Vihar",
+      "area_acres": 0.76,
+      "lat": 28.699124,
+      "lon": 77.26658,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "648",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-4/158, Park   Yamuna Vihar",
+      "area_acres": 0.17,
+      "lat": 28.699283,
+      "lon": 77.267671,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "649",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-5/423 Shashi kant Park Yamuna Vihar",
+      "area_acres": 0.32,
+      "lat": 28.69927,
+      "lon": 77.268952,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "650",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-5/326, Madhev Park  Yamuna Vihar",
+      "area_acres": 0.28,
+      "lat": 28.698804,
+      "lon": 77.268942,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "651",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-5/261, Rameshwer Park  Yamuna Vihar",
+      "area_acres": 0.21,
+      "lat": 28.690001,
+      "lon": 77.2699,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "652",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-5/274, Store wala Park  Yamuna Vihar",
+      "area_acres": 0.42,
+      "lat": 28.698594,
+      "lon": 77.269525,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "653",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-5/160, Mahadev Park  Yamuna Vihar",
+      "area_acres": 0.21,
+      "lat": 28.698574,
+      "lon": 77.270998,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "654",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "B-5/327, Nishad Raj Vatika Yamuna Vihar",
+      "area_acres": 0.25,
+      "lat": 28.700469,
+      "lon": 77.268318,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "655",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-1/185, Bhawani Park Yamuna Vihar",
+      "area_acres": 0.25,
+      "lat": 28.701378,
+      "lon": 77.274184,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "656",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-1/211, Bhairo Park Yamuna Vihar",
+      "area_acres": 0.18,
+      "lat": 28.700796,
+      "lon": 77.274059,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "657",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-2/196, Krishna Park  Yamuna Vihar",
+      "area_acres": 0.28,
+      "lat": 28.700412,
+      "lon": 77.277115,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "658",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-2/246, Shri Ram Park  Yamuna Vihar",
+      "area_acres": 0.14,
+      "lat": 28.701334,
+      "lon": 77.276772,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "659",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-3/291, Maha Rana Pratap Park  Yamuna Vihar",
+      "area_acres": 0.97,
+      "lat": 28.70077,
+      "lon": 77.2784,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "660",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-3/113, Bal Samriti Vatika Park  Yamuna Vihar",
+      "area_acres": 0.35,
+      "lat": 28.700506,
+      "lon": 77.279713,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "661",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-3/196, Mahavir Vatika  Yamuna Vihar",
+      "area_acres": 0.27,
+      "lat": 28.700149,
+      "lon": 77.279692,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "662",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-4/104, Behind Rathwala Mandir  Yamuna Vihar",
+      "area_acres": 0.56,
+      "lat": 28.700697,
+      "lon": 77.28089,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "663",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-4/115, Panchsheel  Park   Yamuna Vihar",
+      "area_acres": 0.15,
+      "lat": 28.700287,
+      "lon": 77.282048,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "664",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-4/73A Panchwati Park  Yamuna Vihar",
+      "area_acres": 0.14,
+      "lat": 28.700674,
+      "lon": 77.282449,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "665",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-4/335, Chitra Gupt Vatika Park  Yamuna Vihar",
+      "area_acres": 0.51,
+      "lat": 28.700597,
+      "lon": 77.282044,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "666",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-5/206, Vijay Laxmi Bahal Park  Yamuna Vihar",
+      "area_acres": 0.28,
+      "lat": 28.700202,
+      "lon": 77.283747,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "667",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-5/185, Rajesh Pilot Park  Yamuna Vihar",
+      "area_acres": 1.33,
+      "lat": 28.699237,
+      "lon": 77.28312,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "668",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-5/81, Atul Park  Yamuna Vihar",
+      "area_acres": 0.12,
+      "lat": 28.69845,
+      "lon": 77.282672,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "669",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-5/67, Keshav Vatika  Yamuna Vihar",
+      "area_acres": 0.36,
+      "lat": 28.698718,
+      "lon": 77.282014,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "670",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-5/63, Keshav Vatika ke samne Park  Yamuna Vihar",
+      "area_acres": 0.29,
+      "lat": 28.699056,
+      "lon": 77.281885,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "671",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-5/106, Opp. Shiv Shakti Mandir  Yamuna Vihar",
+      "area_acres": 0.83,
+      "lat": 28.699021,
+      "lon": 77.282084,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "672",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-6/425, Pkt, Park Near Keshav Vatika  Yamuna Vihar",
+      "area_acres": 0.46,
+      "lat": 28.698378,
+      "lon": 77.282219,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "673",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-6/172, Dayanand  Park  Yamuna Vihar",
+      "area_acres": 0.62,
+      "lat": 28.698863,
+      "lon": 77.280914,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "674",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-6/42, Pkt, Near Mahila Park  Yamuna Vihar",
+      "area_acres": 0.47,
+      "lat": 28.698777,
+      "lon": 77.280911,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "675",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-6/37, Mahila Park  Yamuna Vihar",
+      "area_acres": 0.4,
+      "lat": 28.698585,
+      "lon": 77.27965,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "676",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-6/196,  Krishna Park Desu Office  Yamuna Vihar",
+      "area_acres": 0.31,
+      "lat": 28.69915,
+      "lon": 77.279328,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "677",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-6/292,  Prahlad Vatika Park  Yamuna Vihar",
+      "area_acres": 0.51,
+      "lat": 28.6993,
+      "lon": 77.280357,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "678",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-6/101,  Hanuman Vatika  Yamuna Vihar",
+      "area_acres": 0.61,
+      "lat": 28.698623,
+      "lon": 77.279671,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "679",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-7/24, Shishu Vatika  Yamuna Vihar",
+      "area_acres": 0.49,
+      "lat": 28.698084,
+      "lon": 77.2725,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "680",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-7/100, Shri Ram  Park  Yamuna Vihar",
+      "area_acres": 0.54,
+      "lat": 28.698248,
+      "lon": 77.28015,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "681",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-7/148,Vadahi Park  Yamuna Vihar",
+      "area_acres": 0.3,
+      "lat": 28.696813,
+      "lon": 77.28015,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "682",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-8/92, Mohan Chand Park  Yamuna Vihar",
+      "area_acres": 0.29,
+      "lat": 28.696901,
+      "lon": 77.279091,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "683",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-8/174 Gottam Budh Park   Yamuna Vihar",
+      "area_acres": 0.35,
+      "lat": 28.69862,
+      "lon": 77.275407,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "684",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-8/35, Ambedkar Park  Yamuna Vihar",
+      "area_acres": 0.35,
+      "lat": 28.697906,
+      "lon": 77.274802,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "685",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-8/170, Tulsi Vatika Park  Yamuna Vihar",
+      "area_acres": 0.24,
+      "lat": 28.697138,
+      "lon": 77.275192,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "686",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-9/242, Guru Govind Singh Park  Yamuna Vihar",
+      "area_acres": 0.56,
+      "lat": 28.697053,
+      "lon": 77.278011,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "687",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-9/96, Ram Park  Yamuna Vihar",
+      "area_acres": 0.12,
+      "lat": 28.698162,
+      "lon": 77.2749,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "688",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-9/168, Shayam  Park  Yamuna Vihar",
+      "area_acres": 0.18,
+      "lat": 28.696285,
+      "lon": 77.27422,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "689",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-9/150 Bhagat Singh Park  Yamuna Vihar",
+      "area_acres": 3.64,
+      "lat": 28.697394,
+      "lon": 77.274123,
+      "supervisor": "Rajveer"
+    },
+    {
+      "sno": "690",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-10, T.C. Sharma Wala Park   Yamuna Vihar",
+      "area_acres": 0.14,
+      "lat": 28.69767,
+      "lon": 77.374452,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "691",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-10, Behaind Nursary Yamuna Vihar",
+      "area_acres": 0.1,
+      "lat": 28.697115,
+      "lon": 77.277047,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "692",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-10, Parshuram Vatika  Yamuna Vihar",
+      "area_acres": 0.36,
+      "lat": 28.697463,
+      "lon": 77.277321,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "693",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-10 Nursery, Yamuna Vihar",
+      "area_acres": 1.51,
+      "lat": 28.697216,
+      "lon": 77.276816,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "694",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-10/100, Chatri Wala Park Yamuna Vihar",
+      "area_acres": 0.13,
+      "lat": 28.697256,
+      "lon": 77.277566,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "695",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-10/178, Park Yamuna Vihar",
+      "area_acres": 0.14,
+      "lat": 28.696844,
+      "lon": 77.275038,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "696",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-10/44, Park Yamuna Vihar",
+      "area_acres": 0.13,
+      "lat": 28.697372,
+      "lon": 77.275192,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "697",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-12 Pocket Goyal Wala  Yamuna Vihar",
+      "area_acres": 0.45,
+      "lat": 28.697033,
+      "lon": 77.275167,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "698",
+      "ward_no": 232,
+      "region_id": "REG_W232",
+      "park_name": "C-12 Park Jangle Jalebe wala  Yamuna Vihar",
+      "area_acres": 0.09,
+      "lat": 28.697665,
+      "lon": 77.281387,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "699",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "B-4, Near Subhash Mohalla",
+      "area_acres": 0.91,
+      "lat": 28.692953,
+      "lon": 77.268585,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "700",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "Ghonda Shivaji Park",
+      "area_acres": 0.21,
+      "lat": 28.699097,
+      "lon": 77.267577,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "701",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-11/59, Green Belt, Yamuna Vihar",
+      "area_acres": 0.07,
+      "lat": 28.60097244,
+      "lon": 77.27,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "702",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-11/186, Fawara Wala Park",
+      "area_acres": 0.39,
+      "lat": 28.60097516,
+      "lon": 77.277,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "703",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-11/60, Green Belt Park",
+      "area_acres": 0.19,
+      "lat": 28.60097607,
+      "lon": 77.276,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "704",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-11/100, Alongwith Vijaya Park colony",
+      "area_acres": 0.49,
+      "lat": 28.6009690069,
+      "lon": 77.27,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "705",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12, Krishna  Park",
+      "area_acres": 0.75,
+      "lat": 28.60097252,
+      "lon": 77.27,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "706",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12/67, Choti Pocket Yauna Vihar",
+      "area_acres": 0.1,
+      "lat": 28.60097246,
+      "lon": 77.27,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "707",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12/239 , Green Belt",
+      "area_acres": 0.23,
+      "lat": 28.697132,
+      "lon": 77.279,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "708",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12/428, Near Community Bhawan",
+      "area_acres": 0.15,
+      "lat": 28.60097072,
+      "lon": 77.28,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "709",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12/225, Park Yamuna Vihar",
+      "area_acres": 0.31,
+      "lat": 28.697462,
+      "lon": 77.27,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "710",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12/320  Park",
+      "area_acres": 0.42,
+      "lat": 28.696772,
+      "lon": 77.27,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "711",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12/484, Ekta Park",
+      "area_acres": 0.9,
+      "lat": 28.69686,
+      "lon": 77.28,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "712",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12/477  Jaiky Park",
+      "area_acres": 0.79,
+      "lat": 28.697074,
+      "lon": 77.28,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "713",
+      "ward_no": 233,
+      "region_id": "REG_W233",
+      "park_name": "C-12/387",
+      "area_acres": 0.27,
+      "lat": 28.696546,
+      "lon": 77.28,
+      "supervisor": "Soran Singh"
+    },
+    {
+      "sno": "714",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "Central Park, H.No. 2, B Block Store Wala New Zafrabad",
+      "area_acres": 1.19,
+      "lat": 28.684132,
+      "lon": 77.278127,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "715",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. A-22, A Block, Masjid Wala Park, New Zafrabad",
+      "area_acres": 0.22,
+      "lat": 28.684368,
+      "lon": 77.279502,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "716",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. A-36, A Block Mkt, Wala Park, New Zafrabad",
+      "area_acres": 0.22,
+      "lat": 28.685237,
+      "lon": 77.280022,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "717",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 57, B-Block, Jal Board Office Wala Park, New Zafrabad",
+      "area_acres": 0.21,
+      "lat": 28.684675,
+      "lon": 77.279465,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "718",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 36, A-Block, Hudda Public School",
+      "area_acres": 0.12,
+      "lat": 28.685792,
+      "lon": 77.276807,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "719",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 2, A-Block, Mahila Park",
+      "area_acres": 0.29,
+      "lat": 28.689576,
+      "lon": 77.282295,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "720",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 28, B-Block, Balmiki Mandir, Z.B.",
+      "area_acres": 0.75,
+      "lat": 28.683452,
+      "lon": 77.278733,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "721",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 36, C Block, Bhagwan Mahavir Swami Park, Z.B.",
+      "area_acres": 0.27,
+      "lat": 28.68311,
+      "lon": 77.279625,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "722",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 37, D Block, Yog Sadhana Park, Z.B.",
+      "area_acres": 0.12,
+      "lat": 28.68269,
+      "lon": 77.27828,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "723",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 45, D Block, Azmid Dev Park",
+      "area_acres": 0.69,
+      "lat": 28.683195,
+      "lon": 77.278069,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "724",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. D-2, D Block, Shaddi  Wala Park, Mini Stadium",
+      "area_acres": null,
+      "lat": 28.685177,
+      "lon": 77.27842,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "725",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 3, C Block DDA Flat, Kasyap  Park",
+      "area_acres": 2.15,
+      "lat": 28.683468,
+      "lon": 77.279584,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "726",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. B-11, A Block DDA FLAT",
+      "area_acres": 1.83,
+      "lat": 28.685031,
+      "lon": 77.27739,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "727",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. A-25, A Block Chotti Pockit",
+      "area_acres": 0.53,
+      "lat": 28.688388,
+      "lon": 77.281186,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "728",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "C BLOCK Shiv Mandir Wala Park",
+      "area_acres": 0.53,
+      "lat": 28.685089,
+      "lon": 77.280426,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "729",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. C-19, C Block Shishu Vatika Park, New Zafrabad",
+      "area_acres": 0.34,
+      "lat": 28.682326,
+      "lon": 77.280497,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "730",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 75, C Block Mahila Park, New Zafrabad",
+      "area_acres": 0.04,
+      "lat": 28.682546,
+      "lon": 77.280217,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "731",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. 104, C Block Maharaja Agarsein Park, Ghorakh Park",
+      "area_acres": 0.72,
+      "lat": 28.682671,
+      "lon": 77.281521,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "732",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "Chahha Kashiram Rattor  Park B Block New Jafrabad",
+      "area_acres": 0.25,
+      "lat": null,
+      "lon": null,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "733",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "H.No. A-22, A PKT. Khatte Wala Park",
+      "area_acres": 0.23,
+      "lat": 28.689064,
+      "lon": 77.281691,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "734",
+      "ward_no": 235,
+      "region_id": "REG_W235",
+      "park_name": "Green land K.L. Rathi Mill Loni Road Shahdara (Divyang Park)",
+      "area_acres": 2.79,
+      "lat": 28.40514,
+      "lon": 77.173025,
+      "supervisor": "Tej Pal Sharma"
+    },
+    {
+      "sno": "735",
+      "ward_no": 236,
+      "region_id": "REG_W236",
+      "park_name": "West Jyoti Nagar, Big Park",
+      "area_acres": 1.92,
+      "lat": 28.691651,
+      "lon": 77.276592,
+      "supervisor": "Rajender Pal Rana"
+    },
+    {
+      "sno": "736",
+      "ward_no": 236,
+      "region_id": "REG_W236",
+      "park_name": "Mandir Wala Park, West Jyoti Nagar",
+      "area_acres": 0.54,
+      "lat": 28.684168,
+      "lon": 77.279265,
+      "supervisor": "Rajender Pal Rana"
+    },
+    {
+      "sno": "737",
+      "ward_no": 236,
+      "region_id": "REG_W236",
+      "park_name": "Small Park, West Jyoti Nagar",
+      "area_acres": 0.13,
+      "lat": 28.682848,
+      "lon": 77.274842,
+      "supervisor": "Rajender Pal Rana"
+    },
+    {
+      "sno": "738",
+      "ward_no": 236,
+      "region_id": "REG_W236",
+      "park_name": "Park Balbir Nagar Wala",
+      "area_acres": 0.25,
+      "lat": 28.689125,
+      "lon": 77.274842,
+      "supervisor": "Rajender Pal Rana"
+    },
+    {
+      "sno": "739",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "A-Block, H. No. 322, Gokulpuri",
+      "area_acres": 0.52,
+      "lat": 28.704435,
+      "lon": 77.281069,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "740",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "B-Block, H.No. 375 Gokulpuri",
+      "area_acres": 0.53,
+      "lat": 28.704769,
+      "lon": 77.285567,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "741",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "C-Block, H. No. 495, Gokulpuri (Billu)",
+      "area_acres": 0.14,
+      "lat": 28.704386,
+      "lon": 77.284204,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "742",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "C/D Block H. No. 270 Gokulpuri",
+      "area_acres": 0.53,
+      "lat": 28.704015,
+      "lon": 77.282996,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "743",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "D-Block, H. No. 594, Gokulpuri( Mahila Park)",
+      "area_acres": 0.9,
+      "lat": 28.703798,
+      "lon": 77.280111,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "744",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "D-Block, Community Hall, Gokulpuri H.No. D-6",
+      "area_acres": 0.91,
+      "lat": 28.70438,
+      "lon": 77.282143,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "745",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "A-Block, Green Belt, Gokulpuri",
+      "area_acres": 0.18,
+      "lat": 28.703269,
+      "lon": 77.283852,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "746",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "D-Block, Green Belt, Main Road, Wazirabad (Ambedker Park)",
+      "area_acres": 2.66,
+      "lat": 28.703236,
+      "lon": 77.1727019,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "747",
+      "ward_no": 239,
+      "region_id": "REG_W239",
+      "park_name": "Gokalpur Village (Jagat Wali Dairy)",
+      "area_acres": 0.52,
+      "lat": 28.4211772,
+      "lon": 77.280217,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "748",
+      "ward_no": 241,
+      "region_id": "REG_W241",
+      "park_name": "Chauhan Pur Park",
+      "area_acres": 0.25,
+      "lat": 28.723196,
+      "lon": 77.268366,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "749",
+      "ward_no": 242,
+      "region_id": "REG_W242",
+      "park_name": "Park at Ashoka Colour Mill Karawal Nagar",
+      "area_acres": 0.34,
+      "lat": 28.440532,
+      "lon": 77.1636515,
+      "supervisor": "Mukesh"
+    },
+    {
+      "sno": "750",
+      "ward_no": 250,
+      "region_id": "REG_W250",
+      "park_name": "Sabha Pur Park",
+      "area_acres": 0.12,
+      "lat": 28.747208,
+      "lon": 77.247407,
+      "supervisor": "Mukesh"
+    }
+  ],
+  "supervisors": [
+    {
+      "name": "Mukesh Kumar"
+    },
+    {
+      "name": "Mahesh"
+    },
+    {
+      "name": "Brijbir"
+    },
+    {
+      "name": "Jai Prakash"
+    },
+    {
+      "name": "Nishant"
+    },
+    {
+      "name": "Kripal Singh"
+    },
+    {
+      "name": "Sanjeev Kumar"
+    },
+    {
+      "name": "Dinesh"
+    },
+    {
+      "name": "Kalu Ram"
+    },
+    {
+      "name": "Nabab"
+    },
+    {
+      "name": "Shakti Singh"
+    },
+    {
+      "name": "Lokender"
+    },
+    {
+      "name": "Jai Veer"
+    },
+    {
+      "name": "Omkar"
+    },
+    {
+      "name": "Ravinder"
+    },
+    {
+      "name": "Amresh"
+    },
+    {
+      "name": "Shahdara South Zone"
+    },
+    {
+      "name": "Rakesh Kashyap"
+    },
+    {
+      "name": "Soran Singh"
+    },
+    {
+      "name": "Rajveer"
+    },
+    {
+      "name": "Mukesh"
+    },
+    {
+      "name": "Tej Pal Sharma"
+    },
+    {
+      "name": "Rajender Pal Rana"
+    }
+  ],
+  "source_file": "sh_north_zone_duty_roaster_*.xlsx",
+  "source_type": "semi_structured_xlsx",
+  "confidence": 0.9
+}

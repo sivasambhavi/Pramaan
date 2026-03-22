@@ -26,3 +26,14 @@ EVT_SOCIAL_002,Public Hearing on Drainage Delays,SocialEvent,2025-03-16,
 EVT_SOCIAL_003,Community Petition for Streetlight Repairs,SocialEvent,2025-04-08,
 EVT_SOCIAL_004,Resident Welfare Meeting on Sanitation Gaps,SocialEvent,2025-05-19,
 EVT_SOCIAL_005,Ward-Level Grievance Camp Conducted,SocialEvent,2025-06-21,
+EVT_W45_GALI7_DRAIN_TENDER,Tender awarded — Gali 7 Drain,tender,2023-11-15,ASSET_W45_GALI7_DRAIN
+EVT_W45_GALI7_DRAIN_INSPECT,MCD site inspection — Gali 7 Drain,inspection,2025-01-20,ASSET_W45_GALI7_DRAIN
+EVT_W45_GALI12_DRAIN_TENDER,Tender awarded — Gali 12 Drain,tender,2023-12-01,ASSET_W45_GALI12_DRAIN
+EVT_W45_GALI12_DRAIN_INSPECT,MCD site inspection — Gali 12 Drain,inspection,2025-02-14,ASSET_W45_GALI12_DRAIN
+EVT_W45_PARK_TENDER,Tender awarded — Community Park,tender,2023-09-05,ASSET_W45_PARK
+EVT_W45_PARK_INSPECT,AMRUT monitoring inspection — Park,inspection,2025-03-10,ASSET_W45_PARK
+EVT_W45_GALI3_DRAIN_TENDER,Tender awarded — Gali 3 Drain,tender,2024-01-10,ASSET_W45_GALI3_DRAIN
+EVT_W45_ROAD_GALI7_TENDER,Tender awarded — Gali 7 Road,tender,2023-11-20,ASSET_W45_ROAD_GALI7
+EVT_W45_ROAD_GALI7_INSPECT,MCD inspection — Gali 7 Road,inspection,2024-02-28,ASSET_W45_ROAD_GALI7
+EVT_W45_STREETLIGHT_TENDER,Tender awarded — Gali 12 Streetlights,tender,2024-09-01,ASSET_W45_GALI12_STREETLIGHT
+EVT_W45_STREETLIGHT_INSPECT,DUSIB inspection — Streetlights Gali 12,inspection,2025-01-05,ASSET_W45_GALI12_STREETLIGHT

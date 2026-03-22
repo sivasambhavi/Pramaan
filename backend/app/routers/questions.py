@@ -288,9 +288,13 @@ class CustomQuery(BaseModel):
     params: dict = {}
 
 
+_WRITE_KEYWORDS = ["merge", "create", "delete", "set ", "drop", "call apoc", "detach"]
+
 @router.post("/custom")
 def custom_query(payload: CustomQuery):
     """Run a pre-generated Cypher query. Used by frontend hardcoded calls."""
+    if any(kw in payload.cypher.lower() for kw in _WRITE_KEYWORDS):
+        return {"data": [], "error": "Write operations are not allowed on this endpoint."}
     try:
         rows = _run(payload.cypher, payload.params)
         return {"data": rows}

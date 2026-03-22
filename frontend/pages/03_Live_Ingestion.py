@@ -132,9 +132,9 @@ def _render_delivery_chain(response_chain: dict | None) -> None:
     st.caption("Complete traceability path for the asset extracted from the article.")
 
     if response_chain.get("matched_existing"):
-        st.success(f"✅ Matched existing asset: **{response_chain['asset_name']}**")
+        st.success(f"Matched existing asset: **{response_chain['asset_name']}**")
     else:
-        st.info(f"🆕 New asset added to graph: **{response_chain['asset_name']}**")
+        st.info(f"New asset added to graph: **{response_chain['asset_name']}**")
 
     col1, col2 = st.columns([3, 2])
     with col1:
@@ -184,7 +184,7 @@ def _render_delivery_chain(response_chain: dict | None) -> None:
     with col2:
         st.markdown(f"<p class='sec-label'>{icon('image', '#94a3b8', 14)} Evidence Found</p>", unsafe_allow_html=True)
         for ev in response_chain.get("evidence", []):
-            lbl = "✅ AFTER" if ev.get("before_or_after") == "after" else "⏳ BEFORE"
+            lbl = "AFTER" if ev.get("before_or_after") == "after" else "BEFORE"
             st.markdown(f"**{lbl}** — {ev.get('capture_date', 'N/A')}")
             url = ev.get("url", "")
             if url.startswith("http"):
@@ -255,7 +255,7 @@ def main() -> None:
 
     _pin = icon("map-pin", "#64748b", 13)
     if not st.session_state.get("selected_ward"):
-        st.markdown("<p style='color:#64748b;font-size:0.82em;'>📍 No ward selected — <a href='/Ward_Map' target='_self' style='color:#FF6B35;'>go to Ward Map</a> to select a location.</p>", unsafe_allow_html=True)
+        st.markdown("<p style='color:#64748b;font-size:0.82em;'>No ward selected — <a href='/Ward_Map' target='_self' style='color:#FF6B35;'>go to Ward Map</a> to select a location.</p>", unsafe_allow_html=True)
     else:
         st.markdown(f"<p style='color:#64748b;font-size:0.85em;margin-bottom:1rem;'>{_pin} {get_breadcrumb()}</p>", unsafe_allow_html=True)
 
@@ -277,19 +277,19 @@ def main() -> None:
             use_cache = st.checkbox("Use cached result", value=False,
                                     help="Load the last successful scrape result instead of running a live search")
 
-        if st.button("🔍 Auto-Search & Map to Graph"):
+        if st.button("Auto-Search & Map to Graph"):
             if not _rate_limit_ok("auto_search", cooldown_seconds=6):
                 return
             if use_cache:
                 cached = load_cache()
                 if cached:
                     data = cached
-                    st.info("📂 Loaded from cache (offline mode)")
+                    st.info("Loaded from cache (offline mode)")
                 else:
                     st.warning("No cached result found. Please run a live search first.")
                     return
             else:
-                with st.status("🔍 Scraping governance news...", expanded=True) as status:
+                with st.status("Scraping governance news...", expanded=True) as status:
                     try:
                         data = safe_get("/scrape/news", params={"q": search_query}, timeout=30)
                         if data:
@@ -301,7 +301,7 @@ def main() -> None:
                         cached = load_cache()
                         if cached:
                             data = cached
-                            st.warning("⚠️ Network unavailable — loaded from offline cache.")
+                            st.warning("Network unavailable — loaded from offline cache.")
                         else:
                             st.error("Network unavailable and no offline cache found. Run a live search with internet first.")
                             return
@@ -320,7 +320,7 @@ def main() -> None:
             if data.get("message"):
                 st.warning(data["message"])
 
-            with st.expander("📄 View Scraped News Sources"):
+            with st.expander("View Scraped News Sources"):
                 for a in articles:
                     rel_badge = f"**[{a.get('relevance','?')}]**" if a.get('relevance') else ""
                     conf_val  = a.get('confidence')
@@ -337,31 +337,16 @@ def main() -> None:
                 st.markdown(f"<p class='sec-label'>{icon('check-square', '#94a3b8', 15)} Human Review — Approve Entities Before Commit</p>", unsafe_allow_html=True)
                 st.caption("Tick the entities you want to add to the Knowledge Graph. Low-confidence or hallucinated ones are pre-deselected.")
 
-                _CONF_COLORS = {
-                    "high":   ("#22c55e", "✅"),
-                    "medium": ("#f59e0b", "⚠️"),
-                    "low":    ("#ef4444", "❌"),
-                }
-
                 approved_entities = []
                 for i, ent in enumerate(all_entities):
                     conf = float(ent.get("properties", {}).get("confidence", 0.0))
                     name = ent.get("properties", {}).get("name", ent.get("id", "?"))
                     label = ent.get("label", "?")
-
-                    if conf >= 0.75:
-                        tier, badge = "high",   _CONF_COLORS["high"]
-                    elif conf >= 0.55:
-                        tier, badge = "medium", _CONF_COLORS["medium"]
-                    else:
-                        tier, badge = "low",    _CONF_COLORS["low"]
-
-                    color, emoji = badge
-                    # Pre-select high/medium; pre-deselect low
+                    tier = "high" if conf >= 0.75 else ("medium" if conf >= 0.55 else "low")
                     default_checked = tier in ("high", "medium")
 
                     checked = st.checkbox(
-                        f"{emoji} **{name}** `{label}` — confidence {conf:.0%}",
+                        f"**{name}** `{label}` — confidence {conf:.0%}",
                         value=default_checked,
                         key=f"review_ent_{i}",
                         help=f"ID: {ent.get('id')}  |  Properties: {ent.get('properties',{})}",
@@ -371,7 +356,7 @@ def main() -> None:
 
                 st.caption(f"{len(approved_entities)} of {len(all_entities)} entities selected for ingestion.")
 
-                if st.button("🚀 Commit Approved Entities to Knowledge Graph",
+                if st.button("Commit Approved Entities to Knowledge Graph",
                              disabled=len(approved_entities) == 0,
                              type="primary"):
                     if not _rate_limit_ok("auto_commit", cooldown_seconds=5):
@@ -397,14 +382,14 @@ def main() -> None:
                         n_dup = result.get("skipped_duplicates", 0)
                         n_hal = result.get("skipped_hallucinations", 0)
 
-                        st.success(f"🚀 Committed **{n_ent} entities** · **{n_rel} relations** to the Knowledge Graph!")
+                        st.success(f"Committed **{n_ent} entities** · **{n_rel} relations** to the Knowledge Graph!")
 
                         # Validation telemetry
                         if n_low or n_dup or n_hal:
-                            with st.expander("🛡️ Validation Report"):
-                                if n_low: st.warning(f"⚠️ {n_low} entity/ies rejected — confidence below threshold")
-                                if n_dup: st.info(f"ℹ️ {n_dup} entity/ies skipped — already exist in graph")
-                                if n_hal: st.error(f"❌ {n_hal} entity/ies blocked — hallucination detected (implausible cost/status)")
+                            with st.expander("Validation Report"):
+                                if n_low: st.warning(f"{n_low} entity/ies rejected — confidence below threshold")
+                                if n_dup: st.info(f"{n_dup} entity/ies skipped — already exist in graph")
+                                if n_hal: st.error(f"{n_hal} entity/ies blocked — hallucination detected (implausible cost/status)")
                                 v = result.get("validation_summary", {})
                                 if v.get("log"):
                                     st.json(v["log"])
@@ -418,7 +403,7 @@ def main() -> None:
     with tab2:
         st.markdown(f"<p class='sec-label'>{icon('edit-3', '#94a3b8', 15)} Manual Text Ingestion</p>", unsafe_allow_html=True)
         manual_text = st.text_area("Paste news article or governance text here", height=200)
-        if st.button("🧠 Extract Entities (Review before commit)"):
+        if st.button("Extract Entities (Review before commit)"):
             if not _rate_limit_ok("manual_extract", cooldown_seconds=6):
                 return
             if manual_text.strip():
@@ -431,7 +416,7 @@ def main() -> None:
 
                 if data:
                     if not data.get("success", True):
-                        st.error(f"❌ Analysis failed: {data.get('error')}")
+                        st.error(f"Analysis failed: {data.get('error')}")
                         if data.get("raw"):
                             with st.expander("Raw AI response"):
                                 st.code(data.get("raw"))
@@ -447,10 +432,9 @@ def main() -> None:
                             conf  = float(ent.get("properties", {}).get("confidence", 0.0))
                             name  = ent.get("properties", {}).get("name", ent.get("id", "?"))
                             label = ent.get("label", "?")
-                            emoji = "✅" if conf >= 0.75 else ("⚠️" if conf >= 0.55 else "❌")
                             default = conf >= 0.55
                             if st.checkbox(
-                                f"{emoji} **{name}** `{label}` — confidence {conf:.0%}",
+                                f"**{name}** `{label}` — confidence {conf:.0%}",
                                 value=default, key=f"manual_ent_{i}",
                                 help=str(ent.get("properties", {})),
                             ):
@@ -458,7 +442,7 @@ def main() -> None:
 
                         st.caption(f"{len(approved_manual)} of {len(data.get('entities',[]))} selected.")
 
-                        if st.button("✅ Commit to Knowledge Graph",
+                        if st.button("Commit to Knowledge Graph",
                                      disabled=len(approved_manual) == 0,
                                      type="primary", key="manual_commit"):
                             if not _rate_limit_ok("manual_commit", cooldown_seconds=5):
@@ -480,11 +464,11 @@ def main() -> None:
                                 n_hal = r.get("skipped_hallucinations", 0)
                                 st.success(f"Added **{n_ent} entities** · **{n_rel} relations** to the Knowledge Graph!")
                                 if n_low or n_dup or n_hal:
-                                    with st.expander("🛡️ Validation Report"):
-                                        if n_low: st.warning(f"⚠️ {n_low} rejected — low confidence")
-                                        if n_dup: st.info(f"ℹ️ {n_dup} skipped — already exist")
-                                        if n_hal: st.error(f"❌ {n_hal} blocked — hallucination guard")
-                                st.page_link("pages/02_Proof_Chain.py", label="→ View in Proof Chain", icon="🔗")
+                                    with st.expander("Validation Report"):
+                                        if n_low: st.warning(f"{n_low} rejected — low confidence")
+                                        if n_dup: st.info(f"{n_dup} skipped — already exist")
+                                        if n_hal: st.error(f"{n_hal} blocked — hallucination guard")
+                                st.page_link("pages/02_Proof_Chain.py", label="→ View in Proof Chain")
                             else:
                                 st.error("Ingestion failed — backend unreachable.")
                 else:
@@ -501,7 +485,7 @@ def main() -> None:
             key="live_ingestion_photo_upload",
             accept_multiple_files=False,
         )
-        if st.button("📷 Upload & Link Photo Evidence", key="upload_photo_btn"):
+        if st.button("Upload & Link Photo Evidence", key="upload_photo_btn"):
             if not _rate_limit_ok("photo_upload", cooldown_seconds=4):
                 return
             if not photo_file:
@@ -513,7 +497,7 @@ def main() -> None:
                 resp = safe_post("/ingest/photo-evidence", data=form_data, files=files, timeout=30)
                 if resp:
                     st.success(
-                        f"✅ Linked to **{resp.get('asset_name', resp.get('asset_id'))}** "
+                        f"Linked to **{resp.get('asset_name', resp.get('asset_id'))}** "
                         f"({resp.get('distance_meters', 'N/A')}m). Evidence ID: {resp.get('evidence_id')}"
                     )
                 else:
@@ -523,7 +507,7 @@ def main() -> None:
     st.markdown(f"<p class='sec-label'>{icon('shield-check', '#94a3b8', 15)} Verification Agent</p>", unsafe_allow_html=True)
     col_va, col_vb = st.columns([1, 2])
     with col_va:
-        if st.button("🤖 Verify All Assets (Agent Sweep)", key="verify_all_assets_btn"):
+        if st.button("Verify All Assets (Agent Sweep)", key="verify_all_assets_btn"):
             if _rate_limit_ok("verify_all_assets", cooldown_seconds=10):
                 sweep = safe_post("/agents/verify-all", data={"default_confidence": "0.7"}, timeout=45)
                 if sweep:
@@ -539,14 +523,14 @@ def main() -> None:
 
     with st.expander("Advanced Settings"):
         st.warning("**Danger zone.** These actions modify or clear the Knowledge Graph.")
-        if st.button("🗑 Clear Demo Nodes (AI-ingested only)"):
+        if st.button("Clear Demo Nodes (AI-ingested only)"):
             st.session_state['confirm_clear'] = True
 
         if st.session_state.get('confirm_clear'):
             st.error("Are you sure? This will delete all news-ingested nodes (not seeded data).")
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("✅ Confirm Clear"):
+                if st.button("Confirm Clear"):
                     try:
                         resp = safe_delete("/ingest/demo-nodes")
                         if resp is not None:
@@ -557,7 +541,7 @@ def main() -> None:
                     except Exception as e:
                         st.error(f"Error: {e}")
             with col2:
-                if st.button("❌ Cancel"):
+                if st.button("Cancel"):
                     st.session_state['confirm_clear'] = False
                     st.rerun()
 

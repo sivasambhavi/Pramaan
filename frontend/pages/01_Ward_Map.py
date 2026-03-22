@@ -25,12 +25,14 @@ from utils.constants import (
     PIN_RADIUS_KM,
     STATUS_CONFIG,
     DEFAULT_STATE,
+    DEFAULT_STATE_ID,
     DEFAULT_CITY,
+    DEFAULT_ZONE,
     DEFAULT_WARD,
     DEFAULT_WARD_ID,
 )
 from utils.icons import icon, icon_box
-from utils.geo_selector import _fetch_regions, _build_hierarchy
+from utils.geo_selector import _fetch_regions
 from utils.session import init_session, get_ward_id, get_ward_name, get_breadcrumb
 from components.topnav import render_topnav
 
@@ -381,50 +383,152 @@ def main() -> None:
         init_session()
         ss = st.session_state
 
-        # ── Build hierarchy from live API ──────────────────────────────────────
-        _raw = _fetch_regions()
-        _states, _districts, _wards = _build_hierarchy(_raw) if _raw else ([DEFAULT_STATE], {DEFAULT_STATE: [DEFAULT_CITY]}, {DEFAULT_CITY: {DEFAULT_WARD: DEFAULT_WARD_ID}})
+        _PH = "—"   # placeholder sentinel value
 
-        fc1, fc2, fc3, fc4, fc5 = st.columns([1.5, 1.5, 2, 2.5, 0.5], vertical_alignment="bottom")
+        def _dedup_regions(regions: list) -> dict:
+            result = {}
+            for r in regions:
+                name = r.get("name", "")
+                rid  = r.get("region_id", "")
+                if not name:
+                    continue
+                existing = result.get(name, "")
+                if not existing or (rid.startswith("REG_") and not rid.startswith("REG_U") and len(rid) < len(existing)):
+                    result[name] = rid
+            return result
+
+        # ── Pre-compute all maps (before any widget is instantiated) ──────────
+        _state_map  = _dedup_regions(_fetch_regions(type="state"))
+        _sel_state  = ss.get("sel_state", _PH)
+        _state_id   = _state_map.get(_sel_state, "")
+
+        # Zones: load directly under state
+        _zone_map = _dedup_regions(_fetch_regions(type="zone", parent_id=_state_id)) if _state_id else {}
+        _sel_zone = ss.get("sel_district", _PH)
+        _zone_id  = _zone_map.get(_sel_zone, "")
+
+        # Wards: use zone if selected, else load all wards under every zone in state
+        if _zone_id:
+            _ward_raw = _fetch_regions(type="ward", parent_id=_zone_id)
+        elif _state_id:
+            _all_zones = _fetch_regions(type="zone", parent_id=_state_id)
+            _ward_raw  = []
+            for _z in _all_zones:
+                _ward_raw += _fetch_regions(type="ward", parent_id=_z["region_id"])
+        else:
+            _ward_raw = []
+        _ward_map = _dedup_regions(_ward_raw)
+
+        # Store ward map so on_change callbacks can look up ward_id
+        ss["_cur_ward_map"] = _ward_map
+
+        # ── Validate stale selections (clear if no longer in options) ─────────
+        if _sel_state not in ([_PH] + list(_state_map.keys())):
+            ss["sel_state"] = _PH
+        if _sel_zone not in ([_PH] + list(_zone_map.keys())):
+            ss["sel_district"] = _PH
+        _sel_ward = ss.get("sel_ward", _PH)
+        if _sel_ward not in ([_PH] + list(_ward_map.keys())):
+            ss["sel_ward"]  = _PH
+            ss["ward_id"]   = ""
+            ss["ward_name"] = ""
+
+        # ── Callbacks (fire before next re-run — safe to mutate widget keys) ──
+        def _on_state_change():
+            for k in ("sel_district", "sel_ward"):
+                st.session_state[k] = _PH
+            st.session_state["ward_id"]   = ""
+            st.session_state["ward_name"] = ""
+
+        def _on_zone_change():
+            st.session_state["sel_ward"]   = _PH
+            st.session_state["ward_id"]    = ""
+            st.session_state["ward_name"]  = ""
+
+        def _on_ward_change():
+            _ss  = st.session_state
+            ward = _ss.get("sel_ward", _PH)
+            if ward == _PH:
+                _ss["ward_id"]   = ""
+                _ss["ward_name"] = ""
+                return
+            wid = _ss.get("_cur_ward_map", {}).get(ward, "")
+            _ss["ward_id"]   = wid
+            _ss["ward_name"] = ward
+            # Auto-fill zone when ward is chosen from the full list
+            if wid and _ss.get("sel_district", _PH) == _PH:
+                wi = safe_get(f"/regions/{wid}", silent=True) or {}
+                zone_name = wi.get("parent_name", "")
+                if zone_name:
+                    _ss["sel_district"] = zone_name
+
+        def _do_reset():
+            _ss = st.session_state
+            for k in ("sel_state", "sel_district", "sel_ward"):
+                _ss[k] = _PH
+            _ss["ward_id"]   = ""
+            _ss["ward_name"] = ""
+            st.cache_data.clear()
+
+        # ── Render selectors ──────────────────────────────────────────────────
+        def _sel(label, options_map: dict, key: str, placeholder: str, on_change=None):
+            names = [_PH] + sorted(options_map.keys())
+            if ss.get(key, _PH) not in names:
+                ss[key] = _PH
+            return st.selectbox(
+                label, names, label_visibility="collapsed", key=key,
+                format_func=lambda x: placeholder if x == _PH else x,
+                on_change=on_change,
+            )
+
+        fc1, fc2, fc3, fc4 = st.columns([2, 2.5, 3, 0.5], vertical_alignment="bottom")
+
         with fc1:
             st.caption("STATE / UT")
-            _def_state = ss.get("selected_state", DEFAULT_STATE)
-            if _def_state not in _states: _def_state = _states[0] if _states else DEFAULT_STATE
-            state = st.selectbox("w_state", _states, index=_states.index(_def_state), label_visibility="collapsed", key="sel_state")
-            ss["selected_state"] = state
+            _sel("w_state", _state_map, "sel_state", "Select State", _on_state_change)
+
         with fc2:
-            st.caption("CITY / ULB")
-            _city_options = ["MCD Delhi"]
-            city = st.selectbox("w_city", _city_options, index=0, label_visibility="collapsed", key="sel_city")
-            ss["selected_city"] = city
+            _zone_count = len(_zone_map)
+            _zone_label = f"ZONE · {_zone_count} available" if _state_id and _zone_count else "ZONE"
+            st.caption(_zone_label)
+            _sel("w_zone", _zone_map, "sel_district", "Select Zone", _on_zone_change)
+
         with fc3:
-            st.caption("ZONE")
-            _dist_list = _districts.get(state, [DEFAULT_CITY])
-            _def_dist  = ss.get("selected_zone", DEFAULT_CITY)
-            if _def_dist not in _dist_list: _def_dist = _dist_list[0] if _dist_list else DEFAULT_CITY
-            district = st.selectbox("w_zone", _dist_list, index=_dist_list.index(_def_dist), label_visibility="collapsed", key="sel_district")
-            ss["selected_zone"] = district
-            ss["zone"] = district
-        with fc4:
             st.caption("WARD")
-            _ward_map   = _wards.get(district, {DEFAULT_WARD: DEFAULT_WARD_ID})
-            _ward_names = list(_ward_map.keys())
-            _def_ward   = ss.get("selected_ward", DEFAULT_WARD)
-            if _def_ward not in _ward_names: _def_ward = _ward_names[0] if _ward_names else DEFAULT_WARD
-            ward_sel = st.selectbox("w_ward", _ward_names, index=_ward_names.index(_def_ward), label_visibility="collapsed", key="sel_ward")
-            ss["selected_ward"] = ward_sel
-            ss["ward_name"]     = ward_sel
-            ss["ward_id"]       = _ward_map[ward_sel]
-        with fc5:
-            if st.button("↺", key="filter_refresh", use_container_width=True, help="Reset filters to India level."):
-                ss["last_refresh"] = datetime.datetime.now().strftime("%H:%M:%S")
-                st.cache_data.clear()
-                st.rerun()
+            _sel("w_ward", _ward_map, "sel_ward", "Select Ward", _on_ward_change)
 
-        st.markdown("<hr style='border:none;border-top:1px solid #1e293b;margin:4px 0 10px 0;'>", unsafe_allow_html=True)
+        with fc4:
+            st.button("↺", key="filter_refresh", use_container_width=True,
+                      help="Reset all filters", on_click=_do_reset)
 
-        ward_id   = get_ward_id()
-        ward_name = get_ward_name()
+        # Coverage note
+        _covered_states = len(_state_map)
+        _stats = safe_get("/stats", silent=True) or {}
+        _asset_count = _stats.get("assets", 0)
+        st.markdown(
+            f"<div style='font-size:0.72em;color:#475569;margin:2px 0 6px 2px;'>"
+            f"Currently tracking <b style='color:#64748b;'>{_covered_states} states</b> · "
+            f"<b style='color:#64748b;'>{_asset_count:,} assets</b> · "
+            f"<span style='color:#334155;'>Delhi · Andhra Pradesh · Karnataka</span>"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("<hr style='border:none;border-top:1px solid #1e293b;margin:2px 0 10px 0;'>", unsafe_allow_html=True)
+
+        ward_id   = ss.get("ward_id", "")
+        ward_name = ss.get("ward_name", "")
+
+        # ── Guard — no ward selected yet ───────────────────────────────────────
+        if not ward_id or ward_id == _PH:
+            st.markdown("""
+                <div style="text-align:center;padding:60px 20px;color:#475569;">
+                    <div style="margin-bottom:12px;"></div>
+                    <div style="font-size:1.1em;font-weight:600;color:#94a3b8;">Select a ward to view delivery data</div>
+                    <div style="font-size:0.85em;margin-top:6px;">Use the filters above to choose State → Zone → Ward</div>
+                </div>
+            """, unsafe_allow_html=True)
+            st.stop()
 
         # ── Breadcrumb ─────────────────────────────────────────────────────────
         pin_icon = icon("map-pin", "#64748b", 12)
@@ -636,7 +740,7 @@ def main() -> None:
                     text-anchor="middle">Delivery Score</text>
             </svg>
             <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:4px;">
-              <div class="severity-badge">{"⚠ " if severity_label == "Critical" else ""}{severity_label}</div>
+              <div class="severity-badge">{severity_label}</div>
               <div class="band-text" style="font-size:0.75em;">{band_text}</div>
             </div>
             {cta_html}
@@ -656,7 +760,7 @@ def main() -> None:
                 <div style="font-size:0.6em;color:#475569;margin-top:2px;line-height:1.3;">field proof accepted &amp; cleared</div>
               </div>
               <div class="kpi-card" title="Partial Proof — some documents uploaded, pending review">
-                <div class="kpi-val" style="color:#f59e0b">{counts["partially_verified"]}</div>
+                <div class="kpi-val" style="color:{'#f59e0b' if counts['partially_verified'] > 0 else '#475569'}">{counts["partially_verified"]}</div>
                 <div class="kpi-name">Partial Proof</div>
                 <div style="font-size:0.6em;color:#475569;margin-top:2px;line-height:1.3;">docs uploaded, pending review</div>
               </div>
@@ -674,14 +778,22 @@ def main() -> None:
         """, height=280)
 
         if severity_label == "Critical" and counts["unverified"] > 0:
-            st.markdown(
-                f"<div style='margin:-6px 0 8px 0;'>"
-                f"<span style='background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);"
-                f"border-radius:8px;padding:6px 14px;font-size:0.82em;color:#ef4444;font-weight:700;"
-                f"display:inline-block;'>View {counts['unverified']} unverified assets ↓</span>"
-                f"</div>",
-                unsafe_allow_html=True,
-            )
+            if st.button(
+                f"View {counts['unverified']} unverified assets →",
+                key="cta_unverified",
+                type="secondary",
+            ):
+                ss["_asset_filter_init"] = "Unverified"
+                # JS: click the Assets & Proof tab by its label text
+                components.html("""<script>
+                setTimeout(function(){
+                    var tabs=window.parent.document.querySelectorAll('button[role="tab"]');
+                    for(var i=0;i<tabs.length;i++){
+                        if(tabs[i].textContent.indexOf('Assets')!==-1){tabs[i].click();break;}
+                    }
+                },150);
+                </script>""", height=0)
+                st.rerun()
 
         # ── Pre-fetch gaps (needed for accurate tab label) ────────────────────
         try:
@@ -773,34 +885,70 @@ def main() -> None:
                 </div>
                 """, unsafe_allow_html=True)
             else:
-                # Filter controls
-                f1, f2 = st.columns([2, 2])
-                with f1:
-                    filter_status = st.selectbox(
-                        "Filter by proof status",
-                        ["All", "✅ Fully Verified", "⚠️ Partially Verified", "❌ Unverified", "📰 News Only"],
-                        label_visibility="collapsed",
-                    )
-                with f2:
-                    search = st.text_input("Search assets", placeholder="Type asset name...", label_visibility="collapsed")
+                # ── Apply filter from CTA session-state init (before any widget) ──
+                _filter_init = ss.pop("_asset_filter_init", None)
+                if _filter_init:
+                    ss["asset_pill_filter"] = _filter_init
 
-                status_map = {
-                    "✅ Fully Verified": "fully_verified",
-                    "⚠️ Partially Verified": "partially_verified",
-                    "❌ Unverified": "unverified",
-                    "📰 News Only": "news_only",
+                # ── Pill counts ───────────────────────────────────────────────
+                _pill_counts = {
+                    "All":        len(breakdown),
+                    "Verified":   sum(1 for a in breakdown if a.get("proof_status") in ("fully_verified","verified")),
+                    "Partial":    sum(1 for a in breakdown if a.get("proof_status") in ("partially_verified","news_only")),
+                    "Unverified": sum(1 for a in breakdown if a.get("proof_status","unverified") not in ("fully_verified","verified","partially_verified","news_only")),
+                }
+                _pill_options = list(_pill_counts.keys())
+
+                # ── Filter pills + search + sort ──────────────────────────────
+                pf1, pf2, pf3 = st.columns([3, 2, 1.5])
+                with pf1:
+                    filter_pill = st.radio(
+                        "Filter",
+                        _pill_options,
+                        format_func=lambda x: f"{x} ({_pill_counts[x]})",
+                        horizontal=True,
+                        label_visibility="collapsed",
+                        key="asset_pill_filter",
+                    )
+                with pf2:
+                    search = st.text_input("Search", placeholder="Search asset name…", label_visibility="collapsed")
+                with pf3:
+                    sort_by = st.selectbox(
+                        "Sort",
+                        ["Status (Unverified first)", "Name A→Z", "Cost (High→Low)"],
+                        label_visibility="collapsed",
+                        key="asset_sort_by",
+                    )
+
+                # ── Status map for pill filter ────────────────────────────────
+                _pill_status_map = {
+                    "Verified":   ("fully_verified", "verified"),
+                    "Partial":    ("partially_verified", "news_only"),
+                    "Unverified": (),  # everything else
                 }
 
                 filtered = breakdown
-                if filter_status != "All":
-                    key = status_map.get(filter_status, "")
-                    filtered = [a for a in breakdown if a.get("proof_status", "unverified") == key]
+                if filter_pill != "All":
+                    if filter_pill == "Unverified":
+                        filtered = [a for a in breakdown if a.get("proof_status","unverified") not in ("fully_verified","verified","partially_verified","news_only")]
+                    else:
+                        _keep = _pill_status_map.get(filter_pill, ())
+                        filtered = [a for a in breakdown if a.get("proof_status","unverified") in _keep]
                 if search:
-                    filtered = [a for a in filtered if search.lower() in a.get("name", "").lower()]
+                    filtered = [a for a in filtered if search.lower() in a.get("name","").lower()]
+
+                # ── Sort ──────────────────────────────────────────────────────
+                _proof_order = {"unverified": 0, "news_only": 1, "partially_verified": 2, "verified": 3, "fully_verified": 3}
+                if sort_by == "Status (Unverified first)":
+                    filtered = sorted(filtered, key=lambda a: _proof_order.get(a.get("proof_status","unverified"), 0))
+                elif sort_by == "Name A→Z":
+                    filtered = sorted(filtered, key=lambda a: a.get("name",""))
+                elif sort_by == "Cost (High→Low)":
+                    filtered = sorted(filtered, key=lambda a: -(a.get("cost") or 0))
 
                 st.caption(f"Showing {len(filtered)} of {len(breakdown)} assets")
 
-                # Pre-compute which asset IDs are geographically outside the ward radius
+                # ── Pre-compute outside-boundary IDs ─────────────────────────
                 _outside_ids: set = set()
                 for _a in breakdown:
                     try:
@@ -811,10 +959,29 @@ def main() -> None:
                     except (ValueError, TypeError):
                         pass
 
-                # Header row
+                # ── Duplicate detection: same type + same cost ────────────────
+                _suspected_dupes: set = set()
+                for _i, _a1 in enumerate(breakdown):
+                    for _a2 in breakdown[_i+1:]:
+                        if _a1["asset_id"] == _a2["asset_id"]:
+                            continue
+                        if (_a1.get("type") == _a2.get("type") and
+                                (_a1.get("cost") or 0) > 0 and
+                                (_a1.get("cost") or 0) == (_a2.get("cost") or 0)):
+                            _suspected_dupes.add(_a1["asset_id"])
+                            _suspected_dupes.add(_a2["asset_id"])
+
+                # ── Delivery status color map ─────────────────────────────────
+                _status_colors = {
+                    "completed":   "#22c55e",
+                    "in_progress": "#f59e0b",
+                    "planned":     "#64748b",
+                }
+
+                # ── Header row ────────────────────────────────────────────────
                 h1, h2, h3, h4, h5 = st.columns([4, 2, 2, 2, 2])
-                for col, label in zip([h1, h2, h3, h4, h5], ["Asset", "Type", "Scheme", "Status", ""]):
-                    col.markdown(f"<span style='font-size:0.75em;color:#475569;text-transform:uppercase;letter-spacing:0.06em;'>{label}</span>", unsafe_allow_html=True)
+                for col, lbl in zip([h1, h2, h3, h4, h5], ["Asset", "Type", "Scheme", "Status", ""]):
+                    col.markdown(f"<span style='font-size:0.75em;color:#475569;text-transform:uppercase;letter-spacing:0.06em;'>{lbl}</span>", unsafe_allow_html=True)
                 st.markdown("<hr style='margin:4px 0 8px 0;border-color:rgba(71,85,105,0.3);'/>", unsafe_allow_html=True)
 
                 for asset in filtered:
@@ -824,20 +991,34 @@ def main() -> None:
                     s_name = asset.get("scheme_name") or "—"
                     short = SCHEME_SHORT_NAMES.get(s_name, s_name).replace("\n", " ")
                     _is_outside = asset["asset_id"] in _outside_ids
+                    _is_dupe    = asset["asset_id"] in _suspected_dupes
                     _outside_badge = (
                         " <span style='font-size:0.65em;background:rgba(245,158,11,0.12);"
                         "border:1px solid rgba(245,158,11,0.35);border-radius:4px;"
-                        "padding:1px 6px;color:#f59e0b;font-weight:600;'>⚠ Outside boundary</span>"
+                        "padding:1px 6px;color:#f59e0b;font-weight:600;'>Outside boundary</span>"
                         if _is_outside else ""
+                    )
+                    _dupe_badge = (
+                        " <span style='font-size:0.65em;background:rgba(239,68,68,0.08);"
+                        "border:1px solid rgba(239,68,68,0.3);border-radius:4px;"
+                        "padding:1px 6px;color:#ef4444;font-weight:600;'>Possible duplicate</span>"
+                        if _is_dupe else ""
                     )
 
                     c1, c2, c3, c4, c5 = st.columns([4, 2, 2, 2, 2])
-                    _cost = asset.get('cost') or 0
+                    _cost = asset.get("cost") or 0
                     _cost_str = f"₹{_cost:,.0f}" if _cost else "N/A"
-                    _status = (asset.get('status') or '—').replace('_', ' ').capitalize()
-                    c1.markdown(f"<div class='asset-name'>{asset['name']}{_outside_badge}</div>"
-                                f"<div class='asset-meta'>{_status} · {_cost_str} · <span style='color:#334155;font-family:monospace'>{asset['asset_id']}</span></div>",
-                                unsafe_allow_html=True)
+                    _raw_status = (asset.get("status") or "").lower().replace(" ", "_")
+                    _status_label = _raw_status.replace("_", " ").capitalize() or "—"
+                    _status_color = _status_colors.get(_raw_status, "#64748b")
+                    c1.markdown(
+                        f"<div class='asset-name'>{asset['name']}{_outside_badge}{_dupe_badge}</div>"
+                        f"<div class='asset-meta'>"
+                        f"<span style='color:{_status_color};font-weight:600;'>{_status_label}</span>"
+                        f" · {_cost_str} · <span style='color:#334155;font-family:monospace'>{asset['asset_id']}</span>"
+                        f"</div>",
+                        unsafe_allow_html=True,
+                    )
                     c2.write((asset.get("type") or "—").replace("_", " ").title())
                     c3.write(short)
                     c4.markdown(bdg, unsafe_allow_html=True)
@@ -849,7 +1030,7 @@ def main() -> None:
 
                 if _outside_ids:
                     _outside_assets = [a for a in breakdown if a["asset_id"] in _outside_ids]
-                    with st.expander(f"🗺 {len(_outside_ids)} asset{'s' if len(_outside_ids)>1 else ''} outside ward boundary — possible mis-tag"):
+                    with st.expander(f"{len(_outside_ids)} asset{'s' if len(_outside_ids)>1 else ''} outside ward boundary — possible mis-tag"):
                         st.caption("These assets have coordinates outside the ward radius. They appear in the table above but are hidden from the map. Verify coordinates in assets.csv.")
                         for _oa in _outside_assets:
                             st.markdown(f"- **{_oa['name']}** `{_oa['asset_id']}` — lat: `{_oa.get('lat','?')}`, lon: `{_oa.get('lon','?')}`")
@@ -860,7 +1041,7 @@ def main() -> None:
             st.markdown("""
             <div class="map-legend">
                 <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;margin-right:5px;"></span>Fully Verified</span>
-                <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f59e0b;margin-right:5px;"></span>Partially Verified / News Only</span>
+                <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f59e0b;margin-right:5px;"></span>Partial Proof</span>
                 <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;margin-right:5px;"></span>Unverified</span>
             </div>
             """, unsafe_allow_html=True)
@@ -888,10 +1069,26 @@ def main() -> None:
                     except (ValueError, TypeError):
                         pass
 
+                # Pin count badge
+                _fv_pins  = sum(1 for _, _, a, oos in points if not oos and a.get("proof_status") in ("fully_verified", "verified"))
+                _pv_pins  = sum(1 for _, _, a, oos in points if not oos and a.get("proof_status") in ("partially_verified", "news_only"))
+                _uv_pins  = sum(1 for _, _, a, oos in points if not oos and a.get("proof_status") not in ("fully_verified", "verified", "partially_verified", "news_only"))
+                _total_pins = len(points)
+
                 if not points:
                     st.info("No coordinate data available for this ward's assets. Reseed the database with updated assets.csv to see pins.")
-                elif outside_pins:
-                    st.caption(f"⚠ {outside_pins} asset(s) shown as gray pins — coordinates fall outside expected ward boundary (possible data mis-tag).")
+                else:
+                    _badge_parts = [f"**{_total_pins} assets**"]
+                    if _fv_pins:  _badge_parts.append(f"🟢 {_fv_pins} verified")
+                    if _pv_pins:  _badge_parts.append(f"🟡 {_pv_pins} partial")
+                    if _uv_pins:  _badge_parts.append(f"🔴 {_uv_pins} unverified")
+                    st.caption(" · ".join(_badge_parts))
+
+                # Boundary check result — always shown
+                if outside_pins:
+                    st.caption(f"{outside_pins} asset(s) shown as gray pins — coordinates fall outside expected ward boundary (possible data mis-tag).")
+                elif points:
+                    st.caption("All asset coordinates fall within ward boundary.")
 
                 # Center on ward boundary centroid, not asset centroid
                 center_lat, center_lng = centroid_lat, centroid_lng
@@ -901,6 +1098,7 @@ def main() -> None:
                     zoom_start=13,
                     tiles="OpenStreetMap",
                 )
+                m.options["scrollWheelZoom"] = False
 
                 # ── Ward boundary overlay ──────────────────────────────────────
                 boundary = WARD_BOUNDARIES.get(ward_id)
@@ -931,8 +1129,35 @@ def main() -> None:
                     ps        = asset.get("proof_status", "unverified")
                     hex_color = "#94a3b8" if is_outside else get_map_color(ps)
                     label, _, _ = get_status_display(ps)
-                    outside_note = " ⚠ Outside boundary" if is_outside else ""
+                    outside_note = " — outside boundary" if is_outside else ""
 
+                    _a_type   = (asset.get("type") or "?").replace("_", " ").title()
+                    _a_status = (asset.get("status") or "?").replace("_", " ").capitalize()
+                    _a_scheme = asset.get("scheme_name") or "—"
+                    _a_cost   = asset.get("cost") or 0
+                    _cost_str = f"₹{_a_cost:,.0f}" if _a_cost else "N/A"
+                    _proof_color = {"fully_verified": "#22c55e", "verified": "#22c55e",
+                                    "partially_verified": "#f59e0b", "news_only": "#f59e0b"}.get(
+                                        asset.get("proof_status",""), "#ef4444")
+                    _popup_html = f"""
+                    <div style='font-family:sans-serif;min-width:200px;max-width:270px;'>
+                      <div style='font-weight:700;font-size:13px;margin-bottom:6px;
+                                  border-bottom:1px solid #e2e8f0;padding-bottom:4px;'>
+                        {asset['name']}
+                      </div>
+                      <table style='font-size:11px;width:100%;border-collapse:collapse;'>
+                        <tr><td style='color:#64748b;padding:2px 6px 2px 0;'>Type</td><td>{_a_type}</td></tr>
+                        <tr><td style='color:#64748b;padding:2px 6px 2px 0;'>Scheme</td><td>{_a_scheme}</td></tr>
+                        <tr><td style='color:#64748b;padding:2px 6px 2px 0;'>Status</td><td>{_a_status}</td></tr>
+                        <tr><td style='color:#64748b;padding:2px 6px 2px 0;'>Cost</td><td>{_cost_str}</td></tr>
+                        <tr><td style='color:#64748b;padding:2px 6px 2px 0;'>Proof</td>
+                            <td><span style='color:{_proof_color};font-weight:600;'>{label}</span></td></tr>
+                      </table>
+                      {'<div style="color:#f59e0b;font-size:10px;margin-top:6px;">Coordinates may be mis-tagged</div>' if is_outside else ''}
+                      <div style='margin-top:8px;font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:5px;'>
+                        → Find in Assets &amp; Proof table to view Proof Chain
+                      </div>
+                    </div>"""
                     folium.CircleMarker(
                         [lat, lng],
                         radius=7 if is_outside else 10,
@@ -941,15 +1166,7 @@ def main() -> None:
                         fill=True,
                         fill_color=hex_color,
                         fill_opacity=0.55 if is_outside else 0.9,
-                        popup=folium.Popup(
-                            f"<b>{asset['name']}</b>{outside_note}<br>"
-                            f"Type: {(asset.get('type') or '?').replace('_',' ').title()}<br>"
-                            f"Status: {(asset.get('status') or '?').replace('_',' ').capitalize()}<br>"
-                            f"Scheme: {asset.get('scheme_name','?')}<br>"
-                            f"Proof: {label}"
-                            + ("<br><i style='color:#f59e0b;'>Coordinates may be mis-tagged</i>" if is_outside else ""),
-                            max_width=280,
-                        ),
+                        popup=folium.Popup(_popup_html, max_width=290),
                         tooltip=f"{asset['name']} — {label}{outside_note}",
                     ).add_to(m)
 
@@ -971,13 +1188,47 @@ def main() -> None:
         # ── Delivery Gaps ──────────────────────────────────────────────────────
         with tab_gaps:
             st.markdown(f"<p class='sec-label'>{icon('alert-triangle', '#94a3b8', 15)} Proof Gaps — Assets Missing Evidence</p>", unsafe_allow_html=True)
+
+            # ── Rupee at-risk hero callout ─────────────────────────────────────
+            _unverified_assets = [a for a in breakdown if a.get("proof_status", "unverified")
+                                  not in ("fully_verified", "verified", "partially_verified", "news_only")]
+            _at_risk_total = sum(a.get("cost") or 0 for a in _unverified_assets)
+            _at_risk_lakh  = _at_risk_total / 100_000
+            _n_unverified  = len(_unverified_assets)
+            _total_spend   = sum(a.get("cost") or 0 for a in breakdown)
+            _total_lakh    = _total_spend / 100_000
+
+            if _at_risk_total > 0:
+                st.markdown(f"""
+                <div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.35);
+                            border-left:4px solid #ef4444;border-radius:12px;
+                            padding:18px 24px;margin-bottom:16px;display:flex;align-items:center;gap:24px;">
+                    <div>
+                        <div style="font-size:0.7em;color:#94a3b8;text-transform:uppercase;
+                                    letter-spacing:0.07em;font-weight:700;margin-bottom:2px;">Total at risk</div>
+                        <div style="font-size:2em;font-weight:800;color:#ef4444;font-family:'Outfit',sans-serif;
+                                    line-height:1;">₹{_at_risk_lakh:.1f} lakh</div>
+                        <div style="font-size:0.78em;color:#94a3b8;margin-top:4px;">
+                            {_n_unverified} of {len(breakdown)} assets have no verified proof
+                        </div>
+                    </div>
+                    <div style="border-left:1px solid rgba(239,68,68,0.25);padding-left:24px;">
+                        <div style="font-size:0.7em;color:#94a3b8;text-transform:uppercase;
+                                    letter-spacing:0.07em;font-weight:700;margin-bottom:2px;">Total sanctioned</div>
+                        <div style="font-size:1.4em;font-weight:700;color:#f1f5f9;font-family:'Outfit',sans-serif;">
+                            ₹{_total_lakh:.1f} lakh</div>
+                        <div style="font-size:0.78em;color:#94a3b8;margin-top:4px;">
+                            {round(100 * _at_risk_total / _total_spend) if _total_spend else 0}% of ward allocation unaccounted
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
             st.markdown(
                 "<div style='background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);"
                 "border-radius:8px;padding:8px 14px;font-size:0.78em;color:#94a3b8;margin-bottom:12px;'>"
-                "<b style='color:#38bdf8;'>ℹ Proven</b> here means the asset has at least one valid "
-                "evidence URL <em>or</em> a news article mentioning it — it's a broad coverage signal. "
-                "The Snapshot's <b>Fully Verified</b> count is stricter: it requires 2+ evidence items "
-                "or confirmed news + field photo. Both views are correct — they measure different proof depths."
+                "<b style='color:#38bdf8;'>Note:</b> Proven = at least one valid evidence document or news mention. "
+                "Fully Verified (in the snapshot) is stricter — requires field photo or 2+ sources."
                 "</div>",
                 unsafe_allow_html=True,
             )
@@ -1055,8 +1306,67 @@ def main() -> None:
                 """, unsafe_allow_html=True)
                 st.page_link("pages/03_Live_Ingestion.py", label="Upload Evidence", icon=":material/upload:")
 
+        # ── AI Intelligence Briefing ───────────────────────────────────────────
+        st.divider()
+        _ai_ico = icon("cpu", "#f97316", 15)
+        st.markdown(f"<p class='sec-label'>{_ai_ico} AI Ward Briefing</p>", unsafe_allow_html=True)
+        st.caption("One-click AI summary of this ward's delivery status, risks, and recommended action.")
+
+        if st.button("Generate AI Briefing", type="secondary", key="ai_briefing_btn"):
+            _groq_key = os.environ.get("GROQ_API_KEY", "")
+            if not _groq_key:
+                st.warning("GROQ_API_KEY not set — add it to .env to enable AI briefings.")
+            else:
+                with st.spinner("Analysing ward graph…"):
+                    try:
+                        from groq import Groq as _Groq
+                        _verified   = counts.get("fully_verified", 0) + counts.get("verified", 0)
+                        _partial    = counts.get("partially_verified", 0) + counts.get("news_only", 0)
+                        _unverified = counts.get("unverified", 0)
+                        _scheme_summary = ", ".join(f"{k}: {v} assets" for k, v in scheme_bk.items())
+                        _gap_summary    = "; ".join(
+                            f"{g.get('scheme_name','?')} — {g.get('linked_assets',0)-g.get('proven_assets',0)} of {g.get('linked_assets',0)} unproven"
+                            for g in gaps_data if g.get("gap_type") not in ("complete", "no_assets")
+                        ) or "none"
+                        _briefing_prompt = f"""You are a governance analyst reviewing {ward_name}, India.
+
+Ward data:
+- Total assets: {len(breakdown)}, Fully verified: {_verified}, Partially verified: {_partial}, Unverified: {_unverified}
+- Delivery score: {score}%
+- Total sanctioned: ₹{_total_lakh:.1f} lakh, At risk (unverified): ₹{_at_risk_lakh:.1f} lakh
+- Schemes: {_scheme_summary}
+- Proof gaps: {_gap_summary}
+
+Write a 4-bullet briefing for a government official. Be specific with numbers. Use plain English, no markdown headers.
+1. Overall delivery status
+2. Biggest risk (scheme with most unverified spend)
+3. What is working (verified assets)
+4. Recommended action (1 sentence)"""
+                        _gclient = _Groq(api_key=_groq_key)
+                        _resp = _gclient.chat.completions.create(
+                            model="llama-3.3-70b-versatile",
+                            messages=[{"role": "user", "content": _briefing_prompt}],
+                            temperature=0.2,
+                            max_tokens=350,
+                        )
+                        _briefing = _resp.choices[0].message.content
+                        ss["_ai_briefing"] = _briefing
+                    except Exception as _be:
+                        st.error(f"AI briefing failed: {_be}")
+
+        if ss.get("_ai_briefing"):
+            st.markdown(f"""
+            <div style="background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.25);
+                        border-left:4px solid #f97316;border-radius:10px;
+                        padding:16px 20px;margin-top:8px;">
+                <div style="font-size:0.7em;color:#64748b;text-transform:uppercase;
+                            letter-spacing:0.07em;font-weight:700;margin-bottom:8px;">AI Analysis — {ward_name}</div>
+                <div style="font-size:0.88em;color:#e2e8f0;line-height:1.7;white-space:pre-line;">{ss["_ai_briefing"]}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
     except requests.exceptions.ConnectionError:
-        st.error("⚠️ Backend offline — start the FastAPI server on port 8000.")
+        st.error("Backend offline — start the FastAPI server on port 8000.")
     except Exception as e:
         st.error(f"Unexpected error: {e}")
         raise

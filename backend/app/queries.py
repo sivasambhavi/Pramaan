@@ -96,23 +96,28 @@ OPTIONAL MATCH (a)-[:BUILT_BY]->(act:Actor)
 OPTIONAL MATCH (e:Evidence)-[:PROVES]->(a)
   WHERE e.url_or_path IS NOT NULL AND trim(e.url_or_path) <> '' AND e.url_or_path <> 'N/A'
 OPTIONAL MATCH (a)-[:MENTIONED_IN]->(n:NewsArticle)
-WITH a, s, act, count(DISTINCT e) AS ev_count, count(DISTINCT n) AS news_count
-RETURN DISTINCT
+WITH a,
+     collect(DISTINCT s.name)      AS scheme_names,
+     collect(DISTINCT s.scheme_id) AS scheme_ids,
+     collect(DISTINCT act.name)    AS actor_names,
+     count(DISTINCT e)             AS ev_count,
+     count(DISTINCT n)             AS news_count
+RETURN
   a.asset_id  AS asset_id,
   a.name      AS name,
   a.type      AS type,
   a.status    AS status,
   a.cost      AS cost,
-  CASE 
+  CASE
        WHEN (news_count > 0 OR ev_count >= 2) THEN 'fully_verified'
-       WHEN (ev_count = 1) THEN 'partially_verified'
+       WHEN (ev_count = 1)                    THEN 'partially_verified'
        ELSE 'unverified'
   END AS proof_status,
-  a.lat       AS lat,
-  a.lon       AS lon,
-  s.name      AS scheme_name,
-  s.scheme_id AS scheme_id,
-  act.name    AS actor_name
+  a.lat        AS lat,
+  a.lon        AS lon,
+  scheme_names[0]  AS scheme_name,
+  scheme_ids[0]    AS scheme_id,
+  actor_names[0]   AS actor_name
 ORDER BY a.name
 """
 

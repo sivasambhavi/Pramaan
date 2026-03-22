@@ -22,10 +22,13 @@ ZONE_WARDS     = {}
 
 
 @st.cache_data(ttl=300, show_spinner=False)
-def _fetch_regions() -> list[dict]:
-    """Fetch all regions from API. Cached for 5 minutes."""
+def _fetch_regions(type: str = None, parent_id: str = None) -> list[dict]:
+    """Fetch regions from API with optional type/parent_id filters."""
     try:
-        resp = requests.get(f"{BASE_URL}/regions/", timeout=5)
+        params = {}
+        if type:      params["type"]      = type
+        if parent_id: params["parent_id"] = parent_id
+        resp = requests.get(f"{BASE_URL}/regions/", params=params, timeout=8)
         resp.raise_for_status()
         return resp.json()
     except Exception:
@@ -35,10 +38,11 @@ def _fetch_regions() -> list[dict]:
 def _build_hierarchy(regions: list[dict]) -> dict:
     """
     Build cascading dicts from flat region list.
+    Handles state → city → zone → ward hierarchy.
     Returns:
-      states       : list of state names
-      districts    : {state_name: [district_name, ...]}
-      wards        : {district_name: {ward_name: ward_id}}
+      states    : list of state names
+      districts : {state_name: [city_name, ...]}  (city level)
+      wards     : {zone_or_city_name: {ward_name: ward_id}}
     """
     states, districts, wards = [], {}, {}
 
@@ -52,7 +56,7 @@ def _build_hierarchy(regions: list[dict]) -> dict:
             if name not in states:
                 states.append(name)
 
-        elif rtype == "district":
+        elif rtype in ("city", "district", "zone"):
             districts.setdefault(parent_name, [])
             if name not in districts[parent_name]:
                 districts[parent_name].append(name)
@@ -94,60 +98,88 @@ def render_geo_selector(sidebar: bool = True) -> dict:
         <hr style="border-color:rgba(71,85,105,0.2);margin:0 0 8px 0;"/>
         """, unsafe_allow_html=True)
 
-    # ── Fetch & build hierarchy ───────────────────────────────
-    raw_regions = _fetch_regions()
-    if not raw_regions:
+    # ── Fetch states ──────────────────────────────────────────
+    state_regions = _fetch_regions(type="state")
+    if not state_regions:
         target.warning("Could not load regions from API — backend may be offline.")
         return {"state": DEFAULT_STATE, "district": DEFAULT_CITY,
                 "ward_name": DEFAULT_WARD, "ward_id": DEFAULT_WARD_ID, "is_demo_ward": False}
 
-    states, districts, wards = _build_hierarchy(raw_regions)
+    state_map = {r["name"]: r["region_id"] for r in state_regions}
+    states    = sorted(state_map.keys())
 
-    # Update module-level lists so any code that imports them still works
-    global INDIAN_STATES, DELHI_ULBS, DELHI_ZONES, ZONE_WARDS
-    INDIAN_STATES = states
-    DELHI_ULBS    = list(districts.keys())
-    DELHI_ZONES   = districts
-    ZONE_WARDS    = wards
-
-    # ── State ─────────────────────────────────────────────────
     def_state = ss.get("state", DEFAULT_STATE)
     if def_state not in states:
         def_state = states[0] if states else DEFAULT_STATE
 
-    state = target.selectbox("State / UT", states, index=states.index(def_state), key="sel_state_geo")
+    state     = target.selectbox("State / UT", states, index=states.index(def_state), key="sel_state_geo")
+    state_id  = state_map.get(state, "")
 
-    # ── District ──────────────────────────────────────────────
-    district_list = districts.get(state, [DEFAULT_CITY])
-    def_district  = ss.get("city", DEFAULT_CITY)
-    if def_district not in district_list:
-        def_district = district_list[0] if district_list else DEFAULT_CITY
+    # ── Fetch cities for selected state ───────────────────────
+    city_regions = _fetch_regions(type="city", parent_id=state_id) if state_id else []
+    city_map     = {r["name"]: r["region_id"] for r in city_regions}
+    city_list    = sorted(city_map.keys())
+    if not city_list:
+        city_list = [DEFAULT_CITY]
+        city_map  = {DEFAULT_CITY: ""}
 
-    district = target.selectbox("District", district_list,
-                                index=district_list.index(def_district), key="sel_district_geo")
+    def_city = ss.get("city", DEFAULT_CITY)
+    if def_city not in city_list:
+        def_city = city_list[0]
 
-    # ── Ward ──────────────────────────────────────────────────
-    ward_map   = wards.get(district, {DEFAULT_WARD: DEFAULT_WARD_ID})
-    ward_names = list(ward_map.keys())
-    def_ward   = ss.get("ward_name", DEFAULT_WARD)
+    city    = target.selectbox("City / ULB", city_list, index=city_list.index(def_city), key="sel_city_geo")
+    city_id = city_map.get(city, "")
+
+    # ── Fetch zones for selected city ─────────────────────────
+    zone_regions = _fetch_regions(type="zone", parent_id=city_id) if city_id else []
+    zone_map     = {r["name"]: r["region_id"] for r in zone_regions}
+    zone_list    = sorted(zone_map.keys())
+    has_zones    = bool(zone_list)
+    if not zone_list:
+        zone_list = [DEFAULT_ZONE]
+        zone_map  = {DEFAULT_ZONE: city_id}  # fallback: use city as parent for wards
+
+    def_zone = ss.get("zone", DEFAULT_ZONE)
+    if def_zone not in zone_list:
+        def_zone = zone_list[0]
+
+    zone    = target.selectbox("Zone", zone_list, index=zone_list.index(def_zone), key="sel_zone_geo")
+    zone_id = zone_map.get(zone, city_id)
+
+    # ── Fetch wards for selected zone (or city if no zones) ───
+    ward_parent_id = zone_id if has_zones else city_id
+    ward_regions   = _fetch_regions(type="ward", parent_id=ward_parent_id) if ward_parent_id else []
+    ward_map       = {r["name"]: r["region_id"] for r in ward_regions}
+    ward_names     = sorted(ward_map.keys())
+    if not ward_names:
+        ward_names = [DEFAULT_WARD]
+        ward_map   = {DEFAULT_WARD: DEFAULT_WARD_ID}
+
+    def_ward = ss.get("ward_name", DEFAULT_WARD)
     if def_ward not in ward_names:
-        def_ward = ward_names[0] if ward_names else DEFAULT_WARD
+        def_ward = ward_names[0]
 
-    ward_name = target.selectbox("Ward", ward_names,
-                                 index=ward_names.index(def_ward), key="sel_ward_geo")
+    ward_name = target.selectbox("Ward", ward_names, index=ward_names.index(def_ward), key="sel_ward_geo")
     ward_id   = ward_map[ward_name]
 
+    # Update module-level lists for backward compat
+    global INDIAN_STATES, DELHI_ULBS, DELHI_ZONES, ZONE_WARDS
+    INDIAN_STATES = states
+    DELHI_ULBS    = city_list
+    DELHI_ZONES   = {city: zone_list}
+    ZONE_WARDS    = {zone: ward_map}
+
     # ── Persist ───────────────────────────────────────────────
-    ss["state"]      = state
-    ss["city"]       = district
-    ss["zone"]       = district   # backward compat
-    ss["ward_id"]    = ward_id
-    ss["ward_name"]  = ward_name
+    ss["state"]        = state
+    ss["city"]         = city
+    ss["zone"]         = zone
+    ss["ward_id"]      = ward_id
+    ss["ward_name"]    = ward_name
     ss["is_demo_ward"] = False
-    ss["country"]    = "India"
+    ss["country"]      = "India"
 
     return {
-        "state": state, "district": district,
+        "state": state, "city": city, "zone": zone,
         "ward_name": ward_name, "ward_id": ward_id,
         "is_demo_ward": False,
     }
