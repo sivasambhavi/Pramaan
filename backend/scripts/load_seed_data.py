@@ -204,6 +204,8 @@ def main() -> None:
         print("Loading Assets...")
         for _, row in df_assets.iterrows():
             r = row.to_dict()
+            _lat = float(r["lat"]) if str(r.get("lat", "")).strip() else None
+            _lon = float(r["lon"]) if str(r.get("lon", "")).strip() else None
             session.run("""
                 MERGE (a:Asset {asset_id: $asset_id})
                 SET a.name = $name, a.type = $type,
@@ -213,6 +215,7 @@ def main() -> None:
                     a.source_type = $source_type, a.confidence = $confidence,
                     a.ingested_by = 'seed_script'
             """, {**r,
+                  "lat": _lat, "lon": _lon,
                   "source_type": r.get("source_type", "structured_csv"),
                   "confidence":  float(r["confidence"]) if r.get("confidence") not in ("", None) else 1.0,
                   "encroached":  r.get("encroached", ""),

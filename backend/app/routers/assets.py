@@ -8,7 +8,7 @@ router = APIRouter()
 def list_all_assets(ward_region_id: str = "REG_W45"):
     with get_session() as session:
         result = session.run(LIST_ALL_ASSETS, ward_region_id=ward_region_id)
-        assets = [{"asset_id": r["asset_id"], "name": r["name"], "type": r["type"], "status": r["status"]} for r in result]
+        assets = [{"asset_id": r["asset_id"], "name": r["name"], "type": r["type"], "status": r["status"], "proof_status": r.get("proof_status")} for r in result]
     return {"assets": assets}
 
 

@@ -1,6 +1,6 @@
 import os
 import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, Form, Request
 from pydantic import BaseModel
 from app.neo4j_client import get_session
 from twilio.rest import Client
@@ -94,3 +94,63 @@ def trigger_street_notification(payload: NotificationTrigger):
     except Exception as e:
         logger.error(f"Error triggering notifications for {payload.asset_id}: {e}")
         return {"success": False, "error": str(e)}
+
+@router.post("/webhook/whatsapp")
+async def inbound_whatsapp_media(
+    request: Request,
+    NumMedia: int = Form(0),
+    MediaUrl0: str = Form(None),
+    MediaContentType0: str = Form(None),
+    From: str = Form(...)
+):
+    """
+    Inbound Twilio Webhook: Listens for WhatsApp messages.
+    If the message contains a media attachment (PDF, Image), it automatically
+    downloads it to the local /inbox/ folder for the PRAMAAN pipeline to ingest.
+    """
+    import os
+    import requests
+    from datetime import datetime
+    
+    if NumMedia == 0 or not MediaUrl0:
+        return {"success": True, "message": "No media found in the message."}
+
+    # Determine extension
+    ext = ".bin"
+    if MediaContentType0 == "application/pdf":
+        ext = ".pdf"
+    elif MediaContentType0 == "image/jpeg":
+        ext = ".jpg"
+    elif MediaContentType0 == "image/png":
+        ext = ".png"
+        
+    # Download the media
+    twilio_sid = os.environ.get("TWILIO_ACCOUNT_SID")
+    twilio_auth = os.environ.get("TWILIO_AUTH_TOKEN")
+    auth_tuple = (twilio_sid, twilio_auth) if twilio_sid and twilio_auth else None
+    
+    # Safe filename calculation
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    safe_phone = From.replace("whatsapp:", "").replace("+", "")
+    filename = f"whatsapp_{safe_phone}_{timestamp}{ext}"
+    
+    # Target inbox path (e:/INDIA_INNOVATES/Pramaan/inbox)
+    backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    repo_root = os.path.dirname(backend_dir)
+    inbox_dir = os.path.join(repo_root, "inbox")
+    os.makedirs(inbox_dir, exist_ok=True)
+    save_path = os.path.abspath(os.path.join(inbox_dir, filename))
+    
+    try:
+        r = requests.get(MediaUrl0, auth=auth_tuple, stream=True, timeout=15)
+        r.raise_for_status()
+        with open(save_path, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+                
+        logger.info(f"Successfully downloaded WhatsApp media to {save_path}")
+        return {"success": True, "message": "Media successfully routed to PRAMAAN inbox."}
+    except Exception as e:
+        logger.error(f"Failed to download Twilio media: {e}")
+        return {"success": False, "error": str(e)}
+

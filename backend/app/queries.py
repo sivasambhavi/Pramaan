@@ -70,7 +70,7 @@ LIST_ALL_ASSETS = """
 MATCH (w:Region {region_id: $ward_region_id})
 MATCH (a:Asset)-[:LOCATED_IN]->(r:Region)<-[:CONTAINS*0..3]-(w)
 RETURN DISTINCT a.asset_id AS asset_id, a.name AS name, a.type AS type, a.status AS status, a.cost AS cost,
-       r.region_id as region_id, r.name as region_name
+       a.proof_status AS proof_status, r.region_id as region_id, r.name as region_name
 ORDER BY a.type, a.name
 """
 

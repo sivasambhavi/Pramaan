@@ -148,7 +148,7 @@ def main():
         if not resp:
             st.error("Could not load assets from backend.")
             return
-        all_assets = resp.json().get("assets", [])
+        all_assets = resp.get("assets", [])
         if not all_assets:
             st.warning("No assets found for this ward.")
             return

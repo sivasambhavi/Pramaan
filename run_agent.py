@@ -8,6 +8,11 @@ import os
 import time
 import argparse
 import logging
+from dotenv import load_dotenv
+
+# Load API keys before initializing anything else
+load_dotenv()
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from agent.classifier import classify_source
 from agent.tools import fetch_api, scrape_with_crawl4ai, move_from_inbox
@@ -36,9 +41,12 @@ def process_source(source_hint: str):
     
     # Ensure destination folder is absolute or relative to repo root
     os.makedirs(dest_folder.strip('/'), exist_ok=True)
-    base_name = os.path.basename(source_hint).split('?')[0]
-    if not base_name or base_name == source_hint:
-        base_name = "ingested_file"
+    
+    import re
+    from datetime import datetime
+    safe_hint = re.sub(r'[^a-zA-Z0-9]', '_', source_hint.split('://')[-1])[:40].strip('_')
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    base_name = f"{safe_hint}_{timestamp}" if safe_hint else f"ingested_{timestamp}"
         
     # 3. Route to Correct Tool
     if source_type == "structured" and fetch_method == "api":
@@ -58,21 +66,59 @@ def process_source(source_hint: str):
 
 def daily_job():
     logger.info("Running daily PRAMAAN ingestion pipeline...")
-    # Example sources we monitor daily
-    daily_sources = [
-        "https://pib.gov.in/PressReleasePage.aspx?PRID=123456", # Example unstructured
+    
+    # 1. Autonomous Discovery via Tavily
+    tavily_key = os.environ.get("TAVILY_API_KEY")
+    tavily_results = []
+    
+    if tavily_key and "tvly_" not in tavily_key.lower(): # Basic check for default placeholder
+        try:
+            from tavily import TavilyClient
+            from agent.tools import search_tavily_guarded
+            from agent.search_queries import PRIORITY_QUERIES, generate_query_batch
+            from agent.relevance_filter import filter_results
+            
+            logger.info("Initiating autonomous Tavily Hunt with Guardrails & Relevance Scoring...")
+            tv_client = TavilyClient(api_key=tavily_key)
+            
+            # Combine Pre-baked priority queries heavily with dynamic schemes
+            queries_to_run = PRIORITY_QUERIES[:2] + generate_query_batch(3)
+            
+            for query in queries_to_run:
+                # Execution layer
+                results = search_tavily_guarded(query, tv_client)
+                
+                # Validation layer
+                high_val_results = filter_results(results, min_score=30)
+                
+                # Extraction layer
+                urls = [r.get('url') for r in high_val_results if r.get('url')]
+                tavily_results.extend(urls)
+                
+            logger.info(f"Tavily finalized {len(tavily_results)} intensely relevant URLs globally.")
+        except ImportError:
+            logger.error("tavily-python not installed. Run `pip install tavily-python`")
+        except Exception as e:
+            logger.error(f"Tavily search failed: {e}")
+    else:
+        logger.warning("No TAVILY_API_KEY set. Skipping autonomous search hunt.")
+
+    # 2. Combine targeted searches with hardcoded sources
+    daily_sources = tavily_results + [
+        # You can keep fallback or static sources here
     ]
     
-    # Also process anything in the inbox
+    # 3. Process anything in the Local Inbox first
     inbox_dir = os.path.join(os.getcwd(), 'inbox')
     if os.path.exists(inbox_dir):
         for filename in os.listdir(inbox_dir):
             if filename != '.gitkeep':
                 process_source(filename)
                 
-    # Process regular API/Web sources
+    # 4. Process all web sources
     for src in daily_sources:
-        process_source(src)
+        if src.startswith("http"):
+            process_source(src)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run PRAMAAN Ingestion Agent")
