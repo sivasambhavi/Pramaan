@@ -18,43 +18,16 @@
 
 import os
 
-# ── API ────────────────────────────────────────────────────────────────────────
-API_BASE_URL = "http://127.0.0.1:8001"
-
-# Convenience alias used by legacy code
-BASE_URL: str = API_BASE_URL
-
-# ── Node Icons for Proof Chain ────────────────────────────────────────────────
-NODE_ICONS = {
-    "Asset":      "🏗️",
-    "Scheme":     "💰",
-    "Department": "🏛️",
-    "Ward":       "📍",
-    "Evidence":   "📷",
-    "Entity":     "🔷",
-}
-
-# ── Status Colors ──────────────────────────────────────────────────────────────
-STATUS_COLORS = {
-    "verified":   "#00C853",
-    "pending":    "#FFD600",
-    "unverified": "#FF1744",
-}
-
-# ── Data Lake Paths ────────────────────────────────────────────────────────────
-DATA_ROOT        = "e:/INDIA_INNOVATES/Pramaan/data"
-INBOX_DIR        = "e:/INDIA_INNOVATES/Pramaan/inbox"
-STRUCTURED_RAW   = f"{DATA_ROOT}/structured/raw"
-SEMI_RAW         = f"{DATA_ROOT}/semi_structured/raw"
-UNSTRUCTURED_RAW = f"{DATA_ROOT}/unstructured/raw"
-
 # ─────────────────────────────────────────────────────────────────────────────
 # 1. BACKEND API CONFIG
 # ─────────────────────────────────────────────────────────────────────────────
 # Override at runtime via the API_BASE_URL environment variable.
 # All frontend pages and utils must reference this — never hardcode the URL.
 
+API_BASE_URL: str = os.environ.get("API_BASE_URL", "http://127.0.0.1:8000")
 
+# Convenience alias used by legacy code
+BASE_URL: str = API_BASE_URL
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 2. HTTP CLIENT / RETRY CONFIG
@@ -86,11 +59,12 @@ API_TIMEOUT: int   = 10    # default request timeout in seconds (per attempt)
 #   ward:  "DMC Ward No - 45"    (REG_W45, parent: REG_SHAHDARA_SOUTH)
 
 DEFAULT_COUNTRY:  str = "India"
-DEFAULT_STATE:    str = "Delhi"
-DEFAULT_CITY:     str = "East Delhi Municipal Corporation"
-DEFAULT_ZONE:     str = "Shahdara South Zone"
-DEFAULT_WARD:     str = "DMC Ward No - 45"
-DEFAULT_WARD_ID:  str = "REG_W45"
+DEFAULT_STATE:    str = "Delhi"                  # must match /regions/?type=state name
+DEFAULT_STATE_ID: str = "REG_DELHI"              # canonical state region_id
+DEFAULT_CITY:     str = "Delhi"                  # regions.csv city name
+DEFAULT_ZONE:     str = "Shahdara North Zone"    # zones.csv zone name
+DEFAULT_WARD:     str = "DMC Ward No - 45"       # regions.csv ward name
+DEFAULT_WARD_ID:  str = "REG_W45"                # regions.csv region_id
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STATIC GEO DATA — ward polygons and centroids
@@ -135,7 +109,15 @@ STATUS_CONFIG: dict[str, tuple] = {
 # 5. PROOF-CHAIN NODE ICONS & TRUST TIERS
 # ─────────────────────────────────────────────────────────────────────────────
 
-
+# Maps chain node label → Lucide icon name (used by icon_box())
+NODE_ICONS: dict[str, str] = {
+    "Scheme / Funding":       "banknote",
+    "Implementing Agency":    "building-2",
+    "Asset / Infrastructure": "building",
+    "Location":               "map-pin",
+    "Evidence":               "check-circle",
+    "Evidence Status":        "eye",
+}
 
 # Maps trust_tier key → (display_label, text_color, bg_color, border_color)
 TRUST_TIERS: dict[str, tuple] = {

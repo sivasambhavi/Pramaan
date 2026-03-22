@@ -1,0 +1,107 @@
+{
+  "description": "PRAMAAN Global Ontology Engine — Node and Edge Schema",
+  "version": "2.0",
+  "node_types": {
+    "Event": {
+      "id_field": "event_id",
+      "required": ["event_id", "name", "date", "domain"],
+      "properties": {
+        "event_id":    "string  — unique ID e.g. EVT_WAYANAD_2024",
+        "name":        "string  — human readable name",
+        "date":        "string  — ISO date YYYY-MM-DD",
+        "domain":      "string  — primary domain (Climate|Economics|Geopolitics|Defense|Technology|Society|Governance)",
+        "description": "string  — 1-2 sentence summary",
+        "severity":    "string  — low|medium|high|critical",
+        "source_url":  "string  — PIB / Wikipedia / NDMA citation URL",
+        "confidence":  "float   — 0.0-1.0"
+      }
+    },
+    "Region": {
+      "id_field": "region_id",
+      "required": ["region_id", "name", "type"],
+      "properties": {
+        "region_id":        "string",
+        "name":             "string",
+        "type":             "string — country|state|district|city",
+        "lat":              "float",
+        "lon":              "float"
+      }
+    },
+    "Domain": {
+      "id_field": "domain_id",
+      "required": ["domain_id", "name"],
+      "properties": {
+        "domain_id":   "string — e.g. DOM_CLIMATE",
+        "name":        "string — e.g. Climate",
+        "description": "string"
+      }
+    },
+    "Actor": {
+      "id_field": "actor_id",
+      "required": ["actor_id", "name", "type"],
+      "properties": {
+        "actor_id": "string",
+        "name":     "string",
+        "type":     "string — government|military|ministry|company|ngo|international"
+      }
+    },
+    "Scheme": {
+      "id_field": "scheme_id",
+      "required": ["scheme_id", "name"],
+      "properties": {
+        "scheme_id":     "string",
+        "name":          "string",
+        "ministry":      "string",
+        "budget_crore":  "float — total sanctioned budget in ₹ crore",
+        "source_url":    "string"
+      }
+    },
+    "Impact": {
+      "id_field": "impact_id",
+      "required": ["impact_id", "type", "value"],
+      "properties": {
+        "impact_id":   "string",
+        "type":        "string — deaths|displaced|damage_crore|jobs_created|investment_crore",
+        "value":       "float  — numeric value",
+        "unit":        "string — persons|crore_inr|count",
+        "description": "string"
+      }
+    },
+    "Policy": {
+      "id_field": "policy_id",
+      "required": ["policy_id", "name"],
+      "properties": {
+        "policy_id":   "string",
+        "name":        "string",
+        "date":        "string",
+        "description": "string",
+        "source_url":  "string"
+      }
+    },
+    "Evidence": {
+      "id_field": "evidence_id",
+      "required": ["evidence_id", "type", "url"],
+      "properties": {
+        "evidence_id": "string",
+        "type":        "string — news|satellite|report|statement|data",
+        "url":         "string",
+        "title":       "string",
+        "date":        "string",
+        "source":      "string — PIB|NDMA|ISRO|IMD|Wikipedia"
+      }
+    }
+  },
+  "edge_types": {
+    "OCCURRED_IN":   "Event     → Region   — where the event happened",
+    "BELONGS_TO":    "Event     → Domain   — primary domain classification",
+    "ALSO_IN":       "Event     → Domain   — secondary domain (cross-domain link)",
+    "MANAGED_BY":    "Event     → Actor    — who responded/managed",
+    "FUNDED_BY":     "Event     → Scheme   — which scheme funded the response",
+    "CAUSED":        "Event     → Impact   — measurable outcome",
+    "TRIGGERED":     "Event     → Policy   — policy activated or created",
+    "CONNECTED_TO":  "Event     → Event    — cross-domain connection with reason",
+    "PART_OF":       "Actor     → Actor    — org hierarchy",
+    "GOVERNS":       "Policy    → Domain   — which domain the policy covers",
+    "PROVES":        "Evidence  → Event    — source proving event facts"
+  }
+}
