@@ -1,0 +1,67 @@
+{
+  "rows": [
+    {
+      "actor_id": "ACT_NEW_DELHI_MUNICIPAL_COUNCIL",
+      "name": "New Delhi Municipal Council"
+    },
+    {
+      "actor_id": "ACT_PUBLIC_WORKS_DEPARTMENT",
+      "name": "Public Works Department"
+    },
+    {
+      "actor_id": "ACT_IRRIGATION_AND_FLOOD_CONTROL",
+      "name": "Irrigation and Flood Control"
+    },
+    {
+      "actor_id": "ACT_DELHI_JAL_BOARD",
+      "name": "Delhi Jal Board"
+    },
+    {
+      "actor_id": "ACT_DELHI_TRANSCO_LIMITED",
+      "name": "Delhi Transco Limited"
+    },
+    {
+      "actor_id": "ACT_DSIIDC",
+      "name": "DSIIDC"
+    },
+    {
+      "actor_id": "ACT_DELHI_URBAN_SHELTER_IMPROVEMEN",
+      "name": "Delhi Urban Shelter Improvement Board"
+    },
+    {
+      "actor_id": "ACT_DIRECTORATE_OF_HEALTH_SERVICES",
+      "name": "Directorate of Health Services"
+    },
+    {
+      "actor_id": "ACT_GGS_INDERPRASTHA_UNIVERSITY",
+      "name": "GGS INDERPRASTHA UNIVERSITY"
+    },
+    {
+      "actor_id": "ACT_DEPARTMENT_OF_FORESTS_AND_WILD",
+      "name": "Department of Forests and Wildlife"
+    },
+    {
+      "actor_id": "ACT_LAW_JUSTICE_AND_LEGISLATIVE_AF",
+      "name": "Law justice and Legislative Affairs"
+    },
+    {
+      "actor_id": "ACT_DEPARTMENT_OF_EDUCATION",
+      "name": "Department of Education"
+    },
+    {
+      "actor_id": "ACT_G_B_PANT_HOSPITAL",
+      "name": "G B Pant Hospital"
+    },
+    {
+      "actor_id": "ACT_DELHI_TRANSPORT_INFRASTRUCTURE",
+      "name": "Delhi Transport Infrastructure Devlopment Corp Ltd"
+    },
+    {
+      "actor_id": "ACT_DELHI_BUILDING_AND_OTHER_CONST",
+      "name": "Delhi Building and Other Construction workers Welf"
+    }
+  ],
+  "source_file": "delhi_tenders_data.md",
+  "source_type": "semi_structured_md",
+  "confidence": 0.85
+}

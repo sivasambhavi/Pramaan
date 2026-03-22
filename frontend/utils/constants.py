@@ -59,9 +59,10 @@ API_TIMEOUT: int   = 10    # default request timeout in seconds (per attempt)
 #   ward:  "DMC Ward No - 45"    (REG_W45, parent: REG_SHAHDARA_SOUTH)
 
 DEFAULT_COUNTRY:  str = "India"
-DEFAULT_STATE:    str = "Delhi (NCT)"
+DEFAULT_STATE:    str = "Delhi"                  # must match /regions/?type=state name
+DEFAULT_STATE_ID: str = "REG_DELHI"              # canonical state region_id
 DEFAULT_CITY:     str = "Delhi"                  # regions.csv city name
-DEFAULT_ZONE:     str = "Shahdara South Zone"    # regions.csv zone name
+DEFAULT_ZONE:     str = "Shahdara North Zone"    # zones.csv zone name
 DEFAULT_WARD:     str = "DMC Ward No - 45"       # regions.csv ward name
 DEFAULT_WARD_ID:  str = "REG_W45"                # regions.csv region_id
 
@@ -95,13 +96,13 @@ PIN_RADIUS_KM: int = 18   # generous for Burari / Khureji Khas (~10 km away)
 # Maps a proof_status string → (label, folium-colour, hex-colour, marker-hex)
 
 STATUS_CONFIG: dict[str, tuple] = {
-    "fully_verified":     ("✅ Fully Verified",     "green",  "#10b981", "#22c55e"),
-    "partially_verified": ("⚠️ Partially Verified", "orange", "#f59e0b", "#f59e0b"),
-    "unverified":         ("❌ Unverified",          "red",    "#ef4444", "#ef4444"),
-    "news_only":          ("📰 News Only",           "orange", "#f59e0b", "#f59e0b"),
-    "verified":           ("✅ Fully Verified",      "green",  "#10b981", "#22c55e"),
-    None:                 ("❌ Unverified",          "red",    "#ef4444", "#ef4444"),
-    "":                   ("❌ Unverified",          "red",    "#ef4444", "#ef4444"),
+    "fully_verified":     ("Fully Verified",     "green",  "#10b981", "#22c55e"),
+    "partially_verified": ("Partially Verified", "orange", "#f59e0b", "#f59e0b"),
+    "unverified":         ("Unverified",          "red",    "#ef4444", "#ef4444"),
+    "news_only":          ("News Only",           "orange", "#f59e0b", "#f59e0b"),
+    "verified":           ("Fully Verified",      "green",  "#10b981", "#22c55e"),
+    None:                 ("Unverified",          "red",    "#ef4444", "#ef4444"),
+    "":                   ("Unverified",          "red",    "#ef4444", "#ef4444"),
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -219,10 +220,10 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "after":          _img("after_w45_gali7_drain.png"),
         "before_caption": "Reported: waterlogging, blocked drain surface, stagnant water — Jan 2024",
         "after_caption":  "Verified: new drain constructed, surface restored, waterlogging resolved — Mar 2025",
-        "before_gps":     "📍 28.6748°N, 77.2921°E — Gali No. 7 Shahdara",
-        "after_gps":      "📍 28.6748°N, 77.2921°E — Same location confirmed",
-        "before_source":  "📋 MCD Complaint Log #2024-SHD-0132",
-        "after_source":   "📸 Geo-tagged photo — MCD field inspector",
+        "before_gps":     "28.6748°N, 77.2921°E — Gali No. 7 Shahdara",
+        "after_gps":      "28.6748°N, 77.2921°E — Same location confirmed",
+        "before_source":  "MCD Complaint Log #2024-SHD-0132",
+        "after_source":   "Geo-tagged photo — MCD field inspector",
     },
     # ── DRAIN: Gali No. 12 — uses w46 drain as visual proxy ──────────────
     "ASSET_W45_GALI12_DRAIN": {
@@ -230,10 +231,10 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "after":          _img("after_w46_gali3_drain.png"),
         "before_caption": "Reported: broken drain wall, waterlogging, encroachment — Jan 2024",
         "after_caption":  "Verified: drain reconstructed, walls repaired, drainage restored — Mar 2025",
-        "before_gps":     "📍 28.6739°N, 77.2934°E — Gali No. 12 Shahdara",
-        "after_gps":      "📍 28.6739°N, 77.2934°E — Same location confirmed",
-        "before_source":  "📋 MCD Complaint Log #2024-SHD-0147",
-        "after_source":   "📸 Geo-tagged photo — MCD field inspector",
+        "before_gps":     "28.6739°N, 77.2934°E — Gali No. 12 Shahdara",
+        "after_gps":      "28.6739°N, 77.2934°E — Same location confirmed",
+        "before_source":  "MCD Complaint Log #2024-SHD-0147",
+        "after_source":   "Geo-tagged photo — MCD field inspector",
     },
     # ── DRAIN: Gali No. 3 ─────────────────────────────────────────────────
     "ASSET_W45_GALI3_DRAIN": {
@@ -241,10 +242,10 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "after":          _img("drain_after.png"),
         "before_caption": "Reported: blocked drain, overflow onto road — Jan 2024",
         "after_caption":  "Partially verified: drain cleared, surface repair pending",
-        "before_gps":     "📍 28.6760°N, 77.2912°E — Gali No. 3 Shahdara",
-        "after_gps":      "📍 28.6760°N, 77.2912°E — Same location",
-        "before_source":  "📋 MCD Complaint Log #2024-SHD-0138",
-        "after_source":   "📸 Geo-tagged photo — field officer",
+        "before_gps":     "28.6760°N, 77.2912°E — Gali No. 3 Shahdara",
+        "after_gps":      "28.6760°N, 77.2912°E — Same location",
+        "before_source":  "MCD Complaint Log #2024-SHD-0138",
+        "after_source":   "Geo-tagged photo — field officer",
     },
     # ── PARK: Community Park ───────────────────────────────────────────────
     "ASSET_W45_PARK": {
@@ -252,10 +253,10 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "after":          _img("after_w45_park.jpeg"),
         "before_caption": "Reported: overgrown, waterlogged park, no benches — Nov 2023",
         "after_caption":  "Verified: park rejuvenated, pathways laid, benches installed — Apr 2025",
-        "before_gps":     "📍 28.6731°N, 77.2904°E — Community Park Ward 45",
-        "after_gps":      "📍 28.6731°N, 77.2904°E — Same location confirmed",
-        "before_source":  "📋 MCD Inspection Report #2023-SHD-P04",
-        "after_source":   "📸 Geo-tagged photo — AMRUT monitoring team",
+        "before_gps":     "28.6731°N, 77.2904°E — Community Park Ward 45",
+        "after_gps":      "28.6731°N, 77.2904°E — Same location confirmed",
+        "before_source":  "MCD Inspection Report #2023-SHD-P04",
+        "after_source":   "Geo-tagged photo — AMRUT monitoring team",
     },
     # ── ROAD: Gali No. 7 ──────────────────────────────────────────────────
     "ASSET_W45_ROAD_GALI7": {
@@ -263,9 +264,9 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "after":          _img("after_w45_gali7_road.jpeg"),
         "before_caption": "Reported: potholed, broken road surface — Feb 2024",
         "after_caption":  "Pending: road repair work yet to be completed",
-        "before_gps":     "📍 28.6748°N, 77.2921°E — Road Gali No. 7",
+        "before_gps":     "28.6748°N, 77.2921°E — Road Gali No. 7",
         "after_gps":      "",
-        "before_source":  "📋 MCD Complaint Log #2024-SHD-R019",
+        "before_source":  "MCD Complaint Log #2024-SHD-R019",
         "after_source":   "",
     },
     # ── TOILET: Community Toilet Block ────────────────────────────────────
@@ -274,9 +275,9 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "after":          _img("after_w45_toilet.jpeg"),
         "before_caption": "Reported: broken toilet facility, no water connection — Mar 2024",
         "after_caption":  "Pending: maintenance contract under tendering",
-        "before_gps":     "📍 28.6740°N, 77.2915°E — Community Toilet Ward 45",
+        "before_gps":     "28.6740°N, 77.2915°E — Community Toilet Ward 45",
         "after_gps":      "",
-        "before_source":  "📋 MCD Sanitation Report #2024-SHD-T07",
+        "before_source":  "MCD Sanitation Report #2024-SHD-T07",
         "after_source":   "",
     },
     # ── PMAY Housing Block A ───────────────────────────────────────────────
@@ -285,9 +286,9 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "after":          _img("after_w45_pmay.jpeg"),
         "before_caption": "Site pre-construction — foundation under survey — Nov 2023",
         "after_caption":  "Pending: interior finishing and possession handover",
-        "before_gps":     "📍 28.6720°N, 77.2910°E — PMAY Housing Block A Ward 45",
+        "before_gps":     "28.6720°N, 77.2910°E — PMAY Housing Block A Ward 45",
         "after_gps":      "",
-        "before_source":  "📋 DDA PMAY-U Sanction Report #2023-DDA-H45",
+        "before_source":  "DDA PMAY-U Sanction Report #2023-DDA-H45",
         "after_source":   "",
     },
     # ── STREETLIGHT: Gali No. 12 ──────────────────────────────────────────
@@ -296,9 +297,9 @@ ASSET_EVIDENCE_PHOTOS: dict[str, dict] = {
         "after":          _img("after_w45_gali12_streetlight.jpeg"),
         "before_caption": "Reported: street dark at night, lights broken/absent — Jan 2024",
         "after_caption":  "Pending: Smart Street Light Mission deployment in progress",
-        "before_gps":     "📍 28.6739°N, 77.2934°E — Gali No. 12 Shahdara",
+        "before_gps":     "28.6739°N, 77.2934°E — Gali No. 12 Shahdara",
         "after_gps":      "",
-        "before_source":  "📋 MCD Complaint Log #2024-SHD-L023",
+        "before_source":  "MCD Complaint Log #2024-SHD-L023",
         "after_source":   "",
     },
 }

@@ -327,12 +327,12 @@ def render_evidence_image(image_url, caption: str = ""):
     img_str = str(image_url).strip() if image_url is not None else ""
     
     if not img_str or img_str in ["0", "null", "None", "nan", ""] or not img_str.startswith("http"):
-        st.info("📷 No field photo available for this asset yet.")
+        st.info("No field photo available for this asset yet.")
     else:
         try:
             st.image(img_str, use_container_width=True)
         except:
-            st.info("📷 Photo unavailable")
+            st.info("Photo unavailable")
 
 def get_og_image(article_url: str) -> str | None:
     """
@@ -662,7 +662,7 @@ def main() -> None:
     _pin = svg_icon("map-pin", "#94a3b8", 13)
     _no_ward = not st.session_state.get("selected_ward")
     if _no_ward:
-        st.markdown("<p style='color:#64748b;font-size:0.82em;'>📍 No ward selected — <a href='/Ward_Map' target='_self' style='color:#FF6B35;'>go to Ward Map</a> to select a location.</p>", unsafe_allow_html=True)
+        st.markdown("<p style='color:#64748b;font-size:0.82em;'>No ward selected — <a href='/Ward_Map' target='_self' style='color:#FF6B35;'>go to Ward Map</a> to select a location.</p>", unsafe_allow_html=True)
     else:
         # Show asset name as last crumb — updates when asset selector changes
         _base_crumb = get_breadcrumb()
@@ -765,7 +765,7 @@ def main() -> None:
         # ── Quick actions: agent verify + manual full verify ────────────────
         qa1, qa2, qa3 = st.columns([1, 1, 2])
         with qa1:
-            if st.button("🤖 Verify This Asset (Agent)", key=f"agent_verify_{asset_id}"):
+            if st.button("Verify This Asset (Agent)", key=f"agent_verify_{asset_id}"):
                 vr = safe_post(f"/agents/verify/{asset_id}", json={"confidence": 0.7}, timeout=15)
                 if vr:
                     st.success(
@@ -777,7 +777,7 @@ def main() -> None:
                 else:
                     st.error("Agent verification failed.")
         with qa2:
-            if st.button("✅ Mark Fully Verified", key=f"manual_verify_{asset_id}"):
+            if st.button("Mark Fully Verified", key=f"manual_verify_{asset_id}"):
                 patch_asset_verified(asset_id)
                 st.success("Asset marked fully_verified.")
                 st.rerun()
@@ -802,7 +802,7 @@ def main() -> None:
         # ── Pre-fetch evidence BEFORE tabs so badge-sync reruns don't lose it ──
         _ev_cache_key = f"ev_{asset_id}"
         if _ev_cache_key not in st.session_state:
-            with st.spinner("⚡ Fetching evidence…"):
+            with st.spinner("Fetching evidence…"):
                 _at_clean = asset_type.lower()
                 _wn_str   = ward.get("name", "") if ward else ""
                 # Normalise spaces→underscores so "water body"→"water_body" matches key
@@ -824,14 +824,14 @@ def main() -> None:
 
         # key changes with asset_id → Streamlit re-creates tab group → resets to first tab
         try:
-            tab_chain, tab_evidence, tab_impact, tab_context = st.tabs(
-                ["Chain", "Evidence", "Impact", "National Context"],
+            tab_chain, tab_evidence, tab_impact, tab_context, tab_graph = st.tabs(
+                ["Chain", "Evidence", "Impact", "National Context", "Knowledge Graph"],
                 key=f"proof_tabs_{asset_id}",
             )
         except TypeError:
             # Fallback for Streamlit < 1.32 where tabs() has no key parameter
-            tab_chain, tab_evidence, tab_impact, tab_context = st.tabs(
-                ["Chain", "Evidence", "Impact", "National Context"]
+            tab_chain, tab_evidence, tab_impact, tab_context, tab_graph = st.tabs(
+                ["Chain", "Evidence", "Impact", "National Context", "Knowledge Graph"]
             )
 
         # ══════════════════════════════════════════════════════════════════
@@ -986,7 +986,7 @@ def main() -> None:
                     "<div style='background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.3);"
                     "border-left:4px solid #ef4444;border-radius:8px;padding:10px 14px;margin-top:10px;"
                     "font-size:0.82em;color:#fca5a5;'>"
-                    "<b>⚠ Accountability gap:</b> This asset is marked <b>Completed</b>, but "
+                    "<b>Accountability gap:</b> This asset is marked <b>Completed</b>, but "
                     "<b>no verified field evidence exists</b> yet. Completion claim needs field proof "
                     "or completion certificate."
                     "</div>",
@@ -997,7 +997,7 @@ def main() -> None:
                     "<div style='background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.3);"
                     "border-left:4px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-top:10px;"
                     "font-size:0.82em;color:#fde68a;'>"
-                    "<b>📋 Partial verification:</b> This asset is marked <b>Completed</b> with partial "
+                    "<b>Partial verification:</b> This asset is marked <b>Completed</b> with partial "
                     "news evidence. Field photo or completion certificate is needed for full verification."
                     "</div>",
                     unsafe_allow_html=True
@@ -1032,7 +1032,7 @@ def main() -> None:
                 key=f"proof_photo_{asset_id}",
                 accept_multiple_files=False,
             )
-            if st.button("📷 Link Photo to This Asset", key=f"proof_photo_submit_{asset_id}"):
+            if st.button("Link Photo to This Asset", key=f"proof_photo_submit_{asset_id}"):
                 if not _photo:
                     st.warning("Please select a photo first.")
                 else:
@@ -1170,7 +1170,7 @@ def main() -> None:
                 # Show success from previous submission
                 if st.session_state.get(f"ev_submitted_{asset_id}"):
                     st.success(
-                        "✅ Evidence received! It will be reviewed by a field officer and, "
+                        "Evidence received. It will be reviewed by a field officer and, "
                         "if verified, linked to this asset's proof chain within 48 hours."
                     )
                     st.session_state.pop(f"ev_submitted_{asset_id}")
@@ -1653,6 +1653,129 @@ def main() -> None:
                 _ward_display = ward_name or "Ward 45, Shahdara"
                 _sc3.metric("Ward", _ward_display[:20] + "…" if len(_ward_display) > 20 else _ward_display,
                             help=_ward_display)
+
+        # ══════════════════════════════════════════════════════════════════
+        with tab_graph:
+            try:
+                from streamlit_agraph import agraph, Node, Edge, Config
+
+                # ── Build nodes ───────────────────────────────────────────
+                _g_nodes, _g_edges = [], []
+
+                # Asset (centre node)
+                _g_nodes.append(Node(
+                    id="asset",
+                    label=asset_name[:28] + ("…" if len(asset_name) > 28 else ""),
+                    size=30,
+                    color="#22c55e",
+                    title=f"Asset · {asset_type} · {status}\nCost: {f'₹{cost_val:,.0f}' if cost_val else 'N/A'}",
+                    font={"color": "#ffffff", "size": 13},
+                    shape="dot",
+                ))
+
+                # Scheme node
+                if scheme:
+                    _sn = scheme.get("name", "Scheme")
+                    _g_nodes.append(Node(
+                        id="scheme",
+                        label=_sn[:24] + ("…" if len(_sn) > 24 else ""),
+                        size=24,
+                        color="#f97316",
+                        title=f"Scheme\n{scheme.get('name','')}\nMinistry: {scheme.get('ministry','')}",
+                        font={"color": "#ffffff", "size": 11},
+                        shape="dot",
+                    ))
+                    _g_edges.append(Edge(source="scheme", target="asset", label="FUNDS",
+                                        color="#f97316", width=2, font={"size": 9, "color": "#f97316"}))
+
+                # Actor node
+                if actor:
+                    _an = actor.get("name", "Agency")
+                    _g_nodes.append(Node(
+                        id="actor",
+                        label=_an[:24] + ("…" if len(_an) > 24 else ""),
+                        size=22,
+                        color="#38bdf8",
+                        title=f"Agency · {actor.get('type','')}\n{actor.get('name','')}",
+                        font={"color": "#ffffff", "size": 11},
+                        shape="dot",
+                    ))
+                    _g_edges.append(Edge(source="asset", target="actor", label="BUILT_BY",
+                                        color="#38bdf8", width=2, font={"size": 9, "color": "#38bdf8"}))
+
+                # Ward / Region node
+                _loc_node = ward or region
+                if _loc_node:
+                    _rn = _loc_node.get("name", "Location")
+                    _g_nodes.append(Node(
+                        id="region",
+                        label=_rn[:22] + ("…" if len(_rn) > 22 else ""),
+                        size=20,
+                        color="#a78bfa",
+                        title=f"Region · {_loc_node.get('type','')}\n{_loc_node.get('name','')}",
+                        font={"color": "#ffffff", "size": 11},
+                        shape="dot",
+                    ))
+                    _g_edges.append(Edge(source="asset", target="region", label="LOCATED_IN",
+                                        color="#a78bfa", width=2, font={"size": 9, "color": "#a78bfa"}))
+
+                # Evidence nodes (up to 4)
+                for _ei, _ev in enumerate(seed_evs[:4]):
+                    _ev_id  = f"evidence_{_ei}"
+                    _ev_lbl = (_ev.get("type", "Evidence") + f" #{_ei+1}").capitalize()
+                    _ev_url = _ev.get("url", "")
+                    _g_nodes.append(Node(
+                        id=_ev_id,
+                        label=_ev_lbl[:20],
+                        size=16,
+                        color="#facc15",
+                        title=f"Evidence · {_ev.get('type','')}\n{_ev_url[:60] if _ev_url else 'No URL'}",
+                        font={"color": "#1e293b", "size": 10},
+                        shape="dot",
+                    ))
+                    _g_edges.append(Edge(source=_ev_id, target="asset", label="PROVES",
+                                        color="#facc15", width=1.5, font={"size": 9, "color": "#facc15"}))
+
+                # ── Legend ─────────────────────────────────────────────────
+                st.markdown(
+                    "<div style='display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;"
+                    "font-size:0.72em;align-items:center;'>"
+                    "<span style='color:#f97316;font-weight:700;'>● Scheme</span>"
+                    "<span style='color:#22c55e;font-weight:700;'>● Asset</span>"
+                    "<span style='color:#38bdf8;font-weight:700;'>● Agency</span>"
+                    "<span style='color:#a78bfa;font-weight:700;'>● Region</span>"
+                    "<span style='color:#facc15;font-weight:700;'>● Evidence</span>"
+                    "<span style='color:#64748b;margin-left:8px;'>Drag nodes · Scroll to zoom · Click to inspect</span>"
+                    "</div>",
+                    unsafe_allow_html=True,
+                )
+
+                # ── agraph config ──────────────────────────────────────────
+                _cfg = Config(
+                    width="100%",
+                    height=440,
+                    directed=True,
+                    physics=True,
+                    hierarchical=False,
+                    nodeHighlightBehavior=True,
+                    highlightColor="#f97316",
+                    collapsible=False,
+                    node={"labelProperty": "label", "renderLabel": True},
+                    link={"labelProperty": "label", "renderLabel": True},
+                )
+
+                agraph(nodes=_g_nodes, edges=_g_edges, config=_cfg)
+
+                st.caption(
+                    f"Proof chain: {scheme.get('name','') if scheme else 'No scheme'} → "
+                    f"{asset_name} → {_loc_node.get('name','') if _loc_node else 'Unknown location'} | "
+                    f"{len(seed_evs)} evidence node{'s' if len(seed_evs) != 1 else ''} attached"
+                )
+
+            except ImportError:
+                st.warning("streamlit-agraph not installed. Run: `pip install streamlit-agraph`")
+            except Exception as _ge:
+                st.error(f"Graph render error: {_ge}")
 
         # ── Ask the Graph — outside tabs so it always renders ────────────
         st.divider()

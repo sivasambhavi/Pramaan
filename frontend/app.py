@@ -11,6 +11,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 from utils.icons import icon_box, icon
 from components.topnav import render_topnav
+from utils.api import safe_get
 
 LOGO_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "Pramaan_logo.png")
@@ -28,6 +29,13 @@ def home() -> None:
     *::-webkit-scrollbar-thumb { background: #f97316; border-radius: 3px; }
     </style>
     """, unsafe_allow_html=True)
+
+    # Fetch live stats from backend
+    _stats = safe_get("/stats", silent=True) or {}
+    _assets      = _stats.get("assets",      0)
+    _schemes     = _stats.get("schemes",     0)
+    _evidence    = _stats.get("evidence",    0)
+    _total_nodes = _stats.get("total_nodes", 0)
 
     # Encode logo as base64
     logo_b64 = ""
@@ -269,10 +277,10 @@ def home() -> None:
         }}, 16);
       }}
       setTimeout(function() {{
-        countUp(document.getElementById('s1'), 56,  1200);
-        countUp(document.getElementById('s2'), 4,   800);
-        countUp(document.getElementById('s3'), 14,  1000);
-        countUp(document.getElementById('s4'), 223, 1400);
+        countUp(document.getElementById('s1'), {_assets},      1200);
+        countUp(document.getElementById('s2'), {_schemes},     800);
+        countUp(document.getElementById('s3'), {_evidence},    1000);
+        countUp(document.getElementById('s4'), {_total_nodes}, 1400);
       }}, 400);
     </script>
     </body>

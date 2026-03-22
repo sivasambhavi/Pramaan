@@ -101,13 +101,13 @@ def safe_get(
     if resp is None:
         if not silent:
             st.warning(
-                f"⚠️ Could not reach backend at `{path}`. "
+                f"Could not reach backend at `{path}`. "
                 "Is the server running? Check `uvicorn backend.app.main:app`"
             )
         return None
     if not resp.ok:
         if not silent:
-            st.warning(f"⚠️ Backend returned {resp.status_code} for `{path}`")
+            st.warning(f"Backend returned {resp.status_code} for `{path}`")
         return None
     try:
         return resp.json()
@@ -134,13 +134,13 @@ def safe_post(
     if resp is None:
         if not silent:
             st.warning(
-                f"⚠️ POST to `{path}` failed after {_RETRIES} attempts. "
+                f"POST to `{path}` failed after {_RETRIES} attempts. "
                 "Backend may be down."
             )
         return None
     if not resp.ok:
         if not silent:
-            st.warning(f"⚠️ Backend returned {resp.status_code} for POST `{path}`")
+            st.warning(f"Backend returned {resp.status_code} for POST `{path}`")
         return None
     try:
         return resp.json()
@@ -154,7 +154,7 @@ def safe_delete(path: str, timeout: int = _TIMEOUT, silent: bool = False) -> dic
     resp = _retry_request("DELETE", path, timeout=timeout)
     if resp is None or not resp.ok:
         if not silent:
-            st.warning(f"⚠️ DELETE `{path}` failed.")
+            st.warning(f"DELETE `{path}` failed.")
         return None
     try:
         return resp.json()

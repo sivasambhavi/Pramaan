@@ -28,24 +28,41 @@ except ImportError:
     sys.exit(1)
 
 # ── AI service ────────────────────────────────────────────────────────────────
-# fetch_unstructured.py runs standalone (not inside FastAPI), so call Groq directly.
+# fetch_unstructured.py runs standalone (not inside FastAPI), so call LLMs directly.
+# Primary: Groq llama-3.1-8b-instant  |  Fallback: Gemini 1.5 Flash
 try:
     from groq import Groq
     from dotenv import load_dotenv
     import os
     load_dotenv(_PROJECT_ROOT / ".env")
-    _groq_key = os.getenv("GROQ_API_KEY", "")
-    if not _groq_key:
-        print("❌ GROQ_API_KEY not set in .env")
+    _groq_key   = os.getenv("GROQ_API_KEY", "")
+    _gemini_key = os.getenv("GOOGLE_API_KEY", "")
+
+    _client        = Groq(api_key=_groq_key) if _groq_key else None
+    _gemini_client = None
+    if _gemini_key:
+        import google.generativeai as genai
+        genai.configure(api_key=_gemini_key)
+        _gemini_client = genai.GenerativeModel("gemini-1.5-flash")
+
+    if not _client and not _gemini_client:
+        print("❌ Neither GROQ_API_KEY nor GOOGLE_API_KEY set in .env")
         sys.exit(1)
-    _client = Groq(api_key=_groq_key)
+
+    if _client:
+        print(f"  ✅ Primary  : Groq (llama-3.1-8b-instant)")
+    if _gemini_client:
+        print(f"  ✅ Fallback : Gemini 1.5 Flash")
+
 except ImportError as e:
     print(f"❌ Missing dependency: {e}")
     sys.exit(1)
 
 # ── Chunk size — Groq context limit is ~6k tokens safe for extraction ─────────
-CHUNK_CHARS = 3000
-DELAY_SECS  = 2   # avoid rate-limiting between chunks
+CHUNK_CHARS     = 3000
+DELAY_SECS      = 2    # avoid rate-limiting between chunks
+MAX_CHUNKS_FILE = 50   # cap per file — prevents one large PDF burning the daily quota
+                       # (500k TPD free tier ÷ ~1500 tokens/chunk ≈ 333 chunks/day total)
 
 
 print("=" * 60)
@@ -117,31 +134,72 @@ Rules:
 - Actor type must be one of: government|contractor|elected_rep
 - Prefix IDs with source: {source_label}_
 """
-    try:
-        resp = _client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.1,
-            max_tokens=4096,
-        )
-        raw = resp.choices[0].message.content.strip()
-        # Strip markdown code fences if present
+    def _parse(raw: str) -> dict:
         raw = re.sub(r"^```(?:json)?\s*", "", raw)
-        raw = re.sub(r"\s*```$", "", raw)
+        raw = re.sub(r"\s*```$", "", raw.strip())
         return json.loads(raw)
-    except json.JSONDecodeError as e:
-        print(f"    ⚠️  JSON parse error: {e}")
-        return {"entities": [], "relations": []}
-    except Exception as e:
-        print(f"    ⚠️  AI call error: {e}")
-        return {"entities": [], "relations": []}
+
+    # ── Try Groq first ────────────────────────────────────────────────────────
+    if _client:
+        try:
+            resp = _client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.1,
+                max_tokens=4096,
+            )
+            raw = resp.choices[0].message.content.strip()
+            return _parse(raw)
+        except json.JSONDecodeError as e:
+            print(f"    ⚠️  JSON parse error: {e}")
+            return {"entities": [], "relations": []}
+        except Exception as e:
+            err = str(e)
+            if ("rate_limit_exceeded" in err or "429" in err) and _gemini_client:
+                print(f"    ⚠️  Groq rate-limited — switching to Gemini")
+            elif "rate_limit_exceeded" in err or "429" in err:
+                print(f"    ⛔ Rate limit: {err[:120]}")
+                return {"entities": [], "relations": [], "rate_limited": True}
+            else:
+                print(f"    ⚠️  Groq error: {e}")
+                return {"entities": [], "relations": []}
+
+    # ── Fallback: Gemini ──────────────────────────────────────────────────────
+    if _gemini_client:
+        try:
+            import google.generativeai as genai
+            resp = _gemini_client.generate_content(
+                prompt,
+                generation_config=genai.GenerationConfig(
+                    temperature=0.1,
+                    response_mime_type="application/json",
+                ),
+            )
+            return _parse(resp.text)
+        except json.JSONDecodeError as e:
+            print(f"    ⚠️  Gemini JSON parse error: {e}")
+            return {"entities": [], "relations": []}
+        except Exception as e:
+            err = str(e)
+            if "quota" in err.lower() or "429" in err:
+                print(f"    ⛔ Gemini quota also hit: {err[:80]}")
+                return {"entities": [], "relations": [], "rate_limited": True}
+            print(f"    ⚠️  Gemini error: {e}")
+            return {"entities": [], "relations": []}
+
+    return {"entities": [], "relations": []}
 
 
 def extract_from_text(full_text: str, source_label: str) -> dict:
     """Split text into chunks, call AI on each, merge results."""
-    chunks = [full_text[i:i+CHUNK_CHARS] for i in range(0, len(full_text), CHUNK_CHARS)]
+    all_chunks = [full_text[i:i+CHUNK_CHARS] for i in range(0, len(full_text), CHUNK_CHARS)]
+    chunks = all_chunks[:MAX_CHUNKS_FILE]
+    if len(all_chunks) > MAX_CHUNKS_FILE:
+        print(f"    ⚠️  {len(all_chunks)} chunks total — capping at {MAX_CHUNKS_FILE} to stay within daily quota")
+
     all_entities, all_relations = [], []
     seen_ids = set()
+    rate_limited = False
 
     print(f"    Splitting into {len(chunks)} chunk(s) of ~{CHUNK_CHARS} chars")
 
@@ -150,6 +208,12 @@ def extract_from_text(full_text: str, source_label: str) -> dict:
             continue
         print(f"    Chunk {i}/{len(chunks)} ...", end=" ", flush=True)
         result = _call_ai(chunk, source_label)
+
+        # Detect rate limit — stop processing remaining chunks for this file
+        if result.get("rate_limited"):
+            print(f"    ⛔ Rate limit hit at chunk {i} — stopping this file")
+            rate_limited = True
+            break
 
         for ent in result.get("entities", []):
             eid = ent.get("id", "")
@@ -163,7 +227,8 @@ def extract_from_text(full_text: str, source_label: str) -> dict:
         if i < len(chunks):
             time.sleep(DELAY_SECS)
 
-    return {"entities": all_entities, "relations": all_relations}
+    return {"entities": all_entities, "relations": all_relations,
+            "rate_limited": rate_limited, "chunks_processed": i}
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -189,16 +254,19 @@ def main():
     for path in sorted(files):
         out_path = EXTRACTED_DIR / (path.stem + ".json")
 
-        # Skip if already extracted (re-run safe)
+        # Skip if already extracted successfully — retry if previously rate-limited with 0 entities
         if out_path.exists():
             existing = json.loads(out_path.read_text())
             n_ent = len(existing.get("entities", []))
             n_rel = len(existing.get("relations", []))
-            print(f"  ⏭  {path.name} — already extracted ({n_ent} entities, {n_rel} relations) — skipping")
-            total_entities += n_ent
-            total_relations += n_rel
-            skipped += 1
-            continue
+            was_rate_limited = existing.get("rate_limited", False)
+            if n_ent > 0 or not was_rate_limited:
+                print(f"  ⏭  {path.name} — already extracted ({n_ent} entities, {n_rel} relations) — skipping")
+                total_entities += n_ent
+                total_relations += n_rel
+                skipped += 1
+                continue
+            print(f"  🔄 {path.name} — retrying (was rate-limited, 0 entities saved)")
 
         print(f"\n  📄 {path.name}")
         try:
@@ -217,8 +285,8 @@ def main():
         result = extract_from_text(text, source_label)
 
         # Stamp metadata
-        result["source_file"]  = path.name
-        result["source_type"]  = "unstructured_llm"
+        result["source_file"]   = path.name
+        result["source_type"]   = "unstructured_llm"
         result["source_subdir"] = path.parent.name
 
         out_path.write_text(json.dumps(result, indent=2, ensure_ascii=False))
@@ -228,6 +296,11 @@ def main():
         total_relations += n_rel
         processed += 1
         print(f"    ✅ Saved → {out_path.name}  ({n_ent} entities, {n_rel} relations)")
+
+        # Stop the whole run if rate limited — remaining files will auto-retry next run
+        if result.get("rate_limited"):
+            print(f"\n  ⛔ Daily token quota hit — stopping. Re-run tomorrow to continue.")
+            break
 
     print(f"""
 {'=' * 60}

@@ -136,7 +136,7 @@ def main():
 
     _pin = icon("map-pin", "#64748b", 13)
     if not st.session_state.get("selected_ward"):
-        st.markdown("<p style='color:#64748b;font-size:0.82em;'>📍 No ward selected — <a href='/Ward_Map' target='_self' style='color:#FF6B35;'>go to Ward Map</a> to select a location.</p>", unsafe_allow_html=True)
+        st.markdown("<p style='color:#64748b;font-size:0.82em;'>No ward selected — <a href='/Ward_Map' target='_self' style='color:#FF6B35;'>go to Ward Map</a> to select a location.</p>", unsafe_allow_html=True)
     else:
         st.markdown(f"<p style='color:#64748b;font-size:0.85em;margin-bottom:1rem;'>{_pin} {get_breadcrumb()}</p>", unsafe_allow_html=True)
 
@@ -159,13 +159,13 @@ def main():
                            if a.get("proof_status") in ("fully_verified", "verified")]
 
         if not verified_assets:
-            st.warning("⚠️ No fully verified assets found in this ward yet. "
+            st.warning("No fully verified assets found in this ward yet. "
                        "Complete verification steps in the Proof Chain to enable notifications.")
             # ── Locked preview — all steps visible but greyed out ─────────
             st.markdown("<div class='step-header' style='opacity:0.4;'>Step 2 — Configure Broadcast Message "
                         "<span style='font-size:0.75em;color:#475569;font-weight:500;'>"
                         "(locked — verify an asset first)</span></div>", unsafe_allow_html=True)
-            st.text_area("msg_locked", "🔒 Unlock by completing asset verification in the Proof Chain tab.",
+            st.text_area("msg_locked", "Unlock by completing asset verification in the Proof Chain tab.",
                          height=100, disabled=True, label_visibility="collapsed")
             st.markdown("<hr/>", unsafe_allow_html=True)
             st.markdown("<div class='step-header' style='opacity:0.4;'>Step 3 — Citizen Notification Preview "
@@ -173,12 +173,12 @@ def main():
                         "(sample)</span></div>", unsafe_allow_html=True)
             st.caption(f"47 opted-in residents in **{ward_name}** will receive this alert via WhatsApp once an asset is verified.")
             mock_citizens_preview = [
-                {"Name": "Aarav Sharma",  "Phone": "+91-XXXXX-X789", "Locality": "Shahdara Gali No. 7",  "Opted In": "✅ Active"},
-                {"Name": "Priya Gupta",   "Phone": "+91-XXXXX-X123", "Locality": "Shahdara Block A",      "Opted In": "✅ Active"},
-                {"Name": "Rohan Verma",   "Phone": "+91-XXXXX-X456", "Locality": "Krishna Nagar Gali 3",  "Opted In": "✅ Active"},
-                {"Name": "Ananya Singh",  "Phone": "+91-XXXXX-X890", "Locality": "Shahdara Gali No. 12",  "Opted In": "✅ Active"},
-                {"Name": "Kabir Das",     "Phone": "+91-XXXXX-X321", "Locality": "Gandhi Nagar Block B",  "Opted In": "✅ Active"},
-                {"Name": "Ishani Jha",    "Phone": "+91-XXXXX-X654", "Locality": "Shahdara Main Road",    "Opted In": "✅ Active"},
+                {"Name": "Aarav Sharma",  "Phone": "+91-XXXXX-X789", "Locality": "Shahdara Gali No. 7",  "Opted In": "Active"},
+                {"Name": "Priya Gupta",   "Phone": "+91-XXXXX-X123", "Locality": "Shahdara Block A",      "Opted In": "Active"},
+                {"Name": "Rohan Verma",   "Phone": "+91-XXXXX-X456", "Locality": "Krishna Nagar Gali 3",  "Opted In": "Active"},
+                {"Name": "Ananya Singh",  "Phone": "+91-XXXXX-X890", "Locality": "Shahdara Gali No. 12",  "Opted In": "Active"},
+                {"Name": "Kabir Das",     "Phone": "+91-XXXXX-X321", "Locality": "Gandhi Nagar Block B",  "Opted In": "Active"},
+                {"Name": "Ishani Jha",    "Phone": "+91-XXXXX-X654", "Locality": "Shahdara Main Road",    "Opted In": "Active"},
             ]
             st.table(mock_citizens_preview)
             st.caption("_Total: 47 opted-in citizens. Shown: 6 sample rows. Actual list stored in PRAMAAN citizen registry._")
@@ -188,23 +188,23 @@ def main():
         st.error(f"Backend error: {e}")
         return
 
-    asset_options = {f"✅ {a['name']}  ({a.get('type','?')})": a["asset_id"] for a in verified_assets}
-    selected_label = st.selectbox("📌 Select Asset to Announce", list(asset_options.keys()))
+    asset_options = {f"{a['name']}  ({a.get('type','?')})": a["asset_id"] for a in verified_assets}
+    selected_label = st.selectbox("Select Asset to Announce", list(asset_options.keys()))
     asset_id = asset_options[selected_label]
-    asset_display = selected_label.replace("✅ ", "").split("(")[0].strip()
+    asset_display = selected_label.split("(")[0].strip()
 
     st.info(f"**Why only verified assets?** Per PRD FR-7.3, PRAMAAN only triggers citizen "
-            f"notifications for assets with ✅ Full Proof — news + completion data confirmed. "
+            f"notifications for assets with Full Proof — news + completion data confirmed. "
             f"This prevents false alerts and maintains public trust.")
 
     # ── Step 2: Configure Message ─────────────────────────────────────────────
     st.markdown("<div class='step-header'>Step 2 — Configure Broadcast Message</div>", unsafe_allow_html=True)
 
     default_msg = (
-        f"🏗 Pramaan Alert from MCD:\n\n"
+        f"Pramaan Alert from MCD:\n\n"
         f"Your local **{asset_display}** in {ward_name} has been "
-        f"**officially verified as completed** ✅\n\n"
-        f"📸 View proof chain: https://pramaan.gov.in/chain/{asset_id}\n\n"
+        f"**officially verified as completed**\n\n"
+        f"View proof chain: https://pramaan.gov.in/chain/{asset_id}\n\n"
         f"_Sent by MCD {ward_name} — Powered by PRAMAAN Governance Engine_"
     )
     col_msg, col_preview = st.columns([3, 2])
@@ -222,13 +222,13 @@ def main():
                 <div style="font-weight:700;color:#25d366;margin-bottom:4px;font-size:0.85em;">
                     MCD PRAMAAN Alert
                 </div>
-                🏗 Your local <b>{asset_display}</b> in {ward_name} has been
-                <b style="color:#25d366;">officially verified as completed ✅</b><br/><br/>
-                📸 <span style="color:#38bdf8;">pramaan.gov.in/chain/{asset_id}</span><br/><br/>
+                Your local <b>{asset_display}</b> in {ward_name} has been
+                <b style="color:#25d366;">officially verified as completed</b><br/><br/>
+                <span style="color:#38bdf8;">pramaan.gov.in/chain/{asset_id}</span><br/><br/>
                 <span style="color:#64748b;font-size:0.85em;">Powered by PRAMAAN</span>
             </div>
             <div style="text-align:right;font-size:0.65em;color:#475569;margin-top:6px;">
-                ✓✓ Delivered · {ward_name}
+                Delivered · {ward_name}
             </div>
         </div>
         <div style="font-size:0.65em;color:#334155;margin-top:6px;text-align:center;">
@@ -247,11 +247,11 @@ def main():
                 api_ok = False
 
             # Always show demo success
-            st.success("✅ Hyper-Local Notification Triggered Successfully!")
+            st.success("Hyper-Local Notification Triggered!")
             c1, c2, c3 = st.columns(3)
-            c1.metric("📲 Recipients Found",    47)
-            c2.metric("✅ WhatsApp Dispatched", 47)
-            c3.metric("🆔 Blast ID",           "BLAST_2026_03_45_001")
+            c1.metric("Recipients Found",    47)
+            c2.metric("WhatsApp Dispatched", 47)
+            c3.metric("Blast ID",           "BLAST_2026_03_45_001")
 
             if not api_ok:
                 st.caption("_Demo Mode: Twilio sandbox active. In production, "
@@ -263,12 +263,12 @@ def main():
     st.caption(f"47 opted-in residents in **{ward_name}** will receive this alert via WhatsApp.")
 
     mock_citizens = [
-        {"Name": "Aarav Sharma",   "Phone": "+91-XXXXX-X789", "Locality": "Shahdara Gali No. 7",    "Opted In": "✅ Active"},
-        {"Name": "Priya Gupta",    "Phone": "+91-XXXXX-X123", "Locality": "Shahdara Block A",       "Opted In": "✅ Active"},
-        {"Name": "Rohan Verma",    "Phone": "+91-XXXXX-X456", "Locality": "Krishna Nagar Gali 3",   "Opted In": "✅ Active"},
-        {"Name": "Ananya Singh",   "Phone": "+91-XXXXX-X890", "Locality": "Shahdara Gali No. 12",   "Opted In": "✅ Active"},
-        {"Name": "Kabir Das",      "Phone": "+91-XXXXX-X321", "Locality": "Gandhi Nagar Block B",   "Opted In": "✅ Active"},
-        {"Name": "Ishani Jha",     "Phone": "+91-XXXXX-X654", "Locality": "Shahdara Main Road",     "Opted In": "✅ Active"},
+        {"Name": "Aarav Sharma",   "Phone": "+91-XXXXX-X789", "Locality": "Shahdara Gali No. 7",    "Opted In": "Active"},
+        {"Name": "Priya Gupta",    "Phone": "+91-XXXXX-X123", "Locality": "Shahdara Block A",       "Opted In": "Active"},
+        {"Name": "Rohan Verma",    "Phone": "+91-XXXXX-X456", "Locality": "Krishna Nagar Gali 3",   "Opted In": "Active"},
+        {"Name": "Ananya Singh",   "Phone": "+91-XXXXX-X890", "Locality": "Shahdara Gali No. 12",   "Opted In": "Active"},
+        {"Name": "Kabir Das",      "Phone": "+91-XXXXX-X321", "Locality": "Gandhi Nagar Block B",   "Opted In": "Active"},
+        {"Name": "Ishani Jha",     "Phone": "+91-XXXXX-X654", "Locality": "Shahdara Main Road",     "Opted In": "Active"},
     ]
     st.table(mock_citizens)
     st.caption("_Total: 47 opted-in citizens. Shown: 6 sample rows. Actual list stored in PRAMAAN citizen registry._")
