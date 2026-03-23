@@ -2,3 +2,10 @@
 port = 8503
 address = "127.0.0.1"
 headless = true
+
+[theme]
+base = "dark"
+backgroundColor = "#020b14"
+secondaryBackgroundColor = "#0a1628"
+primaryColor = "#f97316"
+textColor = "#e2e8f0"

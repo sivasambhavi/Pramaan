@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": "2.0",
-    "description": "PRAMAAN Global Ontology Engine — 6-event India Intelligence Graph",
-    "sources": "PIB, NDMA, ISRO, IMD, Parliament Q&A, Wikipedia (all publicly verifiable)"
+    "version": "2.1",
+    "description": "PRAMAAN Global Ontology Engine — 15-event India Intelligence Graph",
+    "sources": "PIB, NDMA, ISRO, IMD, MEA, MoHFW, Parliament Q&A, Wikipedia (all publicly verifiable)"
   },
 
   "domains": [
@@ -28,7 +28,14 @@
     {"region_id": "REG_MANIPUR",      "name": "Manipur",              "type": "state",    "lat": 24.6637,  "lon": 93.9063},
     {"region_id": "REG_GUJARAT",      "name": "Gujarat",              "type": "state",    "lat": 22.2587,  "lon": 71.1924},
     {"region_id": "REG_DHOLERA",      "name": "Dholera",              "type": "city",     "lat": 22.2440,  "lon": 72.1808},
-    {"region_id": "REG_ANDHRA",       "name": "Andhra Pradesh",       "type": "state",    "lat": 15.9129,  "lon": 79.7400}
+    {"region_id": "REG_ANDHRA",       "name": "Andhra Pradesh",       "type": "state",    "lat": 15.9129,  "lon": 79.7400},
+    {"region_id": "REG_SRIHARIKOTA",  "name": "Sriharikota",          "type": "city",     "lat": 13.7199,  "lon": 80.2304},
+    {"region_id": "REG_BENGALURU",    "name": "Bengaluru",             "type": "city",     "lat": 12.9716,  "lon": 77.5946},
+    {"region_id": "REG_JK",           "name": "Jammu & Kashmir",       "type": "ut",       "lat": 33.7782,  "lon": 76.5762},
+    {"region_id": "REG_PAKISTAN",     "name": "Pakistan",              "type": "country",  "lat": 30.3753,  "lon": 69.3451},
+    {"region_id": "REG_MUMBAI",       "name": "Mumbai",                "type": "city",     "lat": 19.0760,  "lon": 72.8777},
+    {"region_id": "REG_CANADA",       "name": "Canada",                "type": "country",  "lat": 56.1304,  "lon": -106.3468},
+    {"region_id": "REG_SAUDI",        "name": "Saudi Arabia",          "type": "country",  "lat": 23.8859,  "lon": 45.0792}
   ],
 
   "actors": [
@@ -53,7 +60,15 @@
     {"actor_id": "ACT_POWERCHIP",     "name": "Powerchip Semiconductor Manufacturing Corp",  "type": "company"},
     {"actor_id": "ACT_PARLIAMENT",    "name": "Parliament of India",                          "type": "government"},
     {"actor_id": "ACT_CRPF",          "name": "Central Reserve Police Force",                 "type": "military"},
-    {"actor_id": "ACT_ASSAM_RIFLES",  "name": "Assam Rifles",                                "type": "military"}
+    {"actor_id": "ACT_ASSAM_RIFLES",  "name": "Assam Rifles",                                "type": "military"},
+    {"actor_id": "ACT_DOS",           "name": "Department of Space",                         "type": "government"},
+    {"actor_id": "ACT_MEA",           "name": "Ministry of External Affairs",                "type": "ministry"},
+    {"actor_id": "ACT_MoHFW",         "name": "Ministry of Health and Family Welfare",       "type": "ministry"},
+    {"actor_id": "ACT_ICMR",          "name": "Indian Council of Medical Research",          "type": "government"},
+    {"actor_id": "ACT_PMO",           "name": "Prime Minister's Office",                     "type": "government"},
+    {"actor_id": "ACT_NHPC",          "name": "NHPC Limited",                                "type": "company"},
+    {"actor_id": "ACT_US_GOVT",       "name": "US Government",                               "type": "foreign_govt"},
+    {"actor_id": "ACT_G20_SHERPA",    "name": "India G20 Sherpa Office",                     "type": "government"}
   ],
 
   "schemes": [
@@ -61,7 +76,10 @@
     {"scheme_id": "SCH_SDRF",         "name": "State Disaster Response Fund",                 "ministry": "MHA",    "budget_crore": 43900.0, "source_url": "https://ndma.gov.in"},
     {"scheme_id": "SCH_ISM",          "name": "India Semiconductor Mission",                  "ministry": "MeitY",  "budget_crore": 76000.0, "source_url": "https://pib.gov.in"},
     {"scheme_id": "SCH_PMRF",         "name": "PM Relief Fund",                               "ministry": "PMO",    "budget_crore": null,    "source_url": "https://pmindia.gov.in"},
-    {"scheme_id": "SCH_AMRUT",        "name": "AMRUT 2.0",                                    "ministry": "MoHUA",  "budget_crore": 66750.0, "source_url": "https://amrut.gov.in"}
+    {"scheme_id": "SCH_AMRUT",        "name": "AMRUT 2.0",                                    "ministry": "MoHUA",  "budget_crore": 66750.0, "source_url": "https://amrut.gov.in"},
+    {"scheme_id": "SCH_PM_CARES",     "name": "PM CARES Fund",                                "ministry": "PMO",    "budget_crore": 10000.0, "source_url": "https://pmcares.gov.in"},
+    {"scheme_id": "SCH_COWIN",        "name": "CoWIN Vaccination Platform",                   "ministry": "MoHFW",  "budget_crore": null,    "source_url": "https://www.cowin.gov.in"},
+    {"scheme_id": "SCH_ISRO_BUDGET",  "name": "ISRO Annual Budget 2023-24",                   "ministry": "DOS",    "budget_crore": 12544.0, "source_url": "https://isro.gov.in"}
   ],
 
   "policies": [
@@ -70,7 +88,12 @@
     {"policy_id": "POL_AFSPA",        "name": "Armed Forces Special Powers Act",   "date": "1958-09-11", "description": "Gives armed forces special powers in disturbed areas", "source_url": "https://mha.gov.in"},
     {"policy_id": "POL_EWS_REFORM",   "name": "Early Warning System Reform 2024",  "date": "2024-08-15", "description": "NDMA directive to strengthen landslide EWS post-Wayanad", "source_url": "https://ndma.gov.in"},
     {"policy_id": "POL_YAMUNA_FLOOD", "name": "Yamuna Flood Plain Management",     "date": "2023-09-01", "description": "Post-flood encroachment removal & floodplain protection policy", "source_url": "https://dda.gov.in"},
-    {"policy_id": "POL_JOSHI_COMM",   "name": "Joshimath Expert Committee Report", "date": "2023-02-08", "description": "Govt committee findings on Joshimath subsidence causes & remediation", "source_url": "https://dst.gov.in"}
+    {"policy_id": "POL_JOSHI_COMM",      "name": "Joshimath Expert Committee Report",         "date": "2023-02-08", "description": "Govt committee findings on Joshimath subsidence causes & remediation", "source_url": "https://dst.gov.in"},
+    {"policy_id": "POL_ART370",          "name": "Article 370 Abrogation Order",               "date": "2019-08-05", "description": "Parliament abrogated Article 370, revoking J&K special status; bifurcated into two Union Territories: J&K and Ladakh", "source_url": "https://mha.gov.in"},
+    {"policy_id": "POL_G20_DECL",        "name": "New Delhi G20 Leaders Declaration",          "date": "2023-09-10", "description": "Historic consensus G20 declaration on Ukraine, global debt, AI governance, and climate; African Union admitted as permanent member", "source_url": "https://g20.in"},
+    {"policy_id": "POL_IMEC_MOU",        "name": "India-Middle East-Europe Corridor MoU",      "date": "2023-09-09", "description": "Eight-nation MoU for rail-and-shipping corridor connecting India to Europe via Gulf, signed at G20 sidelines", "source_url": "https://pib.gov.in"},
+    {"policy_id": "POL_COVID_PROTOCOL",  "name": "National COVID Containment Protocol 2021",   "date": "2021-04-01", "description": "MoHFW containment protocol for second wave: state-level lockdowns, oxygen allocation, hospital surge plan, accelerated vaccination", "source_url": "https://mohfw.gov.in"},
+    {"policy_id": "POL_CHAMOLI_INQUIRY", "name": "Chamoli Glacier Disaster Inquiry 2021",      "date": "2021-02-25", "description": "NHPC and Ministry of Power inquiry into Chamoli glacier burst damage to Rishiganga and Tapovan-Vishnugad tunnel projects", "source_url": "https://dst.gov.in"}
   ],
 
   "events": [
@@ -126,12 +149,102 @@
     },
     {
       "event_id":    "EVT_TATA_SEMI_2024",
-      "name":        "Tata Semiconductor Fab Approval",
+      "name":        "Tata Semiconductor Fab",
       "date":        "2024-02-29",
       "domain":      "DOM_TECHNOLOGY",
       "description": "Cabinet approved India's first advanced semiconductor fab. Tata Electronics + Powerchip: ₹91,000 crore plant at Dholera, Gujarat. CG Power + Renesas: ₹7,600 crore at Sanand, Gujarat. Under India Semiconductor Mission.",
       "severity":    "high",
       "source_url":  "https://pib.gov.in/PressReleasePage.aspx?PRID=2002028",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_CHANDRAYAAN3_2023",
+      "name":        "Chandrayaan-3 Moon Landing",
+      "date":        "2023-08-23",
+      "domain":      "DOM_TECHNOLOGY",
+      "description": "India's Chandrayaan-3 Vikram lander soft-landed on the lunar south pole, making India the first nation to land near the lunar south pole and the fourth globally to achieve a soft Moon landing. Pragyan rover operated for 14 days before entering sleep mode.",
+      "severity":    "high",
+      "source_url":  "https://www.isro.gov.in/Chandrayaan3.html",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_ADITYAL1_2023",
+      "name":        "Aditya-L1 Solar Mission",
+      "date":        "2023-09-02",
+      "domain":      "DOM_TECHNOLOGY",
+      "description": "ISRO launched India's first solar observatory Aditya-L1 from Sriharikota. Spacecraft inserted into L1 Lagrange-point halo orbit on 6 Jan 2024. Carries 7 payloads including VELC coronagraph for continuous solar observation.",
+      "severity":    "high",
+      "source_url":  "https://www.isro.gov.in/Aditya_L1.html",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_G20_INDIA_2023",
+      "name":        "G20 New Delhi Summit",
+      "date":        "2023-09-09",
+      "domain":      "DOM_GEOPOLITICS",
+      "description": "India hosted the G20 Leaders' Summit under its Presidency theme 'Vasudhaiva Kutumbakam'. Historic consensus New Delhi Declaration on Ukraine, global debt restructuring, AI governance and sustainable development. African Union admitted as permanent G20 member.",
+      "severity":    "high",
+      "source_url":  "https://g20.in/en/g20-summit/the-delhi-declaration.html",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_INDIA_CANADA_2023",
+      "name":        "India-Canada Diplomatic Row",
+      "date":        "2023-09-18",
+      "domain":      "DOM_GEOPOLITICS",
+      "description": "Canadian PM Trudeau alleged Indian government involvement in killing of Khalistani separatist Hardeep Singh Nijjar in British Columbia. India expelled Canadian diplomat, suspended visa services, and rejected allegations. Bilateral relations severely strained through 2024.",
+      "severity":    "high",
+      "source_url":  "https://mea.gov.in",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_IMEC_2023",
+      "name":        "IMEC Corridor Signing",
+      "date":        "2023-09-09",
+      "domain":      "DOM_ECONOMICS",
+      "description": "India, USA, UAE, Saudi Arabia, EU, France, Germany and Italy signed MoU for India-Middle East-Europe Economic Corridor (IMEC) at G20 sidelines. Rail-and-shipping route connecting India to Europe via Gulf, positioning India as a key global trade hub.",
+      "severity":    "high",
+      "source_url":  "https://pib.gov.in",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_CHAMOLI_2021",
+      "name":        "Chamoli Glacier Burst",
+      "date":        "2021-02-07",
+      "domain":      "DOM_CLIMATE",
+      "description": "A rock-ice avalanche from Nanda Devi massif, Chamoli, Uttarakhand triggered catastrophic flash floods in Rishiganga and Dhauliganga rivers. 204 persons dead or missing. Severely damaged NTPC Tapovan-Vishnugad and NHPC Rishiganga hydropower project tunnels.",
+      "severity":    "critical",
+      "source_url":  "https://ndma.gov.in",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_BALAKOT_2019",
+      "name":        "Balakot Airstrikes",
+      "date":        "2019-02-26",
+      "domain":      "DOM_DEFENSE",
+      "description": "IAF Mirage-2000 jets struck Jaish-e-Mohammed camp in Balakot, KPK, Pakistan — India's first cross-border air strike since 1971. Conducted 12 days after Pulwama suicide attack killing 40 CRPF personnel. Pakistan retaliated; Wing Commander Abhinandan Varthaman was captured and released.",
+      "severity":    "critical",
+      "source_url":  "https://pib.gov.in",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_COVID_WAVE2_2021",
+      "name":        "COVID Second Wave",
+      "date":        "2021-04-01",
+      "domain":      "DOM_SOCIETY",
+      "description": "India's devastating COVID-19 second wave driven by Delta variant peaked May 6 with 414,000 daily cases and 3,500+ daily deaths. Acute oxygen and hospital shortage. PM CARES fund deployed. Mass vaccination (18+) launched May 1, 2021. Total wave deaths estimated 1.6–3.2 million.",
+      "severity":    "critical",
+      "source_url":  "https://mohfw.gov.in",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_ART370_2019",
+      "name":        "Article 370 Abrogation",
+      "date":        "2019-08-05",
+      "domain":      "DOM_GOVERNANCE",
+      "description": "Parliament passed resolutions abrogating Article 370 and 35A, revoking Jammu & Kashmir's special autonomous status. J&K bifurcated into two Union Territories — J&K (with legislature) and Ladakh (without). Internet blackout imposed for months. Supreme Court upheld validity in Dec 2023.",
+      "severity":    "high",
+      "source_url":  "https://mha.gov.in",
       "confidence":  1.0
     }
   ],
@@ -151,7 +264,20 @@
     {"impact_id": "IMP_MANIPUR_INTERNET",  "type": "internet_shutdown_days", "value": 143, "unit": "days",   "description": "Internet shutdown duration — Manipur 2023"},
     {"impact_id": "IMP_TATA_INVESTMENT",   "type": "investment_crore", "value": 91000,  "unit": "crore_inr",  "description": "Tata Electronics + Powerchip fab investment at Dholera"},
     {"impact_id": "IMP_TATA_JOBS",         "type": "jobs_created",     "value": 20000,  "unit": "persons",    "description": "Direct jobs from Tata semiconductor fab"},
-    {"impact_id": "IMP_ISM_BUDGET",        "type": "investment_crore", "value": 76000,  "unit": "crore_inr",  "description": "India Semiconductor Mission total incentive budget"}
+    {"impact_id": "IMP_ISM_BUDGET",           "type": "investment_crore",  "value": 76000,   "unit": "crore_inr",  "description": "India Semiconductor Mission total incentive budget"},
+    {"impact_id": "IMP_CH3_LANDING_SITE",     "type": "geographic_first",  "value": 1,       "unit": "global_first","description": "First nation to land near lunar south pole — Chandrayaan-3"},
+    {"impact_id": "IMP_CH3_ROVER_DAYS",       "type": "mission_duration",  "value": 14,      "unit": "days",       "description": "Pragyan rover operational days on Moon — Chandrayaan-3"},
+    {"impact_id": "IMP_ADITYAL1_ORBIT",       "type": "mission_milestone", "value": 1,       "unit": "boolean",    "description": "India's first spacecraft in L1 Lagrange-point orbit — Aditya-L1"},
+    {"impact_id": "IMP_G20_NATIONS",          "type": "nations_represented","value": 43,     "unit": "count",      "description": "Nations and organisations represented at G20 New Delhi Summit 2023"},
+    {"impact_id": "IMP_G20_AU_ADMIT",         "type": "diplomatic_outcome", "value": 1,      "unit": "boolean",    "description": "African Union admitted as permanent G20 member — New Delhi Summit 2023"},
+    {"impact_id": "IMP_CANADA_DIPLOMATS",     "type": "diplomats_expelled", "value": 41,     "unit": "persons",    "description": "Canadian diplomats asked to leave India in India-Canada row 2023"},
+    {"impact_id": "IMP_IMEC_LENGTH_KM",       "type": "infrastructure_km",  "value": 4800,   "unit": "km",         "description": "Estimated rail corridor length of IMEC from India to Europe"},
+    {"impact_id": "IMP_CHAMOLI_DEATHS",       "type": "deaths",             "value": 204,    "unit": "persons",    "description": "Dead or missing in Chamoli glacier burst Feb 2021"},
+    {"impact_id": "IMP_CHAMOLI_POWER_MW",     "type": "power_loss_mw",      "value": 520,    "unit": "MW",         "description": "MW of hydropower capacity damaged in Chamoli disaster"},
+    {"impact_id": "IMP_BALAKOT_CRPF",        "type": "deaths",             "value": 40,     "unit": "persons",    "description": "CRPF personnel killed in Pulwama attack preceding Balakot strikes"},
+    {"impact_id": "IMP_COVID2_PEAK_CASES",    "type": "daily_cases",        "value": 414000, "unit": "persons",    "description": "Peak daily COVID-19 cases in India second wave — May 6 2021"},
+    {"impact_id": "IMP_COVID2_VACCINATED",    "type": "vaccinated",         "value": 500000000, "unit": "persons", "description": "Cumulative vaccine doses administered in India by end of 2021"},
+    {"impact_id": "IMP_ART370_INTERNET",      "type": "internet_shutdown_days", "value": 213, "unit": "days",     "description": "Internet blackout duration in Kashmir post-Article 370 abrogation"}
   ],
 
   "evidence": [
@@ -163,7 +289,18 @@
     {"evidence_id": "EVD_JOSHI_REPORT",    "type": "report",    "title": "Expert Committee Report on Joshimath Subsidence",        "date": "2023-02-08", "source": "Govt",      "url": "https://dst.gov.in"},
     {"evidence_id": "EVD_DELHI_IMD",       "type": "data",      "title": "IMD — Yamuna 208.65m record level Jul 13 2023",          "date": "2023-07-13", "source": "IMD",       "url": "https://imd.gov.in"},
     {"evidence_id": "EVD_TATA_PIB",        "type": "statement", "title": "Cabinet approves Tata, CG Power semiconductor fabs",     "date": "2024-02-29", "source": "PIB",       "url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2002028"},
-    {"evidence_id": "EVD_MANIPUR_MHA",     "type": "report",    "title": "MHA deployment order — Manipur ethnic violence 2023",    "date": "2023-05-04", "source": "MHA",       "url": "https://mha.gov.in"}
+    {"evidence_id": "EVD_MANIPUR_MHA",     "type": "report",    "title": "MHA deployment order — Manipur ethnic violence 2023",       "date": "2023-05-04", "source": "MHA",   "url": "https://mha.gov.in"},
+    {"evidence_id": "EVD_CH3_ISRO",        "type": "data",      "title": "ISRO Chandrayaan-3 mission status — successful soft landing",  "date": "2023-08-23", "source": "ISRO",  "url": "https://www.isro.gov.in/Chandrayaan3.html"},
+    {"evidence_id": "EVD_CH3_PIB",         "type": "statement", "title": "PM Modi congratulates ISRO on Chandrayaan-3 success",         "date": "2023-08-23", "source": "PIB",   "url": "https://pib.gov.in"},
+    {"evidence_id": "EVD_AL1_ISRO",        "type": "data",      "title": "Aditya-L1 successfully inserted into L1 halo orbit",           "date": "2024-01-06", "source": "ISRO",  "url": "https://www.isro.gov.in/Aditya_L1.html"},
+    {"evidence_id": "EVD_G20_DECL",        "type": "statement", "title": "G20 New Delhi Leaders' Declaration — consensus text",         "date": "2023-09-10", "source": "G20",   "url": "https://g20.in/en/g20-summit/the-delhi-declaration.html"},
+    {"evidence_id": "EVD_G20_PIB",         "type": "news",      "title": "PM Modi chairs G20 Summit; AU admitted as permanent member",   "date": "2023-09-09", "source": "PIB",   "url": "https://pib.gov.in"},
+    {"evidence_id": "EVD_CANADA_MEA",      "type": "statement", "title": "MEA rejects Canadian allegations on Nijjar killing",          "date": "2023-09-19", "source": "MEA",   "url": "https://mea.gov.in"},
+    {"evidence_id": "EVD_IMEC_MOU",        "type": "statement", "title": "IMEC MoU signed — India-Middle East-Europe Corridor",        "date": "2023-09-09", "source": "PIB",   "url": "https://pib.gov.in"},
+    {"evidence_id": "EVD_CHAMOLI_NDMA",    "type": "report",    "title": "NDMA Situation Report — Chamoli glacier burst Feb 2021",      "date": "2021-02-08", "source": "NDMA",  "url": "https://ndma.gov.in"},
+    {"evidence_id": "EVD_BALAKOT_PIB",     "type": "statement", "title": "IAF pre-dawn strikes on JeM camp in Balakot",                "date": "2019-02-26", "source": "PIB",   "url": "https://pib.gov.in"},
+    {"evidence_id": "EVD_COVID2_MOHFW",    "type": "data",      "title": "MoHFW COVID-19 India situation report — second wave peak",   "date": "2021-05-06", "source": "MoHFW", "url": "https://mohfw.gov.in"},
+    {"evidence_id": "EVD_ART370_PARL",     "type": "statement", "title": "Parliament passes J&K Reorganisation Bill 2019",             "date": "2019-08-05", "source": "Sansad","url": "https://sansad.in"}
   ],
 
   "edges": [
@@ -278,6 +415,125 @@
     {"from": "EVT_JOSHIMATH_2023",    "to": "EVT_DELHI_FLOODS_2023", "type": "CONNECTED_TO", "reason": "Both involve NTPC/Haryana infrastructure decisions affecting downstream populations"},
     {"from": "EVT_DELHI_FLOODS_2023", "to": "EVT_MANIPUR_2023",      "type": "CONNECTED_TO", "reason": "Both in 2023 triggered Parliament no-confidence and Centre-State blame — same political season"},
     {"from": "EVT_MANIPUR_2023",      "to": "EVT_TATA_SEMI_2024",    "type": "CONNECTED_TO", "reason": "Manipur instability highlighted NE connectivity gap; semiconductor investment shifts strategic focus to western India"},
-    {"from": "EVT_TATA_SEMI_2024",    "to": "EVT_JOSHIMATH_2023",    "type": "CONNECTED_TO", "reason": "Both involve NTPC/infrastructure vs environment tradeoff — Joshimath dam vs semiconductor water usage policy"}
+    {"from": "EVT_TATA_SEMI_2024",    "to": "EVT_JOSHIMATH_2023",    "type": "CONNECTED_TO", "reason": "Both involve NTPC/infrastructure vs environment tradeoff — Joshimath dam vs semiconductor water usage policy"},
+
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "REG_SRIHARIKOTA",         "type": "OCCURRED_IN"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "REG_BENGALURU",            "type": "OCCURRED_IN"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "DOM_TECHNOLOGY",           "type": "BELONGS_TO"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "DOM_GEOPOLITICS",          "type": "ALSO_IN"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "ACT_ISRO",                 "type": "MANAGED_BY"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "ACT_DOS",                  "type": "MANAGED_BY"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "SCH_ISRO_BUDGET",          "type": "FUNDED_BY"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "IMP_CH3_LANDING_SITE",     "type": "CAUSED"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "IMP_CH3_ROVER_DAYS",       "type": "CAUSED"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "EVD_CH3_ISRO",             "type": "PROVEN_BY"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "EVD_CH3_PIB",              "type": "PROVEN_BY"},
+
+    {"from": "EVT_ADITYAL1_2023",     "to": "REG_SRIHARIKOTA",          "type": "OCCURRED_IN"},
+    {"from": "EVT_ADITYAL1_2023",     "to": "REG_BENGALURU",            "type": "OCCURRED_IN"},
+    {"from": "EVT_ADITYAL1_2023",     "to": "DOM_TECHNOLOGY",           "type": "BELONGS_TO"},
+    {"from": "EVT_ADITYAL1_2023",     "to": "DOM_GEOPOLITICS",          "type": "ALSO_IN"},
+    {"from": "EVT_ADITYAL1_2023",     "to": "ACT_ISRO",                 "type": "MANAGED_BY"},
+    {"from": "EVT_ADITYAL1_2023",     "to": "ACT_DOS",                  "type": "MANAGED_BY"},
+    {"from": "EVT_ADITYAL1_2023",     "to": "SCH_ISRO_BUDGET",          "type": "FUNDED_BY"},
+    {"from": "EVT_ADITYAL1_2023",     "to": "IMP_ADITYAL1_ORBIT",       "type": "CAUSED"},
+    {"from": "EVT_ADITYAL1_2023",     "to": "EVD_AL1_ISRO",             "type": "PROVEN_BY"},
+
+    {"from": "EVT_G20_INDIA_2023",    "to": "REG_DELHI",                "type": "OCCURRED_IN"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "DOM_GEOPOLITICS",          "type": "BELONGS_TO"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "DOM_ECONOMICS",            "type": "ALSO_IN"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "DOM_GOVERNANCE",           "type": "ALSO_IN"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "ACT_MEA",                  "type": "MANAGED_BY"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "ACT_G20_SHERPA",           "type": "MANAGED_BY"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "IMP_G20_NATIONS",          "type": "CAUSED"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "IMP_G20_AU_ADMIT",         "type": "CAUSED"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "POL_G20_DECL",             "type": "TRIGGERED"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "EVD_G20_DECL",             "type": "PROVEN_BY"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "EVD_G20_PIB",              "type": "PROVEN_BY"},
+
+    {"from": "EVT_INDIA_CANADA_2023", "to": "REG_INDIA",                "type": "OCCURRED_IN"},
+    {"from": "EVT_INDIA_CANADA_2023", "to": "REG_CANADA",               "type": "OCCURRED_IN"},
+    {"from": "EVT_INDIA_CANADA_2023", "to": "DOM_GEOPOLITICS",          "type": "BELONGS_TO"},
+    {"from": "EVT_INDIA_CANADA_2023", "to": "DOM_DEFENSE",              "type": "ALSO_IN"},
+    {"from": "EVT_INDIA_CANADA_2023", "to": "ACT_MEA",                  "type": "MANAGED_BY"},
+    {"from": "EVT_INDIA_CANADA_2023", "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_INDIA_CANADA_2023", "to": "IMP_CANADA_DIPLOMATS",     "type": "CAUSED"},
+    {"from": "EVT_INDIA_CANADA_2023", "to": "EVD_CANADA_MEA",           "type": "PROVEN_BY"},
+
+    {"from": "EVT_IMEC_2023",         "to": "REG_INDIA",                "type": "OCCURRED_IN"},
+    {"from": "EVT_IMEC_2023",         "to": "REG_SAUDI",                "type": "OCCURRED_IN"},
+    {"from": "EVT_IMEC_2023",         "to": "DOM_ECONOMICS",            "type": "BELONGS_TO"},
+    {"from": "EVT_IMEC_2023",         "to": "DOM_GEOPOLITICS",          "type": "ALSO_IN"},
+    {"from": "EVT_IMEC_2023",         "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_IMEC_2023",         "to": "ACT_MEA",                  "type": "MANAGED_BY"},
+    {"from": "EVT_IMEC_2023",         "to": "ACT_US_GOVT",              "type": "MANAGED_BY"},
+    {"from": "EVT_IMEC_2023",         "to": "IMP_IMEC_LENGTH_KM",       "type": "CAUSED"},
+    {"from": "EVT_IMEC_2023",         "to": "POL_IMEC_MOU",             "type": "TRIGGERED"},
+    {"from": "EVT_IMEC_2023",         "to": "EVD_IMEC_MOU",             "type": "PROVEN_BY"},
+
+    {"from": "EVT_CHAMOLI_2021",      "to": "REG_CHAMOLI",              "type": "OCCURRED_IN"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "REG_UTTARAKHAND",          "type": "OCCURRED_IN"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "DOM_CLIMATE",              "type": "BELONGS_TO"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "DOM_GOVERNANCE",           "type": "ALSO_IN"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "DOM_ECONOMICS",            "type": "ALSO_IN"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "ACT_NDMA",                 "type": "MANAGED_BY"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "ACT_NDRF",                 "type": "MANAGED_BY"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "ACT_NTPC",                 "type": "MANAGED_BY"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "ACT_NHPC",                 "type": "MANAGED_BY"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "SCH_NDRF_FUND",            "type": "FUNDED_BY"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "IMP_CHAMOLI_DEATHS",       "type": "CAUSED"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "IMP_CHAMOLI_POWER_MW",     "type": "CAUSED"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "POL_CHAMOLI_INQUIRY",      "type": "TRIGGERED"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "EVD_CHAMOLI_NDMA",         "type": "PROVEN_BY"},
+
+    {"from": "EVT_BALAKOT_2019",      "to": "REG_JK",                   "type": "OCCURRED_IN"},
+    {"from": "EVT_BALAKOT_2019",      "to": "REG_PAKISTAN",             "type": "OCCURRED_IN"},
+    {"from": "EVT_BALAKOT_2019",      "to": "DOM_DEFENSE",              "type": "BELONGS_TO"},
+    {"from": "EVT_BALAKOT_2019",      "to": "DOM_GEOPOLITICS",          "type": "ALSO_IN"},
+    {"from": "EVT_BALAKOT_2019",      "to": "ACT_IAF",                  "type": "MANAGED_BY"},
+    {"from": "EVT_BALAKOT_2019",      "to": "ACT_MHA",                  "type": "MANAGED_BY"},
+    {"from": "EVT_BALAKOT_2019",      "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_BALAKOT_2019",      "to": "ACT_CRPF",                 "type": "MANAGED_BY"},
+    {"from": "EVT_BALAKOT_2019",      "to": "IMP_BALAKOT_CRPF",         "type": "CAUSED"},
+    {"from": "EVT_BALAKOT_2019",      "to": "EVD_BALAKOT_PIB",          "type": "PROVEN_BY"},
+
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "REG_INDIA",                "type": "OCCURRED_IN"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "REG_MUMBAI",               "type": "OCCURRED_IN"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "DOM_SOCIETY",              "type": "BELONGS_TO"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "DOM_GOVERNANCE",           "type": "ALSO_IN"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "DOM_ECONOMICS",            "type": "ALSO_IN"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "ACT_MoHFW",                "type": "MANAGED_BY"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "ACT_ICMR",                 "type": "MANAGED_BY"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "SCH_PM_CARES",             "type": "FUNDED_BY"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "SCH_COWIN",                "type": "FUNDED_BY"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "IMP_COVID2_PEAK_CASES",    "type": "CAUSED"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "IMP_COVID2_VACCINATED",    "type": "CAUSED"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "POL_COVID_PROTOCOL",       "type": "TRIGGERED"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "EVD_COVID2_MOHFW",         "type": "PROVEN_BY"},
+
+    {"from": "EVT_ART370_2019",       "to": "REG_JK",                   "type": "OCCURRED_IN"},
+    {"from": "EVT_ART370_2019",       "to": "REG_INDIA",                "type": "OCCURRED_IN"},
+    {"from": "EVT_ART370_2019",       "to": "DOM_GOVERNANCE",           "type": "BELONGS_TO"},
+    {"from": "EVT_ART370_2019",       "to": "DOM_GEOPOLITICS",          "type": "ALSO_IN"},
+    {"from": "EVT_ART370_2019",       "to": "DOM_DEFENSE",              "type": "ALSO_IN"},
+    {"from": "EVT_ART370_2019",       "to": "ACT_MHA",                  "type": "MANAGED_BY"},
+    {"from": "EVT_ART370_2019",       "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_ART370_2019",       "to": "ACT_PARLIAMENT",           "type": "MANAGED_BY"},
+    {"from": "EVT_ART370_2019",       "to": "ACT_INDIAN_ARMY",          "type": "MANAGED_BY"},
+    {"from": "EVT_ART370_2019",       "to": "IMP_ART370_INTERNET",      "type": "CAUSED"},
+    {"from": "EVT_ART370_2019",       "to": "POL_ART370",               "type": "TRIGGERED"},
+    {"from": "EVT_ART370_2019",       "to": "EVD_ART370_PARL",          "type": "PROVEN_BY"},
+
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "EVT_ADITYAL1_2023",        "type": "CONNECTED_TO", "reason": "Back-to-back ISRO missions in 2023 — same launch infrastructure, budget cycle, and DOS mission strategy"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "EVT_IMEC_2023",            "type": "CONNECTED_TO", "reason": "IMEC MoU signed at G20 sidelines — same summit, same diplomatic momentum"},
+    {"from": "EVT_G20_INDIA_2023",    "to": "EVT_INDIA_CANADA_2023",    "type": "CONNECTED_TO", "reason": "Trudeau raised Nijjar allegations on G20 sidelines, straining India-Canada at India's diplomatic high point"},
+    {"from": "EVT_CHAMOLI_2021",      "to": "EVT_JOSHIMATH_2023",       "type": "CONNECTED_TO", "reason": "Both Uttarakhand disasters — Chamoli triggered review of Tapovan-Vishnugad tunnel that overlaps Joshimath subsidence zone"},
+    {"from": "EVT_BALAKOT_2019",      "to": "EVT_ART370_2019",          "type": "CONNECTED_TO", "reason": "Both 2019 — Balakot military action followed by Article 370 abrogation, representing dual-track assertive J&K policy"},
+    {"from": "EVT_COVID_WAVE2_2021",  "to": "EVT_CHAMOLI_2021",         "type": "CONNECTED_TO", "reason": "Both 2021 crises — COVID second wave coincided with Chamoli disaster, severely strained NDRF/NDMA response capacity"},
+    {"from": "EVT_CHANDRAYAAN3_2023", "to": "EVT_TATA_SEMI_2024",       "type": "CONNECTED_TO", "reason": "Both reflect India's deep-tech ambition — space and semiconductor programs share DOS/MeitY budget advocacy and PM Modi's vision"},
+    {"from": "EVT_ART370_2019",       "to": "EVT_MANIPUR_2023",         "type": "CONNECTED_TO", "reason": "Both involve MHA-led security interventions in conflict-affected states with AFSPA and military deployment"}
   ]
 }

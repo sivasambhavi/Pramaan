@@ -7,20 +7,30 @@ import os, base64
 import streamlit as st
 
 PAGES = [
-    ("Ward Map",             "/Ward_Map"),
-    ("Proof Chain",          "/Proof_Chain"),
-    ("Live Ingestion",       "/Live_Ingestion"),
-    ("Micro Accountability", "/Micro_Accountability"),
+    ("Intelligence Map", "/Intelligence_Map"),
+    ("Ontology Graph",   "/Ontology_Graph"),
+    ("Live Feed",        "/Live_Feed"),
+    ("Decision Brief",   "/Decision_Brief"),
 ]
 
 _HIDE_SIDEBAR = """
 <style>
   [data-testid="stSidebar"]        { display: none !important; }
   [data-testid="collapsedControl"] { display: none !important; }
-  #MainMenu  { visibility: hidden; }
-  footer     { visibility: hidden; }
-  header     { visibility: hidden; }
-  .block-container { padding-top: 0 !important; padding-bottom: 1rem !important; }
+  #MainMenu                          { visibility: hidden; }
+  footer                             { visibility: hidden; }
+  header[data-testid="stHeader"]    { height: 0 !important; min-height: 0 !important; }
+  [data-testid="stToolbar"]         { display: none !important; }
+  [data-testid="stDecoration"]      { display: none !important; }
+  [data-testid="stStatusWidget"]    { display: none !important; }
+  .block-container {
+      padding-top: 0 !important;
+      padding-bottom: 1rem !important;
+      padding-left: 1.5rem !important;
+      padding-right: 1.5rem !important;
+      max-width: 100% !important;
+  }
+  .appview-container .main .block-container { padding-top: 0 !important; }
 </style>
 """
 
@@ -41,9 +51,17 @@ def _tryminds_img_tag() -> str:
     )
 
 
-def render_topnav(active_page: str | None = None) -> None:
+def render_topnav(active_page: str | None = None, show_sidebar: bool = False) -> None:
     """Inject fixed top navbar, hide sidebar, push content below bar."""
     st.markdown(_HIDE_SIDEBAR, unsafe_allow_html=True)
+    if show_sidebar:
+        # Re-show sidebar for pages that need it (overrides _HIDE_SIDEBAR)
+        st.markdown("""
+        <style>
+          [data-testid="stSidebar"]        { display: flex !important; }
+          [data-testid="collapsedControl"] { display: flex !important; }
+        </style>
+        """, unsafe_allow_html=True)
 
     links_html = ""
     for name, url in PAGES:
@@ -97,4 +115,4 @@ def render_topnav(active_page: str | None = None) -> None:
     """, unsafe_allow_html=True)
 
     # Spacer pushes Streamlit content below the fixed bar
-    st.markdown("<div style='height:60px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:54px'></div>", unsafe_allow_html=True)

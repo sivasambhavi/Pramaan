@@ -11,6 +11,8 @@ import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 from agent.classifier import classify_source
 from agent.tools import fetch_api, scrape_with_crawl4ai, move_from_inbox
+from agent.search_queries import get_priority_queries, generate_query_batch
+from agent.relevance_filter import filter_results
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -57,22 +59,33 @@ def process_source(source_hint: str):
         logger.warning(f"No specific handler defined for {source_type} using {fetch_method}")
 
 def daily_job():
-    logger.info("Running daily PRAMAAN ingestion pipeline...")
-    # Example sources we monitor daily
-    daily_sources = [
-        "https://pib.gov.in/PressReleasePage.aspx?PRID=123456", # Example unstructured
-    ]
-    
-    # Also process anything in the inbox
+    """
+    Daily ingestion pipeline for PRAMAAN Global Ontology Engine.
+    Step 1: Run priority queries for 6 known events.
+    Step 2: Run domain-diverse batch queries.
+    Step 3: Process anything dropped in /inbox/.
+    """
+    logger.info("Running daily PRAMAAN Global Ontology ingestion pipeline...")
+
+    # Step 1 — Priority queries (event-specific, always first)
+    priority = get_priority_queries()
+    logger.info("[agent] Running %d priority queries...", len(priority))
+    for query in priority:
+        process_source(query)
+
+    # Step 2 — Domain-diverse batch (10 queries across 7 domains)
+    batch = generate_query_batch(batch_size=10)
+    logger.info("[agent] Running %d domain-diverse queries...", len(batch))
+    for query in batch:
+        process_source(query)
+
+    # Step 3 — Process anything dropped manually in /inbox/
     inbox_dir = os.path.join(os.getcwd(), 'inbox')
     if os.path.exists(inbox_dir):
         for filename in os.listdir(inbox_dir):
             if filename != '.gitkeep':
+                logger.info("[agent] Processing inbox file: %s", filename)
                 process_source(filename)
-                
-    # Process regular API/Web sources
-    for src in daily_sources:
-        process_source(src)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run PRAMAAN Ingestion Agent")

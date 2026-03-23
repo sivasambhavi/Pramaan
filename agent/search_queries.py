@@ -1,55 +1,109 @@
 """
-PRAMAAN — Approved Search Query Registry
-Agent MUST pick from these templates only.
-No freeform queries allowed.
+PRAMAAN Global Ontology Engine — Search Query Registry
+Agent picks from these domain-aligned query templates only.
+Covers all 6 events across 7 domains.
 """
 
 import random
 
-ANCHORS = ["Delhi MCD", "Delhi municipal", "Delhi NCT"]
+# ── Per-event priority queries (always run first) ─────────────────────────────
 
-SCHEMES = [
-    "PMAY housing", "SBM toilet", "AMRUT drain",
-    "Smart Cities", "Delhi Jal Board water supply",
-    "DDA housing allotment", "DUSIB slum redevelopment",
-    "road repair", "stormwater drain", "solid waste",
-    "streetlight", "public toilet", "pothole repair",
+PRIORITY_QUERIES = [
+    # Wayanad Landslide — Climate + Society
+    "Wayanad landslide 2024 NDMA relief fund Kerala",
+    "Mundakkai Chooralmala landslide rescue update 2024",
+    "Wayanad disaster reconstruction Kerala government 2024 2025",
+
+    # Cyclone Dana — Climate + Defense
+    "Cyclone Dana Odisha 2024 NDRF deployment Puri",
+    "Cyclone Dana Andhra Pradesh damage relief October 2024",
+    "Odisha cyclone preparedness evacuation 2024",
+
+    # Joshimath — Climate + Technology
+    "Joshimath land subsidence ISRO satellite data 2023",
+    "Joshimath NTPC tunnel sinking Uttarakhand update",
+    "Joshimath reconstruction relief package 2023 2024",
+
+    # Delhi Floods — Economics + Geopolitics
+    "Yamuna flood Delhi 2023 record level relief",
+    "Delhi floods Haryana dam water release controversy 2023",
+    "Delhi flood encroachment Yamuna floodplain 2023 2024",
+
+    # Manipur — Geopolitics + Defense
+    "Manipur ethnic violence CRPF Army deployment 2023",
+    "Manipur conflict relief displaced citizens 2023 2024",
+    "Manipur internet shutdown lifted update 2023",
+
+    # Tata Semiconductor — Technology + Economics
+    "Tata semiconductor fab Dholera Gujarat progress 2024 2025",
+    "India Semiconductor Mission ISMC fab update 2024",
+    "CG Power semiconductor Sanand Gujarat construction 2024",
 ]
 
-QUALIFIERS = [
-    "2026", "2025 2026", "ward report",
-    "status update", "tender", "completion",
-    "fund utilization", "beneficiary",
-]
+# ── Domain-level query templates ──────────────────────────────────────────────
 
-def build_query(scheme: str, qualifier: str = "", anchor: str = "Delhi MCD") -> str:
-    """ Builds a natural, realistic search query. """
-    parts = [anchor, scheme]
-    if qualifier:
-        parts.append(qualifier)
-    return " ".join(parts)
+DOMAIN_QUERIES = {
+    "climate": [
+        "NDMA disaster response India {year}",
+        "India flood cyclone landslide relief fund {year}",
+        "IMD early warning system India disaster {year}",
+        "NDRF deployment rescue India natural disaster {year}",
+    ],
+    "economics": [
+        "India infrastructure investment scheme fund release {year}",
+        "PLI scheme India progress report {year}",
+        "India GDP growth sector investment {year}",
+        "Central government scheme fund utilization {year}",
+    ],
+    "geopolitics": [
+        "India Parliament session debate policy {year}",
+        "India state Centre relations dispute fund {year}",
+        "India foreign policy strategic decision {year}",
+        "Lok Sabha Rajya Sabha question answer {year}",
+    ],
+    "defense": [
+        "Indian Army deployment internal security {year}",
+        "CRPF Assam Rifles deployment Northeast India {year}",
+        "India defense ministry strategic asset {year}",
+        "India border security infrastructure {year}",
+    ],
+    "technology": [
+        "India semiconductor chip manufacturing progress {year}",
+        "Digital India initiative update {year}",
+        "ISRO satellite launch mission {year}",
+        "India technology investment startup {year}",
+    ],
+    "society": [
+        "India displaced persons relief rehabilitation {year}",
+        "India welfare scheme beneficiary update {year}",
+        "India poverty reduction program {year}",
+        "India healthcare scheme coverage {year}",
+    ],
+    "governance": [
+        "India government scheme accountability audit {year}",
+        "CAG report India scheme fund misuse {year}",
+        "India RTI response governance transparency {year}",
+        "India public asset delivery accountability {year}",
+    ],
+}
+
+QUALIFIERS = ["2024", "2025", "2024 2025", "latest update", "PIB press release"]
+
 
 def generate_query_batch(batch_size: int = 10) -> list:
-    """ Generates a diverse but controlled batch of queries for one agent run. """
-    schemes_sample = random.sample(SCHEMES, min(batch_size, len(SCHEMES)))
-    qualifiers_cycle = QUALIFIERS * ((batch_size // len(QUALIFIERS)) + 1)
-
+    """Generates a diverse batch of queries across all domains."""
     queries = []
-    for i, scheme in enumerate(schemes_sample):
-        anchor = random.choice(ANCHORS)
-        qualifier = qualifiers_cycle[i]
-        queries.append(build_query(scheme, qualifier, anchor))
+    domains = list(DOMAIN_QUERIES.keys())
+
+    for i in range(batch_size):
+        domain = domains[i % len(domains)]
+        template = random.choice(DOMAIN_QUERIES[domain])
+        year = random.choice(QUALIFIERS)
+        queries.append(template.format(year=year))
 
     return queries[:batch_size]
 
-# PRE-BAKED HIGH PRIORITY QUERIES (always run first)
-PRIORITY_QUERIES = [
-    "Delhi MCD AMRUT stormwater drain fund utilization 2026",
-    "PMAY Delhi housing scheme beneficiary allotment 2025 2026",
-    "Swachh Bharat Delhi toilet construction ward status",
-    "Delhi Jal Board water supply pipeline repair 2026",
-    "MCD Delhi road repair pothole ward 2026",
-    "DUSIB Delhi slum redevelopment progress report",
-    "Smart Cities Delhi ward infrastructure completion 2026",
-    "MCD Delhi solid waste management ward report 2026",
-]
+
+def get_priority_queries() -> list:
+    """Returns the high-priority event-specific queries."""
+    return PRIORITY_QUERIES.copy()

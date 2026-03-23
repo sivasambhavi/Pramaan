@@ -46,11 +46,11 @@ async def scrape_and_analyze(q: str = Query(..., description="Governance news se
         relevant_articles = []
         dropped = 0
         for article in articles:
-            snippet = f"{article.get('title', '')} {article.get('summary', '')}"
+            snippet = f"{article.get('title', '')} {article.get('snippet', '')}"
             scored  = ai_service.score_evidence(
                 text=snippet,
-                asset_name=q,          # query as proxy asset name
-                ward_name="Delhi",
+                asset_name=q,
+                ward_name="India",
             )
             relevance = scored.get("relevance", "")
             if relevance in _INGESTIBLE_RELEVANCE:
@@ -71,7 +71,7 @@ async def scrape_and_analyze(q: str = Query(..., description="Governance news se
 
         # ── Extract ontology only from relevant articles ───────────────────
         combined_text = "\n\n".join(
-            [f"Headline: {a['title']}\nSummary: {a['summary']}" for a in relevant_articles]
+            [f"Headline: {a['title']}\nSummary: {a.get('snippet', '')}" for a in relevant_articles]
         )
         extracted = ai_service.extract_ontology(combined_text, source_type="unstructured_rss")
         extracted["articles"]         = relevant_articles

@@ -1,0 +1,230 @@
+{
+    "index_name": "b97f23f1-a960-4337-8f39-563c85a729db",
+    "title": "Sector-wise details of the total number of applications approved under the Production-Linked Incentive (PLI) from 2020-21 to 2024-25",
+    "desc": "Sector-wise details of the total number of applications approved under the Production-Linked Incentive (PLI) from 2020-21 to 2024-25",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "78889f83-0f96-484b-9fbc-5be92454446f",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1735730827,
+    "updated": 1735730827,
+    "created_date": "2025-01-01T12:27:07Z",
+    "updated_date": "2025-01-01T12:27:07Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "78889f83-0f96-484b-9fbc-5be92454446f",
+        "field": "b97f23f1-a960-4337-8f39-563c85a729db"
+    },
+    "field": [
+        {
+            "id": "sl__no_",
+            "name": "Sl. No.",
+            "type": "keyword"
+        },
+        {
+            "id": "sectors",
+            "name": "Sectors",
+            "type": "keyword"
+        },
+        {
+            "id": "applications_approved___2020_21",
+            "name": "Applications approved - 2020-21",
+            "type": "double"
+        },
+        {
+            "id": "applications_approved___2021_22",
+            "name": "Applications approved - 2021-22",
+            "type": "double"
+        },
+        {
+            "id": "applications_approved___2022_23",
+            "name": "Applications approved - 2022-23",
+            "type": "double"
+        },
+        {
+            "id": "applications_approved___2023_24",
+            "name": "Applications approved - 2023-24",
+            "type": "double"
+        },
+        {
+            "id": "applications_approved___2024_25",
+            "name": "Applications approved - 2024-25",
+            "type": "double"
+        },
+        {
+            "id": "_total",
+            "name": "Total",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 15,
+    "count": 15,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "sl__no_": "1",
+            "sectors": "Mobile Manufacturing and Specified Electronic Components",
+            "applications_approved___2020_21": 16,
+            "applications_approved___2021_22": 16,
+            "applications_approved___2022_23": "NA",
+            "applications_approved___2023_24": "NA",
+            "applications_approved___2024_25": "NA",
+            "_total": 32
+        },
+        {
+            "sl__no_": "2",
+            "sectors": "Electronic/ Technology Products",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": "NA",
+            "applications_approved___2022_23": "NA",
+            "applications_approved___2023_24": 27,
+            "applications_approved___2024_25": "NA",
+            "_total": 27
+        },
+        {
+            "sl__no_": "3",
+            "sectors": "Critical Key Starting Materials/ Drug Intermediaries and Active Pharmaceutical Ingredients",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": 46,
+            "applications_approved___2022_23": 5,
+            "applications_approved___2023_24": "NA",
+            "applications_approved___2024_25": "NA",
+            "_total": 51
+        },
+        {
+            "sl__no_": "4",
+            "sectors": "Manufacturing of Medical Devices",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": 19,
+            "applications_approved___2022_23": 7,
+            "applications_approved___2023_24": 6,
+            "applications_approved___2024_25": "NA",
+            "_total": 32
+        },
+        {
+            "sl__no_": "5",
+            "sectors": "Pharmaceuticals Drugs",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": 53,
+            "applications_approved___2022_23": 1,
+            "applications_approved___2023_24": 1,
+            "applications_approved___2024_25": "NA",
+            "_total": 55
+        },
+        {
+            "sl__no_": "6",
+            "sectors": "Advanced Chemistry Cell (ACC) Battery",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": "NA",
+            "applications_approved___2022_23": 3,
+            "applications_approved___2023_24": 1,
+            "applications_approved___2024_25": "NA",
+            "_total": 4
+        },
+        {
+            "sl__no_": "7",
+            "sectors": "Automobiles and Auto Components",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": 95,
+            "applications_approved___2022_23": "NA",
+            "applications_approved___2023_24": "NA",
+            "applications_approved___2024_25": "NA",
+            "_total": 95
+        },
+        {
+            "sl__no_": "8",
+            "sectors": "Telecom and Networking Products",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": 5,
+            "applications_approved___2022_23": 37,
+            "applications_approved___2023_24": "NA",
+            "applications_approved___2024_25": "NA",
+            "_total": 42
+        },
+        {
+            "sl__no_": "9",
+            "sectors": "Textile Products: MMF Segment and Technical Textiles",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": "NA",
+            "applications_approved___2022_23": 64,
+            "applications_approved___2023_24": "NA",
+            "applications_approved___2024_25": 10,
+            "_total": 74
+        },
+        {
+            "sl__no_": "10",
+            "sectors": "Food Products",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": 182,
+            "applications_approved___2022_23": "NA",
+            "applications_approved___2023_24": "NA",
+            "applications_approved___2024_25": "NA",
+            "_total": 182
+        },
+        {
+            "sl__no_": "11",
+            "sectors": "High-Efficiency Solar PV Modules",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": 3,
+            "applications_approved___2022_23": "NA",
+            "applications_approved___2023_24": 11,
+            "applications_approved___2024_25": "NA",
+            "_total": 14
+        },
+        {
+            "sl__no_": "12",
+            "sectors": "White Goods (ACs and LED)",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": 42,
+            "applications_approved___2022_23": 22,
+            "applications_approved___2023_24": 2,
+            "applications_approved___2024_25": "NA",
+            "_total": 66
+        },
+        {
+            "sl__no_": "13",
+            "sectors": "Specialty Steel",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": "NA",
+            "applications_approved___2022_23": 66,
+            "applications_approved___2023_24": "NA",
+            "applications_approved___2024_25": 1,
+            "_total": 67
+        },
+        {
+            "sl__no_": "14",
+            "sectors": "Drones and Drone Components",
+            "applications_approved___2020_21": "NA",
+            "applications_approved___2021_22": "NA",
+            "applications_approved___2022_23": 23,
+            "applications_approved___2023_24": "NA",
+            "applications_approved___2024_25": "NA",
+            "_total": 23
+        },
+        {
+            "sl__no_": "Total",
+            "sectors": "Total",
+            "applications_approved___2020_21": 16,
+            "applications_approved___2021_22": 461,
+            "applications_approved___2022_23": 228,
+            "applications_approved___2023_24": 48,
+            "applications_approved___2024_25": 11,
+            "_total": 764
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:44:23.336344Z",
+    "_pramaan_dataset_name": "pli_applications_approved_sectorwise"
+}

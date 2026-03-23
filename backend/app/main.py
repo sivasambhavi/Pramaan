@@ -5,12 +5,11 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
-from app.routers import wards, assets, ingest, scrape, questions, govdata, beneficiaries, notifications, regions, agents
-from app.services.scheduler import start_scheduler, stop_scheduler
+from app.routers import ontology, scrape
 
 log = logging.getLogger("pramaan.startup")
 
-_SEED_SCRIPT = Path(__file__).resolve().parents[2] / "backend" / "scripts" / "load_seed_data.py"
+_SEED_SCRIPT = Path(__file__).resolve().parents[2] / "backend" / "scripts" / "load_ontology.py"
 
 
 def _is_graph_empty() -> bool:
@@ -24,12 +23,12 @@ def _is_graph_empty() -> bool:
             return count < 5
     except Exception as e:
         log.warning("[startup] Could not check Neo4j node count: %s", e)
-        return False   # do NOT auto-seed if Neo4j is unreachable — avoid masking connection errors
+        return False
 
 
 def _run_seed():
-    """Run load_seed_data.py as a subprocess so it gets its own sys.path."""
-    log.info("[startup] Graph is empty — running auto-seed from final_formalized CSVs …")
+    """Run load_ontology.py as a subprocess to seed the graph."""
+    log.info("[startup] Graph is empty — running auto-seed from seed_graph.json …")
     result = subprocess.run(
         [sys.executable, str(_SEED_SCRIPT)],
         capture_output=True,
@@ -44,35 +43,22 @@ def _run_seed():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # ── Step 1: auto-seed if graph is empty ───────────────────────────────────
     if _is_graph_empty():
         _run_seed()
     else:
         log.info("[startup] Graph already seeded — skipping auto-seed.")
-
-    # ── Step 2: start background scheduler ────────────────────────────────────
-    start_scheduler()
     yield
-    stop_scheduler()
 
 
 app = FastAPI(
-    title="Pramaan API",
-    version="3.0.0",
-    description="Global Ontology Engine - Micro-Accountability & Booth-Level Logic",
+    title="PRAMAAN API",
+    version="4.0.0",
+    description="Global Ontology Engine — India Intelligence Graph",
     lifespan=lifespan,
 )
 
-app.include_router(wards.router, prefix="/wards", tags=["wards"])
-app.include_router(assets.router, prefix="/assets", tags=["assets"])
-app.include_router(ingest.router, prefix="/ingest", tags=["ingest"])
+app.include_router(ontology.router)
 app.include_router(scrape.router)
-app.include_router(questions.router)
-app.include_router(govdata.router)
-app.include_router(beneficiaries.router, prefix="/beneficiaries", tags=["beneficiaries"])
-app.include_router(notifications.router, prefix="/notifications", tags=["notifications"])
-app.include_router(regions.router, prefix="/regions", tags=["regions"])
-app.include_router(agents.router)
 
 
 @app.get("/health")
@@ -82,39 +68,30 @@ def health():
 
 @app.get("/stats", tags=["meta"])
 def stats():
-    """Live graph statistics for the landing page."""
+    """Live graph statistics."""
     try:
         from app.neo4j_client import get_session
         with get_session() as session:
             rec = session.run("""
-                CALL { MATCH (n)          RETURN count(n)  AS total_nodes }
-                CALL { MATCH (a:Asset)    RETURN count(a)  AS assets      }
-                CALL { MATCH (s:Scheme)   RETURN count(s)  AS schemes     }
-                CALL { MATCH (e:Evidence) RETURN count(e)  AS evidence    }
-                RETURN total_nodes, assets, schemes, evidence
+                CALL { MATCH (n)           RETURN count(n)  AS total_nodes }
+                CALL { MATCH (e:Event)     RETURN count(e)  AS events      }
+                CALL { MATCH (d:Domain)    RETURN count(d)  AS domains     }
+                CALL { MATCH (a:Actor)     RETURN count(a)  AS actors      }
+                CALL { MATCH (i:Impact)    RETURN count(i)  AS impacts     }
+                CALL { MATCH (ev:Evidence) RETURN count(ev) AS evidence    }
+                CALL { MATCH ()-[r]->()    RETURN count(r)  AS total_edges }
+                RETURN total_nodes, events, domains, actors, impacts, evidence, total_edges
             """).single()
             if rec:
                 return {
-                    "assets":      rec["assets"],
-                    "schemes":     rec["schemes"],
+                    "events":      rec["events"],
+                    "domains":     rec["domains"],
+                    "actors":      rec["actors"],
+                    "impacts":     rec["impacts"],
                     "evidence":    rec["evidence"],
                     "total_nodes": rec["total_nodes"],
+                    "total_edges": rec["total_edges"],
                 }
     except Exception as e:
         log.warning("[stats] Neo4j query failed: %s", e)
-    return {"assets": 0, "schemes": 0, "evidence": 0, "total_nodes": 0}
-
-
-@app.get("/scheduler/status", tags=["scheduler"])
-def scheduler_status():
-    """List scheduled jobs and their next run times."""
-    from app.services.scheduler import _scheduler
-    jobs = [
-        {
-            "id":       job.id,
-            "name":     job.name,
-            "next_run": job.next_run_time.isoformat() if job.next_run_time else None,
-        }
-        for job in _scheduler.get_jobs()
-    ]
-    return {"running": _scheduler.running, "jobs": jobs}
+    return {"total_nodes": 0, "events": 0, "domains": 0, "actors": 0, "impacts": 0, "evidence": 0, "total_edges": 0}

@@ -1,118 +1,276 @@
 {
   "_comment": "Central registry of all data.gov.in datasets used by PRAMAAN.",
-  "_comment2": "UUID = index_name from the API response. active=false means UUID is unverified/wrong — skip fetch.",
-  "_how_to_find_uuid": "Go to data.gov.in → search dataset → open API tab → copy the UUID from the URL or response index_name field.",
+  "_comment2": "UUID = index_name from the API response. active=false means skip fetch.",
+  "_how_to_find_uuid": "Go to data.gov.in → search dataset → open API tab → copy UUID from index_name field.",
+  "_version": "2.0 — remapped to 15-event India Intelligence Graph (March 2026)",
 
   "datasets": [
+
+    {
+      "name": "covid_vaccination_statewise_daily",
+      "uuid": "4a02140b-5a4f-4559-9e30-04704d6377bb",
+      "title": "State-wise COVID-19 Vaccination Detail (daily time-series)",
+      "output_file": "covid_vaccination_statewise.json",
+      "api_endpoint": "https://api.data.gov.in/resource/4a02140b-5a4f-4559-9e30-04704d6377bb",
+      "api_available": true,
+      "fields": ["day", "st_name", "dose1", "dose2", "total_doses"],
+      "events": ["EVT_COVID_WAVE2_2021"],
+      "domain": "Society",
+      "active": false,
+      "notes": "UUID not resolving — resource may have been removed. COVID covered by covid_deaths_2021 and covid_cases_deaths."
+    },
+
+    {
+      "name": "covid_deaths_statewise_2021",
+      "uuid": "9352080d-337a-4594-b5a3-80898cd20cfb",
+      "title": "State/UT-wise Deaths due to COVID-19 during 2021",
+      "output_file": "covid_deaths_2021.json",
+      "api_endpoint": "https://api.data.gov.in/resource/9352080d-337a-4594-b5a3-80898cd20cfb",
+      "api_available": true,
+      "fields": ["State/UT", "Deaths during 2021"],
+      "events": ["EVT_COVID_WAVE2_2021"],
+      "domain": "Society",
+      "active": true
+    },
+
+    {
+      "name": "covid_cases_deaths_recovered",
+      "uuid": "c75f6249-dbe9-4771-b39f-5300c60b0f16",
+      "title": "State/UT-wise COVID-19 Cases, Deaths and Recovered",
+      "output_file": "covid_cases_deaths.json",
+      "api_endpoint": "https://api.data.gov.in/resource/c75f6249-dbe9-4771-b39f-5300c60b0f16",
+      "api_available": true,
+      "fields": ["State/UT-wise", "Active Cases", "Total Cases", "Cumulative Cured/Discharged Cases", "Total Deaths"],
+      "events": ["EVT_COVID_WAVE2_2021"],
+      "domain": "Society",
+      "active": true
+    },
+
+    {
+      "name": "ndrf_sdrf_allocation_release_2018_2023",
+      "uuid": "1bcf0a6e-fa7c-4cc8-86dc-caaa8daab1ac",
+      "title": "State/UT-wise SDRF and NDRF Allocation and Release from 2018-19 to 2022-23",
+      "output_file": "ndrf_sdrf_funds.json",
+      "api_endpoint": "https://api.data.gov.in/resource/1bcf0a6e-fa7c-4cc8-86dc-caaa8daab1ac",
+      "api_available": true,
+      "fields": ["State/UT", "SDRF Allocation", "Centre Share Released", "NDRF Release per Year"],
+      "events": ["EVT_WAYANAD_2024", "EVT_CHAMOLI_2021", "EVT_JOSHIMATH_2023", "EVT_DELHI_FLOODS_2023"],
+      "domain": "Climate",
+      "active": true
+    },
+
+    {
+      "name": "ndrf_lives_saved_2018_2023",
+      "uuid": "6ee6994f-ff26-4ba5-8696-d91939f11e9a",
+      "title": "Year-wise Number of Lives and Property saved by NDRF from 2018 to 2023",
+      "output_file": "ndrf_lives_saved.json",
+      "api_endpoint": "https://api.data.gov.in/resource/6ee6994f-ff26-4ba5-8696-d91939f11e9a",
+      "api_available": true,
+      "fields": ["Year", "Persons Rescued", "Persons Evacuated", "Live-stock evacuated"],
+      "events": ["EVT_WAYANAD_2024", "EVT_CHAMOLI_2021", "EVT_CYCLONE_DANA_2024"],
+      "domain": "Climate",
+      "active": true
+    },
+
+    {
+      "name": "cyclone_frequency_1891_2021",
+      "uuid": "d3c39de0-35d6-4e80-83de-bd101fd2e13e",
+      "title": "Annual Frequency of Cyclones and Cyclonic Disturbances from 1891 to 2021 (IMD)",
+      "output_file": "cyclone_frequency.json",
+      "api_endpoint": "https://api.data.gov.in/resource/d3c39de0-35d6-4e80-83de-bd101fd2e13e",
+      "api_available": true,
+      "fields": ["Year", "Cyclonic Disturbances - TOTAL", "Cyclones - TOTAL", "Severe Cyclones - TOTAL"],
+      "events": ["EVT_CYCLONE_DANA_2024"],
+      "domain": "Climate",
+      "active": true
+    },
+
+    {
+      "name": "cyclone_damage_tauktae_yaas_2021",
+      "uuid": "a89e88bd-9b15-441b-aa6f-80e253d3997c",
+      "title": "State/UT-wise Losses and Damages in Cyclone Tauktae and Yaas (July 2021)",
+      "output_file": "cyclone_damage_2021.json",
+      "api_endpoint": "https://api.data.gov.in/resource/a89e88bd-9b15-441b-aa6f-80e253d3997c",
+      "api_available": true,
+      "fields": ["State", "Human lives lost", "Houses/huts damaged", "Cattle lost", "Cropped area affected (in ha.)"],
+      "events": ["EVT_CYCLONE_DANA_2024", "EVT_CHAMOLI_2021"],
+      "domain": "Climate",
+      "active": true
+    },
+
+    {
+      "name": "pli_applications_approved_sectorwise",
+      "uuid": "b97f23f1-a960-4337-8f39-563c85a729db",
+      "title": "Sector-wise Details of Total PLI Applications Approved from 2020-21 to 2024-25",
+      "output_file": "pli_applications.json",
+      "api_endpoint": "https://api.data.gov.in/resource/b97f23f1-a960-4337-8f39-563c85a729db",
+      "api_available": true,
+      "fields": ["Sectors", "Applications approved 2020-21", "Applications approved 2021-22", "Applications approved 2022-23", "Applications approved 2023-24", "Applications approved 2024-25", "Total"],
+      "events": ["EVT_TATA_SEMI_2024"],
+      "domain": "Economics",
+      "active": true
+    },
+
+    {
+      "name": "pli_new_investments_yearwise",
+      "uuid": "5c9e8332-897b-4555-9636-a78dee240658",
+      "title": "Year-wise New Investment Announced under PLI Scheme from 2020-21 to 2024-25",
+      "output_file": "pli_investments.json",
+      "api_endpoint": "https://api.data.gov.in/resource/5c9e8332-897b-4555-9636-a78dee240658",
+      "api_available": true,
+      "fields": ["Year", "Govt.", "Private", "Total"],
+      "events": ["EVT_TATA_SEMI_2024", "EVT_IMEC_2023"],
+      "domain": "Economics",
+      "active": true
+    },
+
+    {
+      "name": "semiconductor_imports_2021_2024",
+      "uuid": "84b0c530-78e2-4f1b-a642-f80312026c86",
+      "title": "Semiconductor Chips and SoCs Imported from 2021-22 to 2023-24",
+      "output_file": "semiconductor_imports.json",
+      "api_endpoint": "https://api.data.gov.in/resource/84b0c530-78e2-4f1b-a642-f80312026c86",
+      "api_available": true,
+      "fields": ["Year", "Volume (Quantity in Bn)", "Value (USD Bn)", "Value (Rs. In Lakh Crore)"],
+      "events": ["EVT_TATA_SEMI_2024"],
+      "domain": "Technology",
+      "active": true
+    },
+
+    {
+      "name": "defence_budget_rd_yearwise",
+      "uuid": "ee2b4024-eeae-49f6-b57e-742e14982339",
+      "title": "Department of Defence R&D Budget over the years (DRDO)",
+      "output_file": "defence_budget_rd.json",
+      "api_endpoint": "https://api.data.gov.in/resource/ee2b4024-eeae-49f6-b57e-742e14982339",
+      "api_available": true,
+      "fields": ["Year", "Annual Defence Budget (in Cr)", "Defence R&D Budget (in Cr)", "Percentage of DRDO Budget to Defence Outlay"],
+      "events": ["EVT_BALAKOT_2019", "EVT_MANIPUR_2023", "EVT_CHANDRAYAAN3_2023", "EVT_ADITYAL1_2023"],
+      "domain": "Defense",
+      "active": true
+    },
+
+    {
+      "name": "defence_budget_gdp_percentage",
+      "uuid": "028ce5f5-c769-468d-8c1f-f086a74b1ee0",
+      "title": "Year-wise Gross Defence Budget as Percentage of GDP from 2019-20 to 2021-22",
+      "output_file": "defence_budget_gdp.json",
+      "api_endpoint": "https://api.data.gov.in/resource/028ce5f5-c769-468d-8c1f-f086a74b1ee0",
+      "api_available": true,
+      "fields": ["Year", "Defence Budget (BE) (Gross)", "GDP", "Defence Budget as percentage of GDP"],
+      "events": ["EVT_BALAKOT_2019", "EVT_MANIPUR_2023"],
+      "domain": "Defense",
+      "active": true
+    },
+
+    {
+      "name": "jk_development_investment_2019_2023",
+      "uuid": "0ae1d443-bf20-4d2d-8e64-8367bc0d344a",
+      "title": "Year-wise Details of Investments for Development of Jammu and Kashmir from 2019-20 to 2022-23",
+      "output_file": "jk_development_investment.json",
+      "api_endpoint": "https://api.data.gov.in/resource/0ae1d443-bf20-4d2d-8e64-8367bc0d344a",
+      "api_available": true,
+      "fields": ["Year", "Amount of investment (Rs In Crores)"],
+      "events": ["EVT_ART370_2019"],
+      "domain": "Governance",
+      "active": true
+    },
+
+    {
+      "name": "fdi_equity_inflows_live",
+      "uuid": "e1c37ff8-df5a-43b8-bca2-f77ba6d2ac58",
+      "title": "FDI Equity Inflows from 2000 to present (DPIIT, live-updating)",
+      "output_file": "fdi_equity_inflows.json",
+      "api_endpoint": "https://api.data.gov.in/resource/e1c37ff8-df5a-43b8-bca2-f77ba6d2ac58",
+      "api_available": true,
+      "fields": ["SECTOR_NAME", "AMOUNT_IN_RS", "AMOUNT_IN_USD", "UNIT", "FROM_DATE", "TO_DATE"],
+      "events": ["EVT_G20_INDIA_2023", "EVT_IMEC_2023", "EVT_TATA_SEMI_2024"],
+      "domain": "Economics",
+      "active": true
+    },
+
+    {
+      "name": "fdi_countrywise_2017_2021",
+      "uuid": "9183b5f9-d573-4271-a907-bf36f575a09b",
+      "title": "Country-wise FDI Equity Inflows from 2017-18 to 2020-21",
+      "output_file": "fdi_countrywise.json",
+      "api_endpoint": "https://api.data.gov.in/resource/9183b5f9-d573-4271-a907-bf36f575a09b",
+      "api_available": true,
+      "fields": ["Country", "2017-18", "2018-19", "2019-20", "2020-21", "Total"],
+      "events": ["EVT_INDIA_CANADA_2023", "EVT_G20_INDIA_2023"],
+      "domain": "Geopolitics",
+      "active": true
+    },
+
     {
       "name": "amrut_storm_water_drainage",
       "uuid": "6e38d0c0-045e-4dce-81d0-eca39519bb07",
-      "title": "State/UT-wise Status of Progress of Storm-Water Drainage Projects taken up under AMRUT (Dec 2021)",
+      "title": "State/UT-wise Status of Progress of Storm-Water Drainage Projects under AMRUT",
       "output_file": "amrut_storm_water_drainage.json",
       "api_endpoint": "https://api.data.gov.in/resource/6e38d0c0-045e-4dce-81d0-eca39519bb07",
-      "download_url": "https://www.data.gov.in/resource/stateut-wise-status-progress-storm-water-drainage-projects-taken-under-amrut-reply-starred%22",
       "api_available": true,
       "fields": ["State/UT", "Work Completed - Number", "Work Completed - Amount", "Work in Progress - Number"],
-      "delhi_filter": "State/UT = 'NCT of Delhi'",
-      "active": true
+      "events": [],
+      "domain": "Governance",
+      "active": false,
+      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
     },
+
     {
       "name": "pmay_housing_data",
       "uuid": "65a47638-5f03-4c47-968f-63ccbac210f1",
-      "title": "State/UT-wise Details of Houses Sanctioned, Grounded, Completed and Occupied along with Central Assistance under PMAY-U from 2020-21 to 2024-25",
+      "title": "State/UT-wise Details of Houses Sanctioned, Grounded, Completed under PMAY-U",
       "output_file": "pmay_housing_data.json",
       "api_endpoint": "https://api.data.gov.in/resource/65a47638-5f03-4c47-968f-63ccbac210f1",
-      "download_url": "https://www.data.gov.in/resource/stateut-wise-details-houses-sanctioned-grounded-completed-and-occupied-along-central%22",
       "api_available": true,
-      "fields": ["State/UT", "Houses Sanctioned", "Houses Grounded", "Houses Completed", "Houses Occupied", "CA Approved", "CA Released"],
-      "delhi_filter": "State/UT = 'NCT of Delhi'",
-      "active": true
-    },
-    {
-      "name": "amrut_funds_ca_allocation",
-      "uuid": "bf2b01ec-9ff6-4d37-a9e9-475a85e2e8f9",
-      "title": "State/UTs-wise Central Assistance (CA) Allocation under AMRUT 2.0 (Jul 2022)",
-      "output_file": "amrut_funds.json",
-      "api_endpoint": "https://api.data.gov.in/resource/bf2b01ec-9ff6-4d37-a9e9-475a85e2e8f9",
-      "download_url": "https://www.data.gov.in/resource/stateuts-wise-central-assistance-ca-allocation-under-atal-mission-rejuvenation-and-urban%22",
-      "api_available": true,
-      "fields": ["State/UT", "CA Allocated (in Crore)"],
-      "delhi_filter": "State/UT = 'NCT of Delhi'",
-      "active": true
-    },
-    {
-      "name": "amrut_statewise_cs_released",
-      "uuid": "c1e13610-f726-4eed-9c9f-12217c49390e",
-      "title": "State/UT-wise Central Share Released/Sanctioned for Projects and Utilisation Certificates under AMRUT 2.0 from 2021-22 to 2024-25",
-      "output_file": "amrut_statewise_allocation.json",
-      "api_endpoint": "https://api.data.gov.in/resource/c1e13610-f726-4eed-9c9f-12217c49390e",
-      "download_url": "https://www.data.gov.in/resource/stateut-wise-central-share-released-sanctioned-projects-and-utilisation-certificates%22",
-      "api_available": true,
-      "fields": ["State/UT", "CS Released", "CS Sanctioned", "UC Received"],
-      "delhi_filter": "State/UT = 'NCT of Delhi'",
-      "active": true
-    },
-    {
-      "name": "sbm_toilets_urban_2021_22",
-      "uuid": "18621e31-7e6d-429e-86b4-fa80894e6eb3",
-      "title": "State/UTs-wise Details of Toilets Constructed under SBM (Swachh Bharat Mission) in Urban Areas during 2021-22",
-      "output_file": "sbm_toilets_2122.json",
-      "api_endpoint": "https://api.data.gov.in/resource/18621e31-7e6d-429e-86b4-fa80894e6eb3",
-      "download_url": "https://www.data.gov.in/resource/stateuts-wise-details-toilets-constructed-under-sbm-swachh-bharat-mission-urban-areas%22",
-      "api_available": true,
-      "fields": ["States/UTs", "Total IHHLs Constructed till March 2021", "IHHLs During Apr 2021-Mar 2022", "Total CT/PT Constructed till March 2021"],
-      "delhi_filter": "States/UTs = 'Delhi'",
+      "fields": ["State/UT", "Houses Sanctioned", "Houses Grounded", "Houses Completed", "CA Released"],
+      "events": [],
+      "domain": "Governance",
       "active": false,
-      "notes": "Superseded by sbm_toilets_individual_ct_pt_2017_2022 which has full year-by-year breakdown. Transform now uses sbm_toilets_comprehensive.json."
+      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
     },
+
     {
       "name": "sbm_toilets_individual_ct_pt_2017_2022",
       "uuid": "88801d21-6a04-485a-9d6a-5e844db67a61",
-      "title": "State/UTs-wise Details of Individual Toilets and Public & Community Toilets Constructed under SBM-U in Urban Areas from 2017 to 2022",
+      "title": "State/UTs-wise Individual and Public Toilets Constructed under SBM-U 2017-2022",
       "output_file": "sbm_toilets_comprehensive.json",
       "api_endpoint": "https://api.data.gov.in/resource/88801d21-6a04-485a-9d6a-5e844db67a61",
-      "download_url": "https://www.data.gov.in/resource/stateuts-wise-details-individual-toilets-and-public-community-toilets-constructed-under%22",
       "api_available": true,
-      "fields": ["State/UT", "Individual Toilets (Upto 2017)", "Individual Toilets 2018", "Individual Toilets 2019", "Individual Toilets 2020", "Individual Toilets 2021", "Individual Toilets 2022", "CT/PT Constructed"],
-      "delhi_filter": "State/UT = 'Delhi'",
-      "active": true
+      "fields": ["State/UT", "Individual Toilets 2018", "Individual Toilets 2019", "Individual Toilets 2020", "Individual Toilets 2021", "Individual Toilets 2022"],
+      "events": [],
+      "domain": "Governance",
+      "active": false,
+      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
     },
+
     {
       "name": "pm_svanidhi_beneficiaries",
       "uuid": "9ecf4d59-ca75-44fb-8513-137f254880c3",
-      "title": "State/UT-wise Total Number of Beneficiaries Under PM SVANidhi Scheme from 2020-21 to 2023-24",
+      "title": "State/UT-wise Total Number of Beneficiaries Under PM SVANidhi Scheme 2020-21 to 2023-24",
       "output_file": "pm_svanidhi_beneficiaries.json",
       "api_endpoint": "https://api.data.gov.in/resource/9ecf4d59-ca75-44fb-8513-137f254880c3",
-      "download_url": "https://www.data.gov.in/resource/stateut-wise-total-number-beneficiaries-under-prime-minister-street-vendor-atmanirbhar%22",
       "api_available": true,
       "fields": ["State/UT", "2020-21", "2021-22", "2022-23", "2023-24"],
-      "delhi_filter": "State/UT = 'Delhi'",
-      "active": true
-    },
-    {
-      "name": "amrut_waterlogging_eliminated",
-      "uuid": "caadd339-a9a7-47bc-adbe-671bf57ad3fe",
-      "title": "State/UTs-wise list of AMRUT cities where Water Logging points have been eliminated through AMRUT Projects (Aug 2023)",
-      "output_file": "amrut_waterlogging_eliminated.json",
-      "api_endpoint": "https://api.data.gov.in/resource/caadd339-a9a7-47bc-adbe-671bf57ad3fe",
-      "download_url": "",
-      "api_available": true,
-      "fields": ["State/UT", "City", "Water Logging Points Eliminated"],
-      "delhi_filter": "State/UT = 'NCT of Delhi'",
+      "events": [],
+      "domain": "Economics",
       "active": false,
-      "notes": "UUID preserved from amrut_water_logging.py (now deleted). Mark active=true to fetch."
+      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
     },
+
     {
       "name": "ayushman_bharat_pmjay_cards",
       "uuid": "2029b46f-154e-4fb3-b5fb-2dde336e52c4",
-      "title": "State/UTs-wise Details of Eligible Beneficiary Families and Ayushman Cards Issued under AB-PMJAY (Dec 2022)",
+      "title": "State/UTs-wise Ayushman Cards Issued under AB-PMJAY",
       "output_file": "ayushman_bharat_cards.json",
       "api_endpoint": "https://api.data.gov.in/resource/2029b46f-154e-4fb3-b5fb-2dde336e52c4",
-      "download_url": "https://www.data.gov.in/resource/stateuts-wise-details-eligible-beneficiary-families-and-ayushman-cards-issued-under%22",
       "api_available": true,
       "fields": ["State/UT", "Eligible Beneficiary Families", "Total Individual Ayushman Card Issued"],
-      "delhi_filter": "State/UT = 'Delhi'",
-      "active": true
+      "events": [],
+      "domain": "Society",
+      "active": false,
+      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
     }
+
   ]
 }

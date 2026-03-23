@@ -1,0 +1,90 @@
+{
+    "index_name": "5c9e8332-897b-4555-9636-a78dee240658",
+    "title": "Year-wise Details of New Investment Announced by Indian or Foreign Companies, or Joint Ventures, under the Production Linked Incentive (PLI) Scheme from 2020-21 to 2024-25",
+    "desc": "Year-wise Details of New Investment Announced by Indian or Foreign Companies, or Joint Ventures, under the Production Linked Incentive (PLI) Scheme from 2020-21 to 2024-25",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "e3b19e4d-e287-4d32-b53d-70e9617c7770",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1751007844,
+    "updated": 1751007844,
+    "created_date": "2025-06-27T09:04:04Z",
+    "updated_date": "2025-06-27T09:04:04Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "e3b19e4d-e287-4d32-b53d-70e9617c7770",
+        "field": "5c9e8332-897b-4555-9636-a78dee240658"
+    },
+    "field": [
+        {
+            "id": "_year",
+            "name": "Year",
+            "type": "keyword"
+        },
+        {
+            "id": "govt_",
+            "name": "Govt.",
+            "type": "double"
+        },
+        {
+            "id": "private",
+            "name": "Private",
+            "type": "double"
+        },
+        {
+            "id": "_total",
+            "name": "Total",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 5,
+    "count": 5,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "_year": "2020-21",
+            "govt_": 5.28,
+            "private": 5.43,
+            "_total": 10.71
+        },
+        {
+            "_year": "2021-22",
+            "govt_": 6.26,
+            "private": 13.75,
+            "_total": 20.01
+        },
+        {
+            "_year": "2022-23",
+            "govt_": 11.61,
+            "private": 25.45,
+            "_total": 37.06
+        },
+        {
+            "_year": "2023-24",
+            "govt_": 15.61,
+            "private": 23,
+            "_total": 38.61
+        },
+        {
+            "_year": "2024-25 (9M)",
+            "govt_": 9.7,
+            "private": 22.31,
+            "_total": 32.01
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:44:23.656349Z",
+    "_pramaan_dataset_name": "pli_new_investments_yearwise"
+}

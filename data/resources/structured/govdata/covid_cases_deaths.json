@@ -1,0 +1,366 @@
+{
+    "index_name": "c75f6249-dbe9-4771-b39f-5300c60b0f16",
+    "title": "State/UT-wise details of COVID-19 Cases, Deaths and Number of Recovered Patients as on 19th September, 2020 (From: Ministry of Health and Family Welfare)",
+    "desc": "State/UT-wise details of COVID-19 Cases, Deaths and Number of Recovered Patients as on 19th September, 2020 (From: Ministry of Health and Family Welfare)",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "3da2c35f-4909-4f65-a3e5-50d86f728a01",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1627468482,
+    "updated": 1627890160,
+    "created_date": "2021-07-28T10:34:42Z",
+    "updated_date": "2021-08-02T13:12:40Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "3da2c35f-4909-4f65-a3e5-50d86f728a01",
+        "field": "c75f6249-dbe9-4771-b39f-5300c60b0f16"
+    },
+    "field": [
+        {
+            "id": "sl__no_",
+            "name": "Sl. No.",
+            "type": "keyword"
+        },
+        {
+            "id": "state_ut_wise",
+            "name": "State/UT-wise",
+            "type": "keyword"
+        },
+        {
+            "id": "active_cases",
+            "name": "Active Cases",
+            "type": "double"
+        },
+        {
+            "id": "total_cases",
+            "name": "Total Cases",
+            "type": "double"
+        },
+        {
+            "id": "cumulative_cured_discharged_cases",
+            "name": "Cumulative Cured/Discharged Cases",
+            "type": "double"
+        },
+        {
+            "id": "total_deaths",
+            "name": "Total Deaths",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 37,
+    "count": 37,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "sl__no_": "1",
+            "state_ut_wise": "Andaman & Nicobar Islands",
+            "active_cases": 165,
+            "total_cases": 3631,
+            "cumulative_cured_discharged_cases": 3414,
+            "total_deaths": 52
+        },
+        {
+            "sl__no_": "2",
+            "state_ut_wise": "Andhra Pradesh",
+            "active_cases": 84423,
+            "total_cases": 609558,
+            "cumulative_cured_discharged_cases": 519891,
+            "total_deaths": 5244
+        },
+        {
+            "sl__no_": "3",
+            "state_ut_wise": "Arunachal Pradesh",
+            "active_cases": 1886,
+            "total_cases": 7005,
+            "cumulative_cured_discharged_cases": 5106,
+            "total_deaths": 13
+        },
+        {
+            "sl__no_": "4",
+            "state_ut_wise": "Assam",
+            "active_cases": 28631,
+            "total_cases": 152858,
+            "cumulative_cured_discharged_cases": 123687,
+            "total_deaths": 540
+        },
+        {
+            "sl__no_": "5",
+            "state_ut_wise": "Bihar",
+            "active_cases": 12609,
+            "total_cases": 165218,
+            "cumulative_cured_discharged_cases": 151750,
+            "total_deaths": 859
+        },
+        {
+            "sl__no_": "6",
+            "state_ut_wise": "Chandigarh",
+            "active_cases": 2978,
+            "total_cases": 9506,
+            "cumulative_cured_discharged_cases": 6415,
+            "total_deaths": 113
+        },
+        {
+            "sl__no_": "7",
+            "state_ut_wise": "Chhattisgarh",
+            "active_cases": 36580,
+            "total_cases": 81617,
+            "cumulative_cured_discharged_cases": 44392,
+            "total_deaths": 645
+        },
+        {
+            "sl__no_": "8",
+            "state_ut_wise": "Daman & Diu and Dadra & Nagar Haveli",
+            "active_cases": 218,
+            "total_cases": 2859,
+            "cumulative_cured_discharged_cases": 2639,
+            "total_deaths": 2
+        },
+        {
+            "sl__no_": "9",
+            "state_ut_wise": "Delhi",
+            "active_cases": 32250,
+            "total_cases": 238828,
+            "cumulative_cured_discharged_cases": 201671,
+            "total_deaths": 4907
+        },
+        {
+            "sl__no_": "10",
+            "state_ut_wise": "Goa",
+            "active_cases": 5730,
+            "total_cases": 27379,
+            "cumulative_cured_discharged_cases": 21314,
+            "total_deaths": 335
+        },
+        {
+            "sl__no_": "11",
+            "state_ut_wise": "Gujarat",
+            "active_cases": 16076,
+            "total_cases": 120336,
+            "cumulative_cured_discharged_cases": 100974,
+            "total_deaths": 3286
+        },
+        {
+            "sl__no_": "12",
+            "state_ut_wise": "Haryana",
+            "active_cases": 21291,
+            "total_cases": 106261,
+            "cumulative_cured_discharged_cases": 83878,
+            "total_deaths": 1092
+        },
+        {
+            "sl__no_": "13",
+            "state_ut_wise": "Himachal Pradesh",
+            "active_cases": 4430,
+            "total_cases": 11622,
+            "cumulative_cured_discharged_cases": 7081,
+            "total_deaths": 111
+        },
+        {
+            "sl__no_": "14",
+            "state_ut_wise": "Jammu & Kashmir",
+            "active_cases": 20770,
+            "total_cases": 61041,
+            "cumulative_cured_discharged_cases": 39305,
+            "total_deaths": 966
+        },
+        {
+            "sl__no_": "15",
+            "state_ut_wise": "Jharkhand",
+            "active_cases": 13924,
+            "total_cases": 68578,
+            "cumulative_cured_discharged_cases": 54052,
+            "total_deaths": 602
+        },
+        {
+            "sl__no_": "16",
+            "state_ut_wise": "Karnataka",
+            "active_cases": 101148,
+            "total_cases": 502982,
+            "cumulative_cured_discharged_cases": 394026,
+            "total_deaths": 7808
+        },
+        {
+            "sl__no_": "17",
+            "state_ut_wise": "Kerala",
+            "active_cases": 35795,
+            "total_cases": 126381,
+            "cumulative_cured_discharged_cases": 90085,
+            "total_deaths": 501
+        },
+        {
+            "sl__no_": "18",
+            "state_ut_wise": "Ladakh",
+            "active_cases": 987,
+            "total_cases": 3635,
+            "cumulative_cured_discharged_cases": 2600,
+            "total_deaths": 48
+        },
+        {
+            "sl__no_": "19",
+            "state_ut_wise": "Lakshdweep",
+            "active_cases": "0",
+            "total_cases": "0",
+            "cumulative_cured_discharged_cases": "0",
+            "total_deaths": "0"
+        },
+        {
+            "sl__no_": "20",
+            "state_ut_wise": "Madhya Pradesh",
+            "active_cases": 21605,
+            "total_cases": 100458,
+            "cumulative_cured_discharged_cases": 76952,
+            "total_deaths": 1901
+        },
+        {
+            "sl__no_": "21",
+            "state_ut_wise": "Maharashtra",
+            "active_cases": 301273,
+            "total_cases": 1167496,
+            "cumulative_cured_discharged_cases": 834432,
+            "total_deaths": 31791
+        },
+        {
+            "sl__no_": "22",
+            "state_ut_wise": "Manipur",
+            "active_cases": 1926,
+            "total_cases": 8607,
+            "cumulative_cured_discharged_cases": 6629,
+            "total_deaths": 52
+        },
+        {
+            "sl__no_": "23",
+            "state_ut_wise": "Meghalaya",
+            "active_cases": 1976,
+            "total_cases": 4445,
+            "cumulative_cured_discharged_cases": 2437,
+            "total_deaths": 32
+        },
+        {
+            "sl__no_": "24",
+            "state_ut_wise": "Mizoram",
+            "active_cases": 575,
+            "total_cases": 1548,
+            "cumulative_cured_discharged_cases": 973,
+            "total_deaths": "0"
+        },
+        {
+            "sl__no_": "25",
+            "state_ut_wise": "Nagaland",
+            "active_cases": 1213,
+            "total_cases": 5357,
+            "cumulative_cured_discharged_cases": 4129,
+            "total_deaths": 15
+        },
+        {
+            "sl__no_": "26",
+            "state_ut_wise": "Odisha",
+            "active_cases": 33092,
+            "total_cases": 171341,
+            "cumulative_cured_discharged_cases": 137567,
+            "total_deaths": 682
+        },
+        {
+            "sl__no_": "27",
+            "state_ut_wise": "Puducherry",
+            "active_cases": 4736,
+            "total_cases": 21913,
+            "cumulative_cured_discharged_cases": 16715,
+            "total_deaths": 462
+        },
+        {
+            "sl__no_": "28",
+            "state_ut_wise": "Punjab",
+            "active_cases": 21662,
+            "total_cases": 92833,
+            "cumulative_cured_discharged_cases": 68463,
+            "total_deaths": 2708
+        },
+        {
+            "sl__no_": "29",
+            "state_ut_wise": "Rajasthan",
+            "active_cases": 17717,
+            "total_cases": 111290,
+            "cumulative_cured_discharged_cases": 92265,
+            "total_deaths": 1308
+        },
+        {
+            "sl__no_": "30",
+            "state_ut_wise": "Sikkim",
+            "active_cases": 422,
+            "total_cases": 2303,
+            "cumulative_cured_discharged_cases": 1857,
+            "total_deaths": 24
+        },
+        {
+            "sl__no_": "31",
+            "state_ut_wise": "Tamil Nadu",
+            "active_cases": 46506,
+            "total_cases": 530908,
+            "cumulative_cured_discharged_cases": 475717,
+            "total_deaths": 8685
+        },
+        {
+            "sl__no_": "32",
+            "state_ut_wise": "Telangana",
+            "active_cases": 30636,
+            "total_cases": 169169,
+            "cumulative_cured_discharged_cases": 137508,
+            "total_deaths": 1025
+        },
+        {
+            "sl__no_": "33",
+            "state_ut_wise": "Tripura",
+            "active_cases": 7107,
+            "total_cases": 21484,
+            "cumulative_cured_discharged_cases": 14142,
+            "total_deaths": 235
+        },
+        {
+            "sl__no_": "34",
+            "state_ut_wise": "Uttar Pradesh",
+            "active_cases": 67825,
+            "total_cases": 342788,
+            "cumulative_cured_discharged_cases": 270094,
+            "total_deaths": 4869
+        },
+        {
+            "sl__no_": "35",
+            "state_ut_wise": "Uttarakhand",
+            "active_cases": 11293,
+            "total_cases": 38007,
+            "cumulative_cured_discharged_cases": 26250,
+            "total_deaths": 464
+        },
+        {
+            "sl__no_": "36",
+            "state_ut_wise": "West Bengal",
+            "active_cases": 24509,
+            "total_cases": 218772,
+            "cumulative_cured_discharged_cases": 190021,
+            "total_deaths": 4242
+        },
+        {
+            "sl__no_": "Total",
+            "state_ut_wise": "Total",
+            "active_cases": 1013964,
+            "total_cases": 5308014,
+            "cumulative_cured_discharged_cases": 4208431,
+            "total_deaths": 85619
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:43:14.857237Z",
+    "_pramaan_dataset_name": "covid_cases_deaths_recovered"
+}
