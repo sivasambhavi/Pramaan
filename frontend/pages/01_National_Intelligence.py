@@ -254,12 +254,9 @@ def page():
             interactive=False,
         ).add_to(m)
 
-    # ── 2-column layout: map (full-ish width) + detail panel ──────────────────
-    col_map, col_right = st.columns([3.5, 1], gap="medium")
-
-    with col_map:
-        map_result = st_folium(m, width="100%", height=560,
-                               returned_objects=["last_object_clicked"])
+    # ── Full-width map ──────────────────────────────────────────────────────────
+    map_result = st_folium(m, width="100%", height=520,
+                           returned_objects=["last_object_clicked"])
 
     # ── Sync map marker click → session state ──────────────────────────────────
     clicked = (map_result or {}).get("last_object_clicked")
@@ -276,63 +273,340 @@ def page():
                     st.session_state.sel_event = best_eid
                     st.rerun()
 
-    # ── Right — event detail panel ─────────────────────────────────────────────
-    with col_right:
-        if sel and sel in EVENT_META:
-            lat0, lon0, sname, sdomain, scolor, sdate, ssev = EVENT_META[sel]
-            sev_label, _ = SEVERITY_BADGE.get(ssev, SEVERITY_BADGE["high"])
-            detail   = safe_get(f"/ontology/events/{sel}", silent=True) or {}
-            evt_data = detail.get("event", {})
-            impacts  = detail.get("impacts", [])
-            sdesc    = evt_data.get("description", "") or api_events.get(sel, {}).get("description", "")
+    # ── Event detail panel (below map, horizontal) ─────────────────────────────
+    if sel and sel in EVENT_META:
+        lat0, lon0, sname, sdomain, scolor, sdate, ssev = EVENT_META[sel]
+        sev_label, _ = SEVERITY_BADGE.get(ssev, SEVERITY_BADGE["high"])
+        detail   = safe_get(f"/ontology/events/{sel}", silent=True) or {}
+        evt_data = detail.get("event", {})
+        impacts  = detail.get("impacts", [])
+        schemes  = detail.get("schemes", [])
+        sdesc    = evt_data.get("description", "") or api_events.get(sel, {}).get("description", "")
 
+        detail_col, impact_col, scheme_col, action_col = st.columns([2.2, 1.5, 1.5, 1], gap="medium")
+
+        with detail_col:
             st.markdown(f"""
-            <div style="border-left:3px solid {scolor};padding:10px 12px;
-                        background:#111827;border-radius:4px;margin-bottom:10px;">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
-                <div style="font-size:12px;font-weight:700;color:{scolor};line-height:1.3;">{sname}</div>
+            <div style="border-left:4px solid {scolor};padding:10px 14px;
+                        background:#0a1628;border-radius:6px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span style="font-size:13px;font-weight:800;color:{scolor};">{sname}</span>
                 {sev_label}
               </div>
-              <div style="font-size:10px;color:#64748b;">{sdomain} · {sdate}</div>
+              <div style="font-size:10px;color:#64748b;margin-bottom:6px;">{sdomain} · {sdate}</div>
+              <div style="font-size:10.5px;color:#94a3b8;line-height:1.5;">
+                {sdesc[:220]}{"…" if len(sdesc) > 220 else ""}
+              </div>
             </div>
             """, unsafe_allow_html=True)
 
-            if sdesc:
-                st.markdown(
-                    f'<div style="font-size:10.5px;color:#94a3b8;line-height:1.55;'
-                    f'background:#060f1e;border-radius:6px;padding:8px 10px;margin-bottom:8px;">'
-                    f'{sdesc[:280]}{"…" if len(sdesc) > 280 else ""}</div>',
-                    unsafe_allow_html=True,
-                )
-
+        with impact_col:
+            st.markdown(
+                '<div style="font-size:9px;color:#475569;font-weight:700;text-transform:uppercase;'
+                'letter-spacing:0.08em;margin-bottom:6px;">MEASURED IMPACTS</div>',
+                unsafe_allow_html=True,
+            )
             if impacts:
-                st.markdown(
-                    '<div style="font-size:9.5px;color:#475569;font-weight:700;text-transform:uppercase;'
-                    'letter-spacing:0.08em;margin-bottom:4px;">Impact Nodes</div>',
-                    unsafe_allow_html=True,
-                )
-                for imp in impacts[:4]:
+                for imp in impacts[:5]:
                     itype = imp.get("type", "").replace("_", " ").title()
                     val   = imp.get("value", "")
                     unit  = imp.get("unit", "")
                     st.markdown(
                         f'<div style="font-size:10px;color:#64748b;padding:2px 0 2px 8px;'
-                        f'border-left:2px solid {scolor}44;margin-bottom:2px;">• {itype}'
-                        f'{f": {val} {unit}" if val else ""}</div>',
+                        f'border-left:2px solid {scolor}44;margin-bottom:3px;">• {itype}'
+                        f'{f" — {val} {unit}" if val else ""}</div>',
+                        unsafe_allow_html=True,
+                    )
+            else:
+                st.markdown('<div style="font-size:10px;color:#334155;">Loading…</div>',
+                            unsafe_allow_html=True)
+
+        with scheme_col:
+            st.markdown(
+                '<div style="font-size:9px;color:#475569;font-weight:700;text-transform:uppercase;'
+                'letter-spacing:0.08em;margin-bottom:6px;">GOVT RESPONSE</div>',
+                unsafe_allow_html=True,
+            )
+            if schemes:
+                for s in schemes[:4]:
+                    sname_s   = s.get("name", s.get("scheme_id", ""))[:28]
+                    sbudget   = s.get("budget_crore")
+                    bstr      = f" · ₹{sbudget:,.0f} Cr" if sbudget else ""
+                    st.markdown(
+                        f'<div style="font-size:10px;color:#facc15;padding:2px 0 2px 8px;'
+                        f'border-left:2px solid #facc1544;margin-bottom:3px;">• {sname_s}{bstr}</div>',
+                        unsafe_allow_html=True,
+                    )
+            else:
+                actors = detail.get("actors", [])
+                for a in actors[:3]:
+                    aname = a.get("name", "")[:28]
+                    st.markdown(
+                        f'<div style="font-size:10px;color:#38bdf8;padding:2px 0 2px 8px;'
+                        f'border-left:2px solid #38bdf844;margin-bottom:3px;">• {aname}</div>',
                         unsafe_allow_html=True,
                     )
 
-            st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
-            if st.button("View in Scheme Tracker →", key=f"goto_graph_{sel}",
+        with action_col:
+            st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+            if st.button("Scheme Tracker →", key=f"goto_graph_{sel}",
                          use_container_width=True, type="primary"):
                 st.session_state["deep_link_event"] = sel
                 st.switch_page("pages/02_Scheme_Tracker.py")
-        else:
+            st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+            if st.button("Proof & Evidence →", key=f"goto_proof_{sel}",
+                         use_container_width=True):
+                st.session_state["deep_link_brief"] = sel
+                st.switch_page("pages/04_Proof_and_Evidence.py")
+
+    # ── Live Ingestion Panel ────────────────────────────────────────────────────
+    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    with st.expander("📡 Live Ingestion — Fetch & Ingest Real-Time Governance News", expanded=False):
+        _render_live_ingestion()
+
+
+def _render_live_ingestion():
+    """Live ingestion: scrape Google News → extract entities → ingest to Neo4j."""
+    import time
+    import requests as _req
+    import streamlit as st
+    from utils.api import safe_get
+
+    BACKEND = "http://localhost:8000"
+
+    PRESET_QUERIES = [
+        "NDRF disaster relief India 2024",
+        "AMRUT urban infrastructure India",
+        "PMAY housing scheme India",
+        "India flood cyclone relief fund 2024",
+        "Ayushman Bharat health scheme India",
+        "India semiconductor PLI scheme 2024",
+        "Jal Jeevan Mission water supply India",
+        "India defence budget DRDO 2024",
+        "India G20 trade geopolitics 2024",
+        "India climate disaster NDMA response",
+    ]
+
+    # Auto-refresh timer state
+    if "ingestion_last_run" not in st.session_state:
+        st.session_state.ingestion_last_run   = 0.0
+    if "ingestion_results"  not in st.session_state:
+        st.session_state.ingestion_results    = None
+    if "ingestion_query"    not in st.session_state:
+        st.session_state.ingestion_query      = PRESET_QUERIES[0]
+    if "auto_ingest_on"     not in st.session_state:
+        st.session_state.auto_ingest_on       = False
+
+    # ── Controls row ────────────────────────────────────────────────────────
+    ctrl_col, btn_col, auto_col = st.columns([3, 1, 1.2], gap="small")
+
+    with ctrl_col:
+        query = st.selectbox(
+            "News query",
+            PRESET_QUERIES,
+            index=PRESET_QUERIES.index(st.session_state.ingestion_query)
+                  if st.session_state.ingestion_query in PRESET_QUERIES else 0,
+            label_visibility="collapsed",
+            key="ingestion_query_sel",
+        )
+        st.session_state.ingestion_query = query
+
+    with btn_col:
+        fetch_clicked = st.button("🔍 Fetch & Extract", use_container_width=True, type="primary",
+                                  key="live_fetch_btn")
+
+    with auto_col:
+        auto_on = st.toggle("Auto (5 min)", value=st.session_state.auto_ingest_on, key="auto_ingest_tog")
+        st.session_state.auto_ingest_on = auto_on
+
+    # Auto-refresh trigger
+    now = time.time()
+    if auto_on and (now - st.session_state.ingestion_last_run) > 300:
+        fetch_clicked = True
+
+    # ── Fetch ────────────────────────────────────────────────────────────────
+    if fetch_clicked:
+        with st.spinner(f"Scraping news for: {query} …"):
+            try:
+                resp = _req.get(
+                    f"{BACKEND}/scrape/news",
+                    params={"q": query},
+                    timeout=30,
+                )
+                if resp.status_code == 200:
+                    st.session_state.ingestion_results = resp.json()
+                    st.session_state.ingestion_last_run = time.time()
+                else:
+                    st.error(f"Scrape failed: {resp.status_code}")
+                    st.session_state.ingestion_results = None
+            except Exception as e:
+                st.error(f"Connection error: {e}")
+                st.session_state.ingestion_results = None
+
+    # ── Show results ─────────────────────────────────────────────────────────
+    results = st.session_state.ingestion_results
+    if not results:
+        st.markdown(
+            '<div style="font-size:11px;color:#334155;padding:12px;text-align:center;">'
+            'Click "Fetch & Extract" to scrape live governance news and extract entities.</div>',
+            unsafe_allow_html=True,
+        )
+        return
+
+    articles  = results.get("articles", [])
+    entities  = results.get("entities", [])
+    relations = results.get("relations", [])
+    dropped   = results.get("articles_dropped", 0)
+    message   = results.get("message", "")
+
+    # Summary bar
+    st.markdown(
+        f'<div style="background:#0a1628;border:1px solid #22c55e33;border-radius:8px;'
+        f'padding:8px 14px;margin-bottom:10px;display:flex;gap:20px;align-items:center;">'
+        f'<span style="font-size:11px;color:#22c55e;font-weight:700;">'
+        f'✅ {len(articles)} articles</span>'
+        f'<span style="font-size:11px;color:#facc15;">'
+        f'🧩 {len(entities)} entities</span>'
+        f'<span style="font-size:11px;color:#38bdf8;">'
+        f'🔗 {len(relations)} relations</span>'
+        f'<span style="font-size:10px;color:#475569;">'
+        f'{dropped} dropped (Unrelated)</span>'
+        f'{"<span style=\\'font-size:10px;color:#64748b;margin-left:auto;\\'>" + message + "</span>" if message else ""}'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+    if message and not articles:
+        return
+
+    res_col, ent_col = st.columns([1.4, 1], gap="large")
+
+    with res_col:
+        st.markdown(
+            '<div style="font-size:9px;color:#475569;font-weight:700;text-transform:uppercase;'
+            'letter-spacing:0.08em;margin-bottom:6px;">NEWS ARTICLES</div>',
+            unsafe_allow_html=True,
+        )
+        for art in articles[:6]:
+            rel       = art.get("relevance", "")
+            conf      = art.get("confidence", 0)
+            title     = art.get("title", "")[:80]
+            published = art.get("published", "")[:16]
+            link      = art.get("link", "")
+            rel_color = "#22c55e" if rel == "Direct Match" else ("#facc15" if rel == "Zone Context" else "#38bdf8")
+            link_html = f'<a href="{link}" target="_blank" style="font-size:9px;color:#38bdf8;text-decoration:none;">→</a>' if link else ""
             st.markdown(
-                '<div style="font-size:10px;color:#1e293b;padding:8px;text-align:center;margin-top:40px;">'
-                'Click a map marker or select an event to see details</div>',
+                f'<div style="background:#060f1e;border:1px solid #1e293b;border-left:3px solid {rel_color};'
+                f'border-radius:6px;padding:7px 10px;margin-bottom:5px;">'
+                f'<div style="font-size:10.5px;font-weight:600;color:#e2e8f0;">{title} {link_html}</div>'
+                f'<div style="font-size:9.5px;color:#475569;margin-top:2px;display:flex;gap:8px;">'
+                f'<span style="color:{rel_color};">{rel}</span>'
+                f'<span>conf: {conf:.2f}</span>'
+                f'<span>{published}</span>'
+                f'</div>'
+                f'</div>',
                 unsafe_allow_html=True,
             )
+
+    with ent_col:
+        st.markdown(
+            '<div style="font-size:9px;color:#475569;font-weight:700;text-transform:uppercase;'
+            'letter-spacing:0.08em;margin-bottom:6px;">EXTRACTED ENTITIES</div>',
+            unsafe_allow_html=True,
+        )
+        if entities:
+            for ent in entities[:8]:
+                ename = ent.get("properties", {}).get("name", ent.get("id", ""))[:36]
+                elabel = ent.get("label", "")
+                econf  = ent.get("properties", {}).get("confidence", 0)
+                NODE_COLORS = {
+                    "Event": "#f97316", "Region": "#22c55e", "Actor": "#38bdf8",
+                    "Scheme": "#facc15", "Policy": "#fb7185", "Impact": "#94a3b8",
+                    "Evidence": "#e2e8f0", "Asset": "#a78bfa",
+                }
+                ec = NODE_COLORS.get(elabel, "#64748b")
+                st.markdown(
+                    f'<div style="background:#060f1e;border:1px solid {ec}22;border-radius:5px;'
+                    f'padding:5px 8px;margin-bottom:4px;display:flex;align-items:center;gap:8px;">'
+                    f'<span style="background:{ec}22;color:{ec};font-size:8.5px;font-weight:700;'
+                    f'padding:1px 5px;border-radius:3px;border:1px solid {ec}44;">{elabel}</span>'
+                    f'<span style="font-size:10.5px;color:#94a3b8;flex:1;">{ename}</span>'
+                    f'<span style="font-size:9px;color:#334155;">{econf:.2f}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+        else:
+            st.markdown(
+                '<div style="font-size:10px;color:#334155;">No entities extracted.</div>',
+                unsafe_allow_html=True,
+            )
+
+    # ── Ingest to Neo4j ──────────────────────────────────────────────────────
+    if entities or relations:
+        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+        ingest_col, status_col = st.columns([1, 2], gap="medium")
+        with ingest_col:
+            if st.button(f"⬆️ Ingest {len(entities)} Entities → Neo4j",
+                         key="do_ingest_btn", use_container_width=True):
+                try:
+                    payload = {
+                        "entities":    entities,
+                        "relations":   relations,
+                        "source_type": results.get("source_type", "unstructured_rss"),
+                    }
+                    resp = _req.post(
+                        f"{BACKEND}/ingest/entities",
+                        json=payload,
+                        timeout=30,
+                    )
+                    if resp.status_code == 200:
+                        r = resp.json()
+                        st.session_state["last_ingest_result"] = r
+                        st.rerun()
+                    else:
+                        st.error(f"Ingest failed {resp.status_code}: {resp.text[:200]}")
+                except Exception as e:
+                    st.error(f"Ingest error: {e}")
+
+        # Show last ingest result
+        last = st.session_state.get("last_ingest_result")
+        if last:
+            with status_col:
+                ec   = last.get("entities_created", 0)
+                rc   = last.get("relations_created", 0)
+                slc  = last.get("skipped_low_confidence", 0)
+                sh   = last.get("skipped_hallucinations", 0)
+                vs   = last.get("validation_summary", {}) or {}
+                tot  = vs.get("total_submitted", 0)
+                acc  = vs.get("accepted", 0)
+                st.markdown(
+                    f'<div style="background:#0a2010;border:1px solid #22c55e44;border-radius:8px;'
+                    f'padding:8px 12px;font-size:11px;">'
+                    f'<span style="color:#22c55e;font-weight:700;">✅ Ingested:</span>'
+                    f' {ec} entities · {rc} relations'
+                    f'<span style="color:#475569;margin-left:12px;">|</span>'
+                    f'<span style="color:#475569;margin-left:12px;">'
+                    f'{slc} low-conf skipped · {sh} hallucinations rejected</span>'
+                    f'<span style="color:#475569;margin-left:12px;">|</span>'
+                    f'<span style="color:#64748b;margin-left:12px;">'
+                    f'Acceptance rate: {acc}/{tot} ({int(acc/tot*100) if tot else 0}%)</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+
+    # Auto-rerun for timer
+    if auto_on:
+        elapsed = time.time() - st.session_state.ingestion_last_run
+        remaining = max(0, 300 - int(elapsed))
+        st.markdown(
+            f'<div style="font-size:10px;color:#334155;margin-top:6px;">'
+            f'Auto-refresh in {remaining}s</div>',
+            unsafe_allow_html=True,
+        )
+        if remaining > 0:
+            import time as _t
+            _t.sleep(min(remaining, 30))
+            st.rerun()
 
 
 page()
