@@ -145,7 +145,7 @@ def home() -> None:
     st.html("""
     <div style="display:flex;justify-content:center;margin:6px 0 10px;">
       <a href="/National_Intelligence" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;text-decoration:none;border-radius:12px;padding:10px 44px;font-family:Outfit,sans-serif;font-weight:700;font-size:1em;letter-spacing:0.02em;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:inline-block;">
-        Enter Dashboard &nbsp;→
+        Launch PRAMAAN &nbsp;→
       </a>
     </div>
     """)

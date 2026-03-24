@@ -192,20 +192,27 @@ def page():
             key="sev_filter",
         )
 
-    # ── Map center ─────────────────────────────────────────────────────────────
+    # ── Map center: fit all visible markers when no selection ──────────────────
     if sel and sel in filtered_events:
-        lat0, lon0 = filtered_events[sel][0], filtered_events[sel][1]
-        zoom_in    = 6 if abs(lon0) < 45 or abs(lon0) > 85 else 7
-        map_center, map_zoom = [lat0, lon0], zoom_in
+        lat0, lon0   = filtered_events[sel][0], filtered_events[sel][1]
+        zoom_in      = 5 if abs(lon0) < 35 else 6
+        map_center   = [lat0, lon0]
+        map_zoom     = zoom_in
+        use_fitbounds = False
     else:
-        map_center, map_zoom = DEFAULT_CENTER, DEFAULT_ZOOM
+        # Compute bounding box of all currently-filtered events
+        lats = [v[0] for v in filtered_events.values()]
+        lons = [v[1] for v in filtered_events.values()]
+        map_center    = [sum(lats)/len(lats), sum(lons)/len(lons)] if lats else DEFAULT_CENTER
+        map_zoom      = DEFAULT_ZOOM
+        use_fitbounds = bool(lats)
 
     # ── Build Folium map ───────────────────────────────────────────────────────
     m = folium.Map(
         location=map_center,
         zoom_start=map_zoom,
         tiles="CartoDB positron",
-        scrollWheelZoom=False,
+        scrollWheelZoom=True,
     )
     m.get_root().html.add_child(folium.Element(
         "<style>.leaflet-control-attribution { display: none !important; }</style>"
@@ -235,6 +242,16 @@ def page():
         </div>
         """
 
+        # Halo ring added FIRST so it sits below the clickable marker in the layer stack
+        folium.CircleMarker(
+            location=[lat, lon],
+            radius=radius + 8,
+            color=color, fill=True, fill_color=color,
+            fill_opacity=0.15 if is_selected else 0.08,
+            weight=1,
+            interactive=False,
+        ).add_to(m)
+
         folium.CircleMarker(
             location=[lat, lon],
             radius=radius,
@@ -245,20 +262,24 @@ def page():
             tooltip=folium.Tooltip(f"<b style='color:{color}'>{name}</b><br>{domain} · {date}"),
         ).add_to(m)
 
-        folium.CircleMarker(
-            location=[lat, lon],
-            radius=radius + 8,
-            color=color, fill=True, fill_color=color,
-            fill_opacity=0.15 if is_selected else 0.08,
-            weight=1,
-            interactive=False,
-        ).add_to(m)
+    # Fit map to show all visible markers when no event is selected
+    if use_fitbounds and filtered_events:
+        all_lats = [v[0] for v in filtered_events.values()]
+        all_lons = [v[1] for v in filtered_events.values()]
+        pad = 3   # degrees padding
+        m.fit_bounds(
+            [[min(all_lats) - pad, min(all_lons) - pad],
+             [max(all_lats) + pad, max(all_lons) + pad]]
+        )
 
-    # ── Full-width map ──────────────────────────────────────────────────────────
-    map_result = st_folium(m, width="100%", height=520,
-                           returned_objects=["last_object_clicked"])
+    # ── Map + right panel ───────────────────────────────────────────────────────
+    col_map, col_right = st.columns([3.2, 1], gap="medium")
 
-    # ── Sync map marker click → session state ──────────────────────────────────
+    with col_map:
+        map_result = st_folium(m, key="pramaan_map", width="100%", height=520,
+                               returned_objects=["last_object_clicked"])
+
+    # ── Sync map marker click → session state (no rerun — update in-place) ─────
     clicked = (map_result or {}).get("last_object_clicked")
     if clicked:
         clat, clng = clicked.get("lat"), clicked.get("lng")
@@ -269,86 +290,75 @@ def page():
                 if dist < best_dist:
                     best_dist, best_eid = dist, eid
             if best_eid and best_dist < 1.5:
-                if st.session_state.sel_event != best_eid:
-                    st.session_state.sel_event = best_eid
-                    st.rerun()
+                st.session_state.sel_event = best_eid
 
-    # ── Event detail panel (below map, horizontal) ─────────────────────────────
-    if sel and sel in EVENT_META:
-        lat0, lon0, sname, sdomain, scolor, sdate, ssev = EVENT_META[sel]
-        sev_label, _ = SEVERITY_BADGE.get(ssev, SEVERITY_BADGE["high"])
-        detail   = safe_get(f"/ontology/events/{sel}", silent=True) or {}
-        evt_data = detail.get("event", {})
-        impacts  = detail.get("impacts", [])
-        schemes  = detail.get("schemes", [])
-        sdesc    = evt_data.get("description", "") or api_events.get(sel, {}).get("description", "")
+    # Re-read sel AFTER click detection so first click shows the panel immediately
+    sel = st.session_state.sel_event
 
-        detail_col, impact_col, scheme_col, action_col = st.columns([2.2, 1.5, 1.5, 1], gap="medium")
+    # ── Right — event detail panel ─────────────────────────────────────────────
+    with col_right:
+        if sel and sel in EVENT_META:
+            lat0, lon0, sname, sdomain, scolor, sdate, ssev = EVENT_META[sel]
+            sev_label, _ = SEVERITY_BADGE.get(ssev, SEVERITY_BADGE["high"])
+            detail   = safe_get(f"/ontology/events/{sel}", silent=True) or {}
+            evt_data = detail.get("event", {})
+            impacts  = detail.get("impacts", [])
+            schemes  = detail.get("schemes", [])
+            sdesc    = evt_data.get("description", "") or api_events.get(sel, {}).get("description", "")
 
-        with detail_col:
             st.markdown(f"""
-            <div style="border-left:4px solid {scolor};padding:10px 14px;
-                        background:#0a1628;border-radius:6px;">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                <span style="font-size:13px;font-weight:800;color:{scolor};">{sname}</span>
+            <div style="border-left:3px solid {scolor};padding:10px 12px;
+                        background:#0a1628;border-radius:6px;margin-bottom:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+                <div style="font-size:12px;font-weight:700;color:{scolor};line-height:1.3;">{sname}</div>
                 {sev_label}
               </div>
-              <div style="font-size:10px;color:#64748b;margin-bottom:6px;">{sdomain} · {sdate}</div>
-              <div style="font-size:10.5px;color:#94a3b8;line-height:1.5;">
-                {sdesc[:220]}{"…" if len(sdesc) > 220 else ""}
-              </div>
+              <div style="font-size:10px;color:#64748b;">{sdomain} · {sdate}</div>
             </div>
             """, unsafe_allow_html=True)
 
-        with impact_col:
-            st.markdown(
-                '<div style="font-size:9px;color:#475569;font-weight:700;text-transform:uppercase;'
-                'letter-spacing:0.08em;margin-bottom:6px;">MEASURED IMPACTS</div>',
-                unsafe_allow_html=True,
-            )
+            if sdesc:
+                st.markdown(
+                    f'<div style="font-size:10.5px;color:#94a3b8;line-height:1.55;'
+                    f'background:#060f1e;border-radius:6px;padding:8px 10px;margin-bottom:8px;">'
+                    f'{sdesc[:260]}{"…" if len(sdesc) > 260 else ""}</div>',
+                    unsafe_allow_html=True,
+                )
+
+            if schemes:
+                st.markdown(
+                    '<div style="font-size:9px;color:#facc15;font-weight:700;text-transform:uppercase;'
+                    'letter-spacing:0.08em;margin-bottom:4px;">GOVT RESPONSE</div>',
+                    unsafe_allow_html=True,
+                )
+                for s in schemes[:3]:
+                    sname_s = s.get("name", s.get("scheme_id", ""))[:30]
+                    sbudget = s.get("budget_crore")
+                    bstr    = f" · ₹{sbudget:,.0f} Cr" if sbudget else ""
+                    st.markdown(
+                        f'<div style="font-size:10px;color:#facc15;padding:2px 0 2px 8px;'
+                        f'border-left:2px solid #facc1544;margin-bottom:2px;">• {sname_s}{bstr}</div>',
+                        unsafe_allow_html=True,
+                    )
+
             if impacts:
-                for imp in impacts[:5]:
+                st.markdown(
+                    '<div style="font-size:9px;color:#475569;font-weight:700;text-transform:uppercase;'
+                    'letter-spacing:0.08em;margin-top:8px;margin-bottom:4px;">IMPACTS</div>',
+                    unsafe_allow_html=True,
+                )
+                for imp in impacts[:4]:
                     itype = imp.get("type", "").replace("_", " ").title()
                     val   = imp.get("value", "")
                     unit  = imp.get("unit", "")
                     st.markdown(
                         f'<div style="font-size:10px;color:#64748b;padding:2px 0 2px 8px;'
-                        f'border-left:2px solid {scolor}44;margin-bottom:3px;">• {itype}'
-                        f'{f" — {val} {unit}" if val else ""}</div>',
-                        unsafe_allow_html=True,
-                    )
-            else:
-                st.markdown('<div style="font-size:10px;color:#334155;">Loading…</div>',
-                            unsafe_allow_html=True)
-
-        with scheme_col:
-            st.markdown(
-                '<div style="font-size:9px;color:#475569;font-weight:700;text-transform:uppercase;'
-                'letter-spacing:0.08em;margin-bottom:6px;">GOVT RESPONSE</div>',
-                unsafe_allow_html=True,
-            )
-            if schemes:
-                for s in schemes[:4]:
-                    sname_s   = s.get("name", s.get("scheme_id", ""))[:28]
-                    sbudget   = s.get("budget_crore")
-                    bstr      = f" · ₹{sbudget:,.0f} Cr" if sbudget else ""
-                    st.markdown(
-                        f'<div style="font-size:10px;color:#facc15;padding:2px 0 2px 8px;'
-                        f'border-left:2px solid #facc1544;margin-bottom:3px;">• {sname_s}{bstr}</div>',
-                        unsafe_allow_html=True,
-                    )
-            else:
-                actors = detail.get("actors", [])
-                for a in actors[:3]:
-                    aname = a.get("name", "")[:28]
-                    st.markdown(
-                        f'<div style="font-size:10px;color:#38bdf8;padding:2px 0 2px 8px;'
-                        f'border-left:2px solid #38bdf844;margin-bottom:3px;">• {aname}</div>',
+                        f'border-left:2px solid {scolor}44;margin-bottom:2px;">• {itype}'
+                        f'{f": {val} {unit}" if val else ""}</div>',
                         unsafe_allow_html=True,
                     )
 
-        with action_col:
-            st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+            st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
             if st.button("Scheme Tracker →", key=f"goto_graph_{sel}",
                          use_container_width=True, type="primary"):
                 st.session_state["deep_link_event"] = sel
@@ -358,6 +368,12 @@ def page():
                          use_container_width=True):
                 st.session_state["deep_link_brief"] = sel
                 st.switch_page("pages/04_Proof_and_Evidence.py")
+        else:
+            st.markdown(
+                '<div style="font-size:10px;color:#1e293b;padding:8px;text-align:center;margin-top:40px;">'
+                'Click a map marker<br>or select an event<br>to see details</div>',
+                unsafe_allow_html=True,
+            )
 
     # ── Live Ingestion Panel ────────────────────────────────────────────────────
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
