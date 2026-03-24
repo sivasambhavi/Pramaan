@@ -1,0 +1,70 @@
+{
+    "index_name": "dabeaac7-1164-4b41-b533-51781aae8bc4",
+    "title": "Year-wise Number of Budget Allocation for Department of Space from 2020-21 to 2024-25",
+    "desc": "Year-wise Number of Budget Allocation for Department of Space from 2020-21 to 2024-25",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "e3b19e4d-e287-4d32-b53d-70e9617c7770",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1754934367,
+    "updated": 1754934367,
+    "created_date": "2025-08-11T19:46:07Z",
+    "updated_date": "2025-08-11T19:46:07Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "e3b19e4d-e287-4d32-b53d-70e9617c7770",
+        "field": "dabeaac7-1164-4b41-b533-51781aae8bc4"
+    },
+    "field": [
+        {
+            "id": "financial_year",
+            "name": "Financial Year",
+            "type": "keyword"
+        },
+        {
+            "id": "be_allocations___in_rs__crore_",
+            "name": "BE Allocations ( in Rs. Crore)",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 5,
+    "count": 5,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "financial_year": "2020-21",
+            "be_allocations___in_rs__crore_": 13479.47
+        },
+        {
+            "financial_year": "2021-22",
+            "be_allocations___in_rs__crore_": 13949.09
+        },
+        {
+            "financial_year": "2022-23",
+            "be_allocations___in_rs__crore_": 13700
+        },
+        {
+            "financial_year": "2023-24",
+            "be_allocations___in_rs__crore_": 12543.91
+        },
+        {
+            "financial_year": "2024-25",
+            "be_allocations___in_rs__crore_": 13042.75
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-24T11:54:33.613852Z",
+    "_pramaan_dataset_name": "dos_budget_allocation_2020_2025"
+}

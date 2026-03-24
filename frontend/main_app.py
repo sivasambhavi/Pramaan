@@ -36,11 +36,11 @@ def home() -> None:
     """, unsafe_allow_html=True)
 
     # Fetch live stats (cached 5 min)
-    _stats       = _fetch_stats()
-    _events      = _stats.get("events",      0)
-    _actors      = _stats.get("actors",      0)
-    _evidence    = _stats.get("evidence",    0)
-    _total_nodes = _stats.get("total_nodes", 0)
+    _stats           = _fetch_stats()
+    _funds_tracked   = _stats.get("funds_tracked",   0)
+    _verified_assets = _stats.get("verified_assets", 0)
+    _evidence        = _stats.get("evidence",        0)
+    _events          = _stats.get("events",          0)
 
     # Encode logo as base64
     logo_b64 = ""
@@ -88,18 +88,18 @@ def home() -> None:
       {"<div class='logo-wrap'><img class='logo-img' src='" + logo_src + "' /></div>" if logo_src else ""}
       <div class="title-block">
         <div class="hero-title">PRAMAAN</div>
-        <div class="hero-tagline">AI-Powered <span style="color:#f97316;-webkit-text-fill-color:#f97316;">Global Ontology Engine</span> &nbsp;·&nbsp; 7 Domains</div>
+        <div class="hero-tagline">India Governance Intelligence &amp; <span style="color:#f97316;-webkit-text-fill-color:#f97316;">Proof System</span> &nbsp;·&nbsp; 7 Domains</div>
       </div>
       <div class="explainer">
-        PRAMAAN maps {_events} high-impact events — from Wayanad landslides to the Russia–Ukraine War and Gaza Red Sea crisis —
+        PRAMAAN connects national events to government responses, scheme delivery, and ground-level proof —
         across 7 domains: Climate, Economics, Geopolitics, Defense, Technology, Society, and Governance.
         Every node is real. Every edge is evidence-backed.
       </div>
       <div class="stats-wrap">
-        <div class="stat"><div class="stat-val" id="s1" style="color:#f97316">0</div><div class="stat-lbl">Events Tracked</div><div class="stat-sub">across 7 domains</div></div>
-        <div class="stat"><div class="stat-val" id="s2" style="color:#22c55e">0</div><div class="stat-lbl">Key Actors</div><div class="stat-sub">NDMA · Army · ISRO · MHA</div></div>
+        <div class="stat"><div class="stat-val" id="s1" style="color:#f97316">₹0 Cr</div><div class="stat-lbl">Funds Tracked</div><div class="stat-sub">AMRUT · PMAY · SDRF · PLI</div></div>
+        <div class="stat"><div class="stat-val" id="s2" style="color:#22c55e">0</div><div class="stat-lbl">Verified Assets</div><div class="stat-sub">ground-level delivery proof</div></div>
         <div class="stat"><div class="stat-val" id="s3" style="color:#38bdf8">0</div><div class="stat-lbl">Evidence Nodes</div><div class="stat-sub">PIB · NDMA · ISRO · IMD</div></div>
-        <div class="stat"><div class="stat-val" id="s4" style="color:#a78bfa">0</div><div class="stat-lbl">Graph Nodes</div><div class="stat-sub">live Neo4j knowledge graph</div></div>
+        <div class="stat"><div class="stat-val" id="s4" style="color:#a78bfa">0</div><div class="stat-lbl">Events Tracked</div><div class="stat-sub">across 7 domains</div></div>
       </div>
       <div class="badge-row">
         <span class="badge"><span class="dot" style="background:#22c55e"></span>Neo4j Knowledge Graph</span>
@@ -124,10 +124,17 @@ def home() -> None:
         }}, 16);
       }}
       setTimeout(function() {{
-        countUp(document.getElementById('s1'), {_events},      400);
-        countUp(document.getElementById('s2'), {_actors},      500);
-        countUp(document.getElementById('s3'), {_evidence},    500);
-        countUp(document.getElementById('s4'), {_total_nodes}, 700);
+        var fundsEl = document.getElementById('s1');
+        var fundsTarget = {_funds_tracked};
+        var fundsStart = 0, fundsStep = fundsTarget / (400 / 16);
+        var fundsT = setInterval(function() {{
+          fundsStart = Math.min(fundsStart + fundsStep, fundsTarget);
+          fundsEl.textContent = '₹' + Math.floor(fundsStart).toLocaleString('en-IN') + ' Cr';
+          if (fundsStart >= fundsTarget) clearInterval(fundsT);
+        }}, 16);
+        countUp(document.getElementById('s2'), {_verified_assets}, 500);
+        countUp(document.getElementById('s3'), {_evidence},        500);
+        countUp(document.getElementById('s4'), {_events},          700);
       }}, 400);
     </script>
     </body>

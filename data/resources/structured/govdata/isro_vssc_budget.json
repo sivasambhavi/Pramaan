@@ -1,0 +1,90 @@
+{
+    "index_name": "1035a4ec-5f46-4fa2-a094-0e5bdafdce58",
+    "title": "Year-wise Budget (Revised Estimates) Allocated to Indian Space Research Organization and Vikram Sarabhai Space Centre from 2017-18 to 2021-22",
+    "desc": "Year-wise Budget (Revised Estimates) Allocated to Indian Space Research Organization and Vikram Sarabhai Space Centre from 2017-18 to 2021-22",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "d1045b41-4c31-4225-8afa-390b454c2498",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1677742987,
+    "updated": 1677746176,
+    "created_date": "2023-03-02T13:13:07Z",
+    "updated_date": "2023-03-02T14:06:16Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "d1045b41-4c31-4225-8afa-390b454c2498",
+        "field": "1035a4ec-5f46-4fa2-a094-0e5bdafdce58"
+    },
+    "field": [
+        {
+            "id": "_sl__no_",
+            "name": "Sl. No.",
+            "type": "double"
+        },
+        {
+            "id": "financial_year",
+            "name": "Financial Year",
+            "type": "keyword"
+        },
+        {
+            "id": "revised_estimates__rs__in_crores____indian_space_research_organization___department_of_space",
+            "name": "Revised Estimates (Rs. in Crores) - Indian Space Research Organization / Department of Space",
+            "type": "double"
+        },
+        {
+            "id": "revised_estimates__rs__in_crores____vikram_sarabhai_space_centre",
+            "name": "Revised Estimates (Rs. in Crores) - Vikram Sarabhai Space Centre",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 5,
+    "count": 5,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "_sl__no_": 1,
+            "financial_year": "2017-18",
+            "revised_estimates__rs__in_crores____indian_space_research_organization___department_of_space": 9158.92,
+            "revised_estimates__rs__in_crores____vikram_sarabhai_space_centre": 1368.9
+        },
+        {
+            "_sl__no_": 2,
+            "financial_year": "2018-19",
+            "revised_estimates__rs__in_crores____indian_space_research_organization___department_of_space": 11200,
+            "revised_estimates__rs__in_crores____vikram_sarabhai_space_centre": 1385.51
+        },
+        {
+            "_sl__no_": 3,
+            "financial_year": "2019-20",
+            "revised_estimates__rs__in_crores____indian_space_research_organization___department_of_space": 13139.26,
+            "revised_estimates__rs__in_crores____vikram_sarabhai_space_centre": 1463.09
+        },
+        {
+            "_sl__no_": 4,
+            "financial_year": "2020-21",
+            "revised_estimates__rs__in_crores____indian_space_research_organization___department_of_space": 9500,
+            "revised_estimates__rs__in_crores____vikram_sarabhai_space_centre": 1206
+        },
+        {
+            "_sl__no_": 5,
+            "financial_year": "2021-22",
+            "revised_estimates__rs__in_crores____indian_space_research_organization___department_of_space": 12642,
+            "revised_estimates__rs__in_crores____vikram_sarabhai_space_centre": 1458
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-24T11:55:08.959371Z",
+    "_pramaan_dataset_name": "isro_vssc_budget_2017_2022"
+}

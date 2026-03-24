@@ -68,30 +68,43 @@ def health():
 
 @app.get("/stats", tags=["meta"])
 def stats():
-    """Live graph statistics."""
+    """Live graph statistics — v5 governance metrics."""
     try:
         from app.neo4j_client import get_session
         with get_session() as session:
             rec = session.run("""
-                CALL { MATCH (n)           RETURN count(n)  AS total_nodes }
-                CALL { MATCH (e:Event)     RETURN count(e)  AS events      }
-                CALL { MATCH (d:Domain)    RETURN count(d)  AS domains     }
-                CALL { MATCH (a:Actor)     RETURN count(a)  AS actors      }
-                CALL { MATCH (i:Impact)    RETURN count(i)  AS impacts     }
-                CALL { MATCH (ev:Evidence) RETURN count(ev) AS evidence    }
-                CALL { MATCH ()-[r]->()    RETURN count(r)  AS total_edges }
-                RETURN total_nodes, events, domains, actors, impacts, evidence, total_edges
+                CALL { MATCH (n)                          RETURN count(n)    AS total_nodes  }
+                CALL { MATCH (e:Event)                    RETURN count(e)    AS events       }
+                CALL { MATCH (d:Domain)                   RETURN count(d)    AS domains      }
+                CALL { MATCH (a:Actor)                    RETURN count(a)    AS actors       }
+                CALL { MATCH (ev:Evidence)                RETURN count(ev)   AS evidence     }
+                CALL { MATCH ()-[r]->()                   RETURN count(r)    AS total_edges  }
+                CALL { MATCH (s:Scheme)                   RETURN count(s)    AS schemes      }
+                CALL { MATCH (ast:Asset)                  RETURN count(ast)  AS assets       }
+                CALL { MATCH (ast:Asset {status:'completed'}) RETURN count(ast) AS verified_assets }
+                CALL { MATCH (s:Scheme)
+                       WHERE s.budget IS NOT NULL
+                       RETURN sum(toFloat(s.budget)) AS funds_tracked }
+                RETURN total_nodes, events, domains, actors, evidence, total_edges,
+                       schemes, assets, verified_assets, funds_tracked
             """).single()
             if rec:
                 return {
-                    "events":      rec["events"],
-                    "domains":     rec["domains"],
-                    "actors":      rec["actors"],
-                    "impacts":     rec["impacts"],
-                    "evidence":    rec["evidence"],
-                    "total_nodes": rec["total_nodes"],
-                    "total_edges": rec["total_edges"],
+                    "events":          rec["events"],
+                    "domains":         rec["domains"],
+                    "actors":          rec["actors"],
+                    "evidence":        rec["evidence"],
+                    "total_nodes":     rec["total_nodes"],
+                    "total_edges":     rec["total_edges"],
+                    "schemes":         rec["schemes"],
+                    "assets":          rec["assets"],
+                    "verified_assets": rec["verified_assets"],
+                    "funds_tracked":   rec["funds_tracked"] or 0,
                 }
     except Exception as e:
         log.warning("[stats] Neo4j query failed: %s", e)
-    return {"total_nodes": 0, "events": 0, "domains": 0, "actors": 0, "impacts": 0, "evidence": 0, "total_edges": 0}
+    return {
+        "total_nodes": 0, "events": 0, "domains": 0, "actors": 0,
+        "evidence": 0, "total_edges": 0, "schemes": 0, "assets": 0,
+        "verified_assets": 0, "funds_tracked": 0,
+    }

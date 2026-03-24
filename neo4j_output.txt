@@ -1,8 +1,0 @@
---- ASSET LOCATIONS ---
-
---- DESCENDANT QUERY REG_W45 ---
-Total descendant assets found: 0
-
---- PARENT QUERY REG_W45 ---
-
---- WARD METADATA ---

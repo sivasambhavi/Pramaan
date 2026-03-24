@@ -54,7 +54,7 @@
       "api_endpoint": "https://api.data.gov.in/resource/1bcf0a6e-fa7c-4cc8-86dc-caaa8daab1ac",
       "api_available": true,
       "fields": ["State/UT", "SDRF Allocation", "Centre Share Released", "NDRF Release per Year"],
-      "events": ["EVT_WAYANAD_2024", "EVT_CHAMOLI_2021", "EVT_JOSHIMATH_2023", "EVT_DELHI_FLOODS_2023"],
+      "events": ["EVT_WAYANAD_2024", "EVT_CHAMOLI_2021", "EVT_JOSHIMATH_2023", "EVT_DELHI_FLOODS_2023", "EVT_CYCLONE_DANA_2024"],
       "domain": "Climate",
       "active": true
     },
@@ -210,10 +210,9 @@
       "api_endpoint": "https://api.data.gov.in/resource/6e38d0c0-045e-4dce-81d0-eca39519bb07",
       "api_available": true,
       "fields": ["State/UT", "Work Completed - Number", "Work Completed - Amount", "Work in Progress - Number"],
-      "events": [],
+      "events": ["EVT_DELHI_FLOODS_2023"],
       "domain": "Governance",
-      "active": false,
-      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
+      "active": true
     },
 
     {
@@ -224,10 +223,9 @@
       "api_endpoint": "https://api.data.gov.in/resource/65a47638-5f03-4c47-968f-63ccbac210f1",
       "api_available": true,
       "fields": ["State/UT", "Houses Sanctioned", "Houses Grounded", "Houses Completed", "CA Released"],
-      "events": [],
+      "events": ["EVT_DELHI_FLOODS_2023"],
       "domain": "Governance",
-      "active": false,
-      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
+      "active": true
     },
 
     {
@@ -238,10 +236,9 @@
       "api_endpoint": "https://api.data.gov.in/resource/88801d21-6a04-485a-9d6a-5e844db67a61",
       "api_available": true,
       "fields": ["State/UT", "Individual Toilets 2018", "Individual Toilets 2019", "Individual Toilets 2020", "Individual Toilets 2021", "Individual Toilets 2022"],
-      "events": [],
-      "domain": "Governance",
-      "active": false,
-      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
+      "events": ["EVT_COVID_WAVE2_2021"],
+      "domain": "Society",
+      "active": true
     },
 
     {
@@ -252,10 +249,9 @@
       "api_endpoint": "https://api.data.gov.in/resource/9ecf4d59-ca75-44fb-8513-137f254880c3",
       "api_available": true,
       "fields": ["State/UT", "2020-21", "2021-22", "2022-23", "2023-24"],
-      "events": [],
+      "events": ["EVT_COVID_WAVE2_2021"],
       "domain": "Economics",
-      "active": false,
-      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
+      "active": true
     },
 
     {
@@ -266,10 +262,63 @@
       "api_endpoint": "https://api.data.gov.in/resource/2029b46f-154e-4fb3-b5fb-2dde336e52c4",
       "api_available": true,
       "fields": ["State/UT", "Eligible Beneficiary Families", "Total Individual Ayushman Card Issued"],
-      "events": [],
+      "events": ["EVT_COVID_WAVE2_2021"],
       "domain": "Society",
-      "active": false,
-      "notes": "Old ward-level PRD dataset — not mapped to current 15 events."
+      "active": true
+    }
+
+  ,
+
+    {
+      "name": "dos_budget_allocation_2020_2025",
+      "uuid": "dabeaac7-1164-4b41-b533-51781aae8bc4",
+      "title": "Year-wise Budget Allocation for Department of Space from 2020-21 to 2024-25",
+      "output_file": "dos_budget_allocation.json",
+      "api_endpoint": "https://api.data.gov.in/resource/dabeaac7-1164-4b41-b533-51781aae8bc4",
+      "api_available": true,
+      "fields": ["financial_year", "be_allocations___in_rs__crore_"],
+      "events": ["EVT_CHANDRAYAAN3_2023", "EVT_ADITYAL1_2023"],
+      "domain": "Technology",
+      "active": true
+    },
+
+    {
+      "name": "isro_vssc_budget_2017_2022",
+      "uuid": "1035a4ec-5f46-4fa2-a094-0e5bdafdce58",
+      "title": "Year-wise Budget (Revised Estimates) Allocated to ISRO and VSSC from 2017-18 to 2021-22",
+      "output_file": "isro_vssc_budget.json",
+      "api_endpoint": "https://api.data.gov.in/resource/1035a4ec-5f46-4fa2-a094-0e5bdafdce58",
+      "api_available": true,
+      "fields": ["financial_year", "revised_estimates_isro", "revised_estimates_vssc"],
+      "events": ["EVT_CHANDRAYAAN3_2023", "EVT_ADITYAL1_2023"],
+      "domain": "Technology",
+      "active": true
+    },
+
+    {
+      "name": "crude_oil_petroleum_import_export",
+      "uuid": "518e560e-7fa7-4f5b-8aed-3b90323ed965",
+      "title": "Crude Oil Import and Petroleum Product Import/Export by Oil Companies (monthly)",
+      "output_file": "crude_oil_petroleum.json",
+      "api_endpoint": "https://api.data.gov.in/resource/518e560e-7fa7-4f5b-8aed-3b90323ed965",
+      "api_available": true,
+      "fields": ["Month", "Year", "PRODUCTS", "TRADE", "Quantity (000 Metric Tonnes)", "Value in Rupees (Crore)", "Value in Dollars (Million US dollar)"],
+      "events": ["EVT_RUSSIA_UKRAINE_2022"],
+      "domain": "Geopolitics",
+      "active": true
+    },
+
+    {
+      "name": "merchandise_services_trade_2017_2023",
+      "uuid": "3a2055ab-0975-45e4-a16f-efc148f95e1e",
+      "title": "Year-wise Value of Overall Merchandise + Services Exports, Imports and Trade Deficit from 2017-18 to 2022-23",
+      "output_file": "merchandise_services_trade.json",
+      "api_endpoint": "https://api.data.gov.in/resource/3a2055ab-0975-45e4-a16f-efc148f95e1e",
+      "api_available": true,
+      "fields": ["years", "overall_export", "overall_import"],
+      "events": ["EVT_GAZA_REDSEA_2023"],
+      "domain": "Geopolitics",
+      "active": true
     }
 
   ]

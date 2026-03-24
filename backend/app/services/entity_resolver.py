@@ -18,8 +18,8 @@ Usage (called from ingest.py):
     from app.services.entity_resolver import resolve_entity_id
 
     resolved_id = resolve_entity_id(
-        raw_id  = "ward_45_shahdara",
-        name    = "Ward 45 Shahdara",
+        raw_id  = "reg_delhi",
+        name    = "NCT of Delhi",
         label   = "Region",
         session = session,
     )

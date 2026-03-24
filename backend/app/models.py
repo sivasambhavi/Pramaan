@@ -7,14 +7,15 @@ are the source of truth for both the loader and the API layer.
 API models (request/response) are kept separate at the bottom.
 
 Changelog:
-  v2 — Added lat/lon to RegionNode and AssetNode (used by Ward Map).
-       Added proof_status, verified to AssetNode (set by /assets/{id}/set-verified).
-       Added AuditFields mixin: all live-ingested nodes carry these lineage stamps.
+  v2 — Added lat/lon to RegionNode and AssetNode.
+       Added proof_status, verified to AssetNode.
+       Added AuditFields mixin: all live-ingested nodes carry lineage stamps.
        Fixed AssetChainResponse: funded_by -> built_by; added people_served, beneficiary_desc.
-       Replaced narrow DeliveryScoreResponse with full WardScoreResponse + sub-models.
        Added ValidationEntry typed model for ingest audit log.
        source_type on IngestPayload now uses Literal for strict validation.
        Added ScrapeNewsResponse typed model.
+  v5 — Models support 5-layer proof chain (Event → Response → Scheme → Asset → Evidence).
+       /stats returns v5 governance metrics: funds_tracked, verified_assets, evidence, events.
 """
 
 from typing import Any, Literal, Optional
