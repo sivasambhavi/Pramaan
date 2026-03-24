@@ -696,6 +696,9 @@ def page():
         unsafe_allow_html=True,
     )
 
+    # ── Before/After Photo Section (Delhi pilot + generic) ─────────────────────
+    _render_photo_evidence(event_id, color)
+
     # ── Query selector (event-specific) ───────────────────────────────────────
     _EVENT_QUERIES = {
         "EVT_WAYANAD_2024": [
@@ -803,8 +806,6 @@ def page():
             "What cross-domain links exist between Aditya-L1 data and India's climate intelligence?",
             "What commercial and diplomatic leverage does India gain from solar observation data?",
         ],
-    }
-
         "EVT_RUSSIA_UKRAINE_2022": [
             "How has the Russia-Ukraine war changed India's energy import strategy and at what cost?",
             "What is the India-Russia bilateral trade impact — total value, commodities, and risks?",
@@ -923,6 +924,89 @@ def page():
           </div>
         </div>
         """, unsafe_allow_html=True)
+
+
+def _render_photo_evidence(event_id: str, color: str):
+    """Render before/after photo pairs and data proof for the selected event."""
+    import streamlit as st
+    import base64
+    from pathlib import Path
+
+    EVIDENCE_DIR = Path(__file__).resolve().parents[1] / "static" / "evidence"
+
+    def _img_b64(fname: str) -> str:
+        p = EVIDENCE_DIR / fname
+        if not p.exists():
+            return ""
+        with open(p, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+        ext = p.suffix.lower().replace(".", "")
+        mime = "png" if ext == "png" else "jpeg"
+        return f"data:image/{mime};base64,{b64}"
+
+    PHOTO_PAIRS = {
+        "EVT_DELHI_FLOODS_2023": [
+            ("before_w45_gali7_drain.png",        "after_w45_gali7_drain.png",        "Gali 7 Storm Drain · Ward 45",    "Before: monsoon blockage",          "After: AMRUT 2024 ✅"),
+            ("before_w45_gali12_streetlight.jpeg", "after_w45_gali12_streetlight.jpeg","Gali 12 Streetlight · Ward 45",   "Before: broken light",              "After: LED · SFC scheme ✅"),
+            ("before_w45_pmay.jpeg",               "after_w45_pmay.jpeg",              "PMAY Housing · Ward 45",          "Before: kachha structure",          "After: pucca house ✅"),
+            ("before_w45_toilet.jpeg",             "after_w45_toilet.jpeg",            "SBM Toilet · Ward 45",            "Before: open defecation",           "After: functional toilet ✅"),
+        ],
+    }
+    GENERIC_PAIRS = [
+        ("drain_before.png", "drain_after.png", "Storm Drain", "Before repair", "After repair ✅"),
+        ("road_before.png",  "road_after.png",  "Road",        "Before repair", "After repair ✅"),
+    ]
+
+    pairs = PHOTO_PAIRS.get(event_id, GENERIC_PAIRS)
+    has_photos = any(
+        (EVIDENCE_DIR / b).exists() or (EVIDENCE_DIR / a).exists()
+        for b, a, *_ in pairs
+    )
+    if not has_photos:
+        return
+
+    st.markdown(
+        '<div style="font-size:0.7em;color:#475569;text-transform:uppercase;letter-spacing:0.1em;'
+        'font-weight:700;margin-bottom:10px;margin-top:4px;">GROUND-TRUTH PHOTO EVIDENCE — BEFORE / AFTER</div>',
+        unsafe_allow_html=True,
+    )
+
+    n_cols = min(len(pairs), 4)
+    cols   = st.columns(n_cols, gap="small")
+
+    for i, (bfile, afile, title, blabel, alabel) in enumerate(pairs):
+        col  = cols[i % n_cols]
+        bsrc = _img_b64(bfile)
+        asrc = _img_b64(afile)
+        with col:
+            if bsrc and asrc:
+                st.markdown(
+                    f'<div style="background:#060f1e;border:1px solid {color}22;border-radius:10px;'
+                    f'overflow:hidden;margin-bottom:6px;">'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">'
+                    f'<div style="position:relative;">'
+                    f'<img src="{bsrc}" style="width:100%;height:110px;object-fit:cover;">'
+                    f'<span style="position:absolute;bottom:3px;left:3px;background:#0009;color:#fca5a5;'
+                    f'font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;">BEFORE</span>'
+                    f'</div>'
+                    f'<div style="position:relative;">'
+                    f'<img src="{asrc}" style="width:100%;height:110px;object-fit:cover;">'
+                    f'<span style="position:absolute;bottom:3px;left:3px;background:#0009;color:#86efac;'
+                    f'font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;">AFTER ✅</span>'
+                    f'</div>'
+                    f'</div>'
+                    f'<div style="padding:7px 10px;">'
+                    f'<div style="font-size:10.5px;font-weight:700;color:#94a3b8;">{title}</div>'
+                    f'<div style="font-size:9px;color:#334155;margin-top:1px;">'
+                    f'<span style="color:#7f1d1d;">{blabel}</span>'
+                    f' → <span style="color:#14532d;">{alabel}</span>'
+                    f'</div>'
+                    f'</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+
+    st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
 
 page()

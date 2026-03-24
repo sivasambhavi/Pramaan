@@ -602,6 +602,108 @@ def page():
                         st.session_state["deep_link_feed"] = bare_id
                         st.switch_page("pages/03_Delivery_Monitor.py")
 
+    # ══ SCHEME DECISION PANEL ════════════════════════════════════════════════
+    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.markdown(
+        '<div style="font-size:0.7em;color:#475569;text-transform:uppercase;'
+        'letter-spacing:0.1em;font-weight:700;margin-bottom:10px;border-top:1px solid #1e293b;padding-top:14px;">'
+        'SCHEME DECISION PANEL — TYPE 1 vs TYPE 2</div>',
+        unsafe_allow_html=True,
+    )
+
+    # Static scheme classification
+    TYPE1_SCHEMES = [
+        {"name": "State Disaster Response Fund",    "id": "SCH_SDRF",      "budget": "₹43,900 Cr", "trigger": "Flood / Cyclone / Disaster", "ministry": "MHA",  "events": ["Delhi Floods", "Cyclone Dana", "Wayanad", "Chamoli"]},
+        {"name": "National Disaster Response Fund", "id": "SCH_NDRF_FUND", "budget": "₹12,390 Cr", "trigger": "National emergency declared",  "ministry": "MHA",  "events": ["Delhi Floods", "Cyclone Dana", "Wayanad"]},
+        {"name": "PM-KUSUM / Rupaya Solar",         "id": "SCH_PLI_SEMI",  "budget": "₹76,000 Cr", "trigger": "Semiconductor supply shock",   "ministry": "MoCI", "events": ["Tata Semiconductor Fab"]},
+    ]
+
+    TYPE2_SCHEMES = [
+        {"name": "AMRUT 2.0",                  "id": "SCH_AMRUT",    "budget": "₹66,750 Cr", "focus": "Urban water/drainage infrastructure", "ministry": "MoHUA",  "delhi": "3 drainage projects · ₹5.38 Cr · 2 completed ✅"},
+        {"name": "PMAY-U (Urban)",             "id": "SCH_PMAY",     "budget": "₹401 Cr",    "focus": "Affordable urban housing",            "ministry": "MoHUA",  "delhi": "17,067 houses · ₹401 Cr · 100% complete ✅"},
+        {"name": "Ayushman Bharat PMJAY",      "id": "SCH_AYUSHMAN", "budget": "₹7,200 Cr",  "focus": "Universal health coverage",           "ministry": "MoHFW",  "delhi": "7.4 Cr cards issued · 2.2 Cr hospitalised"},
+        {"name": "PM SVANidhi",                "id": "SCH_SVANIDHI", "budget": "₹700 Cr",    "focus": "Street vendor micro-credit",          "ministry": "MoHUA",  "delhi": "68.7L beneficiaries · 3rd tranche"},
+        {"name": "SBM Urban 2.0",              "id": "SCH_SBM",      "budget": "₹1,400 Cr",  "focus": "Sanitation / waste-free cities",      "ministry": "MoHUA",  "delhi": "ODF+ certified wards"},
+        {"name": "Jal Jeevan Mission",         "id": "SCH_JJBY",     "budget": "₹197,000 Cr","focus": "Har ghar jal — tap water to all",     "ministry": "Jal Shakti", "delhi": "14.39 Cr connections (76.7%)"},
+        {"name": "DDUGJY Rural Power",         "id": "SCH_DDUGJY",   "budget": "₹12,544 Cr", "focus": "Rural electrification",               "ministry": "Power",  "delhi": "100% village electrification"},
+        {"name": "PLI — Semiconductor",        "id": "SCH_PLI_SEMI", "budget": "₹76,000 Cr", "focus": "Domestic chip manufacturing",         "ministry": "MoCI",   "delhi": "Tata / CG Power · ₹1.26 Lakh Cr investment"},
+    ]
+
+    t1col, t2col = st.columns([1, 2], gap="large")
+
+    with t1col:
+        st.markdown(
+            '<div style="background:#0d1826;border:1px solid #ef444433;border-left:4px solid #ef4444;'
+            'border-radius:10px;padding:12px 14px;margin-bottom:12px;">'
+            '<div style="font-size:11px;font-weight:800;color:#ef4444;text-transform:uppercase;'
+            'letter-spacing:0.08em;margin-bottom:8px;">🚨 Type 1 — Event-Triggered Response</div>'
+            '<div style="font-size:10.5px;color:#64748b;margin-bottom:10px;line-height:1.5;">'
+            'Activated only when a qualifying disaster or emergency is declared. '
+            'Funds are released directly to state/national agencies.'
+            '</div>',
+            unsafe_allow_html=True,
+        )
+        for s in TYPE1_SCHEMES:
+            evts_html = " · ".join(f'<span style="color:#ef444488;">{e}</span>' for e in s["events"])
+            st.markdown(
+                f'<div style="background:#060f1e;border:1px solid #ef444422;border-radius:8px;'
+                f'padding:9px 12px;margin-bottom:6px;">'
+                f'<div style="font-size:11.5px;font-weight:700;color:#fca5a5;">{s["name"]}</div>'
+                f'<div style="font-size:10px;color:#64748b;margin-top:3px;">'
+                f'{s["budget"]} &nbsp;·&nbsp; {s["ministry"]}</div>'
+                f'<div style="font-size:9.5px;color:#475569;margin-top:4px;">'
+                f'Trigger: <span style="color:#94a3b8;">{s["trigger"]}</span></div>'
+                f'<div style="font-size:9.5px;color:#334155;margin-top:3px;">Events: {evts_html}</div>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with t2col:
+        st.markdown(
+            '<div style="background:#0a1a0a;border:1px solid #22c55e33;border-left:4px solid #22c55e;'
+            'border-radius:10px;padding:12px 14px;margin-bottom:12px;">'
+            '<div style="font-size:11px;font-weight:800;color:#22c55e;text-transform:uppercase;'
+            'letter-spacing:0.08em;margin-bottom:8px;">🏗️ Type 2 — Ongoing Delivery Schemes</div>'
+            '<div style="font-size:10.5px;color:#64748b;margin-bottom:10px;line-height:1.5;">'
+            'Always-on implementation programmes. Triggered events create urgency and unlock '
+            'additional fund releases, but delivery is continuous.'
+            '</div>',
+            unsafe_allow_html=True,
+        )
+        cols_a, cols_b = st.columns(2, gap="small")
+        half = len(TYPE2_SCHEMES) // 2
+        for i, s in enumerate(TYPE2_SCHEMES):
+            target_col = cols_a if i < half else cols_b
+            with target_col:
+                st.markdown(
+                    f'<div style="background:#060f1e;border:1px solid #22c55e22;border-radius:8px;'
+                    f'padding:9px 12px;margin-bottom:6px;">'
+                    f'<div style="font-size:11.5px;font-weight:700;color:#86efac;">{s["name"]}</div>'
+                    f'<div style="font-size:10px;color:#64748b;margin-top:2px;">'
+                    f'{s["budget"]} &nbsp;·&nbsp; {s["ministry"]}</div>'
+                    f'<div style="font-size:9.5px;color:#475569;margin-top:3px;">{s["focus"]}</div>'
+                    f'<div style="font-size:9.5px;color:#22c55e88;margin-top:4px;border-top:1px solid #1e293b;'
+                    f'padding-top:3px;">Delhi: {s["delhi"]}</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # ── Delivery chain CTA ────────────────────────────────────────────────────
+    st.markdown(
+        '<div style="background:#0a1628;border:1px solid #22c55e44;border-radius:10px;'
+        'padding:10px 16px;display:flex;align-items:center;gap:16px;margin-top:4px;">'
+        '<div style="flex:1;font-size:12px;color:#64748b;">'
+        '📍 <strong style="color:#22c55e;">Delhi Pilot</strong> — AMRUT + PMAY delivery tracked to asset level '
+        'with real data.gov.in evidence. Click below to see full ground-truth proof chain.'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+    if st.button("View Delhi Pilot → Delivery Monitor", key="goto_delivery_pilot", type="primary"):
+        st.session_state["feed_sel"] = "EVT_DELHI_FLOODS_2023"
+        st.switch_page("pages/03_Delivery_Monitor.py")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 page()

@@ -83,8 +83,8 @@ def stats():
                 CALL { MATCH (ast:Asset)                  RETURN count(ast)  AS assets       }
                 CALL { MATCH (ast:Asset {status:'completed'}) RETURN count(ast) AS verified_assets }
                 CALL { MATCH (s:Scheme)
-                       WHERE s.budget IS NOT NULL
-                       RETURN sum(toFloat(s.budget)) AS funds_tracked }
+                       WHERE s.budget_crore IS NOT NULL
+                       RETURN sum(toFloat(s.budget_crore)) AS funds_tracked }
                 RETURN total_nodes, events, domains, actors, evidence, total_edges,
                        schemes, assets, verified_assets, funds_tracked
             """).single()
