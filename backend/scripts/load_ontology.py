@@ -3,9 +3,10 @@ load_ontology.py — PRAMAAN Global Ontology Engine Seed Loader
 Reads data/resources/ontology/seed_graph.json and loads all nodes + edges
 into Neo4j.
 
-Node types: Domain, Region, Actor, Scheme, Policy, Event, Impact, Evidence
+Node types: Domain, Region, Actor, Scheme, Policy, Event, Impact, Evidence, Asset
 Edge types: OCCURRED_IN, BELONGS_TO, ALSO_IN, MANAGED_BY, FUNDED_BY,
-            CAUSED, TRIGGERED, CONNECTED_TO, PART_OF, PROVEN_BY
+            CAUSED, TRIGGERED, CONNECTED_TO, PART_OF, PROVEN_BY,
+            FUNDS, LOCATED_IN, HAS_EVIDENCE
 
 Usage:
     cd /path/to/Pramaan
@@ -41,6 +42,7 @@ def setup_schema(session):
         ("Event",    "event_id"),
         ("Impact",   "impact_id"),
         ("Evidence", "evidence_id"),
+        ("Asset",    "asset_id"),
     ]
     for label, prop in constraints:
         session.run(
@@ -145,6 +147,26 @@ def load_impacts(session, impacts):
     logger.info("  Loaded %d Impact nodes.", len(impacts))
 
 
+def load_assets(session, assets):
+    for a in assets:
+        session.run("""
+            MERGE (n:Asset {asset_id: $asset_id})
+            SET n.name        = $name,
+                n.type        = $type,
+                n.status      = $status,
+                n.cost_crore  = $cost_crore,
+                n.proof_status = $proof_status,
+                n.description = $description,
+                n.source      = $source
+        """, {**a,
+              "status":       a.get("status", ""),
+              "cost_crore":   a.get("cost_crore"),
+              "proof_status": a.get("proof_status", "unverified"),
+              "description":  a.get("description", ""),
+              "source":       a.get("source", "")})
+    logger.info("  Loaded %d Asset nodes.", len(assets))
+
+
 def load_evidence(session, evidence):
     for e in evidence:
         session.run("""
@@ -162,6 +184,7 @@ def load_evidence(session, evidence):
 
 # Map edge type → (from_label, from_id, to_label, to_id)
 EDGE_CONFIG = {
+    # Event-level edges
     "OCCURRED_IN":  ("Event",   "event_id",   "Region",  "region_id"),
     "BELONGS_TO":   ("Event",   "event_id",   "Domain",  "domain_id"),
     "ALSO_IN":      ("Event",   "event_id",   "Domain",  "domain_id"),
@@ -172,6 +195,10 @@ EDGE_CONFIG = {
     "PROVEN_BY":    ("Event",   "event_id",   "Evidence","evidence_id"),
     "CONNECTED_TO": ("Event",   "event_id",   "Event",   "event_id"),
     "PART_OF":      ("Actor",   "actor_id",   "Actor",   "actor_id"),
+    # v5 delivery chain edges
+    "FUNDS":        ("Scheme",  "scheme_id",  "Asset",   "asset_id"),
+    "LOCATED_IN":   ("Asset",   "asset_id",   "Region",  "region_id"),
+    "HAS_EVIDENCE": ("Asset",   "asset_id",   "Evidence","evidence_id"),
 }
 
 def load_edges(session, edges):
@@ -235,6 +262,7 @@ def main():
     logger.info("  Policies: %d", len(graph["policies"]))
     logger.info("  Events:   %d", len(graph["events"]))
     logger.info("  Impacts:  %d", len(graph["impacts"]))
+    logger.info("  Assets:   %d", len(graph.get("assets", [])))
     logger.info("  Evidence: %d", len(graph["evidence"]))
     logger.info("  Edges:    %d", len(graph["edges"]))
 
@@ -255,6 +283,7 @@ def main():
         load_policies(session, graph["policies"])
         load_events(session,   graph["events"])
         load_impacts(session,  graph["impacts"])
+        load_assets(session,   graph.get("assets", []))
         load_evidence(session, graph["evidence"])
 
         logger.info("\n── Loading edges ──────────────────────────────────")
@@ -262,7 +291,7 @@ def main():
 
     logger.info("\nSUCCESS: Global Ontology Graph loaded into Neo4j.")
     logger.info("Total nodes: %d | Total edges: %d",
-                sum(len(graph[k]) for k in ["domains","regions","actors","schemes","policies","events","impacts","evidence"]),
+                sum(len(graph.get(k, [])) for k in ["domains","regions","actors","schemes","policies","events","impacts","assets","evidence"]),
                 len(graph["edges"]))
 
 

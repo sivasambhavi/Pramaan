@@ -1,7 +1,7 @@
 """
-04_Decision_Brief.py — PRAMAAN Global Ontology Engine
-AI-powered decision brief using Groq LLaMA 3.3 70B.
-Synthesizes event subgraph data into a structured intelligence brief.
+04_Proof_and_Evidence.py — PRAMAAN v5
+Proof & Evidence: AI decision brief (Groq LLaMA 3.3 70B), before/after photos,
+data proof layer, trust scoring, citizen mock view.
 """
 
 import sys
@@ -432,8 +432,8 @@ def _generate_compound_brief(context: str, query: str):
 
 
 def page():
-    st.set_page_config(page_title="Decision Brief – PRAMAAN", layout="wide")
-    render_topnav(active_page="Decision Brief", show_sidebar=True)
+    st.set_page_config(page_title="Proof & Evidence – PRAMAAN", layout="wide")
+    render_topnav(active_page="Proof & Evidence", show_sidebar=True)
 
     st.markdown("""
     <style>
@@ -555,7 +555,7 @@ def page():
     st.markdown("""
     <div style="padding:6px 0 4px;border-bottom:1px solid #1e293b;margin-bottom:8px;display:flex;align-items:center;gap:14px;">
       <span style="font-size:1.9em;font-weight:800;color:#38bdf8;font-family:'Cinzel',serif;letter-spacing:0.08em;white-space:nowrap;animation:glowPulse 2.5s ease-in-out infinite;">
-        DECISION BRIEF
+        PROOF & EVIDENCE
       </span>
       <span style="font-size:0.75em;color:#64748b;white-space:nowrap;">
         AI-Powered Intelligence Brief &nbsp;·&nbsp; <span style="color:#475569;">Groq LLaMA 3.3 70B</span> &nbsp;·&nbsp; <span style="color:#334155;">Verified Ontology Data</span>

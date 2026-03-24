@@ -1,6 +1,7 @@
 """
-02_Ontology_Graph.py — PRAMAAN Global Ontology Engine
-Interactive knowledge graph visualization using streamlit-agraph.
+02_Scheme_Tracker.py — PRAMAAN v5
+Scheme Tracker: interactive knowledge graph (streamlit-agraph), Type 1/2 scheme panels,
+cross-domain connections, node detail panel.
 """
 
 import sys
@@ -221,8 +222,8 @@ def _build_graph(graph_data: dict, filter_type: set | None = None, focus_ids: se
 
 
 def page():
-    st.set_page_config(page_title="Ontology Graph – PRAMAAN", layout="wide")
-    render_topnav(active_page="Ontology Graph")
+    st.set_page_config(page_title="Scheme Tracker – PRAMAAN", layout="wide")
+    render_topnav(active_page="Scheme Tracker")
 
     st.markdown("""
     <style>
@@ -289,7 +290,7 @@ def page():
                 display:flex;align-items:center;gap:14px;">
       <span style="font-size:1.9em;font-weight:800;color:#a78bfa;font-family:'Cinzel',serif;
                    letter-spacing:0.08em;white-space:nowrap;animation:glowPulse 2.5s ease-in-out infinite;">
-        ONTOLOGY GRAPH
+        SCHEME TRACKER
       </span>
       <span style="font-size:0.75em;color:#64748b;white-space:nowrap;">
         {total_nodes} Entities &nbsp;·&nbsp; {total_edges} Relationships &nbsp;·&nbsp;
@@ -432,7 +433,8 @@ def page():
     with col_graph:
         # Focus mode banner
         if focus_ids:
-            focused_name   = focus_label
+            _focus_meta    = EVENTS_BY_ID.get(st.session_state.get("ontology_sel"), {})
+            focused_name   = _focus_meta.get("name", st.session_state.get("ontology_sel", ""))
             neighbor_count = len(focus_ids) - 1
             st.markdown(
                 f'<div style="background:#0a1628;border:1px solid #f97316;border-left:4px solid #f97316;'
@@ -595,10 +597,10 @@ def page():
                     }}
                     </style>
                     """, unsafe_allow_html=True)
-                    if st.button("View in Live Feed  →", key=f"goto_feed_{sel_node_id}",
+                    if st.button("View in Delivery Monitor  →", key=f"goto_feed_{sel_node_id}",
                                  use_container_width=True, type="primary"):
                         st.session_state["deep_link_feed"] = bare_id
-                        st.switch_page("pages/03_Live_Feed.py")
+                        st.switch_page("pages/03_Delivery_Monitor.py")
 
 
 

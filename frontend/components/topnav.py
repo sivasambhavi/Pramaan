@@ -7,10 +7,10 @@ import os, base64
 import streamlit as st
 
 PAGES = [
-    ("Intelligence Map", "/Intelligence_Map"),
-    ("Ontology Graph",   "/Ontology_Graph"),
-    ("Live Feed",        "/Live_Feed"),
-    ("Decision Brief",   "/Decision_Brief"),
+    ("National Intelligence", "/National_Intelligence"),
+    ("Scheme Tracker",        "/Scheme_Tracker"),
+    ("Delivery Monitor",      "/Delivery_Monitor"),
+    ("Proof & Evidence",      "/Proof_and_Evidence"),
 ]
 
 _HIDE_SIDEBAR = """

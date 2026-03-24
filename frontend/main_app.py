@@ -144,7 +144,7 @@ def home() -> None:
     # Button in main DOM — navigates correctly
     st.html("""
     <div style="display:flex;justify-content:center;margin:6px 0 10px;">
-      <a href="/Intelligence_Map" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;text-decoration:none;border-radius:12px;padding:10px 44px;font-family:Outfit,sans-serif;font-weight:700;font-size:1em;letter-spacing:0.02em;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:inline-block;">
+      <a href="/National_Intelligence" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;text-decoration:none;border-radius:12px;padding:10px 44px;font-family:Outfit,sans-serif;font-weight:700;font-size:1em;letter-spacing:0.02em;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:inline-block;">
         Enter Dashboard &nbsp;→
       </a>
     </div>
@@ -155,10 +155,10 @@ def main() -> None:
     pg = st.navigation(
         [
             st.Page(home,                                   title="Pramaan",          icon=":material/verified_user:", default=True, url_path=""),
-            st.Page("pages/01_Intelligence_Map.py",         title="Intelligence Map", icon=":material/map:",           url_path="Intelligence_Map"),
-            st.Page("pages/02_Ontology_Graph.py",           title="Ontology Graph",   icon=":material/hub:",           url_path="Ontology_Graph"),
-            st.Page("pages/03_Live_Feed.py",                title="Live Feed",        icon=":material/electric_bolt:", url_path="Live_Feed"),
-            st.Page("pages/04_Decision_Brief.py",           title="Decision Brief",   icon=":material/psychology:",    url_path="Decision_Brief"),
+            st.Page("pages/01_National_Intelligence.py", title="National Intelligence", icon=":material/map:",           url_path="National_Intelligence"),
+            st.Page("pages/02_Scheme_Tracker.py",       title="Scheme Tracker",       icon=":material/hub:",           url_path="Scheme_Tracker"),
+            st.Page("pages/03_Delivery_Monitor.py",     title="Delivery Monitor",     icon=":material/electric_bolt:", url_path="Delivery_Monitor"),
+            st.Page("pages/04_Proof_and_Evidence.py",   title="Proof & Evidence",     icon=":material/psychology:",    url_path="Proof_and_Evidence"),
         ],
         expanded=True,
     )

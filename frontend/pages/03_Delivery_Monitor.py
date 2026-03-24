@@ -1,7 +1,7 @@
 """
-03_Live_Feed.py — PRAMAAN Global Ontology Engine
-Live evidence feed: real government sources from the ontology graph.
-Shows evidence nodes from Neo4j + cross-domain connections per event.
+03_Delivery_Monitor.py — PRAMAAN v5
+Delivery Monitor: per-event impacts, actors, evidence, cross-domain connections.
+Delhi pilot — AMRUT drainage + PMAY housing with real government data.
 """
 
 import sys
@@ -117,8 +117,8 @@ def _impact_card(imp: dict, color: str):
 
 
 def page():
-    st.set_page_config(page_title="Live Feed – PRAMAAN", layout="wide")
-    render_topnav(active_page="Live Feed")
+    st.set_page_config(page_title="Delivery Monitor – PRAMAAN", layout="wide")
+    render_topnav(active_page="Delivery Monitor")
 
     st.markdown("""
     <style>
@@ -149,7 +149,7 @@ def page():
                 display:flex;align-items:center;gap:14px;">
       <span style="font-size:1.9em;font-weight:800;color:#22c55e;font-family:'Cinzel',serif;
                    letter-spacing:0.08em;white-space:nowrap;
-                   animation:glowPulse 2.5s ease-in-out infinite;">LIVE FEED</span>
+                   animation:glowPulse 2.5s ease-in-out infinite;">DELIVERY MONITOR</span>
       <span style="font-size:0.75em;color:#64748b;white-space:nowrap;">
         {_N_EVENTS} Events &nbsp;·&nbsp; Verified Government Sources &nbsp;·&nbsp;
         <span style="color:#475569;">PIB · NDMA · ISRO · IMD</span> &nbsp;·&nbsp;
@@ -179,7 +179,7 @@ def page():
         if st.button("View AI Summary →", key=f"goto_brief_{event_id}", type="primary",
                      use_container_width=True):
             st.session_state["deep_link_brief"] = event_id
-            st.switch_page("pages/04_Decision_Brief.py")
+            st.switch_page("pages/04_Proof_and_Evidence.py")
 
     # ── Event banner ───────────────────────────────────────────────────────────
     st.markdown(

@@ -1,7 +1,7 @@
 """
-01_Intelligence_Map.py — PRAMAAN Global Ontology Engine
-World map with event pins, domain-colored markers, event detail cards.
-Horizontal chip filter bar replaces the left sidebar.
+01_National_Intelligence.py — PRAMAAN v5
+National Intelligence: world map with event pins, domain-colored markers, event detail cards.
+Horizontal chip filter bar. 17 events across 7 domains.
 """
 
 import sys
@@ -55,8 +55,8 @@ DEFAULT_ZOOM   = 4
 
 
 def page():
-    st.set_page_config(page_title="Intelligence Map – PRAMAAN", layout="wide")
-    render_topnav(active_page="Intelligence Map")
+    st.set_page_config(page_title="National Intelligence – PRAMAAN", layout="wide")
+    render_topnav(active_page="National Intelligence")
 
     st.markdown("""
     <style>
@@ -123,7 +123,7 @@ def page():
       <span style="font-size:1.9em;font-weight:800;color:#14b8a6;
                    font-family:'Cinzel',serif;letter-spacing:0.08em;white-space:nowrap;
                    animation:glowPulse 2.5s ease-in-out infinite;">
-        INTELLIGENCE MAP
+        NATIONAL INTELLIGENCE
       </span>
       <span style="font-size:0.75em;color:#64748b;white-space:nowrap;">
         {n_events} Events &nbsp;·&nbsp; {n_domains} Active Domains &nbsp;·&nbsp; Verified Data
@@ -323,10 +323,10 @@ def page():
                     )
 
             st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
-            if st.button("View in Ontology Graph →", key=f"goto_graph_{sel}",
+            if st.button("View in Scheme Tracker →", key=f"goto_graph_{sel}",
                          use_container_width=True, type="primary"):
                 st.session_state["deep_link_event"] = sel
-                st.switch_page("pages/02_Ontology_Graph.py")
+                st.switch_page("pages/02_Scheme_Tracker.py")
         else:
             st.markdown(
                 '<div style="font-size:10px;color:#1e293b;padding:8px;text-align:center;margin-top:40px;">'
