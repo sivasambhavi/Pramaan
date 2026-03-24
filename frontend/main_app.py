@@ -91,7 +91,7 @@ def home() -> None:
         <div class="hero-tagline">AI-Powered <span style="color:#f97316;-webkit-text-fill-color:#f97316;">Global Ontology Engine</span> &nbsp;·&nbsp; 7 Domains</div>
       </div>
       <div class="explainer">
-        PRAMAAN maps {_events} high-impact events — from Wayanad landslides to Tata semiconductor fabs —
+        PRAMAAN maps {_events} high-impact events — from Wayanad landslides to the Russia–Ukraine War and Gaza Red Sea crisis —
         across 7 domains: Climate, Economics, Geopolitics, Defense, Technology, Society, and Governance.
         Every node is real. Every edge is evidence-backed.
       </div>

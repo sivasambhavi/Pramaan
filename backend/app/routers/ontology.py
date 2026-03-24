@@ -276,6 +276,97 @@ def full_graph():
     }
 
 
+# ── /compound-risk ────────────────────────────────────────────────────────────
+
+@router.get("/compound-risk")
+def compound_risk():
+    """
+    Cross-domain compound risk context for portfolio-level decision briefs.
+    Returns:
+      - all events (severity + domain + date)
+      - overloaded actors (appear in 2+ critical events)
+      - cross-domain connections with causal reasons
+      - top quantified impacts across all events
+      - temporal clusters (events sharing same year)
+    """
+    with get_session() as s:
+
+        # All events
+        events = s.run("""
+            MATCH (e:Event)
+            WHERE e.confidence IS NOT NULL
+            RETURN e.event_id AS event_id, e.name AS name,
+                   e.domain AS domain, e.severity AS severity,
+                   e.date AS date, e.description AS description
+            ORDER BY e.date DESC
+        """).data()
+
+        # Actors appearing in 2+ events — overload signal
+        overloaded_actors = s.run("""
+            MATCH (e:Event)-[:MANAGED_BY]->(a:Actor)
+            WHERE e.confidence IS NOT NULL
+            WITH a, collect(DISTINCT e.name) AS event_names,
+                    collect(DISTINCT e.severity) AS severities,
+                    count(DISTINCT e) AS event_count
+            WHERE event_count >= 2
+            RETURN a.actor_id AS actor_id, a.name AS name,
+                   a.type AS type, event_count,
+                   event_names, severities
+            ORDER BY event_count DESC
+        """).data()
+
+        # Cross-domain connections with reasons
+        connections = s.run("""
+            MATCH (a:Event)-[r:CONNECTED_TO]->(b:Event)
+            RETURN a.event_id AS from_id, a.name AS from_name,
+                   a.domain AS from_domain, a.severity AS from_severity,
+                   b.event_id AS to_id, b.name AS to_name,
+                   b.domain AS to_domain, b.severity AS to_severity,
+                   r.reason AS reason
+        """).data()
+
+        # Top quantified impacts across all events (resource picture)
+        top_impacts = s.run("""
+            MATCH (e:Event)-[:CAUSED]->(i:Impact)
+            WHERE i.value IS NOT NULL AND i.value > 0
+            RETURN e.name AS event_name, e.domain AS domain,
+                   i.type AS type, i.value AS value,
+                   i.unit AS unit, i.description AS description,
+                   coalesce(i.source, '') AS source
+            ORDER BY
+                CASE i.unit
+                    WHEN 'crore_inr'   THEN i.value
+                    WHEN 'billion_usd' THEN i.value * 8300
+                    WHEN 'persons'     THEN i.value / 1000
+                    ELSE i.value
+                END DESC
+            LIMIT 25
+        """).data()
+
+        # Temporal clusters — events sharing same year
+        year_clusters = s.run("""
+            MATCH (e:Event)
+            WHERE e.confidence IS NOT NULL AND e.date IS NOT NULL
+            WITH substring(e.date, 0, 4) AS year,
+                 collect(e.name) AS event_names,
+                 collect(e.severity) AS severities,
+                 count(e) AS count
+            WHERE count >= 2
+            RETURN year, event_names, severities, count
+            ORDER BY year DESC
+        """).data()
+
+    return {
+        "events":            events,
+        "overloaded_actors": overloaded_actors,
+        "connections":       connections,
+        "top_impacts":       top_impacts,
+        "year_clusters":     year_clusters,
+        "total_events":      len(events),
+        "total_connections": len(connections),
+    }
+
+
 # ── /cross-domain ─────────────────────────────────────────────────────────────
 
 @router.get("/cross-domain")

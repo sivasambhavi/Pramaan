@@ -12,26 +12,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import streamlit as st
 from utils.api import safe_get
+from utils.events import EVENTS as _EVENTS_FULL, N_EVENTS as _N_EVENTS, render_event_dropdown
 from components.topnav import render_topnav
 
-# ── Event metadata ─────────────────────────────────────────────────────────────
-EVENTS = [
-    ("EVT_WAYANAD_2024",       "Wayanad Landslide",           "#22c55e", "Climate",     "Jul 2024", "critical"),
-    ("EVT_CYCLONE_DANA_2024",  "Cyclone Dana – Puri",         "#22c55e", "Climate",     "Oct 2024", "critical"),
-    ("EVT_CHAMOLI_2021",       "Chamoli Glacier Burst",       "#22c55e", "Climate",     "Feb 2021", "critical"),
-    ("EVT_JOSHIMATH_2023",     "Joshimath Subsidence",        "#06b6d4", "Governance",  "Jan 2023", "high"),
-    ("EVT_DELHI_FLOODS_2023",  "Delhi Yamuna Floods",         "#fb7185", "Society",     "Jul 2023", "critical"),
-    ("EVT_COVID_WAVE2_2021",   "COVID Second Wave",           "#fb7185", "Society",     "Apr 2021", "critical"),
-    ("EVT_MANIPUR_2023",       "Manipur Conflict",            "#f97316", "Defense",     "May 2023", "critical"),
-    ("EVT_BALAKOT_2019",       "Balakot Airstrikes",          "#f97316", "Defense",     "Feb 2019", "critical"),
-    ("EVT_ART370_2019",        "Article 370 Abrogation",      "#06b6d4", "Governance",  "Aug 2019", "high"),
-    ("EVT_TATA_SEMI_2024",     "Tata Semiconductor Fab",      "#38bdf8", "Economics",   "Feb 2024", "high"),
-    ("EVT_IMEC_2023",          "IMEC Corridor Signing",       "#38bdf8", "Economics",   "Sep 2023", "high"),
-    ("EVT_G20_INDIA_2023",     "G20 New Delhi Summit",        "#a78bfa", "Geopolitics", "Sep 2023", "high"),
-    ("EVT_INDIA_CANADA_2023",  "India-Canada Diplomatic Row", "#a78bfa", "Geopolitics", "Sep 2023", "high"),
-    ("EVT_CHANDRAYAAN3_2023",  "Chandrayaan-3 Landing",       "#facc15", "Technology",  "Aug 2023", "high"),
-    ("EVT_ADITYAL1_2023",      "Aditya-L1 Solar Mission",     "#facc15", "Technology",  "Sep 2023", "high"),
-]
+# Strip lat/lon — Live Feed only needs first 6 fields
+EVENTS = [e[:6] for e in _EVENTS_FULL]
 
 DOMAIN_COLORS = {
     "Climate":     "#22c55e",
@@ -158,18 +143,15 @@ def page():
         if raw in valid_ids:
             st.session_state.feed_sel = raw
 
-    if "feed_sel" not in st.session_state:
-        st.session_state.feed_sel = EVENTS[0][0]
-
     # ── Title ──────────────────────────────────────────────────────────────────
-    st.markdown("""
+    st.markdown(f"""
     <div style="padding:6px 0 4px;border-bottom:1px solid #1e293b;margin-bottom:8px;
                 display:flex;align-items:center;gap:14px;">
       <span style="font-size:1.9em;font-weight:800;color:#22c55e;font-family:'Cinzel',serif;
                    letter-spacing:0.08em;white-space:nowrap;
                    animation:glowPulse 2.5s ease-in-out infinite;">LIVE FEED</span>
       <span style="font-size:0.75em;color:#64748b;white-space:nowrap;">
-        15 Events &nbsp;·&nbsp; Verified Government Sources &nbsp;·&nbsp;
+        {_N_EVENTS} Events &nbsp;·&nbsp; Verified Government Sources &nbsp;·&nbsp;
         <span style="color:#475569;">PIB · NDMA · ISRO · IMD</span> &nbsp;·&nbsp;
         <span style="color:#334155;">Real Impact Data</span>
       </span>
@@ -181,18 +163,12 @@ def page():
     """, unsafe_allow_html=True)
 
     # ── Event selector row ─────────────────────────────────────────────────────
-    evt_labels = [f"{e[1]}  ·  {e[4]}" for e in EVENTS]
-    evt_ids    = [e[0] for e in EVENTS]
-    cur_idx    = evt_ids.index(st.session_state.feed_sel) if st.session_state.feed_sel in evt_ids else 0
+    if "feed_sel" not in st.session_state:
+        st.session_state.feed_sel = EVENTS[0][0]
 
     dcol, ncol = st.columns([3, 1], gap="small")
     with dcol:
-        chosen = st.selectbox("Event", options=evt_labels, index=cur_idx,
-                              label_visibility="collapsed", key="feed_event_drop")
-        chosen_id = evt_ids[evt_labels.index(chosen)]
-        if chosen_id != st.session_state.feed_sel:
-            st.session_state.feed_sel = chosen_id
-            st.rerun()
+        render_event_dropdown("feed_sel", "feed_event_drop")
 
     sel_evt = next((e for e in EVENTS if e[0] == st.session_state.feed_sel), EVENTS[0])
     event_id, name, color, domain, date, sev = sel_evt

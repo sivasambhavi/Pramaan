@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "2.1",
-    "description": "PRAMAAN Global Ontology Engine — 15-event India Intelligence Graph",
+    "description": "PRAMAAN Global Ontology Engine — 17-event India + Global Intelligence Graph",
     "sources": "PIB, NDMA, ISRO, IMD, MEA, MoHFW, Parliament Q&A, Wikipedia (all publicly verifiable)"
   },
 
@@ -35,7 +35,13 @@
     {"region_id": "REG_PAKISTAN",     "name": "Pakistan",              "type": "country",  "lat": 30.3753,  "lon": 69.3451},
     {"region_id": "REG_MUMBAI",       "name": "Mumbai",                "type": "city",     "lat": 19.0760,  "lon": 72.8777},
     {"region_id": "REG_CANADA",       "name": "Canada",                "type": "country",  "lat": 56.1304,  "lon": -106.3468},
-    {"region_id": "REG_SAUDI",        "name": "Saudi Arabia",          "type": "country",  "lat": 23.8859,  "lon": 45.0792}
+    {"region_id": "REG_SAUDI",        "name": "Saudi Arabia",          "type": "country",  "lat": 23.8859,  "lon": 45.0792},
+    {"region_id": "REG_UKRAINE",      "name": "Ukraine",               "type": "country",  "lat": 48.3794,  "lon": 31.1656},
+    {"region_id": "REG_RUSSIA",       "name": "Russia",                "type": "country",  "lat": 61.5240,  "lon": 105.3188},
+    {"region_id": "REG_EUROPE",       "name": "Europe",                "type": "continent","lat": 54.5260,  "lon": 15.2551},
+    {"region_id": "REG_ISRAEL",       "name": "Israel",                "type": "country",  "lat": 31.0461,  "lon": 34.8516},
+    {"region_id": "REG_GAZA",         "name": "Gaza Strip",            "type": "territory","lat": 31.3547,  "lon": 34.3088},
+    {"region_id": "REG_RED_SEA",      "name": "Red Sea",               "type": "waterway", "lat": 20.0000,  "lon": 38.0000}
   ],
 
   "actors": [
@@ -68,7 +74,13 @@
     {"actor_id": "ACT_PMO",           "name": "Prime Minister's Office",                     "type": "government"},
     {"actor_id": "ACT_NHPC",          "name": "NHPC Limited",                                "type": "company"},
     {"actor_id": "ACT_US_GOVT",       "name": "US Government",                               "type": "foreign_govt"},
-    {"actor_id": "ACT_G20_SHERPA",    "name": "India G20 Sherpa Office",                     "type": "government"}
+    {"actor_id": "ACT_G20_SHERPA",    "name": "India G20 Sherpa Office",                     "type": "government"},
+    {"actor_id": "ACT_PPAC",          "name": "Petroleum Planning & Analysis Cell",           "type": "government"},
+    {"actor_id": "ACT_RBI",           "name": "Reserve Bank of India",                       "type": "government"},
+    {"actor_id": "ACT_MoPNG",         "name": "Ministry of Petroleum & Natural Gas",         "type": "ministry"},
+    {"actor_id": "ACT_OCHA",          "name": "UN Office for Coordination of Humanitarian Affairs", "type": "international"},
+    {"actor_id": "ACT_UNHCR",         "name": "UNHCR — UN Refugee Agency",                   "type": "international"},
+    {"actor_id": "ACT_EXIM_INDIA",    "name": "EXIM Bank of India",                          "type": "government"}
   ],
 
   "schemes": [
@@ -93,7 +105,9 @@
     {"policy_id": "POL_G20_DECL",        "name": "New Delhi G20 Leaders Declaration",          "date": "2023-09-10", "description": "Historic consensus G20 declaration on Ukraine, global debt, AI governance, and climate; African Union admitted as permanent member", "source_url": "https://g20.in"},
     {"policy_id": "POL_IMEC_MOU",        "name": "India-Middle East-Europe Corridor MoU",      "date": "2023-09-09", "description": "Eight-nation MoU for rail-and-shipping corridor connecting India to Europe via Gulf, signed at G20 sidelines", "source_url": "https://pib.gov.in"},
     {"policy_id": "POL_COVID_PROTOCOL",  "name": "National COVID Containment Protocol 2021",   "date": "2021-04-01", "description": "MoHFW containment protocol for second wave: state-level lockdowns, oxygen allocation, hospital surge plan, accelerated vaccination", "source_url": "https://mohfw.gov.in"},
-    {"policy_id": "POL_CHAMOLI_INQUIRY", "name": "Chamoli Glacier Disaster Inquiry 2021",      "date": "2021-02-25", "description": "NHPC and Ministry of Power inquiry into Chamoli glacier burst damage to Rishiganga and Tapovan-Vishnugad tunnel projects", "source_url": "https://dst.gov.in"}
+    {"policy_id": "POL_CHAMOLI_INQUIRY", "name": "Chamoli Glacier Disaster Inquiry 2021",      "date": "2021-02-25", "description": "NHPC and Ministry of Power inquiry into Chamoli glacier burst damage to Rishiganga and Tapovan-Vishnugad tunnel projects", "source_url": "https://dst.gov.in"},
+    {"policy_id": "POL_INDIA_RUSSIA_OIL", "name": "India Discounted Russian Crude Oil Policy", "date": "2022-04-01", "description": "India's strategic decision to continue purchasing heavily discounted Russian Urals crude despite Western sanctions — MoPNG & PPAC-administered. Share of Russian crude rose from 2% to 40% of India's imports by 2023.", "source_url": "https://ppac.gov.in"},
+    {"policy_id": "POL_REDSEA_REROUTE",   "name": "India Shipping Rerouting Advisory — Red Sea", "date": "2024-01-15", "description": "Ministry of Ports advisory rerouting India–Europe cargo via Cape of Good Hope following Houthi attacks on Red Sea shipping lanes. Average voyage time increased 10-15 days.", "source_url": "https://sagarmala.gov.in"}
   ],
 
   "events": [
@@ -238,6 +252,26 @@
       "confidence":  1.0
     },
     {
+      "event_id":    "EVT_RUSSIA_UKRAINE_2022",
+      "name":        "Russia–Ukraine War",
+      "date":        "2022-02-24",
+      "domain":      "DOM_GEOPOLITICS",
+      "description": "Russia launched full-scale invasion of Ukraine on Feb 24 2022. 12,000+ civilians verified killed by OHCHR (Jan 2026); 6.7 million external refugees (UNHCR). India maintained strategic autonomy — abstained on UN votes, purchased discounted Russian crude oil (share rose from 2% to 40% of imports), and expanded bilateral trade to $65 billion in 2023-24. India's fertilizer imports from Russia account for 18% of urea and DAP supply.",
+      "severity":    "critical",
+      "source_url":  "https://www.ohchr.org/en/press-releases/2024/02/ukraine-un-human-rights-monitoring-mission-records-over-10000-civilian",
+      "confidence":  1.0
+    },
+    {
+      "event_id":    "EVT_GAZA_REDSEA_2023",
+      "name":        "Gaza War & Red Sea Crisis",
+      "date":        "2023-10-07",
+      "domain":      "DOM_GEOPOLITICS",
+      "description": "Hamas attack on Israel (Oct 7 2023) triggered Israeli military campaign in Gaza. OHCHR verified 15,170+ civilian deaths as of Jan 2026; 1.7 million displaced (OCHA). Houthi militia in Yemen launched Red Sea shipping attacks from Nov 2023 — 80-90% of India–Europe cargo rerouted via Cape of Good Hope. Drewry freight index spiked 173%. India's gem, pharma and textile exports faced 10-15 day delays. IMEC corridor implementation frozen.",
+      "severity":    "critical",
+      "source_url":  "https://www.ochaopt.org/situation-reports",
+      "confidence":  1.0
+    },
+    {
       "event_id":    "EVT_ART370_2019",
       "name":        "Article 370 Abrogation",
       "date":        "2019-08-05",
@@ -277,7 +311,17 @@
     {"impact_id": "IMP_BALAKOT_CRPF",        "type": "deaths",             "value": 40,     "unit": "persons",    "description": "CRPF personnel killed in Pulwama attack preceding Balakot strikes"},
     {"impact_id": "IMP_COVID2_PEAK_CASES",    "type": "daily_cases",        "value": 414000, "unit": "persons",    "description": "Peak daily COVID-19 cases in India second wave — May 6 2021"},
     {"impact_id": "IMP_COVID2_VACCINATED",    "type": "vaccinated",         "value": 500000000, "unit": "persons", "description": "Cumulative vaccine doses administered in India by end of 2021"},
-    {"impact_id": "IMP_ART370_INTERNET",      "type": "internet_shutdown_days", "value": 213, "unit": "days",     "description": "Internet blackout duration in Kashmir post-Article 370 abrogation"}
+    {"impact_id": "IMP_ART370_INTERNET",      "type": "internet_shutdown_days", "value": 213, "unit": "days",     "description": "Internet blackout duration in Kashmir post-Article 370 abrogation"},
+    {"impact_id": "IMP_RU_CIVILIAN_DEAD",   "type": "deaths",              "value": 12000,  "unit": "persons",      "description": "OHCHR-verified civilian deaths — Russia-Ukraine war as of Jan 2026"},
+    {"impact_id": "IMP_RU_REFUGEES",        "type": "displaced",           "value": 6700000,"unit": "persons",      "description": "Externally displaced Ukrainian refugees — UNHCR Jan 2026"},
+    {"impact_id": "IMP_RU_INDIA_OIL_PCT",  "type": "trade_share_percent", "value": 40,     "unit": "percent",      "description": "India's crude oil sourced from Russia — share rose from 2% (2021) to 40% (2023)", "source": "data.gov.in/ppac"},
+    {"impact_id": "IMP_RU_INDIA_TRADE",    "type": "trade_value",         "value": 65,     "unit": "billion_usd",  "description": "India–Russia bilateral trade value 2023-24 (up from $13B in 2021)", "source": "data.gov.in/dgcis"},
+    {"impact_id": "IMP_RU_FERTILIZER_PCT", "type": "trade_share_percent", "value": 18,     "unit": "percent",      "description": "India's fertilizer imports from Russia — share of urea and DAP", "source": "data.gov.in/fert"},
+    {"impact_id": "IMP_GZ_CIVILIAN_DEAD",  "type": "deaths",              "value": 15170,  "unit": "persons",      "description": "OHCHR-verified civilian deaths in Gaza as of Jan 2026"},
+    {"impact_id": "IMP_GZ_DISPLACED",      "type": "displaced",           "value": 1700000,"unit": "persons",      "description": "People displaced within Gaza — OCHA Mar 2026"},
+    {"impact_id": "IMP_GZ_AID_PALLETS",   "type": "aid_units",           "value": 329000, "unit": "count",        "description": "Aid pallets tracked by OCHA entering Gaza as of Mar 2026"},
+    {"impact_id": "IMP_RS_FREIGHT_SPIKE", "type": "cost_increase_percent","value": 173,    "unit": "percent",      "description": "Drewry World Container Index spike — Red Sea crisis India-Europe freight"},
+    {"impact_id": "IMP_RS_VOYAGE_DAYS",   "type": "delay_days",          "value": 12,     "unit": "days",         "description": "Extra voyage days via Cape of Good Hope vs Suez route for India-Europe cargo"}
   ],
 
   "evidence": [
@@ -300,7 +344,15 @@
     {"evidence_id": "EVD_CHAMOLI_NDMA",    "type": "report",    "title": "NDMA Situation Report — Chamoli glacier burst Feb 2021",      "date": "2021-02-08", "source": "NDMA",  "url": "https://ndma.gov.in"},
     {"evidence_id": "EVD_BALAKOT_PIB",     "type": "statement", "title": "IAF pre-dawn strikes on JeM camp in Balakot",                "date": "2019-02-26", "source": "PIB",   "url": "https://pib.gov.in"},
     {"evidence_id": "EVD_COVID2_MOHFW",    "type": "data",      "title": "MoHFW COVID-19 India situation report — second wave peak",   "date": "2021-05-06", "source": "MoHFW", "url": "https://mohfw.gov.in"},
-    {"evidence_id": "EVD_ART370_PARL",     "type": "statement", "title": "Parliament passes J&K Reorganisation Bill 2019",             "date": "2019-08-05", "source": "Sansad","url": "https://sansad.in"}
+    {"evidence_id": "EVD_ART370_PARL",     "type": "statement", "title": "Parliament passes J&K Reorganisation Bill 2019",             "date": "2019-08-05", "source": "Sansad","url": "https://sansad.in"},
+    {"evidence_id": "EVD_RU_OHCHR",       "type": "report",    "title": "OHCHR Ukraine Civilian Casualty Report — 12,000+ verified deaths", "date": "2026-01-31", "source": "OHCHR",  "url": "https://www.ohchr.org/en/ukraine"},
+    {"evidence_id": "EVD_RU_UNHCR",       "type": "data",      "title": "UNHCR Ukraine Refugee Data — 6.7 million displaced",           "date": "2026-01-01", "source": "UNHCR",  "url": "https://data.unhcr.org/en/situations/ukraine"},
+    {"evidence_id": "EVD_RU_PPAC",        "type": "data",      "title": "PPAC India Crude Oil Import Mix — Russia 40% share 2023",      "date": "2023-12-31", "source": "data.gov.in", "url": "https://ppac.gov.in/content/212_1_ImportExport.aspx"},
+    {"evidence_id": "EVD_RU_DGCIS",       "type": "data",      "title": "DGCI&S India–Russia Bilateral Trade $65B FY2023-24",           "date": "2024-03-31", "source": "data.gov.in", "url": "https://commerce.gov.in"},
+    {"evidence_id": "EVD_GZ_OCHA",        "type": "report",    "title": "OCHA Gaza Humanitarian Situation Report — 329,000 aid pallets", "date": "2026-03-16", "source": "OCHA",   "url": "https://www.ochaopt.org/situation-reports"},
+    {"evidence_id": "EVD_GZ_OHCHR",       "type": "report",    "title": "OHCHR Gaza Civilian Casualty Update — 15,170+ verified",       "date": "2026-01-31", "source": "OHCHR",  "url": "https://www.ohchr.org/en/press-releases/2024/01"},
+    {"evidence_id": "EVD_RS_DREWRY",      "type": "data",      "title": "Drewry World Container Index — 173% freight spike Red Sea",    "date": "2024-02-01", "source": "Drewry", "url": "https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry"},
+    {"evidence_id": "EVD_RS_SAGARMALA",   "type": "statement", "title": "India Ports Rerouting Advisory — Cape of Good Hope via Sagarmala", "date": "2024-01-15", "source": "data.gov.in", "url": "https://sagarmala.gov.in"}
   ],
 
   "edges": [
@@ -534,6 +586,58 @@
     {"from": "EVT_BALAKOT_2019",      "to": "EVT_ART370_2019",          "type": "CONNECTED_TO", "reason": "Both 2019 — Balakot military action followed by Article 370 abrogation, representing dual-track assertive J&K policy"},
     {"from": "EVT_COVID_WAVE2_2021",  "to": "EVT_CHAMOLI_2021",         "type": "CONNECTED_TO", "reason": "Both 2021 crises — COVID second wave coincided with Chamoli disaster, severely strained NDRF/NDMA response capacity"},
     {"from": "EVT_CHANDRAYAAN3_2023", "to": "EVT_TATA_SEMI_2024",       "type": "CONNECTED_TO", "reason": "Both reflect India's deep-tech ambition — space and semiconductor programs share DOS/MeitY budget advocacy and PM Modi's vision"},
-    {"from": "EVT_ART370_2019",       "to": "EVT_MANIPUR_2023",         "type": "CONNECTED_TO", "reason": "Both involve MHA-led security interventions in conflict-affected states with AFSPA and military deployment"}
+    {"from": "EVT_ART370_2019",       "to": "EVT_MANIPUR_2023",         "type": "CONNECTED_TO", "reason": "Both involve MHA-led security interventions in conflict-affected states with AFSPA and military deployment"},
+
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "REG_UKRAINE",              "type": "OCCURRED_IN"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "REG_RUSSIA",               "type": "OCCURRED_IN"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "REG_EUROPE",               "type": "OCCURRED_IN"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "DOM_GEOPOLITICS",          "type": "BELONGS_TO"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "DOM_ECONOMICS",            "type": "ALSO_IN"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "DOM_SOCIETY",              "type": "ALSO_IN"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "DOM_DEFENSE",              "type": "ALSO_IN"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "ACT_MEA",                  "type": "MANAGED_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "ACT_PPAC",                 "type": "MANAGED_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "ACT_MoPNG",                "type": "MANAGED_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "ACT_RBI",                  "type": "MANAGED_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "ACT_UNHCR",                "type": "MANAGED_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "IMP_RU_CIVILIAN_DEAD",     "type": "CAUSED"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "IMP_RU_REFUGEES",          "type": "CAUSED"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "IMP_RU_INDIA_OIL_PCT",    "type": "CAUSED"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "IMP_RU_INDIA_TRADE",       "type": "CAUSED"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "IMP_RU_FERTILIZER_PCT",   "type": "CAUSED"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "POL_INDIA_RUSSIA_OIL",     "type": "TRIGGERED"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "EVD_RU_OHCHR",             "type": "PROVEN_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "EVD_RU_UNHCR",             "type": "PROVEN_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "EVD_RU_PPAC",              "type": "PROVEN_BY"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "EVD_RU_DGCIS",             "type": "PROVEN_BY"},
+
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "REG_ISRAEL",               "type": "OCCURRED_IN"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "REG_GAZA",                 "type": "OCCURRED_IN"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "REG_RED_SEA",              "type": "OCCURRED_IN"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "DOM_GEOPOLITICS",          "type": "BELONGS_TO"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "DOM_ECONOMICS",            "type": "ALSO_IN"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "DOM_SOCIETY",              "type": "ALSO_IN"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "ACT_MEA",                  "type": "MANAGED_BY"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "ACT_PM_MODI",              "type": "MANAGED_BY"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "ACT_OCHA",                 "type": "MANAGED_BY"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "ACT_MoPNG",                "type": "MANAGED_BY"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "ACT_EXIM_INDIA",           "type": "MANAGED_BY"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "IMP_GZ_CIVILIAN_DEAD",     "type": "CAUSED"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "IMP_GZ_DISPLACED",         "type": "CAUSED"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "IMP_GZ_AID_PALLETS",      "type": "CAUSED"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "IMP_RS_FREIGHT_SPIKE",     "type": "CAUSED"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "IMP_RS_VOYAGE_DAYS",       "type": "CAUSED"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "POL_REDSEA_REROUTE",       "type": "TRIGGERED"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "EVD_GZ_OCHA",              "type": "PROVEN_BY"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "EVD_GZ_OHCHR",             "type": "PROVEN_BY"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "EVD_RS_DREWRY",            "type": "PROVEN_BY"},
+    {"from": "EVT_GAZA_REDSEA_2023",  "to": "EVD_RS_SAGARMALA",         "type": "PROVEN_BY"},
+
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "EVT_IMEC_2023",           "type": "CONNECTED_TO", "reason": "Ukraine war accelerated European energy diversification that made IMEC strategically urgent; Russia-Ukraine stalemate shaped G20 declaration language at IMEC signing"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "EVT_TATA_SEMI_2024",      "type": "CONNECTED_TO", "reason": "Ukraine war exposed semiconductor supply chain vulnerability via Russia's neon gas (used in chip lithography) supply — accelerated India's self-sufficiency push"},
+    {"from": "EVT_GAZA_REDSEA_2023",   "to": "EVT_IMEC_2023",            "type": "CONNECTED_TO", "reason": "Houthi Red Sea attacks directly paralysed the sea leg of IMEC; the corridor signed Sep 2023 was frozen before implementation began"},
+    {"from": "EVT_RUSSIA_UKRAINE_2022", "to": "EVT_GAZA_REDSEA_2023",    "type": "CONNECTED_TO", "reason": "Both conflicts — India abstained on UN Security Council votes for both; same strategic autonomy doctrine, same Western pressure on India"},
+    {"from": "EVT_GAZA_REDSEA_2023",   "to": "EVT_G20_INDIA_2023",       "type": "CONNECTED_TO", "reason": "India's G20 Declaration on Middle East peace was directly tested by Gaza war two weeks after the summit — undermining India's diplomatic credibility as broker"}
   ]
 }

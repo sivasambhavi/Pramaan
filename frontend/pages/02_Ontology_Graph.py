@@ -12,18 +12,22 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 import streamlit as st
 from streamlit_agraph import agraph, Node, Edge, Config
 from utils.api import safe_get
+from utils.events import EVENTS_BY_ID, render_event_dropdown
 from components.topnav import render_topnav
 
 NODE_CONFIG = {
-    "Event":    {"color": "#f97316", "size": 32, "shape": "dot",     "desc": "High-impact incidents"},
-    "Domain":   {"color": "#a78bfa", "size": 26, "shape": "diamond", "desc": "Policy areas"},
-    "Region":   {"color": "#22c55e", "size": 22, "shape": "dot",     "desc": "Geographic locations"},
-    "Actor":    {"color": "#38bdf8", "size": 22, "shape": "dot",     "desc": "Govt bodies & agencies"},
-    "Scheme":   {"color": "#facc15", "size": 20, "shape": "dot",     "desc": "Funding programmes"},
-    "Policy":   {"color": "#fb7185", "size": 20, "shape": "dot",     "desc": "Legislation & policy"},
-    "Impact":   {"color": "#94a3b8", "size": 16, "shape": "dot",     "desc": "Measured outcomes"},
-    "Evidence": {"color": "#e2e8f0", "size": 14, "shape": "dot",     "desc": "PIB · NDMA · ISRO sources"},
+    "Event":    {"color": "#f97316", "size": 26, "shape": "dot",     "desc": "High-impact incidents"},
+    "Domain":   {"color": "#a78bfa", "size": 20, "shape": "diamond", "desc": "Policy areas"},
+    "Region":   {"color": "#22c55e", "size": 16, "shape": "dot",     "desc": "Geographic locations"},
+    "Actor":    {"color": "#38bdf8", "size": 16, "shape": "dot",     "desc": "Govt bodies & agencies"},
+    "Scheme":   {"color": "#facc15", "size": 14, "shape": "dot",     "desc": "Funding programmes"},
+    "Policy":   {"color": "#fb7185", "size": 14, "shape": "dot",     "desc": "Legislation & policy"},
+    "Impact":   {"color": "#94a3b8", "size": 8,  "shape": "dot",     "desc": "Measured outcomes"},
+    "Evidence": {"color": "#e2e8f0", "size": 7,  "shape": "dot",     "desc": "PIB · NDMA · ISRO sources"},
 }
+
+# Node types that show labels — Impact/Evidence hidden to reduce clutter
+_LABELLED_TYPES = {"Event", "Domain", "Actor", "Region", "Scheme", "Policy"}
 
 DOMAIN_COLORS = {
     "Climate":     "#22c55e",
@@ -160,22 +164,35 @@ def _build_graph(graph_data: dict, filter_type: set | None = None, focus_ids: se
         ntype = n.get("type", "Event")
         if filter_type and ntype not in filter_type:
             continue
-        in_focus = focus_ids is None or n["id"] in focus_ids
-        cfg   = NODE_CONFIG.get(ntype, NODE_CONFIG["Event"])
-        label = _humanize(n.get("label") or n["id"])
-        # Dim nodes outside focus — still visible but de-emphasised
-        color      = cfg["color"] if in_focus else "#334155"
-        size       = cfg["size"]  if in_focus else max(cfg["size"] - 6, 8)
-        font_color = "#ffffff"    if in_focus else "#64748b"
-        font_size  = 13           if in_focus else 10
+        in_focus   = focus_ids is None or n["id"] in focus_ids
+        cfg        = NODE_CONFIG.get(ntype, NODE_CONFIG["Event"])
+        full_name  = n.get("label") or n["id"]          # full name for tooltip
+        short_label = _humanize(full_name)               # short label for canvas
+
+        # Only show canvas labels for important types — hide Impact/Evidence
+        canvas_label = short_label if ntype in _LABELLED_TYPES else ""
+
+        color      = cfg["color"] if in_focus else "#2d3f55"
+        size       = cfg["size"]  if in_focus else max(cfg["size"] - 4, 5)
+        font_color = "#e2e8f0"    if in_focus else "#475569"
+        font_size  = 10           if in_focus else 8
+
+        # Rich tooltip: full name + type + description if available
+        props       = n.get("props", {})
+        tooltip     = f"{ntype}: {full_name}"
+        if props.get("description"):
+            tooltip += f"\n{props['description'][:120]}"
+        elif props.get("type"):
+            tooltip += f"\nType: {props['type']}"
+
         nodes.append(Node(
             id=n["id"],
-            label=label,
+            label=canvas_label,
             size=size,
             color=color,
-            title=f"{ntype}: {label}",
+            title=tooltip,
             shape=cfg["shape"],
-            font={"color": font_color, "size": font_size, "strokeWidth": 2, "strokeColor": "#020b14"},
+            font={"color": font_color, "size": font_size, "strokeWidth": 1, "strokeColor": "#020b14"},
         ))
         seen_ids.add(n["id"])
 
@@ -229,17 +246,17 @@ def page():
 
     if "graph_clicked" not in st.session_state:
         st.session_state.graph_clicked = None
-    if "focus_event" not in st.session_state:
-        st.session_state.focus_event = None
+    if "ontology_sel" not in st.session_state:
+        st.session_state.ontology_sel = None    # bare event_id or None = All Events
     if "active_types" not in st.session_state:
         st.session_state.active_types = set(NODE_CONFIG.keys())
 
     # Deep-link from Intelligence Map — auto-focus the passed event
     if "deep_link_event" in st.session_state:
         raw = st.session_state.pop("deep_link_event")
-        # Graph node IDs are "Event_EVT_..." — Intelligence Map stores bare event_id
-        st.session_state.focus_event = raw if raw.startswith("Event_") else f"Event_{raw}"
-        # Clear cached widget state so selectbox respects the new default_idx
+        # raw may be "Event_EVT_..." or bare "EVT_..." — normalise to bare id
+        bare = raw[len("Event_"):] if raw.startswith("Event_") else raw
+        st.session_state.ontology_sel = bare
         st.session_state.pop("focus_select", None)
 
     header_slot = st.empty()
@@ -282,46 +299,28 @@ def page():
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Horizontal filter row ─────────────────────────────────────────────────
-    # Build event list from graph data (available after fetch above)
-    event_nodes = [n for n in graph_data.get("nodes", []) if n.get("type") == "Event"]
-    event_options = {(n.get("label") or _humanize(n["id"])): n["id"] for n in event_nodes}
-
     # ── Top control row: event focus + toggles + reset ───────────────────────
-    all_labels   = ["All Events"] + list(event_options.keys())
-    # Find label matching current focus_event (for deep-link or click-focus)
-    id_to_label  = {v: k for k, v in event_options.items()}
-    default_idx  = 0
-    if st.session_state.focus_event:
-        lbl = id_to_label.get(st.session_state.focus_event)
-        if lbl and lbl in all_labels:
-            default_idx = all_labels.index(lbl)
-
     ecol, tcol1, tcol2, rcol = st.columns([3, 0.8, 0.9, 0.7], gap="small")
     with ecol:
-        focus_label = st.selectbox(
-            "Focus event",
-            options=all_labels,
-            index=default_idx,
-            label_visibility="collapsed",
-            key="focus_select",
-        )
-        if focus_label == "All Events":
-            st.session_state.focus_event = None
-        else:
-            st.session_state.focus_event = event_options.get(focus_label)
+        render_event_dropdown("ontology_sel", "focus_select", include_all=True)
+
+    # Derive the Neo4j node ID used for ego-graph highlighting
+    _oid = st.session_state.get("ontology_sel")
+    focus_event = f"Event_{_oid}" if _oid else None
+
     with tcol1:
-        physics    = st.checkbox("Physics",     value=False, key="phy_cb")
+        physics    = st.checkbox("Physics",     value=True,  key="phy_cb")
     with tcol2:
         show_cross = st.checkbox("Cross-links", value=True,  key="cross_cb")
     with rcol:
-        if st.session_state.focus_event:
+        if focus_event:
             if st.button("Reset", use_container_width=True):
-                st.session_state.focus_event = None
+                st.session_state.ontology_sel = None
+                st.session_state.pop("focus_select", None)
                 st.rerun()
 
     active_filter = st.session_state.active_types or set(NODE_CONFIG.keys())
-    focus_ids = _get_ego_ids(st.session_state.focus_event, graph_data) if st.session_state.focus_event else None
+    focus_ids = _get_ego_ids(focus_event, graph_data) if focus_event else None
 
     # ── 3-column layout ───────────────────────────────────────────────────────
     col_left, col_graph, col_detail = st.columns([1, 2.8, 1], gap="medium")
@@ -433,7 +432,7 @@ def page():
     with col_graph:
         # Focus mode banner
         if focus_ids:
-            focused_name = focus_label
+            focused_name   = focus_label
             neighbor_count = len(focus_ids) - 1
             st.markdown(
                 f'<div style="background:#0a1628;border:1px solid #f97316;border-left:4px solid #f97316;'
@@ -453,21 +452,22 @@ def page():
 
         config = Config(
             width="100%",
-            height=630,
+            height=640,
             directed=True,
             physics=physics,
             hierarchical=False,
             node={"labelProperty": "label"},
-            edge={"labelProperty": "title"},
+            edge={"labelProperty": "title", "smooth": {"type": "continuous"}},
             interaction={
                 "hover": True,
-                "tooltipDelay": 150,
+                "tooltipDelay": 100,
                 "navigationButtons": False,
                 "keyboard": True,
                 "zoomView": True,
                 "dragView": True,
                 "selectConnectedEdges": True,
                 "multiselect": False,
+                "hideEdgesOnDrag": True,
             },
             manipulation=False,
         )
@@ -479,8 +479,10 @@ def page():
             # Auto-focus when an Event node is clicked
             clicked_node = next((n for n in graph_data.get("nodes", []) if n["id"] == clicked), None)
             if clicked_node and clicked_node.get("type") == "Event":
-                if st.session_state.focus_event != clicked:
-                    st.session_state.focus_event = clicked
+                # clicked is "Event_EVT_..." — strip prefix to get bare event_id
+                bare = clicked[len("Event_"):] if clicked.startswith("Event_") else clicked
+                if st.session_state.get("ontology_sel") != bare:
+                    st.session_state.ontology_sel = bare
                     # Clear selectbox cache so it reflects new focus on rerun
                     st.session_state.pop("focus_select", None)
                     st.rerun()
@@ -574,8 +576,27 @@ def page():
                 if ntype == "Event":
                     bare_id = sel_node_id.replace("Event_", "", 1)
                     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-                    if st.button("View in Live Feed →", key=f"goto_feed_{sel_node_id}",
-                                 use_container_width=True):
+                    st.markdown(f"""
+                    <style>
+                    button[kind="primary"] {{
+                        background: linear-gradient(135deg, {color}, {color}cc) !important;
+                        border: none !important;
+                        color: #fff !important;
+                        font-family: Outfit, sans-serif !important;
+                        font-weight: 700 !important;
+                        font-size: 0.82em !important;
+                        letter-spacing: 0.03em !important;
+                        border-radius: 10px !important;
+                        box-shadow: 0 4px 16px {color}55 !important;
+                    }}
+                    button[kind="primary"]:hover {{
+                        box-shadow: 0 6px 24px {color}88 !important;
+                        opacity: 0.92 !important;
+                    }}
+                    </style>
+                    """, unsafe_allow_html=True)
+                    if st.button("View in Live Feed  →", key=f"goto_feed_{sel_node_id}",
+                                 use_container_width=True, type="primary"):
                         st.session_state["deep_link_feed"] = bare_id
                         st.switch_page("pages/03_Live_Feed.py")
 
