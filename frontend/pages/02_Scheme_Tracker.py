@@ -433,8 +433,8 @@ def page():
     with col_graph:
         # Focus mode banner
         if focus_ids:
-            _focus_meta    = EVENTS_BY_ID.get(st.session_state.get("ontology_sel"), {})
-            focused_name   = _focus_meta.get("name", st.session_state.get("ontology_sel", ""))
+            _focus_tuple   = EVENTS_BY_ID.get(st.session_state.get("ontology_sel"))
+            focused_name   = _focus_tuple[1] if _focus_tuple else st.session_state.get("ontology_sel", "")
             neighbor_count = len(focus_ids) - 1
             st.markdown(
                 f'<div style="background:#0a1628;border:1px solid #f97316;border-left:4px solid #f97316;'
