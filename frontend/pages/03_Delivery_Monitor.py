@@ -45,6 +45,25 @@ SOURCE_ICONS = {
 SEV_COLOR = {"critical": "#ef4444", "high": "#f97316", "medium": "#facc15"}
 
 
+def _sanitise(text: str) -> str:
+    if not text:
+        return text
+    # Fix Mojibake: UTF-8 bytes for dashes/quotes interpreted as CP1252
+    # e.g., '—' (E2 80 94) becomes 'â€'
+    replacements = [
+        ("\u00e2\u20ac\u2014", "—"),  # em-dash
+        ("\u00e2\u20ac\u201d", "—"),  # variant em-dash
+        ("\u00e2\u20ac\u2013", "–"),  # en-dash
+        ("\u00e2\u20ac\u2122", "'"),   # smart quote ’
+        ("\u00e2\u20ac\u0153", "\""),  # smart quote “
+        ("\u00e2\u20ac\u009d", "\""),  # smart quote ” (raw)
+        ("\u00e2\u20ac\u00a6", "..."), # ellipsis
+    ]
+    for bad, good in replacements:
+        text = text.replace(bad, good)
+    return text
+
+
 # --- Fix 16: Hardcoded fallback event data for demo (when Neo4j is down) ---
 _FEED_FALLBACK = {
     "EVT_DELHI_FLOODS_2023": {
@@ -198,7 +217,7 @@ def _provenance_badge(source: str) -> str:
 
 def _evidence_card(ev: dict, color: str):
     icon   = _source_icon(ev.get("source", ""))
-    title  = ev.get("title") or ev.get("id", "Evidence")
+    title  = _sanitise(ev.get("title") or ev.get("id", "Evidence"))
     source = ev.get("source", "")
     date   = ev.get("date", "")
     url    = ev.get("url", "")
@@ -232,7 +251,7 @@ def _impact_card(imp: dict, color: str):
     itype   = imp.get("type", "")
     value   = imp.get("value", "")
     unit    = imp.get("unit", "")
-    desc    = imp.get("description", "")[:100]
+    desc    = _sanitise(imp.get("description", ""))[:100]
     source  = imp.get("source", "")
     val_str = f"{value:,}" if isinstance(value, (int, float)) and value == int(value) else str(value) if value else "—"
     badge   = _provenance_badge(source)
@@ -432,7 +451,7 @@ def _render_event_feed():
                   <div style="font-size:12px;font-weight:700;color:{cc};">{conn.get('name','')}</div>
                   <div style="font-size:10.5px;color:#475569;margin-top:2px;">{cd}</div>
                   <div style="font-size:10.5px;color:#64748b;margin-top:3px;font-style:italic;">
-                    "{conn.get('reason','')}"
+                    "{_sanitise(conn.get('reason',''))}"
                   </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -449,7 +468,7 @@ def _render_event_feed():
         st.markdown(
             f'<div style="background:#0a1628;border:1px solid {color}33;border-radius:8px;'
             f'padding:12px 16px;font-size:13px;color:#94a3b8;line-height:1.6;">'
-            f'{event_data["description"]}</div>',
+            f'{_sanitise(event_data["description"])}</div>',
             unsafe_allow_html=True,
         )
         if event_data.get("source_url"):

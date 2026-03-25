@@ -135,8 +135,13 @@ _FALLBACK_DETAIL = {
     },
 }
 
-DEFAULT_CENTER = [35.0, 57.0]
-DEFAULT_ZOOM   = 4
+INDIA_CENTER = [22.5, 82.0]
+INDIA_ZOOM   = 5
+WORLD_CENTER = [30.0, 55.0]
+WORLD_ZOOM   = 3
+
+DEFAULT_CENTER = INDIA_CENTER
+DEFAULT_ZOOM   = INDIA_ZOOM
 
 # Per-domain / per-severity chip CSS.
 # Uses CSS :has() (Chrome 105+, Safari 15.4+, Firefox 121+) to target
@@ -231,8 +236,22 @@ def page():
         unsafe_allow_html=True,
     )
 
-    # ── Event dropdown ─────────────────────────────────────────────────────────
-    render_event_dropdown("sel_event", "map_event_dropdown", include_all=True)
+    # ── Event dropdown + Cross-links toggle ──────────────────────────────────
+    tcol1, tcol2 = st.columns([2.5, 1], gap="medium")
+    with tcol1:
+        render_event_dropdown("sel_event", "map_event_dropdown", include_all=True)
+    with tcol2:
+        show_cross = st.checkbox("Cross-links", value=False, key="cross_cb")
+        if show_cross:
+            st.markdown(
+                "<div style='font-size:9px;color:#FFD700;margin-top:-8px;'>🌐 World view</div>",
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                "<div style='font-size:9px;color:#94a3b8;margin-top:-8px;'>🇮🇳 India view</div>",
+                unsafe_allow_html=True
+            )
 
     # ── Chip filter bar — pure HTML anchors, no Streamlit buttons ────────────
     dcounts = {d: sum(1 for m in EVENT_META.values() if m[3] == d) for d in DOMAIN_ORDER}
@@ -285,17 +304,20 @@ def page():
     # ── Map center: fit all visible markers when no selection ──────────────────
     if sel and sel in filtered_events:
         lat0, lon0   = filtered_events[sel][0], filtered_events[sel][1]
+        # Auto-zoom based on location (further out for Europe/Canada)
         zoom_in      = 5 if abs(lon0) < 35 else 6
         map_center   = [lat0, lon0]
         map_zoom     = zoom_in
         use_fitbounds = False
     else:
-        # Compute bounding box of all currently-filtered events
-        lats = [v[0] for v in filtered_events.values()]
-        lons = [v[1] for v in filtered_events.values()]
-        map_center    = [sum(lats)/len(lats), sum(lons)/len(lons)] if lats else DEFAULT_CENTER
-        map_zoom      = DEFAULT_ZOOM
-        use_fitbounds = bool(lats)
+        # Two-state zoom tied to Cross-links toggle
+        if show_cross:
+            map_center = WORLD_CENTER
+            map_zoom   = WORLD_ZOOM
+        else:
+            map_center = INDIA_CENTER
+            map_zoom   = INDIA_ZOOM
+        use_fitbounds = False # Manual centers are cleaner for "revelation" demo
 
     # ── Build Folium map ───────────────────────────────────────────────────────
     m = folium.Map(
@@ -372,18 +394,19 @@ def page():
         ("EVT_CHANDRAYAAN3_2023",   "EVT_ADITYAL1_2023",      "ISRO dual-mission resource allocation"),
         ("EVT_COVID_WAVE2_2021",    "EVT_MANIPUR_2023",       "Healthcare capacity stress — NE India"),
     ]
-    for e1_id, e2_id, reason in CROSS_PAIRS:
-        if e1_id in filtered_events and e2_id in filtered_events:
-            lat1, lon1 = filtered_events[e1_id][0], filtered_events[e1_id][1]
-            lat2, lon2 = filtered_events[e2_id][0], filtered_events[e2_id][1]
-            folium.PolyLine(
-                locations=[[lat1, lon1], [lat2, lon2]],
-                color="#FFD700",
-                weight=2.5,
-                opacity=0.75,
-                dash_array="6 4",
-                tooltip=f"🔗 Cross-domain: {reason}",
-            ).add_to(m)
+    if show_cross:
+        for e1_id, e2_id, reason in CROSS_PAIRS:
+            if e1_id in filtered_events and e2_id in filtered_events:
+                lat1, lon1 = filtered_events[e1_id][0], filtered_events[e1_id][1]
+                lat2, lon2 = filtered_events[e2_id][0], filtered_events[e2_id][1]
+                folium.PolyLine(
+                    locations=[[lat1, lon1], [lat2, lon2]],
+                    color="#FFD700",
+                    weight=2.5,
+                    opacity=0.75,
+                    dash_array="6 4",
+                    tooltip=f"🔗 Cross-domain: {reason}",
+                ).add_to(m)
 
     # ── Map + right panel ───────────────────────────────────────────────────────
     col_map, col_right = st.columns([3.2, 1], gap="medium")
@@ -586,14 +609,23 @@ def page():
                 st.session_state["deep_link_brief"] = sel
                 st.switch_page("pages/04_Proof_and_Evidence.py")
         else:
-            st.markdown(
-                '<div style="font-size:10px;color:#1e293b;padding:8px;text-align:center;margin-top:40px;">'
-                'Click a map marker<br>or select an event<br>to see details</div>',
-                unsafe_allow_html=True,
-            )
+            _featured = "EVT_DELHI_FLOODS_2023"
+            if _featured in EVENT_META:
+                lat0, lon0, sname, sdomain, scolor, sdate, ssev = EVENT_META[_featured]
+                _fb = _FALLBACK_DETAIL.get(_featured, {})
+                st.markdown(f"""
+                <div style='padding:10px;border-radius:8px;background:#0f1f2e;border:1px solid {scolor}44'>
+                  <div style='color:{scolor};font-size:10px;font-weight:700;letter-spacing:0.08em;'>⭐ FEATURED EVENT</div>
+                  <div style='font-size:13px;font-weight:700;color:#e2e8f0;margin-top:4px;'>{sname}</div>
+                  <div style='font-size:10px;color:#94a3b8;'>{sdomain} · {sdate}</div>
+                  <div style='font-size:11px;color:#cbd5e1;margin-top:6px;line-height:1.5;'>
+                    {_fb.get("description","")[:200]}...
+                  </div>
+                </div>
+                """, unsafe_allow_html=True)
 
     # ── Live Ingestion — always-visible banner strip ────────────────────────
-    TICKER_ITEMS = [
+    _STATIC_TICKER = [
         ("🟢", "IMD Rainfall Alert — Yamuna basin · Updated 2 min ago",         "#22c55e"),
         ("🔴", "NDMA Flash Flood Warning — Delhi NCT · CRITICAL",               "#ef4444"),
         ("🟡", "PIB: SDRF ₹43,900 Cr release confirmed · Jul 2023",             "#facc15"),
@@ -606,8 +638,27 @@ def page():
     if "ticker_idx" not in st.session_state:
         st.session_state.ticker_idx = 0
 
-    idx   = st.session_state.ticker_idx % len(TICKER_ITEMS)
-    dot, text, col = TICKER_ITEMS[idx]
+    # Try pulling a live node from the backend first
+    _LABEL_DOT = {"Evidence": "🟢", "Event": "🔵", "Actor": "🟡", "Scheme": "🟤"}
+    _LABEL_COL  = {"Evidence": "#22c55e", "Event": "#38bdf8", "Actor": "#facc15", "Scheme": "#a78bfa"}
+
+    try:
+        import requests as _r
+        _live_resp = _r.get("http://localhost:8000/ingest/live/recent-nodes", timeout=2)
+        _live_nodes = _live_resp.json().get("nodes", []) if _live_resp.status_code == 200 else []
+    except Exception:
+        _live_nodes = []
+
+    if _live_nodes:
+        _n     = _live_nodes[st.session_state.ticker_idx % len(_live_nodes)]
+        _lbl   = _n.get("label", "Evidence")
+        _ts    = _n.get("ts", "")[:19].replace("T", " ")
+        dot    = _LABEL_DOT.get(_lbl, "🟢")
+        text   = f"{_n.get('name', '')[:70]} · {_ts}"
+        col    = _LABEL_COL.get(_lbl, "#22c55e")
+    else:
+        idx   = st.session_state.ticker_idx % len(_STATIC_TICKER)
+        dot, text, col = _STATIC_TICKER[idx]
 
     st.markdown(
         f'<div style="background:#050e1a;border:1px solid #0f2a45;border-radius:10px;'
@@ -625,7 +676,7 @@ def page():
             st.session_state.ticker_idx += 1
             st.rerun()
     with full_col:
-        with st.expander("Full ingestion panel", expanded=False):
+        with st.expander("⚡ Live Data Sources", expanded=False):
             _render_live_ingestion()
 
 
@@ -676,7 +727,7 @@ def _render_live_ingestion():
         st.session_state.ingestion_query = query
 
     with btn_col:
-        fetch_clicked = st.button("🔍 Fetch & Extract", use_container_width=True, type="primary",
+        fetch_clicked = st.button("🔍 Refresh Live Sources", use_container_width=True, type="primary",
                                   key="live_fetch_btn")
 
     with auto_col:
@@ -712,7 +763,7 @@ def _render_live_ingestion():
     if not results:
         st.markdown(
             '<div style="font-size:11px;color:#334155;padding:12px;text-align:center;">'
-            'Click "Fetch & Extract" to scrape live governance news and extract entities.</div>',
+            'Click "Refresh Live Sources" to scrape live governance news and extract entities.</div>',
             unsafe_allow_html=True,
         )
         return

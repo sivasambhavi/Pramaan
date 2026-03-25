@@ -42,8 +42,7 @@ DOMAIN_COLORS = {
 
 EDGE_COLORS = {
     # Cross-domain — gold, dashed, thick
-    "CONNECTED_TO": "#FFD700",
-    # Causation / action — orange
+    "CONNECTED_TO": "#FFD700", # Causation / action — orange
     "TRIGGERED":    "#f97316",
     "CAUSED":       "#f97316",
     "CAUSED_BY":    "#f97316",
@@ -64,6 +63,44 @@ EDGE_COLORS = {
     # Structural — muted
     "PART_OF":      "#475569",
     "LOCATED_IN":   "#475569",
+}
+
+_DECISION_PANELS = {
+    "EVT_DELHI_FLOODS_2023": {
+        "scheme": "AMRUT 2.0 — Delhi NCT · Storm Water Drainage",
+        "allocated": "₹5.38 Cr", "status": "1 / 3 unverified",
+        "action": "Investigate Ward 46",
+        "detail": "Asset unverified · Audit due · data.gov.in",
+        "color": "#f97316",
+    },
+    "EVT_CYCLONE_DANA_2024": {
+        "scheme": "SDRF — Odisha · Cyclone Relief",
+        "allocated": "₹800 Cr", "status": "87% delivered",
+        "action": "Verify fisheries livelihood coverage",
+        "detail": "SDRF covers disaster not livelihood recovery · PM-KISAN gap",
+        "color": "#38bdf8",
+    },
+    "EVT_WAYANAD_2024": {
+        "scheme": "Kerala SDRF · Landslide Rehabilitation",
+        "allocated": "₹300 Cr", "status": "Relief registration ongoing",
+        "action": "Expedite PMAY reconstruction tokens",
+        "detail": "Chooralmala families unhoused · 90 day deadline",
+        "color": "#22c55e",
+    },
+    "EVT_CHAMOLI_2021": {
+        "scheme": "Uttarakhand SDRF · Glacial Outburst Relief",
+        "allocated": "₹200 Cr", "status": "Relief disbursed",
+        "action": "Audit Tapovan tunnel worker insurance",
+        "detail": "NTPC insurance vs SDRF coverage gaps identified",
+        "color": "#fb7185",
+    },
+    "EVT_JOSHIMATH_2023": {
+        "scheme": "NDMA — Joshimath Subsidence Package",
+        "allocated": "₹1,600 Cr", "status": "Rehabilitation in progress",
+        "action": "Verify core-zone displacement proof",
+        "detail": "165 families in temporary shelters · permanent tokens pending",
+        "color": "#a78bfa",
+    },
 }
 
 # Per-relationship visual properties: (width, dashes, arrows)
@@ -392,7 +429,7 @@ def _build_graph(graph_data: dict, filter_type: set | None = None, focus_ids: se
 
 def page():
     st.set_page_config(page_title="Decision Engine (Scheme Tracker) – PRAMAAN", layout="wide")
-    render_topnav(active_page="Scheme Tracker")
+    render_topnav(active_page="Decision Engine")
 
     st.markdown("""
     <style>
@@ -477,9 +514,13 @@ def page():
     focus_event = f"Event_{_oid}" if _oid else None
 
     with tcol1:
-        physics    = st.checkbox("Physics",     value=True,  key="phy_cb")
+        # Physics is now hardcoded for stabilization in Config
+        pass
     with tcol2:
-        show_cross = st.checkbox("Cross-links", value=True,  key="cross_cb")
+        show_cross = st.toggle("Cross-links view", value=True, key="cross_links_tog",
+                               help="Show/hide inter-scheme dependency links.")
+        dynamic_layout = st.toggle("Adaptive Layout", value=False, key="dyn_layout_tog",
+                                  help="Enable live physics for the graph. If off, graph is stable.")
     with rcol:
         if focus_event:
             if st.button("Reset", use_container_width=True):
@@ -495,7 +536,7 @@ def page():
 
     # ══ LEFT — tabbed panel ═══════════════════════════════════════════════════
     with col_left:
-        tab1, tab2 = st.tabs(["Node Index", "Connections"])
+        tab1, tab2 = st.tabs(["Nodes", "Cross-Links"])
 
         # ── Tab 1: Node Index (click to toggle type on/off) ──────────────────
         with tab1:
@@ -623,7 +664,8 @@ def page():
             width="100%",
             height=640,
             directed=True,
-            physics=physics,
+            physics=True,
+            stabilization={"enabled": not dynamic_layout, "iterations": 300, "fit": True},
             hierarchical=False,
             node={"labelProperty": "label"},
             edge={"labelProperty": "title", "smooth": {"type": "continuous"}},
@@ -769,72 +811,26 @@ def page():
                         st.session_state["deep_link_feed"] = bare_id
                         st.switch_page("pages/03_Delivery_Monitor.py")
 
-    # ══ DECISION ENGINE PANEL (PRD v6 — "MOST IMPORTANT") ══════════════════
-    st.markdown(
-        '<div style="background:linear-gradient(135deg,#1a0800,#0a0f1a);'
-        'border:2px solid #f97316;border-radius:14px;padding:18px 22px;margin:16px 0 8px 0;">'
+    # ══ DECISION ENGINE PANEL (Event-Aware Fix 13) ══════════════════════════
+    _sel = st.session_state.get("ontology_sel")
+    _panel = _DECISION_PANELS.get(_sel)
 
-        '<div style="font-size:10px;font-weight:700;color:#f97316;letter-spacing:.12em;'
-        'margin-bottom:14px;">⚡ DECISION ENGINE — ACTION REQUIRED</div>'
-
-        # ── AMRUT Ward 46 row ──
-        '<div style="display:flex;align-items:stretch;gap:12px;margin-bottom:12px;">'
-
-        '<div style="background:#12100a;border:1px solid #f9731660;border-radius:10px;'
-        'padding:12px 16px;flex:1;">'
-        '<div style="font-size:10px;font-weight:700;color:#fdba74;margin-bottom:6px;">'
-        'AMRUT 2.0 — Delhi NCT · Storm Water Drainage</div>'
-        '<div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px;">'
-        '₹5.38 Cr allocated'
-        '<span style="font-size:13px;color:#ef4444;font-weight:700;margin-left:10px;">'
-        '1 / 3 unverified</span></div>'
-        '<div style="font-size:11px;color:#94a3b8;">'
-        'Ward 45 Gali 7 ✅ · Ward 45 Gali 12 ✅ · '
-        '<span style="color:#f97316;font-weight:600;">Ward 46 ⚠️ In Progress — ₹1.87 Cr</span>'
-        '</div></div>'
-
-        '<div style="background:#1a0505;border:2px solid #ef4444;border-radius:10px;'
-        'padding:12px 16px;min-width:200px;display:flex;flex-direction:column;'
-        'align-items:center;justify-content:center;text-align:center;">'
-        '<div style="font-size:8px;font-weight:700;color:#ef4444;letter-spacing:.1em;'
-        'margin-bottom:6px;">RECOMMENDED ACTION</div>'
-        '<div style="font-size:14px;font-weight:800;color:#fca5a5;margin-bottom:4px;">'
-        '🔍 Investigate Ward 46</div>'
-        '<div style="font-size:9px;color:#94a3b8;">Asset unverified · Audit due · data.gov.in</div>'
-        '</div>'
-
-        '</div>'
-
-        # ── PMAY complete row ──
-        '<div style="display:flex;align-items:stretch;gap:12px;">'
-
-        '<div style="background:#0a120a;border:1px solid #22c55e60;border-radius:10px;'
-        'padding:12px 16px;flex:1;">'
-        '<div style="font-size:10px;font-weight:700;color:#86efac;margin-bottom:6px;">'
-        'PMAY-U — Delhi NCT · Affordable Housing</div>'
-        '<div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px;">'
-        '₹401 Cr allocated'
-        '<span style="font-size:13px;color:#22c55e;font-weight:700;margin-left:10px;">'
-        '17,067 / 17,067 verified ✅</span></div>'
-        '<div style="font-size:11px;color:#94a3b8;">'
-        '100% complete · 85,000+ beneficiaries · Flood-affected families prioritised'
-        '</div></div>'
-
-        '<div style="background:#0a1a0a;border:2px solid #22c55e;border-radius:10px;'
-        'padding:12px 16px;min-width:200px;display:flex;flex-direction:column;'
-        'align-items:center;justify-content:center;text-align:center;">'
-        '<div style="font-size:8px;font-weight:700;color:#22c55e;letter-spacing:.1em;'
-        'margin-bottom:6px;">STATUS</div>'
-        '<div style="font-size:14px;font-weight:800;color:#86efac;margin-bottom:4px;">'
-        '✅ Delivery Confirmed</div>'
-        '<div style="font-size:9px;color:#94a3b8;">No action required · MoHUA verified</div>'
-        '</div>'
-
-        '</div>'
-
-        '</div>',
-        unsafe_allow_html=True,
-    )
+    if _panel:
+        st.markdown(f"""
+        <div style="background:linear-gradient(135deg,#1a0a00,#0d1628);
+        border:2px solid {_panel['color']}88;border-radius:14px;padding:16px 20px;margin:12px 0">
+          <div style="font-size:10px;font-weight:700;color:{_panel['color']};
+          letter-spacing:.1em;margin-bottom:10px">⚡ DECISION ENGINE — ACTION REQUIRED</div>
+          <div style="font-size:12px;font-weight:700;color:#e2e8f0">{_panel['scheme']}</div>
+          <div style="font-size:11px;color:#94a3b8;margin:4px 0">{_panel['allocated']} · {_panel['status']}</div>
+          <div style="background:{_panel['color']}22;border:1px solid {_panel['color']}66;
+          border-radius:8px;padding:8px 12px;margin-top:10px">
+            <div style="font-size:9px;font-weight:700;color:{_panel['color']}">RECOMMENDED ACTION</div>
+            <div style="font-size:12px;font-weight:700;color:#e2e8f0;margin:3px 0">🔍 {_panel['action']}</div>
+            <div style="font-size:9px;color:#94a3b8">{_panel['detail']}</div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     # ══ SCHEME DECISION PANEL ════════════════════════════════════════════════
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)

@@ -8,7 +8,7 @@ import streamlit as st
 
 PAGES = [
     ("National Intelligence", "/National_Intelligence"),
-    ("Scheme Tracker",        "/Scheme_Tracker"),
+    ("Decision Engine",       "/Scheme_Tracker"),
     ("Delivery Monitor",      "/Delivery_Monitor"),
     ("Proof & Evidence",      "/Proof_and_Evidence"),
 ]

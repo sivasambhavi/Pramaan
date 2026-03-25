@@ -653,11 +653,8 @@ def _render_citizen_whatsapp(event_id: str):
                 unsafe_allow_html=True,
             )
 
-    st.markdown(
-        '<div style="font-size:8px;color:#475569;margin-top:6px;">'
-        '⚠ Mock UI — production-ready design. WhatsApp Business API integration ready for deployment.</div>',
-        unsafe_allow_html=True,
-    )
+    with st.expander("ℹ️ Integration notes", expanded=False):
+        st.caption("Mock UI — WhatsApp Business API integration ready for deployment.")
 
 
 def _render_citizen_report_tab():
@@ -947,7 +944,7 @@ def _render_citizen_report_tab():
 
 def page():
     st.set_page_config(page_title="Proof & Evidence – PRAMAAN", layout="wide")
-    render_topnav(active_page="Proof & Evidence", show_sidebar=True)
+    render_topnav(active_page="Proof & Evidence")
 
     st.markdown("""
     <style>
@@ -980,7 +977,7 @@ def page():
             st.session_state.brief_sel = raw
 
     if "brief_sel" not in st.session_state:
-        st.session_state.brief_sel = EVENTS[0][0]
+        st.session_state.brief_sel = "EVT_DELHI_FLOODS_2023"
     if "brief_mode" not in st.session_state:
         st.session_state.brief_mode = "Single Event"
 
@@ -1457,8 +1454,8 @@ def page():
             st.code(context, language="text")
 
     else:
-        # ── Fix 11: Auto-load pre-loaded brief if available (instant UI) ──
-        if final_query == default_queries[0] and event_id in _PRELOADED_BRIEFS:
+        # ── Fix 6: AI Brief Pre-loaded on Page Open ──────────────────────────────
+        if event_id in _PRELOADED_BRIEFS and final_query == default_queries[0]:
             pre = _PRELOADED_BRIEFS[event_id]
             st.markdown(f"""
             <div style="background:#0a1628;border:1px solid {color}44;border-left:4px solid {color};
@@ -1481,7 +1478,7 @@ def page():
                 unsafe_allow_html=True,
             )
             st.markdown(_style_priorities(pre["text"]), unsafe_allow_html=True)
-
+            
             with st.expander("View raw ontology context used (Pre-loaded)", expanded=False):
                 st.info("This brief is pre-generated from verified PRAMAAN ontology data for demo latency optimization.")
         else:

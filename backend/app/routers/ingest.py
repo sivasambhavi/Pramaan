@@ -234,3 +234,41 @@ def ingest_entities(payload: IngestPayload) -> IngestResponse:
             log=validation_log,
         ),
     )
+
+
+@router.get("/live/recent-nodes", tags=["live"])
+def recent_nodes(limit: int = 5) -> dict:
+    """
+    Return the most recently ingested nodes (those with an ingested_at timestamp).
+    Used by the frontend live ticker to show real-time activity.
+    Neo4j 5.x compatible — uses IS NOT NULL instead of deprecated EXISTS().
+    """
+    try:
+        from app.neo4j_client import get_session
+        with get_session() as session:
+            result = session.run(
+                """
+                MATCH (n)
+                WHERE n.ingested_at IS NOT NULL
+                RETURN n.name        AS name,
+                       n.ingested_at AS ts,
+                       labels(n)[0]  AS label,
+                       n.source      AS source
+                ORDER BY n.ingested_at DESC
+                LIMIT $limit
+                """,
+                {"limit": limit},
+            )
+            nodes = [
+                {
+                    "name":   rec["name"] or "",
+                    "ts":     rec["ts"]   or "",
+                    "label":  rec["label"] or "",
+                    "source": rec["source"] or "",
+                }
+                for rec in result
+            ]
+        return {"nodes": nodes}
+    except Exception as e:
+        log.warning("[live/recent-nodes] Neo4j query failed: %s", e)
+        return {"nodes": []}

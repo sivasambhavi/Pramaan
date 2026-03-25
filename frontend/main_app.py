@@ -39,13 +39,13 @@ def home() -> None:
     # --- Fix 12: hardcoded demo fallbacks so stats never show 0 ---
     _DEMO_STATS = {
         "funds_tracked":   28450,   # ₹28,450 Cr tracked across AMRUT, PMAY, SDRF, PLI
-        "verified_assets": 847,     # ground-level delivery proof nodes
+        "verified_assets": 6,       # Delhi Pilot: 3 Drains + PMAY + SBM + LED
         "evidence":        31,      # evidence nodes (matches Proof & Evidence page)
         "events":          17,      # 17 events across 7 domains
     }
     _stats           = _fetch_stats()
     _funds_tracked   = _stats.get("funds_tracked",   0) or _DEMO_STATS["funds_tracked"]
-    _verified_assets = _stats.get("verified_assets", 0) or _DEMO_STATS["verified_assets"]
+    _verified_assets = 6
     _evidence        = _stats.get("evidence",        0) or _DEMO_STATS["evidence"]
     _events          = _stats.get("events",          0) or _DEMO_STATS["events"]
 
@@ -104,7 +104,7 @@ def home() -> None:
       </div>
       <div class="stats-wrap">
         <div class="stat"><div class="stat-val" id="s1" style="color:#f97316">₹0 Cr</div><div class="stat-lbl">Funds Tracked</div><div class="stat-sub">AMRUT · PMAY · SDRF · PLI</div></div>
-        <div class="stat"><div class="stat-val" id="s2" style="color:#22c55e">0</div><div class="stat-lbl">Verified Assets</div><div class="stat-sub">ground-level delivery proof</div></div>
+        <div class="stat"><div class="stat-val" id="s2" style="color:#22c55e">0</div><div class="stat-lbl">WARD-LEVEL ASSETS VERIFIED</div><div class="stat-sub">data.gov.in · pilot audit</div></div>
         <div class="stat"><div class="stat-val" id="s3" style="color:#38bdf8">0</div><div class="stat-lbl">Evidence Nodes</div><div class="stat-sub">PIB · NDMA · ISRO · IMD</div></div>
         <div class="stat"><div class="stat-val" id="s4" style="color:#a78bfa">0</div><div class="stat-lbl">Events Tracked</div><div class="stat-sub">across 7 domains</div></div>
       </div>
