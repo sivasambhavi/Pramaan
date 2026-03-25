@@ -95,12 +95,10 @@ def home() -> None:
       {"<div class='logo-wrap'><img class='logo-img' src='" + logo_src + "' /></div>" if logo_src else ""}
       <div class="title-block">
         <div class="hero-title">PRAMAAN</div>
-        <div class="hero-tagline">India Governance Intelligence &amp; <span style="color:#f97316;-webkit-text-fill-color:#f97316;">Proof System</span> &nbsp;·&nbsp; 7 Domains</div>
+        <div class="hero-tagline">India Governance Intelligence &amp; <span style="color:#f97316;-webkit-text-fill-color:#f97316;">Proof System</span></div>
       </div>
       <div class="explainer">
-        PRAMAAN connects national events to government responses, scheme delivery, and ground-level proof —
-        across 7 domains: Climate, Economics, Geopolitics, Defense, Technology, Society, and Governance.
-        Every node is real. Every edge is evidence-backed.
+        Know what's happening. Know why. Decide with proof.
       </div>
       <div class="stats-wrap">
         <div class="stat"><div class="stat-val" id="s1" style="color:#f97316">₹0 Cr</div><div class="stat-lbl">Funds Tracked</div><div class="stat-sub">AMRUT · PMAY · SDRF · PLI</div></div>
@@ -108,6 +106,13 @@ def home() -> None:
         <div class="stat"><div class="stat-val" id="s3" style="color:#38bdf8">0</div><div class="stat-lbl">Evidence Nodes</div><div class="stat-sub">PIB · NDMA · ISRO · IMD</div></div>
         <div class="stat"><div class="stat-val" id="s4" style="color:#a78bfa">0</div><div class="stat-lbl">Events Tracked</div><div class="stat-sub">across 7 domains</div></div>
       </div>
+      <div style="height:14px;"></div>
+      <div style="display:flex;justify-content:center;animation:fadeUp 0.5s 0.35s ease both;">
+        <a href="/National_Intelligence" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;text-decoration:none;border-radius:12px;padding:10px 44px;font-family:Outfit,sans-serif;font-weight:700;font-size:1em;letter-spacing:0.02em;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:inline-block;">
+          Launch PRAMAAN &nbsp;→
+        </a>
+      </div>
+      <div style="height:28px;"></div>
       <div class="badge-row">
         <span class="badge"><span class="dot" style="background:#22c55e"></span>Neo4j Knowledge Graph</span>
         <span class="badge"><span class="dot" style="background:#38bdf8"></span>FastAPI Backend</span>
@@ -203,14 +208,6 @@ def home() -> None:
         unsafe_allow_html=True,
     )
 
-    # Button in main DOM — navigates correctly
-    st.html("""
-    <div style="display:flex;justify-content:center;margin:6px 0 10px;">
-      <a href="/National_Intelligence" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;text-decoration:none;border-radius:12px;padding:10px 44px;font-family:Outfit,sans-serif;font-weight:700;font-size:1em;letter-spacing:0.02em;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:inline-block;">
-        Launch PRAMAAN &nbsp;→
-      </a>
-    </div>
-    """)
 
 
 def main() -> None:
