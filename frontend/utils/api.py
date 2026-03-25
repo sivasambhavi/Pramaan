@@ -45,6 +45,9 @@ _TRANSIENT = (
     requests.exceptions.ChunkedEncodingError,
 )
 
+_CACHE: dict = {}
+_CACHE_TTL = 300
+
 
 def _retry_request(method: str, path: str, **kwargs) -> requests.Response | None:
     """
@@ -93,27 +96,44 @@ def safe_get(
 ) -> dict | None:
     """
     GET {BASE_URL}{path} with retry.
-
-    Returns parsed JSON dict on success.
-    Returns None on failure and shows st.warning() (unless silent=True).
+    Includes a 4-step cache fallback:
+      1. Fresh cache (< 5 min) → return instantly
+      2. Live request succeeds → update cache, return fresh data
+      3. Live fail but cache exists → return stale data + st.toast warning
+      4. No cache at all → show st.warning, return None
     """
+    cache_key = f"GET:{path}:{str(params)}"
+    now = time.time()
+
+    cached = _CACHE.get(cache_key)
+    if cached and (now - cached["ts"]) < _CACHE_TTL:
+        return cached["data"]
+
     resp = _retry_request("GET", path, params=params, timeout=timeout)
-    if resp is None:
+
+    if resp is not None and resp.ok:
+        try:
+            data = resp.json()
+            _CACHE[cache_key] = {"data": data, "ts": now}
+            return data
+        except Exception:
+            logger.error("[api] GET %s — response is not JSON", path)
+
+    if cached:
+        age_min = round((now - cached["ts"]) / 60, 1)
         if not silent:
-            st.warning(
-                f"Could not reach backend at `{path}`. "
-                "Is the server running? Check `uvicorn backend.app.main:app`"
+            st.toast(
+                f"Backend offline — showing cached data ({age_min} min old)",
+                icon="⚠️",
             )
-        return None
-    if not resp.ok:
-        if not silent:
-            st.warning(f"Backend returned {resp.status_code} for `{path}`")
-        return None
-    try:
-        return resp.json()
-    except Exception:
-        logger.error("[api] GET %s — response is not JSON", path)
-        return None
+        return cached["data"]
+
+    if not silent:
+        st.warning(
+            f"Could not reach backend at `{path}`. "
+            "Is the server running? Check `uvicorn backend.app.main:app`"
+        )
+    return None
 
 
 def safe_post(

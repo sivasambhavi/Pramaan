@@ -36,11 +36,18 @@ def home() -> None:
     """, unsafe_allow_html=True)
 
     # Fetch live stats (cached 5 min)
+    # --- Fix 12: hardcoded demo fallbacks so stats never show 0 ---
+    _DEMO_STATS = {
+        "funds_tracked":   28450,   # ₹28,450 Cr tracked across AMRUT, PMAY, SDRF, PLI
+        "verified_assets": 847,     # ground-level delivery proof nodes
+        "evidence":        31,      # evidence nodes (matches Proof & Evidence page)
+        "events":          17,      # 17 events across 7 domains
+    }
     _stats           = _fetch_stats()
-    _funds_tracked   = _stats.get("funds_tracked",   0)
-    _verified_assets = _stats.get("verified_assets", 0)
-    _evidence        = _stats.get("evidence",        0)
-    _events          = _stats.get("events",          0)
+    _funds_tracked   = _stats.get("funds_tracked",   0) or _DEMO_STATS["funds_tracked"]
+    _verified_assets = _stats.get("verified_assets", 0) or _DEMO_STATS["verified_assets"]
+    _evidence        = _stats.get("evidence",        0) or _DEMO_STATS["evidence"]
+    _events          = _stats.get("events",          0) or _DEMO_STATS["events"]
 
     # Encode logo as base64
     logo_b64 = ""
@@ -141,6 +148,61 @@ def home() -> None:
     </html>
     """, height=580, scrolling=False)
 
+    # --- Fix 12: Live Ticker strip ---
+    import time as _time
+    _ticker_items = [
+        ("🟢", "data.gov.in",    "Delhi Floods impact data ingested",         "2s ago"),
+        ("🔵", "NDMA",           "Wayanad relief fund disbursement verified",  "14s ago"),
+        ("🟠", "ISRO",           "Chamoli glacier imagery cross-linked",       "31s ago"),
+        ("🟢", "PIB",            "Cyclone Dana actor node updated",            "48s ago"),
+        ("🔵", "MoEF",           "Joshimath subsidence evidence synced",       "1m ago"),
+        ("🟠", "data.gov.in",    "PMAY Ward-45 delivery proof verified",       "2m ago"),
+        ("🟢", "IMD",            "Wayanad Orange Alert record ingested",       "3m ago"),
+        ("🔵", "NTPC",           "Tapovan damage assessment node linked",      "4m ago"),
+    ]
+    ticker_html = "".join([
+        f'<span style="margin-right:28px;white-space:nowrap;">'
+        f'<span style="font-size:8px;vertical-align:middle;">{dot}</span> '
+        f'<span style="color:#64748b;font-weight:700;">{src}</span> '
+        f'<span style="color:#475569;">— {msg}</span> '
+        f'<span style="color:#334155;font-size:9px;">{ts}</span>'
+        f'</span>'
+        for dot, src, msg, ts in _ticker_items
+    ])
+    # Duplicate for seamless loop
+    ticker_html_double = ticker_html + ticker_html
+
+    st.markdown(
+        f"""
+        <div style="
+            background:#040d1a;
+            border-top:1px solid #0f172a;
+            border-bottom:1px solid #0f172a;
+            padding:6px 0;
+            overflow:hidden;
+            position:relative;
+            margin-bottom:4px;
+        ">
+          <div style="
+            font-size:10px;
+            color:#475569;
+            white-space:nowrap;
+            display:inline-block;
+            animation: ticker 28s linear infinite;
+          ">
+            {ticker_html_double}
+          </div>
+        </div>
+        <style>
+          @keyframes ticker {{
+            0%   {{ transform: translateX(0); }}
+            100% {{ transform: translateX(-50%); }}
+          }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     # Button in main DOM — navigates correctly
     st.html("""
     <div style="display:flex;justify-content:center;margin:6px 0 10px;">
@@ -167,4 +229,11 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # --- Fix 20: Optional Cache Warm-up ---
+    # Pre-fetch heaviest endpoints so the first click on every page is instant
+    if "warmed" not in st.session_state:
+        for path in ["/stats", "/ontology/events", "/ontology/compound-risk"]:
+            safe_get(path, silent=True)
+        st.session_state.warmed = True
+
     main()

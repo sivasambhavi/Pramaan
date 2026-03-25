@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
-from app.routers import ontology, scrape, ingest
+from app.routers import ontology, scrape, ingest, citizen_report
 
 log = logging.getLogger("pramaan.startup")
 
@@ -60,6 +60,7 @@ app = FastAPI(
 app.include_router(ontology.router)
 app.include_router(scrape.router)
 app.include_router(ingest.router)
+app.include_router(citizen_report.router)
 
 
 @app.get("/health")

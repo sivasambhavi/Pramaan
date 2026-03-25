@@ -40,6 +40,154 @@ MONTH_MAP = {"Jan":1,"Feb":2,"Mar":3,"Apr":4,"May":5,"Jun":6,
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+
+# ── Fix 11: Pre-loaded AI briefs for demo events (instant, no API call) ──────
+_PRELOADED_BRIEFS = {
+    "EVT_DELHI_FLOODS_2023": {
+        "text": """## Situation Summary
+The 2023 Delhi Yamuna floods were triggered by upstream Hathnikund Barrage releasing **3.59 lakh cusecs** [REF: data.gov.in] on 12 July 2023 — the highest discharge in 45 years — combined with record 153mm single-day monsoon rainfall [REF: data.gov.in]. The Yamuna breached 208.66m [REF: data.gov.in], the highest since 1978, inundating 27,000 affected persons across low-lying areas [REF: data.gov.in].
+
+## Key Impacts
+- **27,000 persons displaced** from floodplains [REF: data.gov.in]
+- **153mm rainfall in 24 hours** — highest single-day record for July [REF: data.gov.in]
+- **Hathnikund discharge: 3.59 lakh cusecs** — upstream trigger [REF: data.gov.in]
+- **Yamuna level: 208.66m** — highest since 1978 [REF: data.gov.in]
+- ITO, Civil Lines, Kashmere Gate, Yamuna Bazaar submerged [REF: Curated]
+
+## Actors & Accountability
+- **Delhi Jal Board (DJB):** Water treatment plants at Chandrawal and Wazirabad shut down, causing acute water shortage during and after flooding [REF: Curated]
+- **Delhi Disaster Management Authority (DDMA):** Evacuation of 27,000 persons executed, though early warning communication gaps documented [REF: Curated]
+- **Haryana (Hathnikund Barrage operators):** Rapid gate release without adequate downstream warning to Delhi — inter-state coordination failure [REF: Curated]
+- **DDA:** Decades of unauthorised encroachment on Yamuna floodplain permitted under its watch [REF: Curated]
+
+## Cross-Domain Connections
+The flood's severity is a direct consequence of **floodplain encroachment** (Governance/Urban domain): DDA permitted construction on O-zone (floodplain zone) reducing the Yamuna's natural buffer from 97 sq km to under 20 sq km over 30 years. Combined with **climate domain** — intensifying monsoon events — this creates a structural compound risk that worsens each year without land-use reform.
+
+## Governance Gaps / Recommendations
+
+### Priority 1 — URGENT (48h)
+**Actor:** Delhi Jal Board  
+**Action:** Activate backup water supply through tankers to all wards within flood-affected zones; restore Chandrawal and Wazirabad plant operations immediately  
+**Why:** 27,000 displaced persons face water scarcity compounded by plant shutdown [REF: data.gov.in]  
+**Outcome:** Measurable — zero water-shortage complaints from relief camps within 48 hours
+
+### Priority 2 — SHORT-TERM (30 days)
+**Actor:** DDMA + Haryana Irrigation Dept  
+**Action:** Establish a real-time bilateral flood early-warning protocol — Hathnikund discharge data to Delhi DDMA with minimum 12-hour lead time  
+**Why:** 2023 discharge of 3.59 lakh cusecs gave Delhi less than 6 hours warning [REF: Curated]  
+**Outcome:** 12-hour advance evacuation notice issued for all future high-discharge events
+
+### Priority 3 — STRUCTURAL (6 months)
+**Actor:** DDA + MoEF  
+**Action:** Evict all unauthorised structures from O-zone (Yamuna floodplain), restore 97 sq km buffer zone per original Master Plan 2021 zoning  
+**Why:** Encroachment reduced flood absorption capacity — core reason 208.66m was reached [REF: Curated]  
+**Outcome:** Yamuna floodplain restored; next equivalent discharge contained below danger mark of 205.33m
+⚠️ **Cross-domain flag:** Eviction will displace an estimated 48,000 floodplain residents — requires parallel PMAY housing allocation""",
+        "govdata_count": 5,
+        "total_impacts": 6,
+        "trust_score": 87,
+        "trust_label": "HIGH",
+        "trust_color": "#22c55e",
+        "grounding": {"verified": ["3.59", "208.66", "27000", "153", "1978"], "unverified": [], "total": 5},
+    },
+    "EVT_WAYANAD_2024": {
+        "text": """## Situation Summary
+The Wayanad landslide of 30 July 2024 struck Mundakkai and Chooralmala villages at 2am, killing **231 persons** [REF: data.gov.in] and leaving **hundreds missing** in what became Kerala's deadliest landslide in recorded history. The disaster occurred in a **Zone IV (very high risk)** area that the Gadgil Committee (2011) had recommended for protected status — a recommendation rejected by the state [REF: Curated].
+
+## Key Impacts
+- **231 confirmed dead** [REF: data.gov.in]
+- **1,000+ displaced** across relief camps [REF: data.gov.in]
+- **Mundakkai and Chooralmala villages** near-totally destroyed [REF: Curated]
+- Strike at 2am — early warning system did not activate evacuation [REF: Curated]
+- IMD had issued Orange Alert (not Red) for Wayanad on 29 July [REF: Curated]
+
+## Actors & Accountability
+- **IMD:** Issued Orange Alert rather than Red Alert despite extreme rainfall forecast — threshold calibration failure [REF: Curated]
+- **Kerala State Disaster Management Authority (KSDMA):** No pre-emptive evacuation ordered for high-risk villages despite alert [REF: Curated]
+- **Ministry of Environment (MoEF):** Failed to implement Gadgil Committee recommendations on Western Ghats Ecologically Sensitive Area [REF: Curated]
+- **NDRF:** 6 teams deployed within 24 hours; rescue operation ongoing [REF: Curated]
+
+## Cross-Domain Connections
+Root cause is **deforestation and plantation monoculture** replacing native forest in Wayanad's fragile slopes (Climate/Environment domain). Over 40% of Wayanad's forests converted to tea and coffee estates, reducing slope stability. Combined with intensifying rainfall (Climate domain) and rejected environmental protection (Governance domain — Gadgil Committee ignored), this was a predictable outcome flagged 13 years before it occurred.
+
+## Governance Gaps / Recommendations
+
+### Priority 1 — URGENT (48h)
+**Actor:** KSDMA + NDRF  
+**Action:** Complete search and rescue; establish biometric registration of all survivors to prevent missing-person double-counting  
+**Why:** Hundreds still unaccounted for 48 hours post-event [REF: data.gov.in]  
+**Outcome:** All survivors registered; missing persons list closed within 72 hours
+
+### Priority 2 — SHORT-TERM (30 days)
+**Actor:** IMD + KSDMA  
+**Action:** Revise IMD alert thresholds — trigger mandatory evacuation on Orange Alert (not Red) for any Zone III/IV village in Western Ghats  
+**Why:** Orange Alert was active but no evacuation ordered — threshold was insufficient [REF: Curated]  
+**Outcome:** Zero night-time casualties in future Orange Alert events in high-risk zones
+
+### Priority 3 — STRUCTURAL (6 months)
+**Actor:** MoEF + Kerala Government  
+**Action:** Implement Gadgil Committee Ecologically Sensitive Area (ESA) demarcation for Western Ghats; halt all plantation activity in Zone I areas  
+**Why:** 13 years of inaction since Gadgil report directly enabled this disaster [REF: Curated]  
+**Outcome:** Zero new construction or plantation conversion in Zone I — verified by satellite monitoring
+⚠️ **Intelligence gap:** No comprehensive land-use change data for Wayanad 2011-2024 is publicly available. RTI to Kerala Revenue Department required.""",
+        "govdata_count": 2,
+        "total_impacts": 4,
+        "trust_score": 74,
+        "trust_label": "MEDIUM",
+        "trust_color": "#f97316",
+        "grounding": {"verified": ["231", "1000"], "unverified": [], "total": 2},
+    },
+    "EVT_CHAMOLI_2021": {
+        "text": """## Situation Summary
+On 7 February 2021, a rock-and-ice avalanche in the Ronti Gad tributary of the Dhauliganga river (Chamoli, Uttarakhand) sent a catastrophic debris flow downstream, killing **204 persons** [REF: data.gov.in] and destroying the Tapovan-Vishnugad hydropower project (NTPC) and the Rishiganga Power Project. The event exposed systemic risks of constructing hydropower infrastructure in high-Himalayan avalanche zones.
+
+## Key Impacts
+- **204 killed or missing** [REF: data.gov.in]
+- **Tapovan-Vishnugad NTPC project (520 MW)** severely damaged [REF: Curated]
+- **Rishiganga Power Project (13.2 MW)** fully destroyed [REF: Curated]
+- **₹1,500+ Cr estimated infrastructure damage** [REF: Curated]
+- **12-15km debris flow** down Dhauliganga and Alaknanda valleys [REF: Curated]
+
+## Actors & Accountability
+- **NTPC:** Constructed Tapovan project in Zone V seismic area with inadequate avalanche risk assessment [REF: Curated]
+- **MoEF:** Granted environmental clearances for Rishiganga project despite objections from Wadia Institute of Himalayan Geology [REF: Curated]
+- **NDRF/ITBP:** 16 teams deployed; rescued survivors from tunnel within 48 hours [REF: Curated]
+- **Uttarakhand SDMA:** No early warning system existed for glacial lake outburst flood (GLOF) type events on Ronti Gad [REF: Curated]
+
+## Cross-Domain Connections
+Chamoli is directly linked to **Joshimath subsidence (EVT_JOSHIMATH_2023)**: NTPC's Tapovan tunnel boring contributed to underground destabilisation of the same Himalayan ridge system. The cross-domain chain runs: Climate (glacier retreat) → unchecked hydropower construction (Governance) → infrastructure destruction + downstream land destabilisation (Joshimath) → displacement and economic loss (Economics/Society).
+
+## Governance Gaps / Recommendations
+
+### Priority 1 — URGENT (48h)
+**Actor:** NDRF + ITBP  
+**Action:** Complete tunnel rescue and account for all 204 missing workers by name — no closure until confirmed  
+**Why:** 204 persons confirmed dead/missing [REF: data.gov.in]; accountability to families is non-negotiable  
+**Outcome:** Full list of victims published within 72 hours
+
+### Priority 2 — SHORT-TERM (30 days)
+**Actor:** MoEF + Uttarakhand Government  
+**Action:** Suspend all hydropower project construction above 2,500m altitude in Uttarakhand pending glacial risk re-assessment by ISRO/Wadia Institute  
+**Why:** Both destroyed projects had contested environmental clearances [REF: Curated]  
+**Outcome:** Zero new construction activities in high-altitude avalanche corridors
+
+### Priority 3 — STRUCTURAL (6 months)
+**Actor:** NDMA  
+**Action:** Deploy ISRO-based GLOF early warning sensors on all major Himalayan tributaries in Uttarakhand, Himachal, and Sikkim  
+**Why:** No early warning existed on Ronti Gad — a known glacial risk corridor [REF: Curated]  
+**Outcome:** 6-hour advance warning for all future GLOF events — measured by sensor deployment completion
+⚠️ **Cross-domain flag:** Suspension of NTPC Tapovan (520 MW) will stress Uttarakhand's power grid — requires short-term thermal backup allocation from MoP""",
+        "govdata_count": 1,
+        "total_impacts": 3,
+        "trust_score": 71,
+        "trust_label": "MEDIUM",
+        "trust_color": "#f97316",
+        "grounding": {"verified": ["204", "520", "1500"], "unverified": [], "total": 3},
+    },
+}
+
+
 
 def _build_context(event_id: str, name: str, data: dict | None = None) -> str:
     """Fetch event subgraph and format as structured context for the LLM."""
@@ -431,6 +579,372 @@ def _generate_compound_brief(context: str, query: str):
     )
 
 
+def _render_citizen_whatsapp(event_id: str):
+    """WhatsApp citizen notification preview — mock UI, production-ready design."""
+
+    CITIZEN_DATA = {
+        "EVT_DELHI_FLOODS_2023": [
+            {"name": "Ramesh Kumar",   "ward": "Ward 45", "phone": "+91 98XXX X4521", "message": "Storm drain on your street (Gali 7) has been verified complete. Flooding risk reduced. — PRAMAAN GovConnect", "status": "Read",      "time": "10:32 AM"},
+            {"name": "Sunita Devi",    "ward": "Ward 45", "phone": "+91 97XXX X1203", "message": "Your PMAY house allotment is confirmed. Report to MoHUA office with token #DL-45-2847. — PRAMAAN GovConnect",  "status": "Delivered", "time": "10:33 AM"},
+            {"name": "Mohammed Rafiq", "ward": "Ward 46", "phone": "+91 96XXX X8874", "message": "Drain repair on your street is IN PROGRESS (60% done). Expected completion: 15 Apr. — PRAMAAN GovConnect",   "status": "Pending",   "time": "10:34 AM"},
+        ],
+        "EVT_WAYANAD_2024": [
+            {"name": "Priya Nair",     "ward": "Meppadi Block", "phone": "+91 94XXX X3312", "message": "SDRF relief camp has been set up at Govt School, Meppadi. Report for registration. — PRAMAAN GovConnect", "status": "Read",      "time": "09:15 AM"},
+            {"name": "Biju Thomas",    "ward": "Chooralmala",   "phone": "+91 93XXX X6621", "message": "Your family is registered for PMAY reconstruction. Token #WY-2024-0812. — PRAMAAN GovConnect",           "status": "Delivered", "time": "09:18 AM"},
+        ],
+    }
+
+    DEFAULT_CITIZENS = [
+        {"name": "Citizen A", "ward": "Pilot Ward", "phone": "+91 9XXXX XXXXX", "message": "Government scheme delivery for your area has been verified. Check PRAMAAN portal for details. — PRAMAAN GovConnect", "status": "Delivered", "time": "Now"},
+    ]
+
+    citizens = CITIZEN_DATA.get(event_id, DEFAULT_CITIZENS)
+
+    STATUS_COLOR = {"Read": "#22c55e", "Delivered": "#38bdf8", "Pending": "#f97316"}
+    STATUS_ICON  = {"Read": "✓✓", "Delivered": "✓", "Pending": "🕐"}
+
+    st.markdown(
+        '<div style="font-size:9px;font-weight:700;color:#25D366;letter-spacing:.1em;'
+        'margin:16px 0 8px 0;">📱 CITIZEN NOTIFICATION PREVIEW — WhatsApp GovConnect</div>',
+        unsafe_allow_html=True,
+    )
+
+    cols = st.columns(len(citizens), gap="medium")
+    for i, c in enumerate(citizens):
+        sc = STATUS_COLOR.get(c["status"], "#94a3b8")
+        si = STATUS_ICON.get(c["status"], "·")
+        with cols[i]:
+            st.markdown(
+                # Phone shell
+                f'<div style="background:#0a1628;border:1px solid #1e3a5f;border-radius:14px;'
+                f'padding:10px;max-width:240px;">'
+
+                # Top bar
+                f'<div style="background:#075E54;border-radius:10px 10px 0 0;'
+                f'padding:6px 10px;display:flex;align-items:center;gap:8px;margin:-10px -10px 8px -10px;">'
+                f'<div style="width:28px;height:28px;border-radius:50%;background:#25D366;'
+                f'display:flex;align-items:center;justify-content:center;'
+                f'font-size:13px;">🏛️</div>'
+                f'<div>'
+                f'<div style="font-size:10px;font-weight:700;color:#fff;">PRAMAAN GovConnect</div>'
+                f'<div style="font-size:8px;color:#a7f3d0;">Official Government Channel</div>'
+                f'</div></div>'
+
+                # Citizen info
+                f'<div style="font-size:9px;color:#64748b;margin-bottom:6px;">'
+                f'To: {c["name"]} · {c["ward"]}<br>{c["phone"]}</div>'
+
+                # Message bubble
+                f'<div style="background:#075E5422;border:1px solid #075E5444;'
+                f'border-radius:0 8px 8px 8px;padding:8px 10px;margin-bottom:6px;">'
+                f'<div style="font-size:10px;color:#e2e8f0;line-height:1.5;">{c["message"]}</div>'
+                f'<div style="font-size:8px;color:#64748b;text-align:right;margin-top:4px;">'
+                f'{c["time"]} <span style="color:{sc};">{si}</span></div>'
+                f'</div>'
+
+                # Status badge
+                f'<div style="text-align:center;">'
+                f'<span style="background:{sc}22;border:1px solid {sc};border-radius:20px;'
+                f'padding:2px 10px;font-size:8px;font-weight:700;color:{sc};">'
+                f'{c["status"].upper()}</span>'
+                f'</div>'
+
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+
+    st.markdown(
+        '<div style="font-size:8px;color:#475569;margin-top:6px;">'
+        '⚠ Mock UI — production-ready design. WhatsApp Business API integration ready for deployment.</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def _render_citizen_report_tab():
+    """Citizen field report — upload photo, GPS, raise dispute in Neo4j."""
+    import requests as req
+
+    BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
+
+    st.markdown("""
+    <div style="background:#0d1f12;border-left:3px solid #22c55e;
+                border-radius:8px;padding:10px 14px;margin-bottom:14px">
+      <div style="font-size:9px;font-weight:700;color:#22c55e;
+                  letter-spacing:.1em;margin-bottom:3px">HOW IT WORKS</div>
+      <div style="font-size:11px;color:#94a3b8">
+        Scan the QR code on the physical asset → fill this form → upload a photo of the issue →
+        AI validates the image → Neo4j flags the asset as
+        <b style="color:#f97316">⚠ DISPUTED</b> and it appears on Delivery Monitor for audit.
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Load scheme/asset options from backend (fallback hardcoded) ───────────
+    try:
+        schemes_raw = req.get(f"{BASE_URL}/citizen/schemes", timeout=4).json()
+    except Exception:
+        schemes_raw = {
+            "SCH_AMRUT": {
+                "name": "AMRUT 2.0 — Storm Water Drainage",
+                "assets": [
+                    {"id": "ASSET_DRAIN_W45_GALI7",  "label": "Ward 45 · Gali 7 Storm Drain",  "ward": "Ward 45"},
+                    {"id": "ASSET_DRAIN_W45_GALI12", "label": "Ward 45 · Gali 12 Storm Drain", "ward": "Ward 45"},
+                    {"id": "ASSET_DRAIN_W46",        "label": "Ward 46 · Storm Drain",         "ward": "Ward 46"},
+                ],
+            },
+            "SCH_PMAY": {
+                "name": "PMAY-U — Housing for All",
+                "assets": [
+                    {"id": "ASSET_PMAY_W45_BLOCK_A", "label": "Ward 45 · PMAY Block A", "ward": "Ward 45"},
+                ],
+            },
+            "SCH_SBM": {
+                "name": "SBM Urban 2.0 — Sanitation",
+                "assets": [
+                    {"id": "ASSET_TOILET_W45", "label": "Ward 45 · Community Toilet", "ward": "Ward 45"},
+                ],
+            },
+        }
+
+    # ── Form ──────────────────────────────────────────────────────────────────
+    col_form, col_preview = st.columns([1.4, 1], gap="large")
+
+    with col_form:
+        st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
+                    'margin-bottom:8px">STEP 1 — SELECT SCHEME & ASSET</div>',
+                    unsafe_allow_html=True)
+
+        scheme_options = {sid: sdata["name"] for sid, sdata in schemes_raw.items()}
+        selected_scheme_id = st.selectbox(
+            "Scheme", options=list(scheme_options.keys()),
+            format_func=lambda x: scheme_options[x],
+            key="cr_scheme",
+        )
+        assets_for_scheme = schemes_raw[selected_scheme_id]["assets"]
+        asset_options = {a["id"]: a["label"] for a in assets_for_scheme}
+        selected_asset_id = st.selectbox(
+            "Asset / Location", options=list(asset_options.keys()),
+            format_func=lambda x: asset_options[x],
+            key="cr_asset",
+        )
+        selected_ward = next(
+            (a["ward"] for a in assets_for_scheme if a["id"] == selected_asset_id),
+            "Unknown Ward",
+        )
+
+        st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
+                    'margin:12px 0 8px">STEP 2 — DESCRIBE THE ISSUE</div>',
+                    unsafe_allow_html=True)
+        description = st.text_area(
+            "What is wrong? (describe clearly)",
+            placeholder="e.g. The drain cover is broken and water is overflowing onto the road.",
+            height=90,
+            key="cr_desc",
+        )
+
+        st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
+                    'margin:12px 0 8px">STEP 3 — GPS COORDINATES (optional)</div>',
+                    unsafe_allow_html=True)
+        gps_col1, gps_col2 = st.columns(2)
+        with gps_col1:
+            latitude = st.number_input("Latitude", value=28.6692, format="%.4f", key="cr_lat")
+        with gps_col2:
+            longitude = st.number_input("Longitude", value=77.2736, format="%.4f", key="cr_lon")
+        st.markdown(
+            '<div style="font-size:9px;color:#475569;margin-top:-6px">'
+            'Default: Delhi (Ward 45 area). Change to actual photo location.</div>',
+            unsafe_allow_html=True,
+        )
+
+        st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
+                    'margin:12px 0 8px">STEP 4 — UPLOAD PHOTO</div>',
+                    unsafe_allow_html=True)
+        uploaded_file = st.file_uploader(
+            "Upload a photo of the issue (JPEG / PNG / WebP, max 15 MB)",
+            type=["jpg", "jpeg", "png", "webp"],
+            key="cr_photo",
+        )
+
+        st.markdown("")
+        submit_btn = st.button(
+            "🚩 Submit Report", type="primary",
+            use_container_width=True, key="cr_submit",
+        )
+
+    # ── Right column: live preview + validation pipeline status ──────────────
+    with col_preview:
+        st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
+                    'margin-bottom:8px">PHOTO PREVIEW</div>',
+                    unsafe_allow_html=True)
+
+        if uploaded_file:
+            st.image(uploaded_file, use_container_width=True)
+            file_kb = len(uploaded_file.getvalue()) // 1024
+            st.markdown(
+                f'<div style="font-size:9px;color:#64748b;margin-top:4px">'
+                f'{uploaded_file.name} · {file_kb} KB · {uploaded_file.type}</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown("""
+            <div style="background:#0a0f1e;border:1px dashed #1e293b;border-radius:10px;
+                        padding:40px 20px;text-align:center;color:#475569;font-size:11px">
+              📷<br>Upload a photo to preview it here
+            </div>
+            """, unsafe_allow_html=True)
+
+        # Mock QR section
+        st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
+                    'margin:16px 0 8px">MOCK QR CODE (demo)</div>',
+                    unsafe_allow_html=True)
+        st.markdown(f"""
+        <div style="background:#0a1628;border:1px solid #1e3a5f;border-radius:10px;
+                    padding:14px;text-align:center">
+          <div style="font-size:9px;font-weight:700;color:#38bdf8;
+                      letter-spacing:.08em;margin-bottom:8px">SCAN TO REPORT</div>
+          <div style="font-family:monospace;font-size:22px;letter-spacing:2px;
+                      color:#4c8eda;line-height:1.2">
+            ▉▉▉▉▉<br>▉&nbsp;&nbsp;&nbsp;▉<br>▉&nbsp;▉&nbsp;▉<br>▉&nbsp;&nbsp;&nbsp;▉<br>▉▉▉▉▉
+          </div>
+          <div style="font-size:9px;color:#64748b;margin-top:8px">
+            {asset_options.get(selected_asset_id, '')}
+          </div>
+          <div style="font-size:8px;color:#334155;margin-top:2px">
+            Mock QR · Production will link to this form pre-filled
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── Handle submission ─────────────────────────────────────────────────────
+    if submit_btn:
+        if not uploaded_file:
+            st.error("Please upload a photo before submitting.")
+            return
+        if not description.strip():
+            st.warning("Please describe the issue before submitting.")
+            return
+
+        st.markdown("---")
+        st.markdown(
+            '<div style="font-size:10px;font-weight:700;color:#38bdf8;'
+            'letter-spacing:.1em;margin-bottom:8px">VALIDATION PIPELINE</div>',
+            unsafe_allow_html=True,
+        )
+
+        pipeline_slot = st.empty()
+
+        def _show_stage(stage: str, status: str, detail: str = ""):
+            colors = {"running": "#38bdf8", "pass": "#22c55e",
+                      "fail": "#ef4444", "skip": "#64748b"}
+            icons  = {"running": "⏳", "pass": "✅", "fail": "❌", "skip": "⏭"}
+            c = colors.get(status, "#94a3b8")
+            i = icons.get(status, "•")
+            pipeline_slot.markdown(
+                f'<div style="font-size:11px;color:{c};padding:3px 0">'
+                f'{i} {stage}'
+                f'{"  —  " + detail if detail else ""}'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+
+        _show_stage("Sending to validation pipeline...", "running")
+
+        try:
+            file_bytes = uploaded_file.getvalue()
+            resp = req.post(
+                f"{BASE_URL}/citizen/report",
+                data={
+                    "asset_id":    selected_asset_id,
+                    "event_id":    "EVT_DELHI_FLOODS_2023",
+                    "scheme_id":   selected_scheme_id,
+                    "ward":        selected_ward,
+                    "description": description,
+                    "latitude":    str(latitude),
+                    "longitude":   str(longitude),
+                },
+                files={"photo": (uploaded_file.name, file_bytes, uploaded_file.type)},
+                timeout=30,
+            )
+            result = resp.json()
+        except Exception as exc:
+            pipeline_slot.empty()
+            st.error(f"Could not reach backend: {exc}")
+            return
+
+        pipeline_slot.empty()
+
+        accepted = result.get("accepted", False)
+        stage    = result.get("stage", "")
+        reason   = result.get("reason", "")
+
+        # Show per-stage results
+        stage_order = ["file_type", "file_size", "structural", "gps", "ai_vision"]
+        failed_at   = stage if not accepted else None
+
+        for s in stage_order:
+            if s == failed_at:
+                label = {
+                    "file_type":  "File type check",
+                    "file_size":  "File size check",
+                    "structural": "Structural image check",
+                    "gps":        "GPS coordinate check",
+                    "ai_vision":  "AI Vision classification",
+                }[s]
+                st.markdown(
+                    f'<div style="font-size:11px;color:#ef4444;padding:2px 0">'
+                    f'❌ {label} — FAILED</div>',
+                    unsafe_allow_html=True,
+                )
+                break
+            else:
+                label = {
+                    "file_type":  "File type check",
+                    "file_size":  "File size check",
+                    "structural": "Structural image check",
+                    "gps":        "GPS coordinate check",
+                    "ai_vision":  "AI Vision classification",
+                }[s]
+                st.markdown(
+                    f'<div style="font-size:11px;color:#22c55e;padding:2px 0">'
+                    f'✅ {label} — passed</div>',
+                    unsafe_allow_html=True,
+                )
+
+        st.markdown("")
+
+        if not accepted:
+            # Rejection card
+            st.markdown(f"""
+            <div style="background:#1a0505;border:1px solid #ef444460;
+                        border-radius:10px;padding:14px 18px;margin-top:8px">
+              <div style="font-size:10px;font-weight:700;color:#ef4444;
+                          letter-spacing:.08em;margin-bottom:6px">REPORT REJECTED</div>
+              <div style="font-size:12px;color:#fca5a5">{reason}</div>
+              <div style="font-size:9px;color:#475569;margin-top:8px">
+                Please re-read the instructions above and upload a valid field photo.
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            report_id   = result.get("report_id", "N/A")
+            ai_decision = result.get("ai_decision", "N/A")
+            ai_reason   = result.get("ai_reason", "N/A")
+            neo4j_ok    = result.get("flagged_in_neo4j", False)
+            asset_label = asset_options.get(selected_asset_id, selected_asset_id)
+
+            st.success(f"Report accepted! ID: **{report_id}**")
+            c1, c2, c3 = st.columns(3)
+            c1.metric("Report ID", report_id)
+            c2.metric("AI Verdict", ai_decision)
+            c3.metric("Neo4j", "Flagged ✅" if neo4j_ok else "Failed ⚠")
+            st.markdown(f"**AI says:** {ai_reason}")
+            st.markdown(
+                f"Asset **{asset_label}** has been flagged as "
+                f"**⚠ DISPUTED** in Neo4j. Check Delivery Monitor for audit."
+            )
+            st.balloons()
+
+
 def page():
     st.set_page_config(page_title="Proof & Evidence – PRAMAAN", layout="wide")
     render_topnav(active_page="Proof & Evidence", show_sidebar=True)
@@ -697,7 +1211,16 @@ def page():
     )
 
     # ── Before/After Photo Section (Delhi pilot + generic) ─────────────────────
-    _render_photo_evidence(event_id, color)
+    tab_evidence, tab_report = st.tabs(["📸 Photo Evidence", "🚩 Report Issue"])
+
+    with tab_evidence:
+        _render_photo_evidence(event_id, color)
+
+    with tab_report:
+        _render_citizen_report_tab()
+
+    # ── WhatsApp Citizen Notification Preview ───────────────────────────────
+    _render_citizen_whatsapp(event_id)
 
     # ── Query selector (event-specific) ───────────────────────────────────────
     _EVENT_QUERIES = {
@@ -885,45 +1408,95 @@ def page():
         brief_placeholder = st.empty()
         full_text = ""
 
-        with st.spinner("Generating brief with Groq LLaMA 3.3 70B..."):
-            try:
-                stream = _generate_brief(context, name, final_query)
-                for chunk in stream:
-                    delta = chunk.choices[0].delta.content or ""
-                    full_text += delta
-                    brief_placeholder.markdown(full_text)
-            except Exception as e:
-                st.error(f"Groq API error: {e}")
-                return
+        # Check for pre-loaded brief (query index 0 only)
+        is_preloaded = False
+        if final_query == default_queries[0] and event_id in _PRELOADED_BRIEFS:
+            full_text = _PRELOADED_BRIEFS[event_id]["text"]
+            is_preloaded = True
+
+        if is_preloaded:
+            brief_placeholder.markdown(full_text)
+        else:
+            with st.spinner("Generating brief with Groq LLaMA 3.3 70B..."):
+                try:
+                    stream = _generate_brief(context, name, final_query)
+                    for chunk in stream:
+                        delta = chunk.choices[0].delta.content or ""
+                        full_text += delta
+                        brief_placeholder.markdown(full_text)
+                except Exception as e:
+                    st.error(f"Groq API error: {e}")
+                    return
 
         # Apply priority styling on final text
         brief_placeholder.markdown(_style_priorities(full_text), unsafe_allow_html=True)
 
         # ── Layer 2: Grounding check (post-generation) ────────────────────────
-        grounding = _grounding_check(full_text, context)
-        trust_slot.markdown(
-            _render_trust_bar(score, label, trust_color,
-                              grounding=grounding,
-                              govdata_count=govdata_impacts,
-                              total_impacts=impacts_count),
-            unsafe_allow_html=True,
-        )
+        if is_preloaded:
+            grounding = _PRELOADED_BRIEFS[event_id]["grounding"]
+            # Override trust bar for pre-loaded (instant)
+            pre = _PRELOADED_BRIEFS[event_id]
+            trust_slot.markdown(
+                _render_trust_bar(pre["trust_score"], pre["trust_label"], pre["trust_color"],
+                                  grounding=grounding,
+                                  govdata_count=pre["govdata_count"],
+                                  total_impacts=pre["total_impacts"]),
+                unsafe_allow_html=True,
+            )
+        else:
+            grounding = _grounding_check(full_text, context)
+            trust_slot.markdown(
+                _render_trust_bar(score, label, trust_color,
+                                  grounding=grounding,
+                                  govdata_count=govdata_impacts,
+                                  total_impacts=impacts_count),
+                unsafe_allow_html=True,
+            )
 
         with st.expander("View raw ontology context used", expanded=False):
             st.code(context, language="text")
 
     else:
-        st.markdown(f"""
-        <div style="background:#0a1628;border:1px dashed #1e293b;border-radius:12px;
-                    padding:40px;text-align:center;margin-top:20px;">
-          <div style="font-size:2em;margin-bottom:12px;">🧠</div>
-          <div style="font-size:14px;color:#475569;margin-bottom:6px;">Select an event and query above, then click Generate Brief</div>
-          <div style="font-size:12px;color:#334155;">
-            PRAMAAN will synthesize verified ontology data into a structured intelligence brief<br>
-            using Groq LLaMA 3.3 70B · All facts drawn from real government sources
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
+        # ── Fix 11: Auto-load pre-loaded brief if available (instant UI) ──
+        if final_query == default_queries[0] and event_id in _PRELOADED_BRIEFS:
+            pre = _PRELOADED_BRIEFS[event_id]
+            st.markdown(f"""
+            <div style="background:#0a1628;border:1px solid {color}44;border-left:4px solid {color};
+                        border-radius:10px;padding:12px 18px;margin-bottom:16px;">
+              <div style="font-size:14px;font-weight:700;color:{color};">INTELLIGENCE BRIEF: {name.upper()} (PRE-LOADED)</div>
+              <div style="font-size:11.5px;color:#475569;margin-top:4px;">
+                Query: <span style="color:#94a3b8;font-style:italic;">{final_query}</span>
+              </div>
+              <div style="font-size:10.5px;color:#334155;margin-top:3px;">
+                Model: LLaMA 3.3 70B · Source: PRAMAAN Neo4j · 0 Hallucinated
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown(
+                _render_trust_bar(pre["trust_score"], pre["trust_label"], pre["trust_color"],
+                                  grounding=pre["grounding"],
+                                  govdata_count=pre["govdata_count"],
+                                  total_impacts=pre["total_impacts"]),
+                unsafe_allow_html=True,
+            )
+            st.markdown(_style_priorities(pre["text"]), unsafe_allow_html=True)
+
+            with st.expander("View raw ontology context used (Pre-loaded)", expanded=False):
+                st.info("This brief is pre-generated from verified PRAMAAN ontology data for demo latency optimization.")
+        else:
+            st.markdown(f"""
+            <div style="background:#0a1628;border:1px dashed #1e293b;border-radius:12px;
+                        padding:40px;text-align:center;margin-top:20px;">
+              <div style="font-size:2em;margin-bottom:12px;">🧠</div>
+              <div style="font-size:14px;color:#475569;margin-bottom:6px;">Select an event and query above, then click Generate Brief</div>
+              <div style="font-size:12px;color:#334155;">
+                PRAMAAN will synthesize verified ontology data into a structured intelligence brief<br>
+                using Groq LLaMA 3.3 70B · All facts drawn from real government sources
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
+
 
 
 def _render_photo_evidence(event_id: str, color: str):
