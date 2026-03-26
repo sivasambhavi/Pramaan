@@ -18,9 +18,14 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
 from app.neo4j_client import get_session
-from app.queries import build_merge_entity_query, build_merge_relation_query, SOURCE_CONFIDENCE
+from app.queries import (
+    build_merge_entity_query, build_merge_relation_query,
+    SOURCE_CONFIDENCE, validate_extracted,
+)
 from app.services.news_service import news_service
 from app.services.ai_service import ai_service
+from app.services.entity_resolver import resolve_entity_id
+from app.services.verification_agent import VerificationAgent
 
 log = logging.getLogger("pramaan.scheduler")
 
@@ -71,41 +76,79 @@ def _get_active_rss_urls() -> list[dict]:
 # ── Job 1: News refresh ───────────────────────────────────────────────────────
 
 def _ingest_extracted(extracted: dict, source_type: str) -> tuple[int, int]:
-    """Write ai_service extraction output straight to Neo4j. Returns (entities, relations) counts."""
-    entities   = extracted.get("entities", [])
-    relations  = extracted.get("relations", [])
+    """
+    Write ai_service extraction output to Neo4j with full validation pipeline:
+      1. Schema validation (validate_extracted)
+      2. Entity ID resolution (static map + fuzzy Neo4j match)
+      3. Confidence threshold gate (drop < 0.5)
+      4. MERGE entity into graph
+      5. VerificationAgent (Bayesian update + conflict detection)
+      6. Relation ID resolution + MERGE
+
+    Returns (entities_written, relations_written).
+    """
+    raw_entities = extracted.get("entities", [])
+    raw_relations = extracted.get("relations", [])
+
+    # ── Layer 1: Schema validation ────────────────────────────────────────────
+    entities, relations, schema_dropped = validate_extracted(raw_entities, raw_relations)
+    if schema_dropped:
+        log.warning("[scheduler] %d entity/relation(s) failed schema validation", schema_dropped)
+
     stamp = {
         "source_type": source_type,
         "ingested_at": datetime.now(timezone.utc).isoformat(),
         "ingested_by": "scheduler",
     }
     ent_count = rel_count = 0
+    base_confidence = SOURCE_CONFIDENCE.get(source_type, 0.6)
+    now = stamp["ingested_at"]
+
     with get_session() as session:
         for ent in entities:
             try:
+                label = ent.get("label", "")
                 props = {**stamp, **ent.get("properties", {})}
-                if "confidence" not in props:
-                    log.warning("Skipping entity %r — no confidence", ent.get("id"))
-                    continue
-                query = build_merge_entity_query(ent.get("label", "Entity"))
-                session.run(query, id=ent["id"], properties=props)
-                ent_count += 1
-            except Exception as e:
-                log.warning("Entity ingest error: %s", e)
 
-        base_confidence = SOURCE_CONFIDENCE.get(source_type, 0.6)
-        now = stamp["ingested_at"]
+                # ── Layer 2: Confidence threshold ─────────────────────────────
+                conf = float(props.get("confidence", base_confidence))
+                if conf < 0.5:
+                    log.info("[scheduler] entity skipped — low confidence %.2f: %r", conf, ent.get("id"))
+                    continue
+
+                # ── Layer 3: Entity ID resolution ─────────────────────────────
+                name = str(props.get("name", ent.get("id", "")))
+                canonical_id = resolve_entity_id(
+                    raw_id=ent.get("id", ""), name=name, label=label, session=session
+                )
+
+                query = build_merge_entity_query(label)
+                session.run(query, id=canonical_id, properties=props)
+                ent_count += 1
+
+                # ── Layer 4: VerificationAgent ────────────────────────────────
+                vr = VerificationAgent.verify(label, canonical_id, props, session)
+                if vr.action == "CONFLICT_FLAGGED":
+                    log.warning("[scheduler] CONFLICT on %s(%s): %s", label, canonical_id, vr.conflicts)
+
+            except Exception as e:
+                log.warning("[scheduler] Entity ingest error: %s", e)
+
         for rel in relations:
             try:
-                query = build_merge_relation_query(
-                    rel["type"],
-                    from_label=rel.get("from_label", "Entity"),
-                    to_label=rel.get("to_label", "Entity"),
-                )
+                fl    = rel.get("from_label", "")
+                tl    = rel.get("to_label",   "")
+                rtype = rel.get("type",        "")
+
+                # ── Layer 5: Relation endpoint ID resolution ──────────────────
+                fid = resolve_entity_id(raw_id=rel.get("from_id", ""), label=fl, session=session)
+                tid = resolve_entity_id(raw_id=rel.get("to_id",   ""), label=tl, session=session)
+
+                query = build_merge_relation_query(rtype, from_label=fl, to_label=tl)
                 session.run(
                     query,
-                    from_id=rel["from_id"],
-                    to_id=rel["to_id"],
+                    from_id=fid,
+                    to_id=tid,
                     properties={},
                     source_type=source_type,
                     now=now,
@@ -113,7 +156,7 @@ def _ingest_extracted(extracted: dict, source_type: str) -> tuple[int, int]:
                 )
                 rel_count += 1
             except Exception as e:
-                log.warning("Relation ingest error: %s", e)
+                log.warning("[scheduler] Relation ingest error: %s", e)
 
     return ent_count, rel_count
 

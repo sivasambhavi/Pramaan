@@ -79,13 +79,16 @@ ORDER BY a.type, a.name
 # Mapping of Labels to their Primary Key property names
 # ---------------------------------------------------------------------------
 PK_MAP = {
-    "Region": "region_id",
-    "Scheme": "scheme_id",
-    "Actor": "actor_id",
-    "Asset": "asset_id",
+    "Region":      "region_id",
+    "Scheme":      "scheme_id",
+    "Actor":       "actor_id",
+    "Asset":       "asset_id",
     "Beneficiary": "beneficiary_id",
-    "Evidence": "evidence_id",
-    "Event": "event_id",
+    "Evidence":    "evidence_id",
+    "Event":       "event_id",
+    "Domain":      "domain_id",
+    "Policy":      "policy_id",
+    "Impact":      "impact_id",
 }
 
 WARD_ASSET_DETAIL = """
@@ -162,6 +165,7 @@ ORDER BY assets DESC
 ALLOWED_LABELS = {
     "Region", "Scheme", "Actor",
     "Asset", "Beneficiary", "Evidence", "Event",
+    "Domain", "Policy", "Impact",
 }
 
 ALLOWED_REL_TYPES = {
@@ -169,6 +173,9 @@ ALLOWED_REL_TYPES = {
     "BENEFITS", "LIVES_IN", "PROVES", "CAPTURED_AT", "RELATED_TO",
     "SANCTIONS", "PROVIDES", "IMPLEMENTS", "MANAGES", "OPERATES",
     "SERVES", "MONITORS", "APPROVES",
+    # Event-graph edge types
+    "OCCURRED_IN", "BELONGS_TO", "ALSO_IN", "MANAGED_BY", "FUNDED_BY",
+    "CAUSED", "TRIGGERED", "PROVEN_BY", "CONNECTED_TO", "PART_OF", "HAS_EVIDENCE",
 }
 
 # Map AI-generated relation types -> canonical types for consistency
@@ -182,6 +189,73 @@ REL_TYPE_NORMALIZER = {
     "MONITORS": "RELATED_TO",
     "APPROVES": "FUNDS",
 }
+
+
+def validate_extracted(
+    entities: list[dict],
+    relations: list[dict],
+) -> tuple[list[dict], list[dict], int]:
+    """
+    Validate LLM-extracted entities and relations before Neo4j write.
+
+    Checks:
+      - Entity has non-empty 'id' and 'label'
+      - Entity label is in ALLOWED_LABELS
+      - Entity 'properties' is a dict (defaults to {} if missing)
+      - Relation has non-empty from_id, from_label, to_id, to_label, type
+      - Relation labels are in ALLOWED_LABELS
+      - Relation type is in ALLOWED_REL_TYPES (after normalization)
+
+    Returns (valid_entities, valid_relations, skipped_count).
+    """
+    import logging
+    log = logging.getLogger("pramaan.validation")
+
+    valid_ents: list[dict] = []
+    valid_rels: list[dict] = []
+    skipped = 0
+
+    for ent in entities:
+        eid   = str(ent.get("id",    "")).strip()
+        label = str(ent.get("label", "")).strip()
+        if not eid:
+            log.warning("[validate] entity dropped — missing id: %r", ent)
+            skipped += 1
+            continue
+        if not label or label not in ALLOWED_LABELS:
+            log.warning("[validate] entity dropped — invalid label %r (id=%s)", label, eid)
+            skipped += 1
+            continue
+        if not isinstance(ent.get("properties"), dict):
+            ent = {**ent, "properties": {}}
+        valid_ents.append(ent)
+
+    for rel in relations:
+        fid   = str(rel.get("from_id",    "")).strip()
+        fl    = str(rel.get("from_label", "")).strip()
+        tid   = str(rel.get("to_id",      "")).strip()
+        tl    = str(rel.get("to_label",   "")).strip()
+        rtype = str(rel.get("type",       "")).strip()
+        rtype_norm = REL_TYPE_NORMALIZER.get(rtype, rtype)
+
+        if not all([fid, fl, tid, tl, rtype]):
+            log.warning("[validate] relation dropped — missing fields: %r", rel)
+            skipped += 1
+            continue
+        if fl not in ALLOWED_LABELS or tl not in ALLOWED_LABELS:
+            log.warning("[validate] relation dropped — invalid label(s) %r→%r", fl, tl)
+            skipped += 1
+            continue
+        if rtype_norm not in ALLOWED_REL_TYPES:
+            log.warning("[validate] relation dropped — unknown type %r", rtype)
+            skipped += 1
+            continue
+        valid_rels.append(rel)
+
+    if skipped:
+        log.info("[validate] %d entity/relation(s) dropped by schema validation", skipped)
+
+    return valid_ents, valid_rels, skipped
 
 
 def build_merge_entity_query(label: str) -> str:

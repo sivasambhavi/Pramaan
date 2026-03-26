@@ -108,7 +108,7 @@ def home() -> None:
       </div>
       <div style="height:14px;"></div>
       <div style="display:flex;justify-content:center;animation:fadeUp 0.5s 0.35s ease both;">
-        <a href="/National_Intelligence" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;text-decoration:none;border-radius:12px;padding:10px 44px;font-family:Outfit,sans-serif;font-weight:700;font-size:1em;letter-spacing:0.02em;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:inline-block;">
+        <a href="/Live_Ingestion" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;text-decoration:none;border-radius:12px;padding:10px 44px;font-family:Outfit,sans-serif;font-weight:700;font-size:1em;letter-spacing:0.02em;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:inline-block;">
           Launch PRAMAAN &nbsp;→
         </a>
       </div>
@@ -214,8 +214,9 @@ def main() -> None:
     pg = st.navigation(
         [
             st.Page(home,                                   title="Pramaan",          icon=":material/verified_user:", default=True, url_path=""),
+            st.Page("pages/05_Live_Ingestion.py",       title="Live Ingestion",        icon=":material/cell_tower:",    url_path="Live_Ingestion"),
             st.Page("pages/01_National_Intelligence.py", title="National Intelligence", icon=":material/map:",           url_path="National_Intelligence"),
-            st.Page("pages/02_Scheme_Tracker.py",       title="Scheme Tracker",       icon=":material/hub:",           url_path="Scheme_Tracker"),
+            st.Page("pages/02_Scheme_Tracker.py",       title="Scheme Tracker",        icon=":material/hub:",           url_path="Scheme_Tracker"),
             st.Page("pages/03_Delivery_Monitor.py",     title="Delivery Monitor",     icon=":material/electric_bolt:", url_path="Delivery_Monitor"),
             st.Page("pages/04_Proof_and_Evidence.py",   title="Proof & Evidence",     icon=":material/psychology:",    url_path="Proof_and_Evidence"),
         ],

@@ -7,6 +7,7 @@ import os, base64
 import streamlit as st
 
 PAGES = [
+    ("Live Ingestion",        "/Live_Ingestion"),
     ("National Intelligence", "/National_Intelligence"),
     ("Decision Engine",       "/Scheme_Tracker"),
     ("Delivery Monitor",      "/Delivery_Monitor"),

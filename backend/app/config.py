@@ -1,5 +1,9 @@
 import os
+from pathlib import Path
 from pydantic_settings import BaseSettings
+
+# Resolve .env from project root regardless of working directory
+_ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
 
 
 class Settings(BaseSettings):
@@ -12,7 +16,7 @@ class Settings(BaseSettings):
     api_base_url:   str = "http://localhost:8000"
 
     class Config:
-        env_file = ".env"
+        env_file = str(_ENV_FILE)
         extra = "ignore"
 
 

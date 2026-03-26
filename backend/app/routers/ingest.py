@@ -22,6 +22,7 @@ from app.models import (
     ValidationEntry, ValidationSummary,
 )
 from app.services.entity_resolver import resolve_entity_id
+from app.services.verification_agent import VerificationAgent
 
 log    = logging.getLogger("pramaan.ingest")
 router = APIRouter(prefix="/ingest", tags=["ingest"])
@@ -168,6 +169,13 @@ def ingest_entities(payload: IngestPayload) -> IngestResponse:
             if ok:
                 entities_created += 1
                 decision = "ACCEPTED"
+                # ── Verification agent: Bayesian confidence update + conflict check
+                try:
+                    vr = VerificationAgent.verify(label, canonical_id, props, session)
+                    log.info("[ingest] verify %s(%s) → %s conf=%.3f tier=%s conflicts=%s",
+                             label, canonical_id, vr.action, vr.new_conf, vr.trust_tier, vr.conflicts)
+                except Exception as ve:
+                    log.warning("[ingest] VerificationAgent error for %s(%s): %s", label, canonical_id, ve)
             else:
                 decision = "ERROR"
 

@@ -148,6 +148,43 @@ rss_feeds:
     active: true
     verified: true                         # 10 entries
 
+  # ── National Events — Disaster, Defense, Technology, Geopolitics ──────
+  - name: "Google News - NDMA India disasters"
+    url: "https://news.google.com/rss/search?q=NDMA+India+disaster+relief+2025&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["disaster", "ndma", "climate", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - NDRF India disaster response"
+    url: "https://news.google.com/rss/search?q=NDRF+India+flood+cyclone+rescue+2025&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["disaster", "ndrf", "flood", "cyclone", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - ISRO India space missions"
+    url: "https://news.google.com/rss/search?q=ISRO+India+space+mission+launch+2025&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["isro", "space", "technology", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - India national policy events"
+    url: "https://news.google.com/rss/search?q=India+national+policy+government+announcement+2025&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["governance", "policy", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - India economy trade investment"
+    url: "https://news.google.com/rss/search?q=India+economy+investment+trade+deal+2025&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["economics", "trade", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - India flood cyclone IMD alert"
+    url: "https://news.google.com/rss/search?q=India+flood+cyclone+IMD+alert+state+2025&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["climate", "imd", "flood", "cyclone", "event"]
+    active: true
+    verified: true
+
   # ── Dead feeds — kept for reference, do not activate ──────────────────
   - name: "PIB Urban Development (DEAD - 301 redirect)"
     url: "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3"
@@ -289,11 +326,18 @@ govdata_sources:
 # {state}, {city}, {ward}, {scheme} are substituted at runtime.
 
 news_query_templates:
+  # Scheme / delivery queries
   - "{scheme} {state} infrastructure completed"
   - "MCD {city} drain road repair {ward}"
   - "PMAY housing {state} beneficiary"
   - "Swachh Bharat toilet {city}"
   - "{ward} {city} civic work progress"
+  # Event-oriented queries
+  - "India disaster flood cyclone relief 2025"
+  - "NDRF NDMA {state} rescue relief 2025"
+  - "India national policy announcement governance 2025"
+  - "ISRO India space mission 2025"
+  - "India economy GDP trade deal 2025"
 
 
 # ── 5. SEMI-STRUCTURED SOURCE FILES ───────────────────────────────────────────

@@ -9,19 +9,26 @@ source_type must be one of:
   unstructured_llm   — user-pasted text (POST /scrape/analyze)
   unstructured_rss   — RSS / news headline (GET /scrape/news)
 
-Fix 2 applied: Graph-aware prompt includes known canonical IDs preventing orphan nodes.
-Fix 4 applied: Single unified LLM service — llm_extractor.py delegates here.
+LLM priority chain:
+  1. Ollama (local — llama3, mistral, deepseek-coder)
+  2. Groq (remote — llama-3.3-70b)
+  3. Gemini (remote — gemini-1.5-flash)
 """
 
 import os
 import json
 import logging
+import requests as _requests
 from groq import Groq
 import google.generativeai as genai
 from app.config import settings
 from app.utils.retry import retryable
 
 logger = logging.getLogger(__name__)
+
+# ─── Ollama config ────────────────────────────────────────────────────────────
+OLLAMA_HOST  = os.environ.get("OLLAMA_HOST", "http://192.168.48.1:11434")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3:latest")
 
 VALID_SOURCE_TYPES = {"unstructured_llm", "unstructured_rss"}
 
@@ -30,12 +37,39 @@ KNOWN_IDS_CONTEXT = """
 IMPORTANT — The graph already contains these nodes. When the text mentions any
 of them, use the EXACT ID listed. Do NOT invent a new ID for an existing entity.
 
+Events (use these IDs when text mentions the same event):
+  EVT_IRAN_WAR_2026          = Iran-US-Israel War (2026, ongoing — Hormuz blockade, oil spike)
+  EVT_TWELVE_DAY_WAR_2025    = Twelve-Day War Israel-Iran (June 2025)
+  EVT_OPERATION_SINDOOR_2025 = Operation Sindoor India strikes Pakistan PoJK (May 7 2025)
+  EVT_PAHALGAM_2025          = Pahalgam Terror Attack J&K 26 killed (April 22 2025)
+  EVT_INDIA_EXTREME_WEATHER_2025 = India Extreme Weather Year 2025 (331/334 days)
+  EVT_INDIA_UK_CETA_2025     = India-UK Trade Agreement CETA (July 2025)
+  EVT_SP_UPGRADE_2025        = S&P Sovereign Rating Upgrade BBB (August 2025)
+  EVT_LABOUR_CODES_2025      = Four Labour Codes Enforcement (November 2025)
+  EVT_ISRO_SPADEX_2025       = ISRO SpaDeX Satellite Docking (January 2025)
+  EVT_SHUKLA_ISS_2025        = First Indian on ISS Shubhanshu Shukla (June 2025)
+  EVT_INDIA_US_DEFENSE_2025  = India-US 10-Year Defence Partnership Framework (October 2025)
+  EVT_CYCLONE_DANA_2024      = Cyclone Dana (2024, Odisha/West Bengal)
+  EVT_WAYANAD_2024           = Wayanad Landslide (2024, Kerala)
+  EVT_TATA_SEMI_2024         = Tata Semiconductor Fab (2024)
+  EVT_GAZA_REDSEA_2023       = Gaza War & Red Sea Crisis (2023)
+  EVT_INDIA_CANADA_2023      = India-Canada Diplomatic Row (2023)
+  EVT_G20_INDIA_2023         = G20 New Delhi Summit (2023)
+  EVT_IMEC_2023              = IMEC Corridor Signing (2023)
+  EVT_ADITYAL1_2023          = Aditya-L1 Solar Mission (2023)
+  EVT_CHANDRAYAAN3_2023      = Chandrayaan-3 Moon Landing (2023)
+  EVT_DELHI_FLOODS_2023      = Delhi Yamuna Floods (2023)
+  EVT_MANIPUR_2023           = Manipur Ethnic Violence (2023)
+  EVT_JOSHIMATH_2023         = Joshimath Land Subsidence (2023, Uttarakhand)
+
 Schemes:
   SCH_AMRUT        = AMRUT (Atal Mission for Rejuvenation and Urban Transformation)
   SCH_PMAY         = PMAY-Urban (Pradhan Mantri Awas Yojana)
   SCH_SWACHH       = Swachh Bharat Mission - Urban
   SCH_SFC          = Local Development Grants - Roads & Drains (Delhi SFC)
   SCH_LOCAL_LIGHTS = Urban Streetlight Improvement (Delhi)
+  SCH_JJBY         = Jal Jeevan Mission (Har Ghar Jal)
+  SCH_AYUSHMAN     = Ayushman Bharat PMJAY
 
 Regions:
   REG_DELHI           = Delhi (city level)
@@ -57,34 +91,58 @@ Actors:
   ACT_CONTRACTOR_INFRA_1      = ABC Infra Pvt Ltd
   ACT_CONTRACTOR_LIGHTS_1     = BrightLights Engineering
 
-Only create a NEW id (e.g. "act_xyz123") if the entity is genuinely not in
+Only create a NEW id (e.g. "evt_flood_2025") if the entity is genuinely not in
 this list and is not a synonym/alias for any entry above.
 """
 
 class AIService:
     def __init__(self):
-        # ── Primary: Groq ─────────────────────────────────────────────────────
+        # ── Primary: Ollama (local) ───────────────────────────────────────────
+        self.ollama_available = False
+        try:
+            resp = _requests.get(f"{OLLAMA_HOST}/api/tags", timeout=3)
+            if resp.status_code == 200:
+                models = [m["name"] for m in resp.json().get("models", [])]
+                self.ollama_available = True
+                logger.info("AIService: Ollama available at %s — models: %s", OLLAMA_HOST, models)
+            else:
+                logger.warning("AIService: Ollama responded %d — skipping", resp.status_code)
+        except Exception as e:
+            logger.warning("AIService: Ollama not reachable at %s: %s", OLLAMA_HOST, e)
+
+        # ── Secondary: Groq ───────────────────────────────────────────────────
         self.client = None
         groq_key = settings.groq_api_key or os.environ.get("GROQ_API_KEY", "")
         if groq_key:
             try:
                 self.client = Groq(api_key=groq_key)
-                logger.info("AIService: Groq client initialised (primary)")
+                logger.info("AIService: Groq client initialised (secondary)")
             except Exception as e:
                 logger.warning(f"Could not init Groq client: {e}")
         else:
             logger.warning("GROQ_API_KEY not set — will fall back to Gemini if available")
 
-        # ── Fallback: Gemini ──────────────────────────────────────────────────
+        # ── Tertiary: Gemini ──────────────────────────────────────────────────
         self.gemini = None
         gemini_key = settings.google_api_key or os.environ.get("GOOGLE_API_KEY", "")
         if gemini_key:
             try:
                 genai.configure(api_key=gemini_key)
                 self.gemini = genai.GenerativeModel("gemini-1.5-flash")
-                logger.info("AIService: Gemini client initialised (fallback)")
+                logger.info("AIService: Gemini client initialised (tertiary)")
             except Exception as e:
                 logger.warning(f"Could not init Gemini client: {e}")
+
+    def _call_ollama(self, prompt: str, model: str = None) -> str:
+        """Call Ollama local LLM and return raw text response."""
+        m = model or OLLAMA_MODEL
+        resp = _requests.post(
+            f"{OLLAMA_HOST}/api/generate",
+            json={"model": m, "prompt": prompt, "stream": False, "format": "json"},
+            timeout=120,
+        )
+        resp.raise_for_status()
+        return resp.json().get("response", "").strip()
 
     def _is_rate_limit_error(self, e: Exception) -> bool:
         err = str(e)
@@ -132,6 +190,8 @@ Text:
 Return this exact JSON structure:
 {{
   "entities": [
+    {{"id": "EVT_WAYANAD_2024",  "label": "Event",  "properties": {{"name": "Wayanad Landslide", "date": "2024-07-30", "domain": "DOM_CLIMATE", "severity": "high", "description": "brief event description", "confidence": 0.9}}}},
+    {{"id": "evt_new_flood_2025","label": "Event",  "properties": {{"name": "New Event Name", "date": "2025-01-15", "domain": "DOM_CLIMATE/DOM_GEOPOLITICS/DOM_TECHNOLOGY/DOM_ECONOMICS/DOM_GOVERNANCE/DOM_DEFENSE/DOM_SOCIETY", "severity": "high/medium/low", "description": "brief description", "confidence": 0.8}}}},
     {{"id": "SCH_AMRUT", "label": "Scheme", "properties": {{"name": "AMRUT", "ministry": "MoHUA", "category": "infrastructure", "confidence": 0.95}}}},
     {{"id": "REG_W45",   "label": "Region", "properties": {{"name": "Ward 45 Shahdara", "type": "ward", "confidence": 0.9}}}},
     {{"id": "asset_new_1","label": "Asset",  "properties": {{"name": "asset description", "type": "drain/road/toilet/housing/park/streetlight/other", "cost": 1200000, "status": "completed/in_progress/planned", "confidence": 0.8}}}},
@@ -140,6 +200,7 @@ Return this exact JSON structure:
     {{"id": "ev_new_1",  "label": "Evidence",    "properties": {{"type": "photo/report/certificate", "description": "what the evidence shows", "confidence": 0.75}}}}
   ],
   "relations": [
+    {{"from_id": "evt_new_flood_2025", "from_label": "Event", "to_id": "REG_W45", "to_label": "Region", "type": "OCCURRED_IN"}},
     {{"from_id": "SCH_AMRUT", "from_label": "Scheme", "to_id": "asset_new_1", "to_label": "Asset", "type": "FUNDS"}},
     {{"from_id": "asset_new_1", "from_label": "Asset", "to_id": "ACT_MCD_SHAHDARA_WORKS", "to_label": "Actor", "type": "BUILT_BY"}},
     {{"from_id": "asset_new_1", "from_label": "Asset", "to_id": "REG_W45", "to_label": "Region", "type": "LOCATED_IN"}}
@@ -166,7 +227,17 @@ Rules:
             result.setdefault("relations", [])
             return result
 
-        # ── Try Groq first ────────────────────────────────────────────────────
+        # ── Try Ollama first (local) ──────────────────────────────────────────
+        if self.ollama_available:
+            try:
+                raw = self._call_ollama(prompt)
+                result = _parse(raw)
+                logger.info("[ai] extract_ontology via Ollama — %d entities", len(result.get("entities", [])))
+                return result
+            except Exception as e:
+                logger.warning("[ai] Ollama extract failed, falling back: %s", e)
+
+        # ── Try Groq second ───────────────────────────────────────────────────
         if self.client:
             @retryable(retries=2, delay=2.0, backoff=2.0, label="Groq.extract_governance_ontology")
             def _call_groq():
@@ -254,7 +325,17 @@ Return ONLY valid JSON — no markdown, no explanation:
         _fallback = {"key_fact": f"Fallback: Found mention of {asset_name}.",
                      "relevance": "Context Match", "confidence": 0.5}
 
-        # ── Try Groq ──────────────────────────────────────────────────────────
+        # ── Try Ollama first ──────────────────────────────────────────────────
+        if self.ollama_available:
+            try:
+                raw = self._call_ollama(prompt, model="mistral:latest")
+                result = json.loads(raw)
+                logger.info("[ai] score_evidence via Ollama — relevance=%s", result.get("relevance"))
+                return result
+            except Exception as e:
+                logger.warning("[ai] Ollama score_evidence failed, falling back: %s", e)
+
+        # ── Try Groq second ───────────────────────────────────────────────────
         if self.client:
             @retryable(retries=2, delay=2.0, backoff=2.0, label="Groq.analyze_evidence")
             def _call_groq():

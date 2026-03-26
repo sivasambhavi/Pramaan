@@ -5,7 +5,8 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
-from app.routers import ontology, scrape, ingest, citizen_report
+from app.routers import ontology, scrape, ingest, citizen_report, agentic
+from app.services.scheduler import start_scheduler, stop_scheduler
 
 log = logging.getLogger("pramaan.startup")
 
@@ -47,7 +48,9 @@ async def lifespan(app: FastAPI):
         _run_seed()
     else:
         log.info("[startup] Graph already seeded — skipping auto-seed.")
+    start_scheduler()
     yield
+    stop_scheduler()
 
 
 app = FastAPI(
@@ -61,6 +64,7 @@ app.include_router(ontology.router)
 app.include_router(scrape.router)
 app.include_router(ingest.router)
 app.include_router(citizen_report.router)
+app.include_router(agentic.router)
 
 
 @app.get("/health")
