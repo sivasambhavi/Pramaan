@@ -5,9 +5,11 @@ POST /ingest/agentic
   Runs a multi-step agent loop:
     Step 1: Fetch news articles for topic
     Step 2: Score relevance (drop unrelated)
-    Step 3: Extract entities + relations via Ollama → Groq fallback
-    Step 4: Check graph — existing nodes vs new
-    Step 5: Ingest + VerificationAgent (Bayesian confidence, conflict detection)
+    Step 3: Detect if topic is an ongoing crisis → route to crisis pipeline
+    Step 4: Extract entities + relations via Ollama → Groq fallback
+    Step 5: Check graph — existing nodes vs new
+    Step 6: Ingest + VerificationAgent (Bayesian confidence, conflict detection)
+    Step 7: Infer cross-domain CONNECTED_TO edges for new events
   Returns full step trace + summary.
 """
 
@@ -205,7 +207,128 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
         f"Kept {len(relevant)} relevant · dropped {dropped} unrelated · domains: {domain_summary}",
         "ok")
 
-    # ── Step 3: Extract entities ──────────────────────────────────────────────
+    # ── Step 3: Crisis detection — route to crisis pipeline if ongoing event ──
+    _CRISIS_KEYWORDS: dict[str, str] = {
+        "iran war":          "EVT_IRAN_WAR_2026",
+        "hormuz":            "EVT_HORMUZ_BLOCKADE_2026",
+        "iran ceasefire":    "EVT_IRAN_CEASEFIRE_TALKS_2026",
+        "iran-us":           "EVT_IRAN_WAR_2026",
+        "iran us war":       "EVT_IRAN_WAR_2026",
+        "indus waters":      "EVT_INDUS_WATERS_CRISIS_2025",
+        "india pakistan":    "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+        "operation sindoor": "EVT_OPERATION_SINDOOR_2025",
+    }
+    combined_text_lower = req.topic.lower()
+    matched_crisis_event_id = None
+    for kw, evt_id in _CRISIS_KEYWORDS.items():
+        if kw in combined_text_lower:
+            matched_crisis_event_id = evt_id
+            break
+
+    if matched_crisis_event_id:
+        add("Crisis Route",
+            f"Topic matches ongoing crisis {matched_crisis_event_id} — extracting sub-events via crisis pipeline",
+            "ok")
+        # Extract crisis sub-events from combined articles
+        combined_for_crisis = "\n\n".join(
+            f"Headline: {a['title']}\nSummary: {a.get('snippet','')}" for a in relevant
+        )
+        try:
+            from app.neo4j_client import get_session as _get_session
+            crisis_extracted = ai_service.extract_crisis_update(
+                text=combined_for_crisis,
+                parent_event_id=matched_crisis_event_id,
+                parent_event_name=matched_crisis_event_id,
+            )
+            se_count  = len(crisis_extracted.get("subevents",  []))
+            ind_count = len(crisis_extracted.get("indicators", []))
+            dec_count = len(crisis_extracted.get("decisions",  []))
+
+            ts_now = _now_iso()
+            with _get_session() as sess:
+                # Get last SubEvent for PRECEDES chain
+                last_row = sess.run("""
+                    MATCH (e:Event {event_id: $eid})-[:CONTAINS]->(se:SubEvent)
+                    RETURN se ORDER BY se.day_number DESC LIMIT 1
+                """, eid=matched_crisis_event_id).single()
+                prev_se_id = dict(last_row["se"])["subevent_id"] if last_row else None
+
+                for se in crisis_extracted.get("subevents", []):
+                    sid = se.get("subevent_id","")
+                    if not sid:
+                        continue
+                    sess.run("""
+                        MERGE (n:SubEvent {subevent_id: $sid})
+                        SET n.name = $name, n.date = $date, n.category = $cat,
+                            n.description = $desc, n.severity = $sev,
+                            n.india_impact = $impact,
+                            n.source = 'live_ingested', n.ingested_at = $ts
+                        WITH n
+                        MATCH (e:Event {event_id: $eid})
+                        MERGE (e)-[r:CONTAINS]->(n) SET r.ingested_at = $ts
+                    """, sid=sid, name=se.get("name",""), date=se.get("date",""),
+                         cat=se.get("category",""), desc=se.get("description",""),
+                         sev=se.get("severity","medium"), impact=se.get("india_impact",""),
+                         eid=matched_crisis_event_id, ts=ts_now)
+                    if prev_se_id and prev_se_id != sid:
+                        sess.run("""
+                            MATCH (a:SubEvent {subevent_id: $a})
+                            MATCH (b:SubEvent {subevent_id: $b})
+                            MERGE (a)-[r:PRECEDES]->(b) SET r.ingested_at = $ts
+                        """, a=prev_se_id, b=sid, ts=ts_now)
+                    prev_se_id = sid
+                    relations_created += 1
+
+                for ind in crisis_extracted.get("indicators", []):
+                    iid = ind.get("indicator_id","")
+                    if not iid:
+                        continue
+                    sess.run("""
+                        MERGE (n:Indicator {indicator_id: $iid})
+                        SET n.name=$name, n.value=$val, n.unit=$unit,
+                            n.trend=$trend, n.as_of=$as_of,
+                            n.source='live_ingested', n.ingested_at=$ts
+                        WITH n
+                        MATCH (e:Event {event_id: $eid})
+                        MERGE (e)-[r:SIGNALS]->(n) SET r.ingested_at=$ts
+                    """, iid=iid, name=ind.get("name",""), val=float(ind.get("value",0)),
+                         unit=ind.get("unit",""), trend=ind.get("trend",""),
+                         as_of=ind.get("as_of",""), eid=matched_crisis_event_id, ts=ts_now)
+                    entities_created += 1
+
+                for dec in crisis_extracted.get("decisions", []):
+                    did = dec.get("decision_id","")
+                    if not did:
+                        continue
+                    sess.run("""
+                        MERGE (n:Decision {decision_id: $did})
+                        SET n.name=$name, n.date=$date, n.status=$status,
+                            n.description=$desc,
+                            n.source='live_ingested', n.ingested_at=$ts
+                        WITH n
+                        MATCH (e:Event {event_id: $eid})
+                        MERGE (n)-[r:RESPONDS_TO]->(e) SET r.ingested_at=$ts
+                    """, did=did, name=dec.get("name",""), date=dec.get("date",""),
+                         status=dec.get("status",""), desc=dec.get("description",""),
+                         eid=matched_crisis_event_id, ts=ts_now)
+                    entities_created += 1
+
+            add("Crisis Route",
+                f"Stored {se_count} sub-events · {ind_count} indicators · {dec_count} decisions → {matched_crisis_event_id}",
+                "ok")
+        except Exception as ex:
+            add("Crisis Route", f"Crisis extraction failed: {ex}", "warn")
+
+        duration = round(time.time() - t0, 2)
+        add("Done",
+            f"Crisis update complete in {duration}s — LLM: {llm_used.upper()}", "ok")
+        return AgenticResponse(
+            steps=steps, entities_created=entities_created,
+            relations_created=relations_created, entities_skipped=entities_skipped,
+            duration_s=duration, llm_used=llm_used, topic=req.topic,
+        )
+
+    # ── Step 4: Extract entities (non-crisis path) ────────────────────────────
     add("Extract", f"Extracting governance entities via {llm_used.upper()} · {len(relevant)} articles")
     combined = "\n\n".join(
         f"Headline: {a['title']}\nSummary: {a.get('snippet','')}" for a in relevant
@@ -283,7 +406,7 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                 audit_props = {
                     **props,
                     id_field:      canonical_id,
-                    "source":      "agentic_ingestion",
+                    "source":      "live_ingested",
                     "ingested_at": _now_iso(),
                 }
                 set_pairs = ", ".join(f"n.{k} = ${k}" for k, v in audit_props.items() if v is not None)
@@ -297,8 +420,10 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                         existing_count += 1
                     else:
                         new_count += 1
-                        if label == "Event":
-                            ingested_events.append((canonical_id, props))
+                    # Track all Events (new + existing) for edge wiring
+                    # Existing events may be missing edges if ingested before the fix
+                    if label == "Event":
+                        ingested_events.append((canonical_id, props))
 
                     # VerificationAgent
                     vr = VerificationAgent.verify(label, canonical_id, props, session)
@@ -391,8 +516,131 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
         + dup_note,
         "warn" if conflict_count else "ok")
 
-    # ── Step 5: Relations ─────────────────────────────────────────────────────
+    # ── Step 6: Relations ─────────────────────────────────────────────────────
     add("Relations", f"{relations_created} relationships written to graph", "ok")
+
+    # ── Step 7: Cross-domain CONNECTED_TO inference for new events ────────────
+    if ingested_events and new_count > 0:
+        add("Connect", f"Inferring cross-domain links for {new_count} new event(s) via {llm_used.upper()}")
+        try:
+            from app.neo4j_client import get_session as _get_session2
+            with _get_session2() as sess2:
+                # Fetch all existing events for comparison context
+                all_events = sess2.run("""
+                    MATCH (e:Event)
+                    RETURN e.event_id AS id, e.name AS name,
+                           e.domain AS domain, e.description AS description
+                """).data()
+
+            for new_evt_id, new_evt_props in ingested_events:
+                if not any(e["id"] == new_evt_id for e in all_events):
+                    continue  # shouldn't happen but guard
+
+                new_name = new_evt_props.get("name", new_evt_id)
+                new_desc = new_evt_props.get("description", "")
+                new_domain = new_evt_props.get("domain", "")
+
+                # Build existing events context (exclude the new event itself)
+                candidates = [
+                    e for e in all_events if e["id"] != new_evt_id
+                ]
+                if not candidates:
+                    continue
+
+                events_list = "\n".join(
+                    f"  {e['id']} [{e['domain']}]: {e['name']} — {(e['description'] or '')[:120]}"
+                    for e in candidates[:30]
+                )
+
+                connection_prompt = f"""
+You are a strategic intelligence analyst for India's National Security Council.
+
+A new event was ingested into the knowledge graph:
+  ID:          {new_evt_id}
+  Name:        {new_name}
+  Domain:      {new_domain}
+  Description: {new_desc}
+
+Existing events in the graph:
+{events_list}
+
+Task: Which of the existing events have a meaningful CAUSAL, STRATEGIC, or CONSEQUENTIAL
+connection to the new event? Only include connections where the link is specific and
+defensible — not just thematic similarity.
+
+Return ONLY valid JSON:
+{{
+  "connections": [
+    {{
+      "to_event_id": "<existing event_id>",
+      "reason": "<1-2 sentence specific reason why these events are connected>"
+    }}
+  ]
+}}
+
+Rules:
+- Maximum 4 connections per new event.
+- Do NOT connect events just because they happened in the same year or same domain.
+- Each connection must have a specific causal, escalatory, or consequential link.
+- If no strong connections exist, return an empty list.
+"""
+                conn_result = {}
+                if ai_service.ollama_available:
+                    try:
+                        import json as _json
+                        raw = ai_service._call_ollama(connection_prompt)
+                        conn_result = _json.loads(raw.strip())
+                    except Exception:
+                        pass
+                if not conn_result and ai_service.client:
+                    try:
+                        import json as _json
+                        chat = ai_service.client.chat.completions.create(
+                            messages=[{"role": "user", "content": connection_prompt}],
+                            model="llama-3.3-70b-versatile",
+                            temperature=0.1,
+                            response_format={"type": "json_object"},
+                        )
+                        conn_result = _json.loads(chat.choices[0].message.content)
+                    except Exception:
+                        pass
+                if not conn_result and ai_service.gemini:
+                    try:
+                        import json as _json
+                        raw = ai_service._call_gemini(connection_prompt)
+                        conn_result = _json.loads(raw.strip())
+                    except Exception:
+                        pass
+
+                connections = conn_result.get("connections", [])
+                conn_created = 0
+                with _get_session2() as sess3:
+                    for conn in connections[:4]:
+                        to_id = conn.get("to_event_id","")
+                        reason = conn.get("reason","")
+                        if not to_id or not reason:
+                            continue
+                        try:
+                            r = sess3.run("""
+                                MATCH (a:Event {event_id: $aid})
+                                MATCH (b:Event {event_id: $bid})
+                                MERGE (a)-[r:CONNECTED_TO]->(b)
+                                SET r.reason = $reason, r.ingested_at = $ts
+                                RETURN r
+                            """, aid=new_evt_id, bid=to_id, reason=reason,
+                                 ts=_now_iso()).single()
+                            if r:
+                                conn_created += 1
+                                relations_created += 1
+                        except Exception:
+                            pass
+
+                if conn_created:
+                    add("Connect",
+                        f"{new_evt_id} → {conn_created} cross-domain link(s) created", "ok")
+
+        except Exception as ex:
+            add("Connect", f"Connection inference failed: {ex}", "warn")
 
     # ── Done ──────────────────────────────────────────────────────────────────
     duration = round(time.time() - t0, 2)

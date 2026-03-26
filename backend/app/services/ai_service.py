@@ -219,17 +219,49 @@ class AIService:
 
         prompt = f"""
 You are a Global Ontology Engine for India intelligence.
-Extract ALL significant entities and relationships from the text across 7 domains:
+Extract significant entities and relationships from the text across 7 domains:
   Geopolitics · Economics · Defense · Technology · Climate · Society · Governance
 
 {KNOWN_IDS_CONTEXT}
 
-Text:
+── ENTITY LABEL DEFINITIONS ──────────────────────────────────────────────────
+
+EVENT — A specific, discrete occurrence that:
+  ✓ Happened at a point in time or narrow window (has or can have a date)
+  ✓ Is nationally or strategically significant for India
+  ✓ Is a thing that HAPPENED, not a standing state, law, or ongoing condition
+  ✓ Severity must be high or critical to qualify as a standalone Event
+  Examples that ARE Events:
+    Wayanad Landslide (happened on a date, mass casualties)
+    Operation Sindoor (military strike, specific date)
+    Chandrayaan-3 Moon Landing (specific mission success date)
+    Cyclone Dana making landfall (specific natural disaster)
+    India-UK CETA signing (treaty signed on a specific date)
+    INR crossing 87/USD threshold (specific market shock event)
+  Examples that are NOT Events — use the correct label instead:
+    "National Sports Policy" → label as Policy
+    "GST rate changes" → label as Policy (ongoing fiscal rule)
+    "India's Foreign Policy" → too vague, skip entirely
+    "Delhi road construction" → label as Asset or skip
+    "National Policy on Senior Citizens" → label as Policy
+    "Swachh Bharat Mission" → label as Scheme
+    "India inflation" → label as Impact (economic metric), not Event
+      unless it is a specific crisis date (e.g. "Inflation hits 8.5% — RBI emergency meet")
+
+POLICY  — A law, regulation, or standing government directive (not time-bounded)
+SCHEME  — A government funding programme or welfare scheme with a scheme ID
+ACTOR   — A government body, agency, PSU, international org, or named individual
+REGION  — A geographic location: country, state, city, or strategic chokepoint
+IMPACT  — A measurable outcome or consequence (deaths, displaced persons, ₹ loss)
+EVIDENCE — A specific document, report, satellite image, or data source
+ASSET   — A physical infrastructure asset (dam, power plant, road)
+
+── Text ───────────────────────────────────────────────────────────────────────
 {text}
 
+── Output Format ──────────────────────────────────────────────────────────────
 Return ONLY valid JSON — no markdown, no explanation, no code blocks.
 
-Schema:
 {{
   "entities": [
     {{
@@ -240,7 +272,7 @@ Schema:
         "domain": "<DOM_GEOPOLITICS|DOM_ECONOMICS|DOM_DEFENSE|DOM_TECHNOLOGY|DOM_CLIMATE|DOM_SOCIETY|DOM_GOVERNANCE>",
         "date": "<YYYY-MM-DD if known>",
         "description": "<1-2 sentence summary>",
-        "severity": "<critical|high|medium|low — for events>",
+        "severity": "<critical|high|medium|low — for Events only>",
         "confidence": <0.0–1.0>
       }}
     }}
@@ -249,45 +281,37 @@ Schema:
     {{
       "from_id": "<id>", "from_label": "<label>",
       "to_id":   "<id>", "to_label":   "<label>",
-      "type": "<CAUSED|TRIGGERED|FUNDS|BENEFITS|PROVES|BUILT_BY|LOCATED_IN|CONNECTED_TO|OCCURRED_IN>"
+      "type": "<CAUSED|TRIGGERED|FUNDS|BENEFITS|PROVES|BUILT_BY|LOCATED_IN|CONNECTED_TO|OCCURRED_IN|BELONGS_TO|MANAGED_BY>"
     }}
   ]
 }}
 
-Examples across domains:
+── Examples ───────────────────────────────────────────────────────────────────
 
-Geopolitics:
-  {{"id": "EVT_IRAN_WAR_2026", "label": "Event", "properties": {{"name": "Iran-US-Israel War 2026", "domain": "DOM_GEOPOLITICS", "severity": "critical", "confidence": 0.95}}}}
-  {{"id": "ACT_MEA", "label": "Actor", "properties": {{"name": "Ministry of External Affairs India", "confidence": 0.95}}}}
-  Relation: {{"from_id": "EVT_IRAN_WAR_2026", "from_label": "Event", "to_id": "REG_HORMUZ", "to_label": "Region", "type": "OCCURRED_IN"}}
-
-Economics:
-  {{"id": "evt_rupee_fall_2026", "label": "Event", "properties": {{"name": "INR/USD depreciation", "domain": "DOM_ECONOMICS", "severity": "high", "confidence": 0.85}}}}
-  {{"id": "ACT_RBI", "label": "Actor", "properties": {{"name": "Reserve Bank of India", "confidence": 0.95}}}}
-  Relation: {{"from_id": "EVT_IRAN_WAR_2026", "from_label": "Event", "to_id": "evt_rupee_fall_2026", "to_label": "Event", "type": "CAUSED"}}
-
-Defense:
-  {{"id": "EVT_OPERATION_SINDOOR_2025", "label": "Event", "properties": {{"name": "Operation Sindoor", "domain": "DOM_DEFENSE", "severity": "critical", "confidence": 0.95}}}}
+Geopolitics (Event — specific military operation):
+  {{"id": "EVT_OPERATION_SINDOOR_2025", "label": "Event", "properties": {{"name": "Operation Sindoor", "domain": "DOM_DEFENSE", "severity": "critical", "date": "2025-05-07", "confidence": 0.95}}}}
   {{"id": "ACT_MOD", "label": "Actor", "properties": {{"name": "Ministry of Defence India", "confidence": 0.95}}}}
+  Relation: {{"from_id": "EVT_OPERATION_SINDOOR_2025", "from_label": "Event", "to_id": "REG_JK", "to_label": "Region", "type": "OCCURRED_IN"}}
 
-Technology:
-  {{"id": "EVT_ISRO_SPADEX_2025", "label": "Event", "properties": {{"name": "ISRO SpaDeX Docking", "domain": "DOM_TECHNOLOGY", "severity": "medium", "confidence": 0.95}}}}
-  {{"id": "evt_tata_chip_fab_2025", "label": "Event", "properties": {{"name": "Tata Semiconductor Fab Phase 2", "domain": "DOM_TECHNOLOGY", "severity": "high", "confidence": 0.8}}}}
+Economics (Event — specific market shock, not an ongoing metric):
+  {{"id": "evt_rupee_crisis_2026", "label": "Event", "properties": {{"name": "INR/USD hits 90 — RBI intervention", "domain": "DOM_ECONOMICS", "severity": "high", "date": "2026-03-10", "confidence": 0.85}}}}
 
-Climate:
+Economics (Policy — NOT an Event):
+  {{"id": "pol_gst_amendment_2026", "label": "Policy", "properties": {{"name": "GST Rate Rationalisation 2026", "domain": "DOM_GOVERNANCE", "confidence": 0.9}}}}
+
+Climate (Event — specific disaster):
   {{"id": "EVT_WAYANAD_2024", "label": "Event", "properties": {{"name": "Wayanad Landslide 2024", "domain": "DOM_CLIMATE", "severity": "high", "confidence": 0.95}}}}
-  {{"id": "ACT_NDMA", "label": "Actor", "properties": {{"name": "National Disaster Management Authority", "confidence": 0.9}}}}
+  {{"id": "imp_wayanad_dead", "label": "Impact", "properties": {{"name": "231 deaths — Wayanad", "domain": "DOM_CLIMATE", "confidence": 0.95}}}}
 
-Society / Governance:
+Governance (Scheme — NOT an Event):
   {{"id": "SCH_PLI", "label": "Scheme", "properties": {{"name": "PLI Scheme", "domain": "DOM_GOVERNANCE", "confidence": 0.95}}}}
-  {{"id": "evt_india_unemployment_2026", "label": "Event", "properties": {{"name": "India Youth Unemployment Q1 2026", "domain": "DOM_SOCIETY", "severity": "medium", "confidence": 0.8}}}}
 
-Rules:
+── Rules ──────────────────────────────────────────────────────────────────────
 - ALWAYS reuse IDs from the IMPORTANT context above when the entity matches.
-- For new entities, use snake_case: evt_, act_, reg_, sch_, pol_, imp_, ev_, ast_, dom_
-- confidence: your certainty from the text (1.0 = explicitly stated, 0.6 = inferred).
+- For new entities use snake_case prefixes: evt_, act_, reg_, sch_, pol_, imp_, ev_, ast_
+- Only label something Event if it passes the Event definition above — when in doubt use Policy, Impact, or skip.
+- confidence: 1.0 = explicitly stated in text · 0.6 = inferred · below 0.6 = omit entity.
 - Omit fields you cannot determine — do NOT guess dates or numbers.
-- Extract ALL significant entities mentioned, not just the primary topic.
 - Return ONLY the JSON object. Nothing else.
 """
         def _parse(raw: str) -> dict:
@@ -541,6 +565,214 @@ Rules:
                 return _parse_classify(raw)
             except Exception as e:
                 logger.error("[ai] classify_content Gemini also failed: %s", e)
+
+        return _fallback
+
+    # ── 4. Crisis sub-event extraction ───────────────────────────────────────
+    def extract_crisis_update(self, text: str, parent_event_id: str, parent_event_name: str) -> dict:
+        """
+        Given a news article about an ongoing crisis, extract:
+          - SubEvent nodes (specific daily developments)
+          - Indicator updates (metric changes: oil price, INR, etc.)
+          - Decision nodes (India policy responses)
+
+        Returns: { subevents: [...], indicators: [...], decisions: [...] }
+        """
+        _fallback = {"subevents": [], "indicators": [], "decisions": []}
+        if not self.client and not self.gemini:
+            return _fallback
+
+        prompt = f"""
+You are a crisis intelligence analyst for the PRAMAAN India decision-support platform.
+
+The following news article describes a development in an ongoing crisis:
+  Crisis: {parent_event_name} (ID: {parent_event_id})
+
+Extract structured updates from the text below.
+
+── Text ────────────────────────────────────────────────────────────────────
+{text}
+
+── Output Format ────────────────────────────────────────────────────────────
+Return ONLY valid JSON — no markdown, no explanation.
+
+{{
+  "subevents": [
+    {{
+      "subevent_id": "SE_<PARENT_SHORT>_<YYYYMMDD>_<slug>",
+      "name": "<concise title of this specific development>",
+      "date": "<YYYY-MM-DD>",
+      "category": "<military|diplomatic|economic|policy|humanitarian>",
+      "description": "<2-3 sentence factual summary>",
+      "severity": "<critical|high|medium|low>",
+      "india_impact": "<1 sentence — specific impact on India or blank if none>",
+      "actors": ["<actor_id if known, else actor name>"]
+    }}
+  ],
+  "indicators": [
+    {{
+      "indicator_id": "<IND_SLUG>",
+      "name": "<metric name>",
+      "value": <numeric value>,
+      "unit": "<USD/bbl | INR/USD | % | days | vessels/day | persons>",
+      "trend": "<rising|falling|stable|volatile_high|critically_low>",
+      "as_of": "<YYYY-MM-DD>"
+    }}
+  ],
+  "decisions": [
+    {{
+      "decision_id": "DEC_<YYYYMMDD>_<slug>",
+      "name": "<decision title>",
+      "decided_by": "<actor_id e.g. ACT_PMO, ACT_RBI, ACT_MEA, ACT_MoPNG>",
+      "date": "<YYYY-MM-DD>",
+      "status": "<pending|executed|active|cancelled>",
+      "description": "<what was decided and why>"
+    }}
+  ]
+}}
+
+Rules:
+- Only extract subevents that are NEW developments (not background context).
+- Only extract indicators if a specific numeric value is mentioned.
+- Only extract decisions if India (government/RBI/MEA) takes a specific action.
+- If nothing fits a category, return an empty list for it.
+- subevent_id must use parent prefix: e.g. SE_IRAN_WAR_20260326_ceasefire
+"""
+        def _parse(raw: str) -> dict:
+            if raw.startswith("```"):
+                raw = raw.split("```")[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+            result = json.loads(raw.strip())
+            result.setdefault("subevents",  [])
+            result.setdefault("indicators", [])
+            result.setdefault("decisions",  [])
+            return result
+
+        if self.ollama_available:
+            try:
+                return _parse(self._call_ollama(prompt))
+            except Exception as e:
+                logger.warning("[ai] Ollama extract_crisis_update failed: %s", e)
+
+        if self.client:
+            try:
+                chat = self.client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model="llama-3.3-70b-versatile",
+                    temperature=0.0,
+                    response_format={"type": "json_object"},
+                )
+                return _parse(chat.choices[0].message.content)
+            except Exception as e:
+                if self._is_rate_limit_error(e) and self.gemini:
+                    logger.warning("Groq rate-limited — falling back to Gemini for crisis update")
+                else:
+                    logger.error("[ai] extract_crisis_update Groq failed: %s", e)
+                    return _fallback
+
+        if self.gemini:
+            try:
+                return _parse(self._call_gemini(prompt))
+            except Exception as e:
+                logger.error("[ai] extract_crisis_update Gemini failed: %s", e)
+
+        return _fallback
+
+    # ── 5. Scenario generation ────────────────────────────────────────────────
+    def generate_scenarios(self, event_name: str, subevents_summary: str,
+                           indicators_summary: str, decisions_summary: str) -> dict:
+        """
+        Given current crisis state (sub-events, indicators, India decisions),
+        generate 3 scenario branches with India action plans.
+
+        Returns: { scenarios: [ {name, probability, timeline, india_impact, india_actions}, ... ] }
+        """
+        _fallback = {"scenarios": []}
+        if not self.client and not self.gemini:
+            return _fallback
+
+        prompt = f"""
+You are a senior strategic analyst advising the Indian National Security Council.
+
+Crisis: {event_name}
+
+Current situation:
+── Recent Developments ──
+{subevents_summary}
+
+── India Impact Indicators ──
+{indicators_summary}
+
+── India Decisions Taken ──
+{decisions_summary}
+
+Generate EXACTLY 3 scenario branches for the next 60 days.
+Each scenario must be mutually exclusive and cover the realistic spectrum.
+
+Return ONLY valid JSON — no markdown.
+
+{{
+  "scenarios": [
+    {{
+      "scenario_id": "SCN_A",
+      "name": "<short scenario name>",
+      "label": "<Best Case|Base Case|Worst Case>",
+      "probability": <0.0 to 1.0, all 3 must sum to 1.0>,
+      "timeline": "<when this resolves or peaks — e.g. '30 days', '60-90 days'>",
+      "trigger": "<what would cause this scenario to materialise>",
+      "india_impact": {{
+        "oil_supply": "<impact description>",
+        "economy": "<GDP/INR/inflation impact>",
+        "diplomacy": "<India's strategic position>",
+        "security": "<any direct security implications>"
+      }},
+      "india_actions": [
+        "<specific actionable recommendation for India — what to do NOW>",
+        "<second action>",
+        "<third action>"
+      ],
+      "warning_signals": ["<leading indicator to watch>"]
+    }}
+  ]
+}}
+"""
+        def _parse(raw: str) -> dict:
+            if raw.startswith("```"):
+                raw = raw.split("```")[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+            result = json.loads(raw.strip())
+            result.setdefault("scenarios", [])
+            return result
+
+        if self.ollama_available:
+            try:
+                return _parse(self._call_ollama(prompt))
+            except Exception as e:
+                logger.warning("[ai] Ollama generate_scenarios failed: %s", e)
+
+        if self.client:
+            try:
+                chat = self.client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model="llama-3.3-70b-versatile",
+                    temperature=0.2,
+                    response_format={"type": "json_object"},
+                )
+                return _parse(chat.choices[0].message.content)
+            except Exception as e:
+                if self._is_rate_limit_error(e) and self.gemini:
+                    logger.warning("Groq rate-limited — falling back to Gemini for scenarios")
+                else:
+                    logger.error("[ai] generate_scenarios Groq failed: %s", e)
+                    return _fallback
+
+        if self.gemini:
+            try:
+                return _parse(self._call_gemini(prompt))
+            except Exception as e:
+                logger.error("[ai] generate_scenarios Gemini failed: %s", e)
 
         return _fallback
 

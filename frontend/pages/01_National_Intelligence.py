@@ -46,99 +46,6 @@ SEVERITY_BADGE = {
     "medium":   ("<span style='background:#facc1522;color:#fde047;font-weight:700;font-size:9px;padding:1px 5px;border-radius:4px;border:1px solid #facc1566;'>MEDIUM</span>",    6),
 }
 
-# --- Fix 13: Hardcoded fallback event detail for demo (used when Neo4j is down) ---
-_FALLBACK_DETAIL = {
-    "EVT_DELHI_FLOODS_2023": {
-        "description": (
-            "Record Yamuna flooding in July 2023 — Hathnikund Barrage released 3.59 lakh cusecs, "
-            "highest in 45 years. River breached 208.66m, its highest mark since 1978. "
-            "27,000 persons displaced across Delhi's low-lying floodplain areas."
-        ),
-        "impacts": [
-            {"type": "persons_displaced", "value": "27,000",  "unit": "persons"},
-            {"type": "river_level",       "value": "208.66",  "unit": "metres"},
-            {"type": "barrage_discharge", "value": "3.59",    "unit": "lakh cusecs"},
-            {"type": "rainfall_24h",      "value": "153",     "unit": "mm"},
-        ],
-        "schemes": [
-            {"name": "AMRUT 2.0 — Storm Drain Upgrade",    "budget_crore": 1200},
-            {"name": "SDRF Delhi Flood Relief",             "budget_crore": 450},
-            {"name": "DJB Water Supply Restoration",        "budget_crore": None},
-        ],
-    },
-    "EVT_WAYANAD_2024": {
-        "description": (
-            "India's deadliest landslide in recorded history struck Mundakkai and Chooralmala "
-            "villages, Wayanad at 2am on 30 July 2024. IMD had issued only an Orange Alert — "
-            "no pre-emptive evacuation was ordered. 231 confirmed dead, 1,000+ displaced."
-        ),
-        "impacts": [
-            {"type": "deaths",            "value": "231",     "unit": "persons"},
-            {"type": "displaced",         "value": "1,000+",  "unit": "persons"},
-            {"type": "villages_destroyed","value": "2",       "unit": "villages"},
-        ],
-        "schemes": [
-            {"name": "Kerala SDRF Landslide Relief",       "budget_crore": 300},
-            {"name": "NDRF Rescue Operations",             "budget_crore": None},
-            {"name": "PM Relief Fund — Wayanad",           "budget_crore": 200},
-        ],
-    },
-    "EVT_JOSHIMATH_2023": {
-        "description": (
-            "Joshimath, Uttarakhand saw 4,000+ structures develop visible cracks from January 2023. "
-            "600+ families evacuated. Wadia Institute linked NTPC Tapovan tunnel boring as primary "
-            "anthropogenic trigger. Gateway to Badrinath — ₹100+ Cr tourism disruption."
-        ),
-        "impacts": [
-            {"type": "structures_damaged","value": "4,000+",  "unit": "buildings"},
-            {"type": "families_evacuated","value": "600+",    "unit": "families"},
-            {"type": "tourism_loss",      "value": "100+",    "unit": "Cr INR"},
-        ],
-        "schemes": [
-            {"name": "NDMA Joshimath Rehabilitation Plan", "budget_crore": 250},
-            {"name": "PM Awas Yojana — Displaced Families","budget_crore": 80},
-            {"name": "Uttarakhand Urban Dev. Authority Relief", "budget_crore": None},
-        ],
-    },
-    "EVT_CYCLONE_DANA_2024": {
-        "description": (
-            "Cyclone Dana made landfall on Odisha coast on 25 Oct 2024 with 100–120 kmph winds. "
-            "800,000+ evacuated in India's largest pre-cyclone evacuation. "
-            "₹6,000 Cr agricultural and infrastructure damage across Odisha and Andhra Pradesh."
-        ),
-        "impacts": [
-            {"type": "evacuated",         "value": "800,000+","unit": "persons"},
-            {"type": "total_damage",      "value": "6,000",   "unit": "Cr INR"},
-            {"type": "wind_speed",        "value": "120",     "unit": "kmph"},
-        ],
-        "schemes": [
-            {"name": "Odisha SDRF Cyclone Relief",         "budget_crore": 500},
-            {"name": "NDRF Cyclone Dana Response",         "budget_crore": None},
-            {"name": "PM Fasal Bima Yojana — Crop Loss",  "budget_crore": 350},
-        ],
-    },
-    "EVT_PAHALGAM_2025": {
-        "description": (
-            "On 22 April 2025, terrorists opened fire on tourists at Baisaran meadow near Pahalgam, "
-            "Jammu & Kashmir, killing 26 civilians (including foreign nationals) and injuring 17. "
-            "India attributed the attack to Pakistan-backed Lashkar-e-Taiba proxies. "
-            "The government invoked the 'right to pursue' doctrine, suspended the Indus Waters Treaty, "
-            "expelled Pakistani diplomats, and within weeks launched Operation Sindoor — "
-            "precision strikes on 9 terrorist infrastructure sites across PoK and Pakistan."
-        ),
-        "impacts": [
-            {"type": "civilians_killed",  "value": "26",      "unit": "persons"},
-            {"type": "injured",           "value": "17",      "unit": "persons"},
-            {"type": "diplomatic_expulsions","value": "6",    "unit": "diplomats expelled"},
-            {"type": "treaty_suspended",  "value": "Indus Waters Treaty", "unit": "since 1960"},
-        ],
-        "schemes": [
-            {"name": "PM Relief Fund — Pahalgam Victims",         "budget_crore": 50},
-            {"name": "J&K Rehabilitation & Resettlement Scheme",  "budget_crore": 120},
-            {"name": "Yatra Suraksha — Tourist Safety Initiative", "budget_crore": None},
-        ],
-    },
-}
 
 INDIA_CENTER = [22.5, 82.0]
 INDIA_ZOOM   = 5
@@ -463,16 +370,10 @@ def page():
             evt_data = detail.get("event", {})
             impacts  = detail.get("impacts", [])
             schemes  = detail.get("schemes", [])
+            actors   = detail.get("actors", [])
+            evidence = detail.get("evidence", [])
+            policies = detail.get("policies", [])
             sdesc    = evt_data.get("description", "") or api_events.get(sel, {}).get("description", "")
-
-            # --- Fix 13: fallback when Neo4j returns nothing ---
-            _fb = _FALLBACK_DETAIL.get(sel, {})
-            if not impacts:
-                impacts = _fb.get("impacts", [])
-            if not schemes:
-                schemes = _fb.get("schemes", [])
-            if not sdesc:
-                sdesc   = _fb.get("description", "")
 
             # ── Event header card — always visible above tabs ───────────────────────
             _risk_score = {"critical": "9.1", "high": "7.4", "medium": "5.2"}.get(ssev, "6.0")
@@ -1103,6 +1004,78 @@ def page():
                                 unsafe_allow_html=True,
                             )
 
+                # ── Dynamic fallback for live-ingested events not in curated dicts ──
+                # Checks if anything was rendered above; if not, shows Neo4j data
+                _has_curated = any([
+                    ESCALATION_CHAIN.get(sel), FORCES_DEPLOYED.get(sel),
+                    DIPLOMATIC_RESPONSE.get(sel), TYPE1_MAP.get(sel),
+                    IMD_ALERT_AUDIT.get(sel), NDRF_RESPONSE.get(sel),
+                    RECONSTRUCTION_STATUS.get(sel), MARKET_REACTION.get(sel),
+                    SECTOR_IMPACT.get(sel), MISSION_PARAMS.get(sel),
+                    INDIA_RANKING.get(sel), POLICY_STATUS.get(sel),
+                ])
+                if not _has_curated:
+                    if actors:
+                        st.markdown(
+                            '<div style="font-size:8px;font-weight:700;color:#38bdf8;'
+                            'letter-spacing:.08em;margin:4px 0 6px;">KEY ACTORS</div>',
+                            unsafe_allow_html=True,
+                        )
+                        for a in actors[:5]:
+                            aname = a.get("name", a.get("actor_id", ""))
+                            atype = a.get("type", "")
+                            st.markdown(
+                                f'<div style="font-size:9.5px;color:#94a3b8;padding:2px 0;">'
+                                f'<span style="color:#e2e8f0;font-weight:600;">{aname}</span>'
+                                f'{" · " + atype if atype else ""}</div>',
+                                unsafe_allow_html=True,
+                            )
+                    if policies:
+                        st.markdown(
+                            '<div style="font-size:8px;font-weight:700;color:#06b6d4;'
+                            'letter-spacing:.08em;margin:8px 0 4px;">LINKED POLICIES</div>',
+                            unsafe_allow_html=True,
+                        )
+                        for p in policies[:3]:
+                            pname = p.get("name", p.get("policy_id", ""))
+                            st.markdown(
+                                f'<div style="font-size:9.5px;color:#94a3b8;padding:2px 0;">• {pname}</div>',
+                                unsafe_allow_html=True,
+                            )
+                    if schemes:
+                        st.markdown(
+                            '<div style="font-size:8px;font-weight:700;color:#facc15;'
+                            'letter-spacing:.08em;margin:8px 0 4px;">LINKED SCHEMES</div>',
+                            unsafe_allow_html=True,
+                        )
+                        for s in schemes[:3]:
+                            sname_s = s.get("name", s.get("scheme_id", ""))
+                            st.markdown(
+                                f'<div style="font-size:9.5px;color:#94a3b8;padding:2px 0;">• {sname_s}</div>',
+                                unsafe_allow_html=True,
+                            )
+                    if evidence:
+                        st.markdown(
+                            '<div style="font-size:8px;font-weight:700;color:#e2e8f0;'
+                            'letter-spacing:.08em;margin:8px 0 4px;">EVIDENCE SOURCES</div>',
+                            unsafe_allow_html=True,
+                        )
+                        for ev in evidence[:3]:
+                            etitle = ev.get("title", ev.get("evidence_id", ""))
+                            eurl   = ev.get("url", "")
+                            link   = f' <a href="{eurl}" target="_blank" style="color:{scolor};font-size:8px;">→</a>' if eurl else ""
+                            st.markdown(
+                                f'<div style="font-size:9.5px;color:#94a3b8;padding:2px 0;">• {etitle}{link}</div>',
+                                unsafe_allow_html=True,
+                            )
+                    if not any([actors, policies, schemes, evidence]):
+                        st.markdown(
+                            '<div style="font-size:10px;color:#334155;padding:12px 0;">'
+                            'Intelligence brief not yet available for this event.<br>'
+                            '<span style="font-size:9px;">Data will populate as evidence is verified and added to the graph.</span></div>',
+                            unsafe_allow_html=True,
+                        )
+
             # ── Tab 3 — Watch ───────────────────────────────────────────────────────
             # ── Tab 3 — Watch ────────────────────────────────────────────────
             with tab_watch:
@@ -1130,23 +1103,19 @@ def page():
                          use_container_width=True, type="primary"):
                 st.session_state["deep_link_event"] = sel
                 st.switch_page("pages/02_Decision_Engine.py")
-            st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
-            if st.button("Proof & Evidence →", key=f"goto_proof_{sel}",
-                         use_container_width=True):
-                st.session_state["deep_link_brief"] = sel
-                st.switch_page("pages/04_Proof_and_Evidence.py")
         else:
             _featured = "EVT_PAHALGAM_2025"
             if _featured in EVENT_META:
                 lat0, lon0, sname, sdomain, scolor, sdate, ssev = EVENT_META[_featured]
-                _fb = _FALLBACK_DETAIL.get(_featured, {})
+                _featured_data = safe_get(f"/ontology/events/{_featured}") or {}
+                _fdesc = (_featured_data.get("event") or {}).get("description", "")
                 st.markdown(f"""
                 <div style='padding:10px;border-radius:8px;background:#0f1f2e;border:1px solid {scolor}44'>
                   <div style='color:{scolor};font-size:10px;font-weight:700;letter-spacing:0.08em;'>FEATURED EVENT</div>
                   <div style='font-size:13px;font-weight:700;color:#e2e8f0;margin-top:4px;'>{sname}</div>
                   <div style='font-size:10px;color:#94a3b8;'>{sdomain} · {sdate}</div>
                   <div style='font-size:11px;color:#cbd5e1;margin-top:6px;line-height:1.5;'>
-                    {_fb.get("description","")}
+                    {_fdesc}
                   </div>
                 </div>
                 """, unsafe_allow_html=True)

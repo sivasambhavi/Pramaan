@@ -17,6 +17,40 @@ from utils.events import EVENTS_BY_ID, render_event_dropdown
 from components.topnav import render_topnav
 from components.ontology_model import render_ontology_model
 
+try:
+    from groq import Groq as _Groq
+    _GROQ_KEY = os.environ.get("GROQ_API_KEY", "")
+    _GROQ_OK  = bool(_GROQ_KEY)
+except ImportError:
+    _GROQ_OK = False
+
+
+def _generate_insights(event_id: str, event_name: str, context: str):
+    """Stream Groq LLaMA insights for a selected event."""
+    client = _Groq(api_key=_GROQ_KEY)
+    system = (
+        "You are PRAMAAN — an AI governance intelligence engine. "
+        "Synthesise verified ontology data into a crisp decision brief for senior officials. "
+        "Be precise, structured, and cite [REF: source] for every claim. "
+        "Mark anything not in the context as [UNVERIFIED]. Use markdown."
+    )
+    user = (
+        f"Event: **{event_name}** (`{event_id}`)\n\n"
+        f"Ontology context:\n```\n{context}\n```\n\n"
+        "Generate a decision brief with:\n"
+        "1. **Situation Summary** (2–3 sentences)\n"
+        "2. **Key Impacts** (bullets with numbers)\n"
+        "3. **Cross-Domain Connections** (causal chain across domains — why this connects to other events)\n"
+        "4. **Governance Gaps & Priority Actions** (3 items, each: Actor · Action · Outcome)\n\n"
+        "Only use data from the context above."
+    )
+    return client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "system", "content": system},
+                  {"role": "user",   "content": user}],
+        temperature=0.3, max_tokens=900, stream=True,
+    )
+
 NODE_CONFIG = {
     "Event":    {"color": "#f97316", "size": 26, "shape": "dot",     "desc": "High-impact incidents"},
     "Domain":   {"color": "#a78bfa", "size": 20, "shape": "diamond", "desc": "Policy areas"},
@@ -428,6 +462,447 @@ def _build_graph(graph_data: dict, filter_type: set | None = None, focus_ids: se
     return nodes, edges
 
 
+_TREND_ICON = {
+    "rising": "↑", "falling": "↓", "stable": "→",
+    "volatile_high": "⚡", "critically_low": "🔴", "depreciating": "↓",
+    "extreme": "⚡", "evacuation_ongoing": "🚁", "negative": "↓", "high": "⚠️",
+}
+_TREND_COLOR = {
+    "rising": "#ef4444", "falling": "#22c55e", "stable": "#94a3b8",
+    "volatile_high": "#f97316", "critically_low": "#ef4444", "depreciating": "#ef4444",
+    "extreme": "#ef4444", "evacuation_ongoing": "#f97316", "negative": "#ef4444", "high": "#f97316",
+}
+_SEVERITY_COLOR = {"critical": "#ef4444", "high": "#f97316", "medium": "#facc15", "low": "#22c55e"}
+_CAT_ICON = {"military": "🪖", "diplomatic": "🤝", "economic": "📈",
+             "policy": "📋", "humanitarian": "🏥"}
+_STATUS_COLOR = {"executed": "#22c55e", "active": "#38bdf8", "pending": "#facc15", "cancelled": "#ef4444", "ongoing": "#38bdf8"}
+_SCENARIO_COLOR = {"Best Case": "#22c55e", "Base Case": "#f97316", "Worst Case": "#ef4444"}
+
+
+def _crisis_timeline_chart(subevents: list) -> None:
+    """Plotly horizontal timeline — each sub-event as a dot on a date axis."""
+    import plotly.graph_objects as go
+    from datetime import datetime, timedelta
+
+    _CAT_COLOR_HEX = {
+        "military":    "#ef4444",
+        "diplomatic":  "#38bdf8",
+        "economic":    "#22c55e",
+        "policy":      "#facc15",
+        "humanitarian":"#a78bfa",
+    }
+    _SEV_SIZE = {"critical": 18, "high": 14, "medium": 10, "low": 7}
+
+    # Build per-category traces so legend works
+    by_cat: dict = {}
+    for se in subevents:
+        cat = se.get("category", "other")
+        by_cat.setdefault(cat, []).append(se)
+
+    fig = go.Figure()
+    for cat, events in by_cat.items():
+        color = _CAT_COLOR_HEX.get(cat, "#94a3b8")
+        dates, days, names, hovers, sizes = [], [], [], [], []
+        for se in events:
+            d = se.get("date", "")
+            try:
+                dt = datetime.strptime(d, "%Y-%m-%d")
+            except Exception:
+                continue
+            dates.append(dt)
+            days.append(f"Day {se.get('day_number','?')}")
+            names.append(se.get("name",""))
+            impact = se.get("india_impact","")
+            hovers.append(
+                f"<b>{se.get('name','')}</b><br>"
+                f"Day {se.get('day_number','?')} · {d}<br>"
+                f"<i>{se.get('description','')[:120]}…</i>"
+                + (f"<br><span style='color:#f97316'>🇮🇳 {impact}</span>" if impact else "")
+            )
+            sizes.append(_SEV_SIZE.get(se.get("severity","medium"), 10))
+
+        fig.add_trace(go.Scatter(
+            x=dates, y=[cat] * len(dates),
+            mode="markers+text",
+            marker=dict(color=color, size=sizes, line=dict(color="#020b14", width=2),
+                        symbol="circle"),
+            text=days, textposition="top center",
+            textfont=dict(color=color, size=9),
+            name=cat.title(),
+            hovertemplate="%{customdata}<extra></extra>",
+            customdata=hovers,
+        ))
+
+    # Connector lines per category
+    for cat, events in by_cat.items():
+        color = _CAT_COLOR_HEX.get(cat, "#94a3b8")
+        dates = []
+        for se in sorted(events, key=lambda x: x.get("day_number", 0)):
+            d = se.get("date","")
+            try:
+                dates.append(datetime.strptime(d, "%Y-%m-%d"))
+            except Exception:
+                pass
+        if len(dates) > 1:
+            fig.add_trace(go.Scatter(
+                x=dates, y=[cat]*len(dates),
+                mode="lines",
+                line=dict(color=color, width=1, dash="dot"),
+                showlegend=False, hoverinfo="skip",
+            ))
+
+    fig.update_layout(
+        height=280,
+        paper_bgcolor="#020b14", plot_bgcolor="#020b14",
+        font=dict(color="#94a3b8", family="Outfit, sans-serif", size=10),
+        margin=dict(l=10, r=10, t=10, b=10),
+        xaxis=dict(
+            showgrid=True, gridcolor="#0f1e35", gridwidth=1,
+            tickfont=dict(size=9, color="#475569"),
+            tickformat="%b %d",
+            zeroline=False,
+        ),
+        yaxis=dict(
+            showgrid=False,
+            tickfont=dict(size=10, color="#94a3b8"),
+            categoryorder="array",
+            categoryarray=["humanitarian","policy","economic","diplomatic","military"],
+        ),
+        legend=dict(
+            orientation="h", x=0, y=-0.18,
+            font=dict(size=9, color="#94a3b8"),
+            bgcolor="rgba(0,0,0,0)",
+        ),
+        hoverlabel=dict(
+            bgcolor="#0d1f35", bordercolor="#1e3a5f",
+            font=dict(color="#e2e8f0", size=11),
+        ),
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
+def _crisis_radar_chart(indicators: list) -> None:
+    """Plotly radar chart — India's multi-domain exposure to the crisis."""
+    import plotly.graph_objects as go
+
+    # Map indicator_ids to radar axes with normalized 0-100 threat scores
+    _IND_TO_AXIS = {
+        "IND_BRENT_CRUDE":     ("Oil Price",     lambda v: min(100, max(0, (v - 70) / 80 * 100))),
+        "IND_INR_USD":         ("Currency",      lambda v: min(100, max(0, (v - 82) / 15 * 100))),
+        "IND_HORMUZ_TRAFFIC":  ("Trade Routes",  lambda v: min(100, max(0, (1 - v/25) * 100))),
+        "IND_INDIA_SPR_DAYS":  ("Energy Buffer", lambda v: min(100, max(0, (1 - v/30) * 100))),
+        "IND_INDIA_OIL_IMPORT":("Supply Risk",   lambda v: min(100, max(0, v))),
+        "IND_NIFTY_DROP":      ("Markets",       lambda v: min(100, max(0, abs(v) / 20 * 100))),
+        "IND_INDIA_NATIONALS": ("Nationals",     lambda v: min(100, max(0, v / 200000 * 100))),
+        "IND_FREIGHT_RATE":    ("Freight",       lambda v: min(100, max(0, v / 500 * 100))),
+    }
+
+    axes, scores = [], []
+    for ind in indicators:
+        iid = ind.get("indicator_id","")
+        val = float(ind.get("value", 0))
+        if iid in _IND_TO_AXIS:
+            label, fn = _IND_TO_AXIS[iid]
+            axes.append(label)
+            scores.append(round(fn(val), 1))
+
+    if len(axes) < 3:
+        return
+
+    # Close the polygon
+    axes_closed   = axes + [axes[0]]
+    scores_closed = scores + [scores[0]]
+
+    # Color based on avg threat
+    avg = sum(scores) / len(scores)
+    fill_color = "rgba(239,68,68,0.25)"   if avg > 65 else \
+                 "rgba(249,115,22,0.25)"  if avg > 40 else \
+                 "rgba(34,197,94,0.25)"
+
+    line_color = "#ef4444" if avg > 65 else "#f97316" if avg > 40 else "#22c55e"
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatterpolar(
+        r=scores_closed, theta=axes_closed,
+        fill="toself", fillcolor=fill_color,
+        line=dict(color=line_color, width=2),
+        marker=dict(color=line_color, size=6),
+        hovertemplate="%{theta}: %{r:.0f}/100<extra></extra>",
+        name="Threat Level",
+    ))
+    # Reference rings at 25, 50, 75
+    for ring, rc in [(25,"#0f1e35"),(50,"#162236"),(75,"#1e2e42")]:
+        fig.add_trace(go.Scatterpolar(
+            r=[ring]*len(axes_closed), theta=axes_closed,
+            mode="lines", line=dict(color=rc, width=1, dash="dot"),
+            showlegend=False, hoverinfo="skip",
+        ))
+
+    fig.update_layout(
+        height=300,
+        paper_bgcolor="#020b14", plot_bgcolor="#020b14",
+        font=dict(color="#94a3b8", family="Outfit, sans-serif", size=10),
+        margin=dict(l=20, r=20, t=20, b=20),
+        polar=dict(
+            bgcolor="#020b14",
+            radialaxis=dict(
+                visible=True, range=[0,100],
+                tickfont=dict(size=8, color="#334155"),
+                gridcolor="#0f1e35", linecolor="#0f1e35",
+                tickvals=[25,50,75,100],
+            ),
+            angularaxis=dict(
+                tickfont=dict(size=10, color="#94a3b8"),
+                linecolor="#1e293b", gridcolor="#0f1e35",
+            ),
+        ),
+        showlegend=False,
+        hoverlabel=dict(bgcolor="#0d1f35", bordercolor="#1e3a5f",
+                        font=dict(color="#e2e8f0", size=11)),
+    )
+
+    # Threat level label
+    threat_label = "CRITICAL" if avg > 65 else "HIGH" if avg > 40 else "MODERATE"
+    st.markdown(
+        f'<div style="text-align:center;font-size:9px;font-weight:700;color:{line_color};'
+        f'letter-spacing:.1em;margin-bottom:2px;">INDIA EXPOSURE — {threat_label} ({avg:.0f}/100)</div>',
+        unsafe_allow_html=True,
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
+def _crisis_scenario_chart(scenarios: list) -> None:
+    """Plotly donut arc showing scenario probability split."""
+    import plotly.graph_objects as go
+
+    if not scenarios:
+        return
+
+    labels = [f"{s.get('label','?')}<br>{s.get('name','')}" for s in scenarios]
+    values = [s.get("probability", 0.33) for s in scenarios]
+    colors = [_SCENARIO_COLOR.get(s.get("label",""), "#94a3b8") for s in scenarios]
+
+    fig = go.Figure(go.Pie(
+        labels=labels, values=values,
+        hole=0.62,
+        marker=dict(colors=colors,
+                    line=dict(color="#020b14", width=3)),
+        textfont=dict(size=10, color="#e2e8f0"),
+        hovertemplate="<b>%{label}</b><br>Probability: %{percent}<extra></extra>",
+        direction="clockwise",
+        sort=False,
+    ))
+
+    # Centre annotation
+    fig.update_layout(
+        height=260,
+        paper_bgcolor="#020b14", plot_bgcolor="#020b14",
+        font=dict(color="#94a3b8", family="Outfit, sans-serif"),
+        margin=dict(l=10, r=10, t=10, b=10),
+        showlegend=True,
+        legend=dict(
+            orientation="v", x=1.02, y=0.5,
+            font=dict(size=9, color="#94a3b8"),
+            bgcolor="rgba(0,0,0,0)",
+        ),
+        annotations=[dict(
+            text=f"<b>{len(scenarios)}</b><br><span style='font-size:10px'>Scenarios</span>",
+            x=0.5, y=0.5, showarrow=False,
+            font=dict(size=13, color="#e2e8f0"),
+        )],
+        hoverlabel=dict(bgcolor="#0d1f35", bordercolor="#1e3a5f",
+                        font=dict(color="#e2e8f0", size=11)),
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
+def _render_crisis_dashboard(event_id: str):
+    """Render the full crisis intelligence panel for an ongoing event."""
+    API_BASE = os.environ.get("PRAMAAN_API_URL", "http://localhost:8000")
+    import requests as _req
+
+    st.markdown(
+        '<div style="font-size:0.7em;color:#ef4444;text-transform:uppercase;letter-spacing:0.1em;'
+        'font-weight:700;margin:16px 0 8px 0;border-top:1px solid #ef444422;padding-top:14px;">'
+        '🔴 LIVE CRISIS INTELLIGENCE</div>',
+        unsafe_allow_html=True,
+    )
+
+    # Fetch crisis data
+    try:
+        resp = _req.get(f"{API_BASE}/crisis/{event_id}", timeout=8)
+        data = resp.json() if resp.status_code == 200 else {}
+    except Exception:
+        data = {}
+
+    if not data:
+        st.markdown('<div style="color:#475569;font-size:11px;">Crisis data unavailable.</div>',
+                    unsafe_allow_html=True)
+        return
+
+    event      = data.get("event", {})
+    subevents  = data.get("subevents", [])
+    indicators = data.get("indicators", [])
+    decisions  = data.get("decisions", [])
+
+    # ── Event header ──────────────────────────────────────────────────────────
+    ev_sev   = event.get("severity", "high")
+    ev_color = _SEVERITY_COLOR.get(ev_sev, "#f97316")
+    st.markdown(
+        f'<div style="background:linear-gradient(135deg,#1a0000,#0d0f1e);'
+        f'border:1px solid {ev_color}55;border-left:4px solid {ev_color};'
+        f'border-radius:10px;padding:12px 14px;margin-bottom:10px;">'
+        f'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">'
+        f'<span style="background:{ev_color}22;color:{ev_color};font-size:9px;font-weight:700;'
+        f'padding:2px 7px;border-radius:4px;text-transform:uppercase;">ACTIVE CRISIS</span>'
+        f'<span style="font-size:9px;color:#475569;">Day {len(subevents)} · {event.get("date","")}</span>'
+        f'</div>'
+        f'<div style="font-size:13px;font-weight:700;color:#f1f5f9;">{event.get("name","")}</div>'
+        f'<div style="font-size:10px;color:#94a3b8;margin-top:4px;line-height:1.5;">'
+        f'{event.get("description","")}</div>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+    # ── Tabs ──────────────────────────────────────────────────────────────────
+    tab_timeline, tab_exposure, tab_decisions, tab_scenarios = st.tabs(
+        ["📅  Timeline", "🎯  India Exposure", "🇮🇳  Decisions", "🔭  Scenarios"]
+    )
+
+    # ── Tab 1: Crisis Timeline chart ──────────────────────────────────────────
+    with tab_timeline:
+        if not subevents:
+            st.markdown('<div style="font-size:11px;color:#475569;">No sub-events yet.</div>',
+                        unsafe_allow_html=True)
+        else:
+            _crisis_timeline_chart(subevents)
+            st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+            # Detail cards below chart — latest first
+            for se in reversed(subevents):
+                sev    = se.get("severity", "medium")
+                scolor = _SEVERITY_COLOR.get(sev, "#94a3b8")
+                cat    = se.get("category", "")
+                cicon  = _CAT_ICON.get(cat, "📌")
+                impact = se.get("india_impact", "")
+                st.markdown(
+                    f'<div style="border-left:3px solid {scolor}55;padding:5px 8px 5px 10px;'
+                    f'margin-bottom:4px;background:#060f1e;border-radius:0 6px 6px 0;">'
+                    f'<div style="display:flex;align-items:center;gap:6px;">'
+                    f'<span style="font-size:9px;color:#334155;min-width:38px;">Day {se.get("day_number","?")}</span>'
+                    f'<span style="font-size:9px;color:{scolor};font-weight:700;">{cicon} {cat}</span>'
+                    f'<span style="font-size:10px;font-weight:600;color:#cbd5e1;">{se.get("name","")}</span>'
+                    f'</div>'
+                    + (f'<div style="font-size:9px;color:#f97316;margin-top:2px;padding-left:44px;">🇮🇳 {impact}</div>' if impact else "")
+                    + f'</div>',
+                    unsafe_allow_html=True,
+                )
+
+    # ── Tab 2: India Exposure Radar ───────────────────────────────────────────
+    with tab_exposure:
+        if not indicators:
+            st.markdown('<div style="font-size:11px;color:#475569;">No indicators yet.</div>',
+                        unsafe_allow_html=True)
+        else:
+            _crisis_radar_chart(indicators)
+            st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+            # Compact metric rows below radar
+            for ind in indicators:
+                trend  = ind.get("trend", "stable")
+                tcolor = _TREND_COLOR.get(trend, "#94a3b8")
+                ticon  = _TREND_ICON.get(trend, "→")
+                st.markdown(
+                    f'<div style="display:flex;justify-content:space-between;align-items:center;'
+                    f'padding:4px 8px;border-bottom:1px solid #0f1e35;">'
+                    f'<span style="font-size:10px;color:#64748b;">{ind.get("name","")}</span>'
+                    f'<span style="font-size:11px;font-weight:700;color:#e2e8f0;">'
+                    f'{ind.get("value","")} <span style="font-size:9px;color:#334155;">{ind.get("unit","")}</span></span>'
+                    f'<span style="font-size:10px;color:{tcolor};">{ticon}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+
+    # ── Tab 3: India Decisions ────────────────────────────────────────────────
+    with tab_decisions:
+        if not decisions:
+            st.markdown('<div style="font-size:11px;color:#475569;">No India decisions recorded yet.</div>',
+                        unsafe_allow_html=True)
+        else:
+            for dec in decisions:
+                status = dec.get("status", "")
+                sc     = _STATUS_COLOR.get(status, "#94a3b8")
+                actor  = dec.get("actor_name") or dec.get("decided_by", "")
+                st.markdown(
+                    f'<div style="background:#060f1e;border:1px solid #1e293b;'
+                    f'border-radius:8px;padding:8px 12px;margin-bottom:6px;">'
+                    f'<div style="display:flex;justify-content:space-between;align-items:center;">'
+                    f'<span style="font-size:11px;font-weight:600;color:#e2e8f0;">{dec.get("name","")}</span>'
+                    f'<span style="background:{sc}22;color:{sc};font-size:9px;font-weight:700;'
+                    f'padding:2px 6px;border-radius:4px;text-transform:uppercase;">{status}</span>'
+                    f'</div>'
+                    f'<div style="font-size:9px;color:#475569;margin-top:2px;">'
+                    f'{actor} · {dec.get("date","")}</div>'
+                    f'<div style="font-size:10px;color:#64748b;margin-top:4px;line-height:1.4;">'
+                    f'{dec.get("description","")}</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+
+    # ── Tab 4: Scenarios ──────────────────────────────────────────────────────
+    with tab_scenarios:
+        st.markdown(
+            '<div style="font-size:10px;color:#64748b;margin-bottom:8px;">'
+            'AI scenario analysis — probabilities and India action plans for next 60 days.</div>',
+            unsafe_allow_html=True,
+        )
+        if st.button("Generate / Refresh Scenarios", key=f"gen_scn_{event_id}", type="primary"):
+            with st.spinner("Generating scenarios via AI..."):
+                try:
+                    scn_resp = _req.post(f"{API_BASE}/crisis/{event_id}/scenarios", timeout=60)
+                    if scn_resp.status_code == 200:
+                        st.session_state[f"scenarios_{event_id}"] = scn_resp.json().get("scenarios", [])
+                    else:
+                        st.error(f"Scenario generation failed: {scn_resp.status_code}")
+                except Exception as ex:
+                    st.error(f"Error: {ex}")
+
+        scenarios = st.session_state.get(f"scenarios_{event_id}", [])
+        if scenarios:
+            _crisis_scenario_chart(scenarios)
+
+        for scn in scenarios:
+            label   = scn.get("label", "")
+            sc      = _SCENARIO_COLOR.get(label, "#94a3b8")
+            impact  = scn.get("india_impact", {})
+            actions = scn.get("india_actions", [])
+            signals = scn.get("warning_signals", [])
+            st.markdown(
+                f'<div style="background:#060f1e;border:1px solid {sc}33;border-left:3px solid {sc};'
+                f'border-radius:8px;padding:8px 12px;margin-bottom:6px;">'
+                f'<div style="font-size:11px;font-weight:700;color:{sc};margin-bottom:3px;">'
+                f'{scn.get("name","")}</div>'
+                f'<div style="font-size:9px;color:#475569;margin-bottom:5px;">'
+                f'⏱ {scn.get("timeline","")} · {scn.get("trigger","")}</div>'
+                + "".join(
+                    f'<div style="font-size:10px;color:#64748b;margin-bottom:1px;">'
+                    f'<span style="color:#334155">{k.replace("_"," ").title()}:</span> {v}</div>'
+                    for k, v in (impact.items() if isinstance(impact, dict) else {}.items())
+                )
+                + (
+                    '<div style="margin-top:6px;padding:5px 8px;background:#0a1628;border-radius:5px;">'
+                    '<div style="font-size:9px;color:#475569;font-weight:700;margin-bottom:3px;">INDIA ACTIONS</div>'
+                    + "".join(f'<div style="font-size:10px;color:#e2e8f0;margin-bottom:2px;">• {a}</div>' for a in actions)
+                    + '</div>' if actions else ""
+                )
+                + (
+                    '<div style="margin-top:4px;">'
+                    + "".join(f'<div style="font-size:9px;color:#f97316;">⚠ {s}</div>' for s in signals)
+                    + '</div>' if signals else ""
+                )
+                + '</div>',
+                unsafe_allow_html=True,
+            )
+
+
 def page():
     st.set_page_config(page_title="Decision Engine – PRAMAAN", layout="wide")
     render_topnav(active_page="Decision Engine")
@@ -511,7 +986,15 @@ def page():
     """, unsafe_allow_html=True)
 
     # ── Top control row: event focus + refresh + reset ───────────────────────
-    ecol, rcol = st.columns([4, 1], gap="small")
+    st.markdown("""
+    <style>
+    div[data-testid="stButton"] button {
+        font-size:10px !important; padding:2px 10px !important;
+        height:28px !important; min-height:0 !important;
+    }
+    </style>""", unsafe_allow_html=True)
+
+    ecol, r1col, r2col = st.columns([4, 0.4, 0.4], gap="small")
     with ecol:
         render_event_dropdown("ontology_sel", "focus_select", include_all=True)
 
@@ -519,12 +1002,13 @@ def page():
     _oid = st.session_state.get("ontology_sel")
     focus_event = f"Event_{_oid}" if _oid else None
 
-    with rcol:
-        if st.button("↺ Refresh", use_container_width=True):
+    with r1col:
+        if st.button("↺", use_container_width=True, help="Refresh graph"):
             st.session_state.pop("graph_data_cache", None)
             st.rerun()
+    with r2col:
         if focus_event:
-            if st.button("✕ Reset", use_container_width=True):
+            if st.button("✕", use_container_width=True, help="Reset focus"):
                 st.session_state.ontology_sel = None
                 st.session_state.pop("focus_select", None)
                 st.rerun()
@@ -533,7 +1017,7 @@ def page():
     focus_ids = _get_ego_ids(focus_event, graph_data) if focus_event else None
 
     # ── 3-column layout ───────────────────────────────────────────────────────
-    col_left, col_graph, col_detail = st.columns([1, 2.8, 1], gap="medium")
+    col_left, col_graph, col_detail = st.columns([0.55, 3.2, 1], gap="small")
 
     # ══ LEFT — tabbed panel ═══════════════════════════════════════════════════
     with col_left:
@@ -601,16 +1085,11 @@ def page():
 
         config = Config(
             width="100%",
-            height=640,
+            height=650,
             directed=True,
             physics=True,
-            solver="repulsion",
-            nodeDistance=200,
-            centralGravity=0.01,
-            springLength=250,
-            springConstant=0.03,
-            damping=0.9,
-            stabilization={"enabled": True, "iterations": 250, "fit": True},
+            solver="barnesHut",
+            minVelocity=5,
             hierarchical=False,
             node={"labelProperty": "label"},
             edge={"labelProperty": "title", "smooth": {"type": "continuous"}},
@@ -620,6 +1099,9 @@ def page():
                 "navigationButtons": False,
                 "keyboard": True,
                 "zoomView": True,
+                "zoomSpeed": 1,
+                "minZoom": 0.4,
+                "maxZoom": 2.5,
                 "dragView": True,
                 "selectConnectedEdges": True,
                 "multiselect": False,
@@ -627,6 +1109,21 @@ def page():
             },
             manipulation=False,
         )
+        # barnesHut params must be nested under physics["barnesHut"] —
+        # passing them as kwargs puts them at the top level which vis-network ignores
+        config.physics["barnesHut"] = {
+            "gravitationalConstant": -8000,   # strong repulsion — pushes nodes apart
+            "centralGravity":        0.05,    # very weak centre pull — allows distribution
+            "springLength":          160,     # longer edges — connected nodes have breathing room
+            "springConstant":        0.03,    # soft springs — don't over-cluster connected nodes
+            "damping":               0.9,     # high damping — settles fast, no wiggle
+            "avoidOverlap":          0.8,
+        }
+        config.physics["stabilization"] = {
+            "enabled":    True,
+            "iterations": 300,
+            "fit":        True,
+        }
 
         clicked = agraph(nodes=nodes, edges=edges, config=config)
 
@@ -755,6 +1252,79 @@ def page():
                                  use_container_width=True, type="primary"):
                         st.session_state["deep_link_feed"] = bare_id
                         st.switch_page("pages/03_Delivery_Monitor.py")
+
+        # ── AI Insights ──────────────────────────────────────────────────────
+        _ai_event_id = st.session_state.get("ontology_sel")
+        if _ai_event_id and _GROQ_OK:
+            st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+            st.markdown(
+                '<div style="font-size:9px;font-weight:700;color:#475569;text-transform:uppercase;'
+                'letter-spacing:.08em;margin-bottom:6px;">AI INSIGHTS</div>',
+                unsafe_allow_html=True,
+            )
+            if st.button("Generate Brief →", key=f"ai_brief_{_ai_event_id}",
+                         use_container_width=True):
+                _ev_detail = safe_get(f"/ontology/events/{_ai_event_id}") or {}
+                _ev        = _ev_detail.get("event", {})
+                _actors    = _ev_detail.get("actors", [])
+                _schemes   = _ev_detail.get("schemes", [])
+                _connected = _ev_detail.get("connected_events", [])
+                _impacts   = _ev_detail.get("impacts", [])
+                _evidence  = _ev_detail.get("evidence", [])
+                _ctx = (
+                    f"Event: {_ev.get('name','')} | Date: {_ev.get('date','')} | "
+                    f"Severity: {_ev.get('severity','')} | Domain: {_ev.get('domain','')}\n"
+                    f"Description: {_ev.get('description','')}\n\n"
+                    + (f"Actors: {', '.join(a.get('name','') for a in _actors)}\n" if _actors else "")
+                    + (f"Schemes triggered: {', '.join(s.get('name','') for s in _schemes)}\n" if _schemes else "")
+                    + (f"Impacts: {'; '.join(i.get('name','') + ' (' + i.get('severity','') + ')' for i in _impacts)}\n" if _impacts else "")
+                    + (f"Connected events: {', '.join(c.get('name','') for c in _connected)}\n" if _connected else "")
+                    + (f"Evidence sources: {', '.join(e.get('title', e.get('source','')) for e in _evidence[:3])}\n" if _evidence else "")
+                )
+                _ev_name = _ev.get("name", _ai_event_id)
+                with st.spinner("Generating insights..."):
+                    try:
+                        stream = _generate_insights(_ai_event_id, _ev_name, _ctx)
+                        out = ""
+                        for chunk in stream:
+                            out += chunk.choices[0].delta.content or ""
+                        st.session_state[f"ai_brief_{_ai_event_id}"] = out
+                    except Exception as ex:
+                        st.error(f"Groq error: {ex}")
+
+            _brief = st.session_state.get(f"ai_brief_{_ai_event_id}", "")
+            if _brief:
+                st.markdown(
+                    '<div style="background:#060f1e;border:1px solid #1e293b;'
+                    'border-radius:8px;padding:10px 12px;margin-top:4px;">',
+                    unsafe_allow_html=True,
+                )
+                st.markdown(_brief)
+                st.markdown("</div>", unsafe_allow_html=True)
+
+        # ── Crisis Monitor CTA (inside right panel) ──────────────────────────
+        _ONGOING_CRISIS_IDS = {
+            "EVT_IRAN_WAR_2026", "EVT_IRAN_CEASEFIRE_TALKS_2026",
+            "EVT_HORMUZ_BLOCKADE_2026", "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+            "EVT_INDUS_WATERS_CRISIS_2025",
+        }
+        _crisis_event_id = st.session_state.get("ontology_sel")
+        if _crisis_event_id in _ONGOING_CRISIS_IDS:
+            st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+            st.markdown(
+                '<div style="display:flex;align-items:center;gap:6px;'
+                'background:#1a000088;border:1px solid #ef444433;border-radius:8px;'
+                'padding:7px 10px;margin-bottom:6px;">'
+                '<span style="font-size:11px;">🔴</span>'
+                '<span style="font-size:10px;font-weight:700;color:#ef4444;'
+                'letter-spacing:.06em;text-transform:uppercase;">Active Crisis</span>'
+                '</div>',
+                unsafe_allow_html=True,
+            )
+            if st.button("Open Crisis Monitor →", key=f"crisis_cta_{_crisis_event_id}",
+                         use_container_width=True, type="primary"):
+                st.session_state["crisis_sel"] = _crisis_event_id
+                st.switch_page("pages/06_Crisis_Monitor.py")
 
     # ══ DECISION ENGINE PANEL (Event-Aware Fix 13) ══════════════════════════
     _sel = st.session_state.get("ontology_sel")

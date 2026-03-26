@@ -223,6 +223,7 @@ def main() -> None:
             st.Page("pages/02_Decision_Engine.py",       title="Decision Engine",       icon=":material/hub:",           url_path="Decision_Engine"),
             st.Page("pages/03_Delivery_Monitor.py",     title="Delivery Monitor",     icon=":material/electric_bolt:", url_path="Delivery_Monitor"),
             st.Page("pages/04_Proof_and_Evidence.py",   title="Proof & Evidence",     icon=":material/psychology:",    url_path="Proof_and_Evidence"),
+            st.Page("pages/06_Crisis_Monitor.py",        title="Crisis Monitor",        icon=":material/crisis_alert:",  url_path="Crisis_Monitor"),
         ],
         expanded=True,
     )

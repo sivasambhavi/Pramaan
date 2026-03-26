@@ -10,6 +10,7 @@ PAGES = [
     ("Live Ingestion",        "/Live_Ingestion"),
     ("National Intelligence", "/National_Intelligence"),
     ("Decision Engine",       "/Decision_Engine"),
+    ("Crisis Monitor",        "/Crisis_Monitor"),
     ("Delivery Monitor",      "/Delivery_Monitor"),
     ("Proof & Evidence",      "/Proof_and_Evidence"),
 ]
