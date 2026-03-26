@@ -46,7 +46,7 @@ _TRANSIENT = (
 )
 
 _CACHE: dict = {}
-_CACHE_TTL = 300
+_CACHE_TTL = 60   # 60s — fast enough to feel live, avoids hitting backend on every rerun
 
 
 def _retry_request(method: str, path: str, **kwargs) -> requests.Response | None:

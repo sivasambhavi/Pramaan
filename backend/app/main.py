@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from app.routers import ontology, scrape, ingest, citizen_report, agentic
-from app.services.scheduler import start_scheduler, stop_scheduler
+from app.services.scheduler import start_scheduler, stop_scheduler, set_news_refresh_interval, get_scheduler_status
 
 log = logging.getLogger("pramaan.startup")
 
@@ -70,6 +70,20 @@ app.include_router(agentic.router)
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/scheduler/status", tags=["scheduler"])
+def scheduler_status():
+    """Current scheduler state — job names, intervals, next run times."""
+    return get_scheduler_status()
+
+
+@app.post("/scheduler/set-interval", tags=["scheduler"])
+def scheduler_set_interval(minutes: int):
+    """Reschedule news_refresh to run every N minutes (min 5, max 1440)."""
+    minutes = max(5, min(1440, minutes))
+    set_news_refresh_interval(minutes)
+    return {"ok": True, "news_refresh_every_minutes": minutes}
 
 
 @app.get("/stats", tags=["meta"])

@@ -23,6 +23,15 @@ def _fetch_stats() -> dict:
     return safe_get("/stats", silent=True) or {}
 
 
+@st.cache_resource
+def _logo_src() -> str:
+    if not os.path.exists(LOGO_PATH):
+        return ""
+    with open(LOGO_PATH, "rb") as _f:
+        b64 = base64.b64encode(_f.read()).decode()
+    return f"data:image/png;base64,{b64}"
+
+
 def home() -> None:
     render_topnav(active_page=None)
     st.markdown("""
@@ -49,12 +58,7 @@ def home() -> None:
     _evidence        = _stats.get("evidence",        0) or _DEMO_STATS["evidence"]
     _events          = _stats.get("events",          0) or _DEMO_STATS["events"]
 
-    # Encode logo as base64
-    logo_b64 = ""
-    if os.path.exists(LOGO_PATH):
-        with open(LOGO_PATH, "rb") as _f:
-            logo_b64 = base64.b64encode(_f.read()).decode()
-    logo_src = f"data:image/png;base64,{logo_b64}" if logo_b64 else ""
+    logo_src = _logo_src()
 
     # Hero in iframe with JS countUp animation
     components.html(f"""

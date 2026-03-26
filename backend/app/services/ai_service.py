@@ -1,9 +1,13 @@
 """
 PRAMAAN — Unified AI Extraction Service
 
-Two responsibilities:
-  1. extract_ontology(text, source_type)  — extracts entities/relations from any text
-  2. score_evidence(text, asset_name, ward_name) — scores relevance of a news snippet to an asset
+Global Ontology Engine — collects and understands content across:
+  Geopolitics · Economics · Defense · Technology · Climate · Society · Governance
+
+Three responsibilities:
+  1. extract_ontology(text, source_type)  — extracts entities/relations into the global graph
+  2. classify_content(text, topic)        — domain-aware relevance filter for the 7 domains
+  3. score_evidence(text, asset_name, ward_name) — legacy ward-level asset scoring (kept for delivery monitor)
 
 source_type must be one of:
   unstructured_llm   — user-pasted text (POST /scrape/analyze)
@@ -27,8 +31,8 @@ from app.utils.retry import retryable
 logger = logging.getLogger(__name__)
 
 # ─── Ollama config ────────────────────────────────────────────────────────────
-OLLAMA_HOST  = os.environ.get("OLLAMA_HOST", "http://192.168.48.1:11434")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3:latest")
+OLLAMA_HOST  = settings.ollama_host
+OLLAMA_MODEL = settings.ollama_model
 
 VALID_SOURCE_TYPES = {"unstructured_llm", "unstructured_rss"}
 
@@ -37,62 +41,98 @@ KNOWN_IDS_CONTEXT = """
 IMPORTANT — The graph already contains these nodes. When the text mentions any
 of them, use the EXACT ID listed. Do NOT invent a new ID for an existing entity.
 
-Events (use these IDs when text mentions the same event):
+Events:
   EVT_IRAN_WAR_2026          = Iran-US-Israel War (2026, ongoing — Hormuz blockade, oil spike)
   EVT_TWELVE_DAY_WAR_2025    = Twelve-Day War Israel-Iran (June 2025)
-  EVT_OPERATION_SINDOOR_2025 = Operation Sindoor India strikes Pakistan PoJK (May 7 2025)
-  EVT_PAHALGAM_2025          = Pahalgam Terror Attack J&K 26 killed (April 22 2025)
+  EVT_OPERATION_SINDOOR_2025 = Operation Sindoor — India strikes Pakistan PoJK (May 7 2025)
+  EVT_PAHALGAM_2025          = Pahalgam Terror Attack J&K, 26 killed (April 22 2025)
   EVT_INDIA_EXTREME_WEATHER_2025 = India Extreme Weather Year 2025 (331/334 days)
-  EVT_INDIA_UK_CETA_2025     = India-UK Trade Agreement CETA (July 2025)
-  EVT_SP_UPGRADE_2025        = S&P Sovereign Rating Upgrade BBB (August 2025)
-  EVT_LABOUR_CODES_2025      = Four Labour Codes Enforcement (November 2025)
-  EVT_ISRO_SPADEX_2025       = ISRO SpaDeX Satellite Docking (January 2025)
-  EVT_SHUKLA_ISS_2025        = First Indian on ISS Shubhanshu Shukla (June 2025)
+  EVT_INDIA_UK_CETA_2025     = India-UK Free Trade Agreement CETA (July 2025)
+  EVT_SP_UPGRADE_2025        = S&P India Sovereign Rating Upgrade BBB (August 2025)
+  EVT_ISRO_SPADEX_2025       = ISRO SpaDeX Satellite Docking Mission (January 2025)
+  EVT_SHUKLA_ISS_2025        = First Indian on ISS — Shubhanshu Shukla (June 2025)
   EVT_INDIA_US_DEFENSE_2025  = India-US 10-Year Defence Partnership Framework (October 2025)
-  EVT_CYCLONE_DANA_2024      = Cyclone Dana (2024, Odisha/West Bengal)
-  EVT_WAYANAD_2024           = Wayanad Landslide (2024, Kerala)
-  EVT_TATA_SEMI_2024         = Tata Semiconductor Fab (2024)
-  EVT_GAZA_REDSEA_2023       = Gaza War & Red Sea Crisis (2023)
+  EVT_CYCLONE_DANA_2024      = Cyclone Dana (Odisha/West Bengal, 2024)
+  EVT_WAYANAD_2024           = Wayanad Landslide (Kerala, 2024)
+  EVT_TATA_SEMI_2024         = Tata Electronics Semiconductor Fab groundbreaking (2024)
+  EVT_GAZA_REDSEA_2023       = Gaza War and Red Sea Shipping Crisis (2023)
   EVT_INDIA_CANADA_2023      = India-Canada Diplomatic Row (2023)
-  EVT_G20_INDIA_2023         = G20 New Delhi Summit (2023)
-  EVT_IMEC_2023              = IMEC Corridor Signing (2023)
-  EVT_ADITYAL1_2023          = Aditya-L1 Solar Mission (2023)
+  EVT_G20_INDIA_2023         = G20 New Delhi Summit (September 2023)
+  EVT_IMEC_2023              = India-Middle East-Europe Corridor signing (2023)
   EVT_CHANDRAYAAN3_2023      = Chandrayaan-3 Moon Landing (2023)
   EVT_DELHI_FLOODS_2023      = Delhi Yamuna Floods (2023)
-  EVT_MANIPUR_2023           = Manipur Ethnic Violence (2023)
-  EVT_JOSHIMATH_2023         = Joshimath Land Subsidence (2023, Uttarakhand)
 
-Schemes:
-  SCH_AMRUT        = AMRUT (Atal Mission for Rejuvenation and Urban Transformation)
-  SCH_PMAY         = PMAY-Urban (Pradhan Mantri Awas Yojana)
-  SCH_SWACHH       = Swachh Bharat Mission - Urban
-  SCH_SFC          = Local Development Grants - Roads & Drains (Delhi SFC)
-  SCH_LOCAL_LIGHTS = Urban Streetlight Improvement (Delhi)
-  SCH_JJBY         = Jal Jeevan Mission (Har Ghar Jal)
-  SCH_AYUSHMAN     = Ayushman Bharat PMJAY
+Actors — India Government:
+  ACT_MEA          = Ministry of External Affairs India (S. Jaishankar)
+  ACT_PMO          = Prime Minister's Office India (PM Modi)
+  ACT_MOD          = Ministry of Defence India
+  ACT_MOF          = Ministry of Finance India
+  ACT_RBI          = Reserve Bank of India
+  ACT_ISRO         = Indian Space Research Organisation
+  ACT_DRDO         = Defence Research and Development Organisation
+  ACT_MoPNG        = Ministry of Petroleum and Natural Gas India
+  ACT_PPAC         = Petroleum Planning and Analysis Cell
+  ACT_NDMA         = National Disaster Management Authority
+  ACT_NDRF         = National Disaster Response Force
+  ACT_PIB          = Press Information Bureau India
 
-Regions:
-  REG_DELHI           = Delhi (city level)
-  REG_SHAHDARA_NORTH  = Shahdara North Zone
-  REG_SHAHDARA_SOUTH  = Shahdara South Zone
-  REG_W45             = Ward 45 Shahdara
-  REG_W45_GALI7       = Gali No. 7 (street inside Ward 45)
-  REG_W45_GALI12      = Gali No. 12 (street inside Ward 45)
-  REG_W45_GALI3       = Gali No. 3 (street inside Ward 45)
-  REG_W45_MARKET_ROAD = Shahdara Market Road
-  REG_W45_COLONY_Y    = Colony Y Housing Cluster
+Actors — India PSU / Finance:
+  ACT_HPCL         = Hindustan Petroleum Corporation Ltd
+  ACT_BPCL         = Bharat Petroleum Corporation Ltd
+  ACT_IOC          = Indian Oil Corporation
+  ACT_GAIL         = GAIL India Ltd
+  ACT_ONGC         = Oil and Natural Gas Corporation
+  ACT_SBI          = State Bank of India
+  ACT_NSE          = National Stock Exchange
+  ACT_BSE          = Bombay Stock Exchange
 
-Actors:
-  ACT_MCD_SHAHDARA_WORKS      = MCD Shahdara North Works Dept
-  ACT_MCD_SHAHDARA_SANITATION = MCD Shahdara Sanitation Dept
-  ACT_MCD_ELECTRICAL          = MCD Electrical Dept - Shahdara
-  ACT_DDA                     = Delhi Development Authority
-  ACT_W45_COUNCILLOR          = Ward 45 Councillor
-  ACT_CONTRACTOR_INFRA_1      = ABC Infra Pvt Ltd
-  ACT_CONTRACTOR_LIGHTS_1     = BrightLights Engineering
+Actors — Global:
+  ACT_OPEC         = OPEC+ (oil cartel)
+  ACT_US_STATE     = US State Department
+  ACT_US_DOD       = US Department of Defense
+  ACT_IAEA         = International Atomic Energy Agency
+  ACT_UN           = United Nations
+  ACT_UNSC         = UN Security Council
+  ACT_IMF          = International Monetary Fund
+  ACT_WORLD_BANK   = World Bank
+  ACT_WTO          = World Trade Organization
+  ACT_WHO          = World Health Organization
+  ACT_IRAN_GOVT    = Government of Iran
+  ACT_ISRAEL_GOVT  = Government of Israel
+  ACT_PAKISTAN_ISI = Pakistan ISI / Military
 
-Only create a NEW id (e.g. "evt_flood_2025") if the entity is genuinely not in
-this list and is not a synonym/alias for any entry above.
+Regions — Global:
+  REG_INDIA        = India (country)
+  REG_IRAN         = Iran
+  REG_ISRAEL       = Israel
+  REG_USA          = United States of America
+  REG_CHINA        = China
+  REG_PAKISTAN     = Pakistan
+  REG_HORMUZ       = Strait of Hormuz (chokepoint)
+  REG_PERSIAN_GULF = Persian Gulf
+  REG_MIDDLE_EAST  = Middle East region
+  REG_RED_SEA      = Red Sea / Bab-el-Mandeb
+  REG_INDO_PACIFIC = Indo-Pacific region
+  REG_IMEC         = IMEC Corridor (India-Middle East-Europe)
+
+Regions — India:
+  REG_DELHI        = Delhi (NCT)
+  REG_KERALA       = Kerala
+  REG_ODISHA       = Odisha
+  REG_JK           = Jammu & Kashmir
+  REG_W45          = Ward 45 Shahdara (Delhi, local delivery pilot)
+
+Schemes / Policies — India:
+  SCH_AMRUT        = AMRUT Urban Infrastructure Mission
+  SCH_PMAY         = PMAY-Urban Housing Scheme
+  SCH_SWACHH       = Swachh Bharat Mission Urban
+  SCH_PLI          = Production Linked Incentive Scheme
+  SCH_AYUSHMAN     = Ayushman Bharat PMJAY Health Insurance
+  SCH_SPR          = India Strategic Petroleum Reserve (SPR)
+  SCH_JJBY         = Jal Jeevan Mission
+
+Only create a NEW id (e.g. "evt_iran_ceasefire_2026") if the entity is genuinely
+not in this list. Use snake_case prefix matching the label type.
 """
 
 class AIService:
@@ -178,41 +218,76 @@ class AIService:
             }
 
         prompt = f"""
-You are a governance data extraction assistant for India.
-Extract entities from the following governance text and return ONLY valid JSON.
-No explanation, no markdown, no code blocks.
+You are a Global Ontology Engine for India intelligence.
+Extract ALL significant entities and relationships from the text across 7 domains:
+  Geopolitics · Economics · Defense · Technology · Climate · Society · Governance
 
 {KNOWN_IDS_CONTEXT}
 
 Text:
 {text}
 
-Return this exact JSON structure:
+Return ONLY valid JSON — no markdown, no explanation, no code blocks.
+
+Schema:
 {{
   "entities": [
-    {{"id": "EVT_WAYANAD_2024",  "label": "Event",  "properties": {{"name": "Wayanad Landslide", "date": "2024-07-30", "domain": "DOM_CLIMATE", "severity": "high", "description": "brief event description", "confidence": 0.9}}}},
-    {{"id": "evt_new_flood_2025","label": "Event",  "properties": {{"name": "New Event Name", "date": "2025-01-15", "domain": "DOM_CLIMATE/DOM_GEOPOLITICS/DOM_TECHNOLOGY/DOM_ECONOMICS/DOM_GOVERNANCE/DOM_DEFENSE/DOM_SOCIETY", "severity": "high/medium/low", "description": "brief description", "confidence": 0.8}}}},
-    {{"id": "SCH_AMRUT", "label": "Scheme", "properties": {{"name": "AMRUT", "ministry": "MoHUA", "category": "infrastructure", "confidence": 0.95}}}},
-    {{"id": "REG_W45",   "label": "Region", "properties": {{"name": "Ward 45 Shahdara", "type": "ward", "confidence": 0.9}}}},
-    {{"id": "asset_new_1","label": "Asset",  "properties": {{"name": "asset description", "type": "drain/road/toilet/housing/park/streetlight/other", "cost": 1200000, "status": "completed/in_progress/planned", "confidence": 0.8}}}},
-    {{"id": "ACT_MCD_SHAHDARA_WORKS","label": "Actor", "properties": {{"name": "MCD Shahdara North Works Dept", "type": "government", "confidence": 0.85}}}},
-    {{"id": "ben_new_1", "label": "Beneficiary", "properties": {{"count": 100, "description": "households benefiting", "confidence": 0.7}}}},
-    {{"id": "ev_new_1",  "label": "Evidence",    "properties": {{"type": "photo/report/certificate", "description": "what the evidence shows", "confidence": 0.75}}}}
+    {{
+      "id": "<use existing ID from context above, or snake_case new id>",
+      "label": "<Event|Actor|Region|Scheme|Policy|Impact|Evidence|Asset|Domain>",
+      "properties": {{
+        "name": "<human-readable name>",
+        "domain": "<DOM_GEOPOLITICS|DOM_ECONOMICS|DOM_DEFENSE|DOM_TECHNOLOGY|DOM_CLIMATE|DOM_SOCIETY|DOM_GOVERNANCE>",
+        "date": "<YYYY-MM-DD if known>",
+        "description": "<1-2 sentence summary>",
+        "severity": "<critical|high|medium|low — for events>",
+        "confidence": <0.0–1.0>
+      }}
+    }}
   ],
   "relations": [
-    {{"from_id": "evt_new_flood_2025", "from_label": "Event", "to_id": "REG_W45", "to_label": "Region", "type": "OCCURRED_IN"}},
-    {{"from_id": "SCH_AMRUT", "from_label": "Scheme", "to_id": "asset_new_1", "to_label": "Asset", "type": "FUNDS"}},
-    {{"from_id": "asset_new_1", "from_label": "Asset", "to_id": "ACT_MCD_SHAHDARA_WORKS", "to_label": "Actor", "type": "BUILT_BY"}},
-    {{"from_id": "asset_new_1", "from_label": "Asset", "to_id": "REG_W45", "to_label": "Region", "type": "LOCATED_IN"}}
+    {{
+      "from_id": "<id>", "from_label": "<label>",
+      "to_id":   "<id>", "to_label":   "<label>",
+      "type": "<CAUSED|TRIGGERED|FUNDS|BENEFITS|PROVES|BUILT_BY|LOCATED_IN|CONNECTED_TO|OCCURRED_IN>"
+    }}
   ]
 }}
 
+Examples across domains:
+
+Geopolitics:
+  {{"id": "EVT_IRAN_WAR_2026", "label": "Event", "properties": {{"name": "Iran-US-Israel War 2026", "domain": "DOM_GEOPOLITICS", "severity": "critical", "confidence": 0.95}}}}
+  {{"id": "ACT_MEA", "label": "Actor", "properties": {{"name": "Ministry of External Affairs India", "confidence": 0.95}}}}
+  Relation: {{"from_id": "EVT_IRAN_WAR_2026", "from_label": "Event", "to_id": "REG_HORMUZ", "to_label": "Region", "type": "OCCURRED_IN"}}
+
+Economics:
+  {{"id": "evt_rupee_fall_2026", "label": "Event", "properties": {{"name": "INR/USD depreciation", "domain": "DOM_ECONOMICS", "severity": "high", "confidence": 0.85}}}}
+  {{"id": "ACT_RBI", "label": "Actor", "properties": {{"name": "Reserve Bank of India", "confidence": 0.95}}}}
+  Relation: {{"from_id": "EVT_IRAN_WAR_2026", "from_label": "Event", "to_id": "evt_rupee_fall_2026", "to_label": "Event", "type": "CAUSED"}}
+
+Defense:
+  {{"id": "EVT_OPERATION_SINDOOR_2025", "label": "Event", "properties": {{"name": "Operation Sindoor", "domain": "DOM_DEFENSE", "severity": "critical", "confidence": 0.95}}}}
+  {{"id": "ACT_MOD", "label": "Actor", "properties": {{"name": "Ministry of Defence India", "confidence": 0.95}}}}
+
+Technology:
+  {{"id": "EVT_ISRO_SPADEX_2025", "label": "Event", "properties": {{"name": "ISRO SpaDeX Docking", "domain": "DOM_TECHNOLOGY", "severity": "medium", "confidence": 0.95}}}}
+  {{"id": "evt_tata_chip_fab_2025", "label": "Event", "properties": {{"name": "Tata Semiconductor Fab Phase 2", "domain": "DOM_TECHNOLOGY", "severity": "high", "confidence": 0.8}}}}
+
+Climate:
+  {{"id": "EVT_WAYANAD_2024", "label": "Event", "properties": {{"name": "Wayanad Landslide 2024", "domain": "DOM_CLIMATE", "severity": "high", "confidence": 0.95}}}}
+  {{"id": "ACT_NDMA", "label": "Actor", "properties": {{"name": "National Disaster Management Authority", "confidence": 0.9}}}}
+
+Society / Governance:
+  {{"id": "SCH_PLI", "label": "Scheme", "properties": {{"name": "PLI Scheme", "domain": "DOM_GOVERNANCE", "confidence": 0.95}}}}
+  {{"id": "evt_india_unemployment_2026", "label": "Event", "properties": {{"name": "India Youth Unemployment Q1 2026", "domain": "DOM_SOCIETY", "severity": "medium", "confidence": 0.8}}}}
+
 Rules:
-- Use existing IDs from the IMPORTANT section whenever they match.
-- Only create new IDs (e.g. "asset_new_1") for genuinely new entities.
-- cost must be a number in rupees (1200000 = Rs 12 lakh).
-- confidence: float 0.0–1.0 reflecting certainty from the text.
-- Omit unknown fields rather than guessing.
+- ALWAYS reuse IDs from the IMPORTANT context above when the entity matches.
+- For new entities, use snake_case: evt_, act_, reg_, sch_, pol_, imp_, ev_, ast_, dom_
+- confidence: your certainty from the text (1.0 = explicitly stated, 0.6 = inferred).
+- Omit fields you cannot determine — do NOT guess dates or numbers.
+- Extract ALL significant entities mentioned, not just the primary topic.
 - Return ONLY the JSON object. Nothing else.
 """
         def _parse(raw: str) -> dict:
@@ -297,21 +372,20 @@ Rules:
             }
 
         prompt = f"""
-You are a governance data extraction AI.
-Analyze the following news snippet and determine its relevance to a specific infrastructure project.
+You are a governance data extraction AI for India.
+Analyze the following news snippet and determine its relevance to India governance, policy, or national interest.
 
-Asset Name: {asset_name}
-Location: {ward_name}
+Topic: {asset_name}
+Scope: {ward_name}
 
 News Snippet:
 {text}
 
-Extract the most critical 'key_fact' regarding the completion, budget, or
-status of this asset. Determine the 'relevance' category:
-  "Direct Match"   — article is specifically about this asset
-  "Zone Context"   — article mentions the ward/zone but not this asset
-  "National Context" — article discusses the scheme nationally
-  "Unrelated"      — not relevant
+Extract the most critical 'key_fact'. Determine the 'relevance' category:
+  "Direct Match"     — article is specifically about this topic
+  "Zone Context"     — article is about the same region or domain
+  "National Context" — article is relevant to India governance, economy, policy, geopolitics, or national security
+  "Unrelated"        — not relevant to India or governance at all
 
 Give a 'confidence' score 0.0–1.0.
 
@@ -367,5 +441,108 @@ Return ONLY valid JSON — no markdown, no explanation:
 
     def analyze_evidence(self, text: str, asset_name: str = "", ward_name: str = "") -> dict:
         return self.score_evidence(text, asset_name, ward_name)
+
+    # ── 3. Domain-aware content classification ────────────────────────────────
+    def classify_content(self, text: str, topic: str = "") -> dict:
+        """
+        Determine whether text is relevant to India's national interest across
+        7 governance domains. Replaces ward-level score_evidence for ingestion.
+
+        Returns:
+          {
+            "relevant":   bool,
+            "domain":     "DOM_GEOPOLITICS|DOM_ECONOMICS|DOM_DEFENSE|DOM_TECHNOLOGY|DOM_CLIMATE|DOM_SOCIETY|DOM_GOVERNANCE",
+            "confidence": float,
+            "reason":     str
+          }
+        """
+        _fallback = {
+            "relevant":   True,
+            "domain":     "DOM_GOVERNANCE",
+            "confidence": 0.5,
+            "reason":     "Fallback — no LLM available",
+        }
+
+        prompt = f"""
+You are a relevance classifier for the PRAMAAN Global Ontology Engine — India intelligence platform.
+
+Your job: decide if the following content is relevant to India's national interest across any of the 7 domains:
+  DOM_GEOPOLITICS  — foreign policy, wars, diplomacy, border disputes, UN, global alliances
+  DOM_ECONOMICS    — GDP, inflation, trade, FDI, rupee, oil prices, markets, RBI, budget
+  DOM_DEFENSE      — armed forces, DRDO, defence procurement, terrorism, military operations
+  DOM_TECHNOLOGY   — ISRO, space, semiconductors, AI policy, digital India, cyber, EV, telecom
+  DOM_CLIMATE      — disasters, cyclones, floods, drought, heatwave, environment, green energy
+  DOM_SOCIETY      — health, education, poverty, women, youth, religion, social movements
+  DOM_GOVERNANCE   — government schemes, policies, Parliament, elections, infrastructure, law
+
+Topic hint: {topic or "none"}
+
+Text:
+{text}
+
+Answer ONLY with valid JSON. No markdown, no explanation:
+{{
+  "relevant":   true or false,
+  "domain":     "DOM_GEOPOLITICS|DOM_ECONOMICS|DOM_DEFENSE|DOM_TECHNOLOGY|DOM_CLIMATE|DOM_SOCIETY|DOM_GOVERNANCE",
+  "confidence": 0.0 to 1.0,
+  "reason":     "one-sentence explanation"
+}}
+
+Rules:
+- relevant=true if the content relates to India OR has direct impact on India (e.g. oil war affecting INR).
+- relevant=false ONLY for purely local/foreign content with zero India relevance.
+- Pick the single best-fit domain.
+"""
+
+        def _parse_classify(raw: str) -> dict:
+            if raw.startswith("```"):
+                raw = raw.split("```")[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+            result = json.loads(raw.strip())
+            result.setdefault("relevant",   True)
+            result.setdefault("domain",     "DOM_GOVERNANCE")
+            result.setdefault("confidence", 0.6)
+            result.setdefault("reason",     "")
+            return result
+
+        # Ollama first
+        if self.ollama_available:
+            try:
+                raw = self._call_ollama(prompt)
+                result = _parse_classify(raw)
+                logger.info("[ai] classify_content via Ollama — relevant=%s domain=%s",
+                            result["relevant"], result["domain"])
+                return result
+            except Exception as e:
+                logger.warning("[ai] Ollama classify_content failed, falling back: %s", e)
+
+        # Groq second
+        if self.client:
+            try:
+                chat = self.client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model="llama-3.3-70b-versatile",
+                    temperature=0.0,
+                    response_format={"type": "json_object"},
+                )
+                return _parse_classify(chat.choices[0].message.content)
+            except Exception as e:
+                if self._is_rate_limit_error(e) and self.gemini:
+                    logger.warning("Groq rate-limited — falling back to Gemini for classify_content")
+                else:
+                    logger.error("[ai] classify_content Groq failed: %s", e)
+                    return _fallback
+
+        # Gemini fallback
+        if self.gemini:
+            try:
+                raw = self._call_gemini(prompt)
+                return _parse_classify(raw)
+            except Exception as e:
+                logger.error("[ai] classify_content Gemini also failed: %s", e)
+
+        return _fallback
+
 
 ai_service = AIService()

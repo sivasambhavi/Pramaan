@@ -57,11 +57,14 @@ Layer 5: Citizen (mock UI — production-ready design)
 
 | Layer | Technology |
 |-------|-----------|
-| Graph DB | Neo4j 5.18 (Docker) |
+| Graph DB | Neo4j 5.19 (Docker) |
 | Backend | FastAPI + Uvicorn |
-| Frontend | Streamlit + streamlit-agraph |
-| AI / Insights | Groq API (LLaMA 3.3 70B) |
-| Data | data.gov.in · PIB · NDMA · ISRO · IMD |
+| Frontend | Streamlit + streamlit-agraph + streamlit-folium |
+| AI — Primary | Ollama (local) · llama3 · runs offline |
+| AI — Fallback | Groq API · LLaMA 3.3 70B · used when Ollama is offline |
+| AI — Tertiary | Google Gemini Flash · classification + validation |
+| Ingestion | crawl4ai · agentic web crawler |
+| Data | data.gov.in · PIB · NDMA · ISRO · IMD · UN · World Bank |
 
 ---
 
@@ -70,55 +73,122 @@ Layer 5: Citizen (mock UI — production-ready design)
 ### Prerequisites
 - Python 3.10+
 - Docker (for Neo4j)
-- Groq API key (free at [console.groq.com](https://console.groq.com))
-- data.gov.in API key (free at [data.gov.in](https://data.gov.in))
+- [Ollama](https://ollama.com/download) installed locally (primary LLM — free, runs offline)
+- Groq API key — free at [console.groq.com](https://console.groq.com) (fallback if Ollama is offline)
+- Google Gemini API key — free at [aistudio.google.com](https://aistudio.google.com/app/apikey) (tertiary fallback)
+- data.gov.in API key — free at [data.gov.in](https://data.gov.in)
 
 ### 1. Clone & Install
 
 ```bash
 git clone <repo-url>
 cd Pramaan
-python -m venv venv && source venv/bin/activate
+python -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Configure Environment
+### 2. Install & Start Ollama (primary LLM)
+
+#### Linux / WSL (recommended)
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull llama3        # download the model (~4 GB, one-time)
+ollama serve              # starts on http://localhost:11434
+```
+
+#### Windows (running Ollama on Windows, accessed from WSL)
+
+1. Download and install from [ollama.com/download](https://ollama.com/download)
+
+2. **Expose Ollama to WSL** — open PowerShell as Administrator and run:
+```powershell
+# Bind Ollama to all interfaces (not just localhost)
+[System.Environment]::SetEnvironmentVariable("OLLAMA_HOST", "0.0.0.0", "Machine")
+
+# Kill and restart Ollama so it picks up the new setting
+Get-Process | Where-Object {$_.Name -like "*ollama*"} | Stop-Process -Force
+Start-Sleep 3
+Start-Process "ollama" -ArgumentList "serve"
+
+# Allow WSL traffic through Windows firewall
+New-NetFirewallRule -DisplayName "Ollama WSL" -Direction Inbound -Protocol TCP -LocalPort 11434 -Action Allow
+```
+
+3. Verify Ollama is on `0.0.0.0`:
+```powershell
+netstat -ano | findstr 11434
+# Should show: TCP  0.0.0.0:11434  ...  LISTENING
+```
+
+4. Find your WSL gateway IP and test from WSL:
+```bash
+# Get Windows host IP from WSL
+ip route show default | awk '{print $3}'
+
+# Test (replace with your gateway IP)
+curl http://172.17.240.1:11434/
+# Should return: Ollama is running
+```
+
+5. Update `.env` with the Windows host IP:
+```env
+OLLAMA_HOST=http://172.17.240.1:11434   # use your actual gateway IP
+```
+
+> If Ollama is not reachable, the system auto-falls back to Groq — everything still works.
+
+### 3. Configure Environment
+
+```bash
+cp env.example .env       # then edit .env with your keys
+```
+
+Required keys:
 
 ```env
 NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
-NEO4J_PASSWORD=pramaa2026
-GROQ_API_KEY=your_groq_key_here
+NEO4J_PASSWORD=your_neo4j_password
+
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=llama3:latest
+
+GROQ_API_KEY=your_groq_key_here          # fallback LLM
+GOOGLE_API_KEY=your_gemini_key_here      # tertiary LLM
+GEMINI_API_KEY=your_gemini_key_here      # same key, used by agent/classifier.py
+
 DATA_GOV_API_KEY=your_datagov_key_here
 ```
 
-### 3. Start Neo4j
+### 4. Start Neo4j
 
 ```bash
 docker-compose up -d
 ```
 
-Neo4j Browser: `http://localhost:7474` (login: `neo4j` / `pramaa2026`)
+Neo4j Browser: `http://localhost:7474` (login: `neo4j` / your password)
 
-### 4. Seed the Graph
+### 5. Seed the Graph
 
 ```bash
 python backend/scripts/load_ontology.py
 python backend/scripts/load_govdata.py
 ```
 
-### 5. Start Backend
+### 6. Start Backend
 
 ```bash
 uvicorn backend.app.main:app --reload
+# or: venv/bin/python -m uvicorn backend.app.main:app --reload
 ```
 
 API: `http://localhost:8000` · Docs: `http://localhost:8000/docs`
 
-### 6. Start Frontend
+### 7. Start Frontend
 
 ```bash
 streamlit run frontend/main_app.py
+# or: venv/bin/streamlit run frontend/main_app.py
 ```
 
 UI: `http://localhost:8501`

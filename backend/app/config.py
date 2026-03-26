@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     pramaan_env:    str = "development"
     google_api_key: str = ""
     api_base_url:   str = "http://localhost:8000"
+    ollama_host:    str = "http://localhost:11434"
+    ollama_model:   str = "llama3:latest"
 
     class Config:
         env_file = str(_ENV_FILE)

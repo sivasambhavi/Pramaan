@@ -34,7 +34,6 @@ _ALLOWED_LABELS = {
     "Event", "Region", "Actor", "Scheme", "Policy",
     "Impact", "Evidence", "Asset", "Domain",
 }
-_INGESTIBLE_RELEVANCE = {"Direct Match", "Zone Context", "National Context"}
 CONFIDENCE_THRESHOLD  = 0.6
 
 
@@ -63,7 +62,12 @@ class AgenticResponse(BaseModel):
 
 
 def _now() -> str:
+    """Short HH:MM:SS for agent trace display."""
     return datetime.now(timezone.utc).strftime("%H:%M:%S")
+
+def _now_iso() -> str:
+    """Full ISO timestamp for ingested_at property (needed by _rel_time in frontend)."""
+    return datetime.now(timezone.utc).isoformat()
 
 
 @router.post("/agentic", response_model=AgenticResponse)
@@ -100,31 +104,32 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
 
     add("Fetch", f"Found {len(articles)} articles from Google News", "ok")
 
-    # ── Step 2: Score relevance ───────────────────────────────────────────────
-    add("Filter", f"Scoring {len(articles)} articles for governance relevance via {llm_used.upper()}")
+    # ── Step 2: Classify relevance (domain-aware, all 7 domains) ────────────────
+    add("Filter", f"Classifying {len(articles)} articles across 7 domains via {llm_used.upper()}")
     relevant, dropped = [], 0
+    domain_counts: dict[str, int] = {}
+
     for art in articles[:req.max_articles]:
-        snippet = f"{art.get('title','')} {art.get('snippet','')}"
-        scored  = ai_service.score_evidence(text=snippet, asset_name=req.topic, ward_name="India")
-        rel     = scored.get("relevance", "")
-        if rel in _INGESTIBLE_RELEVANCE:
-            art["relevance"]  = rel
+        snippet = f"{art.get('title', '')} {art.get('snippet', '')}"
+        scored  = ai_service.classify_content(text=snippet, topic=req.topic)
+        if scored.get("relevant", False) and scored.get("confidence", 0) >= 0.4:
+            art["relevance"]  = scored.get("domain", "DOM_GOVERNANCE")
             art["confidence"] = scored.get("confidence", 0.5)
             relevant.append(art)
+            domain_counts[art["relevance"]] = domain_counts.get(art["relevance"], 0) + 1
         else:
             dropped += 1
 
     if not relevant:
-        add("Filter", f"All {dropped} articles unrelated — nothing to extract", "warn")
+        add("Filter", f"All {dropped} articles unrelated to India — nothing to extract", "warn")
         return AgenticResponse(steps=steps, entities_created=0, relations_created=0,
                                entities_skipped=0, duration_s=round(time.time()-t0, 2),
                                llm_used=llm_used, topic=req.topic)
 
-    whitelisted_count = sum(1 for a in relevant if a.get("whitelisted", False))
+    domain_summary = " · ".join(f"{v}×{k.replace('DOM_', '')}" for k, v in domain_counts.items())
     add("Filter",
-        f"Kept {len(relevant)} relevant · dropped {dropped} unrelated · "
-        f"{whitelisted_count}/{len(relevant)} from whitelisted gov sources",
-        "ok" if whitelisted_count > 0 else "warn")
+        f"Kept {len(relevant)} relevant · dropped {dropped} unrelated · domains: {domain_summary}",
+        "ok")
 
     # ── Step 3: Extract entities ──────────────────────────────────────────────
     add("Extract", f"Extracting governance entities via {llm_used.upper()} · {len(relevant)} articles")
@@ -192,7 +197,7 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                     **props,
                     id_field:     canonical_id,
                     "source":     "agentic_ingestion",
-                    "ingested_at": _now(),
+                    "ingested_at": _now_iso(),
                 }
                 set_pairs = ", ".join(f"n.{k} = ${k}" for k, v in audit_props.items() if v is not None)
                 cypher    = f"MERGE (n:{label} {{{id_field}: ${id_field}}}) SET {set_pairs} RETURN n"
@@ -230,7 +235,7 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                         MERGE (a)-[r:{rt}]->(b)
                         SET r.ingested_at = $ts
                         RETURN r
-                    """, fid=fid, tid=tid, ts=_now()).single()
+                    """, fid=fid, tid=tid, ts=_now_iso()).single()
                     if r:
                         relations_created += 1
                 except Exception:

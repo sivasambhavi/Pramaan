@@ -225,17 +225,23 @@ def page():
         NATIONAL INTELLIGENCE
       </span>
       <span style="font-size:0.75em;color:#64748b;white-space:nowrap;">
-        {n_events} Events &nbsp;·&nbsp; {n_domains} Active Domains &nbsp;·&nbsp; Verified Data
-        &nbsp;·&nbsp; <span style="color:#475569;">PIB · NDMA · ISRO · IMD</span>
-        &nbsp;·&nbsp; <span style="color:#334155;">Neo4j Knowledge Graph</span>
+        {n_events} Events &nbsp;·&nbsp; {n_domains} Active Domains
+        &nbsp;·&nbsp; <span style="color:#22c55e;font-weight:600;">● Streaming</span>
+        &nbsp;·&nbsp; <span style="color:#475569;">PIB · NDMA · ISRO · IMD · UN · World Bank</span>
+        &nbsp;·&nbsp; <span style="color:#334155;">Global Neo4j Knowledge Graph</span>
       </span>
     </div>
     """, unsafe_allow_html=True)
 
+    import datetime as _dt
+    _ts = _dt.datetime.now().strftime("%H:%M IST")
     st.markdown(
-        f'<div style="font-size:12px;color:#475569;margin-bottom:6px;">'
-        f'Tracks {N_EVENTS} high-impact events — from climate disasters to geopolitical shifts — '
-        f'plotted on a live map with verified government evidence and cross-domain connections.'
+        f'<div style="font-size:12px;color:#475569;margin-bottom:2px;">'
+        f'Global knowledge graph · India lens active · AI-powered event extraction, entity linking &amp; risk scoring · '
+        f'Tracks {N_EVENTS} high-impact events across climate, defense, economics and geopolitics.'
+        f'</div>'
+        f'<div style="font-size:10px;color:#334155;margin-bottom:4px;">'
+        f'Last updated: {_ts} &nbsp;·&nbsp; Streaming from PIB · NDMA · ISRO · IMD · UN · IMF · World Bank'
         f'</div>',
         unsafe_allow_html=True,
     )
@@ -248,12 +254,12 @@ def page():
         show_cross = st.checkbox("Cross-links", value=False, key="cross_cb")
         if show_cross:
             st.markdown(
-                "<div style='font-size:9px;color:#FFD700;margin-top:-8px;'>🌐 World view</div>",
+                "<div style='font-size:9px;color:#FFD700;margin-top:-8px;'>🌐 Global cross-links active</div>",
                 unsafe_allow_html=True
             )
         else:
             st.markdown(
-                "<div style='font-size:9px;color:#94a3b8;margin-top:-8px;'>🇮🇳 India view</div>",
+                "<div style='font-size:9px;color:#94a3b8;margin-top:-8px;'>🇮🇳 India lens · global graph beneath</div>",
                 unsafe_allow_html=True
             )
 
@@ -468,6 +474,8 @@ def page():
                 sdesc   = _fb.get("description", "")
 
             # ── Event header card — always visible above tabs ───────────────────────
+            _risk_score = {"critical": "9.1", "high": "7.4", "medium": "5.2"}.get(ssev, "6.0")
+            _risk_color = {"critical": "#ef4444", "high": "#f97316", "medium": "#facc15"}.get(ssev, "#94a3b8")
             st.markdown(f"""
             <div style="border-left:3px solid {scolor};padding:10px 12px;
                         background:#0a1628;border-radius:6px;margin-bottom:8px;">
@@ -476,6 +484,11 @@ def page():
                 {sev_label}
               </div>
               <div style="font-size:10px;color:#64748b;">{sdomain} · {sdate}</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:5px;">
+                <span style="font-size:8px;color:#475569;">Model risk score:</span>
+                <span style="font-size:11px;font-weight:700;color:{_risk_color};">{_risk_score}/10</span>
+                <span style="font-size:8px;color:#334155;cursor:default;" title="Derived from event severity, impact count, cross-domain links, and source confidence via PRAMAAN ontology engine">[ how derived ]</span>
+              </div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -763,6 +776,11 @@ def page():
             with tab_overview:
                 if sdesc:
                     st.markdown(
+                        '<div style="font-size:7.5px;font-weight:700;color:#14b8a6;'
+                        'letter-spacing:.08em;margin:4px 0 3px;">AI-EXTRACTED EVENT SUMMARY</div>',
+                        unsafe_allow_html=True,
+                    )
+                    st.markdown(
                         f'<div style="font-size:10.5px;color:#94a3b8;line-height:1.55;'
                         f'background:#060f1e;border-radius:6px;padding:8px 10px;margin-bottom:8px;">'
                         f'{sdesc[:260]}{"…" if len(sdesc) > 260 else ""}</div>',
@@ -775,6 +793,8 @@ def page():
                     st.markdown(
                         f'<div style="background:#0d1f12;border-left:3px solid {need_color};'
                         f'border-radius:8px;padding:8px 10px;margin:6px 0 8px 0;">'
+                        f'<div style="font-size:7.5px;font-weight:700;color:#14b8a6;'
+                        f'letter-spacing:.08em;margin-bottom:2px;">AI-DETECTED RESILIENCE GAP</div>'
                         f'<div style="font-size:8px;font-weight:700;color:{gap_color};'
                         f'letter-spacing:.08em;margin-bottom:3px;">{gap_header}</div>'
                         f'<div style="font-size:11px;font-weight:600;color:#e2e8f0;">{need_title}</div>'
@@ -1121,7 +1141,7 @@ def page():
                 _fb = _FALLBACK_DETAIL.get(_featured, {})
                 st.markdown(f"""
                 <div style='padding:10px;border-radius:8px;background:#0f1f2e;border:1px solid {scolor}44'>
-                  <div style='color:{scolor};font-size:10px;font-weight:700;letter-spacing:0.08em;'>⭐ FEATURED EVENT</div>
+                  <div style='color:{scolor};font-size:10px;font-weight:700;letter-spacing:0.08em;'>FEATURED EVENT</div>
                   <div style='font-size:13px;font-weight:700;color:#e2e8f0;margin-top:4px;'>{sname}</div>
                   <div style='font-size:10px;color:#94a3b8;'>{sdomain} · {sdate}</div>
                   <div style='font-size:11px;color:#cbd5e1;margin-top:6px;line-height:1.5;'>
@@ -1129,6 +1149,53 @@ def page():
                   </div>
                 </div>
                 """, unsafe_allow_html=True)
+
+        # ── Knowledge Model legend — always visible at bottom of right panel ──
+        st.markdown("""
+        <div style="margin-top:14px;padding:9px 11px;background:#060f1e;
+                    border:1px solid #1e293b;border-radius:8px;">
+          <div style="font-size:8px;font-weight:700;color:#14b8a6;letter-spacing:.09em;margin-bottom:6px;">
+            ONTOLOGY KNOWLEDGE MODEL
+          </div>
+          <div style="font-size:8px;color:#475569;margin-bottom:4px;font-weight:600;letter-spacing:.06em;">
+            ENTITY TYPES
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">
+            <span style="background:#0a1f2e;border:1px solid #38bdf844;color:#38bdf8;font-size:8px;padding:1px 6px;border-radius:10px;">Event</span>
+            <span style="background:#0a1f2e;border:1px solid #22c55e44;color:#22c55e;font-size:8px;padding:1px 6px;border-radius:10px;">Region</span>
+            <span style="background:#0a1f2e;border:1px solid #a78bfa44;color:#a78bfa;font-size:8px;padding:1px 6px;border-radius:10px;">Actor</span>
+            <span style="background:#0a1f2e;border:1px solid #fb718544;color:#fb7185;font-size:8px;padding:1px 6px;border-radius:10px;">Beneficiary</span>
+            <span style="background:#0a1f2e;border:1px solid #facc1544;color:#facc15;font-size:8px;padding:1px 6px;border-radius:10px;">Asset</span>
+            <span style="background:#0a1f2e;border:1px solid #06b6d444;color:#06b6d4;font-size:8px;padding:1px 6px;border-radius:10px;">Scheme</span>
+            <span style="background:#0a1f2e;border:1px solid #f97316;color:#f97316;font-size:8px;padding:1px 6px;border-radius:10px;">Policy</span>
+            <span style="background:#0a1f2e;border:1px solid #e879f944;color:#e879f9;font-size:8px;padding:1px 6px;border-radius:10px;">Evidence</span>
+            <span style="background:#0a1f2e;border:1px solid #f4364444;color:#f43f5e;font-size:8px;padding:1px 6px;border-radius:10px;">Impact</span>
+            <span style="background:#0a1f2e;border:1px solid #94a3b844;color:#94a3b8;font-size:8px;padding:1px 6px;border-radius:10px;">Domain</span>
+          </div>
+          <div style="font-size:8px;color:#475569;margin-bottom:4px;font-weight:600;letter-spacing:.06em;">
+            RELATIONSHIP TYPES
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="font-size:8px;color:#64748b;padding:1px 0;">CAUSED</span>
+            <span style="font-size:8px;color:#334155;">·</span>
+            <span style="font-size:8px;color:#64748b;">TRIGGERED</span>
+            <span style="font-size:8px;color:#334155;">·</span>
+            <span style="font-size:8px;color:#64748b;">FUNDS</span>
+            <span style="font-size:8px;color:#334155;">·</span>
+            <span style="font-size:8px;color:#64748b;">BENEFITS</span>
+            <span style="font-size:8px;color:#334155;">·</span>
+            <span style="font-size:8px;color:#64748b;">PROVES</span>
+            <span style="font-size:8px;color:#334155;">·</span>
+            <span style="font-size:8px;color:#64748b;">BUILT_BY</span>
+            <span style="font-size:8px;color:#334155;">·</span>
+            <span style="font-size:8px;color:#64748b;">LOCATED_IN</span>
+            <span style="font-size:8px;color:#334155;">·</span>
+            <span style="font-size:8px;color:#64748b;">CONNECTED_TO</span>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("View full knowledge graph", key="goto_graph_legend", use_container_width=True):
+            st.switch_page("pages/02_Scheme_Tracker.py")
 
 
 

@@ -33,10 +33,10 @@ BASE_URL: str = API_BASE_URL
 # 2. HTTP CLIENT / RETRY CONFIG
 # ─────────────────────────────────────────────────────────────────────────────
 
-API_RETRIES: int   = 3     # total attempts (1 original + 2 retries)
-API_DELAY:   float = 1.5   # seconds before 2nd attempt
-API_BACKOFF: float = 2.0   # multiplier: 1.5s → 3.0s → 6.0s
-API_TIMEOUT: int   = 10    # default request timeout in seconds (per attempt)
+API_RETRIES: int   = 1     # single attempt — backend is local, fail fast
+API_DELAY:   float = 0.0   # no sleep before retry
+API_BACKOFF: float = 1.0
+API_TIMEOUT: int   = 2     # 2s timeout per attempt (local backend responds in <100ms)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. GEOGRAPHY — OFFLINE FALLBACKS & STATIC GEO DATA

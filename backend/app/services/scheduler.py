@@ -30,7 +30,7 @@ from app.services.verification_agent import VerificationAgent
 log = logging.getLogger("pramaan.scheduler")
 
 # Project root (scheduler.py lives at backend/app/services/)
-_PROJECT_ROOT = Path(__file__).resolve().parents[4]
+_PROJECT_ROOT = Path(__file__).resolve().parents[3]
 _PIPELINE     = _PROJECT_ROOT / "data" / "scripts" / "pipeline.py"
 _PYTHON       = sys.executable
 
@@ -175,13 +175,26 @@ def job_news_refresh():
             if not articles:
                 continue
             total_art += len(articles)
+
+            # Filter to India-relevant articles across all 7 domains
+            relevant = []
+            for a in articles:
+                snippet = f"{a.get('title', '')} {a.get('summary', '')}"
+                scored  = ai_service.classify_content(text=snippet, topic=query)
+                if scored.get("relevant", False) and scored.get("confidence", 0) >= 0.4:
+                    relevant.append(a)
+            if not relevant:
+                log.info("[scheduler] query=%r — all articles filtered out", query)
+                continue
+
             combined  = "\n\n".join(
-                f"Headline: {a['title']}\nSummary: {a['summary']}" for a in articles
+                f"Headline: {a['title']}\nSummary: {a.get('summary', '')}" for a in relevant
             )
             extracted = ai_service.extract_ontology(combined, source_type="unstructured_rss")
             e, r = _ingest_extracted(extracted, source_type="unstructured_rss")
             total_ent += e
             total_rel += r
+            log.info("[scheduler] query=%r → %d/%d relevant → %d entities", query, len(relevant), len(articles), e)
         except Exception as exc:
             log.error("[scheduler] news_refresh query=%r error: %s", query, exc)
 
@@ -192,14 +205,26 @@ def job_news_refresh():
             if not articles:
                 continue
             total_art += len(articles)
+
+            # Filter to India-relevant articles across all 7 domains
+            relevant = []
+            for a in articles:
+                snippet = f"{a.get('title', '')} {a.get('summary', '')}"
+                scored  = ai_service.classify_content(text=snippet, topic=feed.get("name", ""))
+                if scored.get("relevant", False) and scored.get("confidence", 0) >= 0.4:
+                    relevant.append(a)
+            if not relevant:
+                log.info("[scheduler] RSS %r — all articles filtered out", feed.get("name"))
+                continue
+
             combined  = "\n\n".join(
-                f"Headline: {a['title']}\nSummary: {a.get('summary','')}" for a in articles
+                f"Headline: {a['title']}\nSummary: {a.get('summary', '')}" for a in relevant
             )
             extracted = ai_service.extract_ontology(combined, source_type="unstructured_rss")
             e, r = _ingest_extracted(extracted, source_type="unstructured_rss")
             total_ent += e
             total_rel += r
-            log.info("[scheduler] RSS %r → %d entities", feed["name"], e)
+            log.info("[scheduler] RSS %r → %d/%d relevant → %d entities", feed["name"], len(relevant), len(articles), e)
         except Exception as exc:
             log.error("[scheduler] RSS feed=%r error: %s", feed.get("name"), exc)
 
@@ -248,11 +273,11 @@ def start_scheduler():
     """Register jobs and start the scheduler. Call from FastAPI lifespan startup."""
     _scheduler.add_job(
         job_news_refresh,
-        trigger=IntervalTrigger(hours=6),
+        trigger=IntervalTrigger(hours=1),
         id="news_refresh",
         name="News scrape + auto-ingest",
         replace_existing=True,
-        misfire_grace_time=300,  # allow 5 min late start
+        misfire_grace_time=300,
     )
     _scheduler.add_job(
         job_govdata_refresh,
@@ -263,7 +288,7 @@ def start_scheduler():
         misfire_grace_time=600,
     )
     _scheduler.start()
-    log.info("[scheduler] started — news_refresh every 6h, govdata_refresh every 24h")
+    log.info("[scheduler] started — news_refresh every 1h, govdata_refresh every 24h")
 
 
 def stop_scheduler():
@@ -271,3 +296,25 @@ def stop_scheduler():
     if _scheduler.running:
         _scheduler.shutdown(wait=False)
         log.info("[scheduler] stopped")
+
+
+def set_news_refresh_interval(minutes: int) -> None:
+    """Reschedule news_refresh at a new interval (in minutes)."""
+    _scheduler.reschedule_job(
+        "news_refresh",
+        trigger=IntervalTrigger(minutes=minutes),
+    )
+    log.info("[scheduler] news_refresh rescheduled to every %d minutes", minutes)
+
+
+def get_scheduler_status() -> dict:
+    """Return current job schedules and next run times."""
+    jobs = {}
+    for job in _scheduler.get_jobs():
+        next_run = job.next_run_time
+        jobs[job.id] = {
+            "name":     job.name,
+            "next_run": next_run.isoformat() if next_run else None,
+            "trigger":  str(job.trigger),
+        }
+    return {"running": _scheduler.running, "jobs": jobs}

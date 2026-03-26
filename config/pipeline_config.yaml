@@ -185,6 +185,89 @@ rss_feeds:
     active: true
     verified: true
 
+  # ── Geopolitics & Global Events — India impact ────────────────────────
+  - name: "Google News - MEA India foreign policy"
+    url: "https://news.google.com/rss/search?q=MEA+India+foreign+policy+statement+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["mea", "geopolitics", "diplomacy", "event"]
+    active: true
+    verified: true
+    note: "MEA press releases, diplomatic statements, UNSC votes"
+
+  - name: "Google News - India MEA press release"
+    url: "https://news.google.com/rss/search?q=India+Ministry+External+Affairs+press+release+site:mea.gov.in&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["mea", "geopolitics", "diplomacy"]
+    active: true
+    verified: true
+
+  - name: "Google News - India oil energy PPAC petroleum"
+    url: "https://news.google.com/rss/search?q=India+crude+oil+petroleum+energy+price+PPAC+MoPNG+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["energy", "oil", "petroleum", "economics", "ppac"]
+    active: true
+    verified: true
+    note: "PPAC data, MoPNG press releases, fuel price changes, SPR status"
+
+  - name: "Google News - India Iran war impact"
+    url: "https://news.google.com/rss/search?q=India+Iran+war+impact+oil+economy+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["iran", "war", "geopolitics", "oil", "economics", "event"]
+    active: true
+    verified: true
+    note: "Iran-America war impact on India — oil, trade, diaspora, diplomacy"
+
+  - name: "Google News - Hormuz blockade India"
+    url: "https://news.google.com/rss/search?q=Strait+Hormuz+blockade+India+oil+LNG+supply+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["hormuz", "iran", "oil", "energy", "geopolitics", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - India UNSC vote UN statement"
+    url: "https://news.google.com/rss/search?q=India+UNSC+United+Nations+vote+statement+abstain+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["unsc", "un", "geopolitics", "diplomacy", "mea"]
+    active: true
+    verified: true
+
+  - name: "Google News - India Israel conflict impact"
+    url: "https://news.google.com/rss/search?q=India+Israel+conflict+Middle+East+impact+trade+diaspora+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["israel", "middleeast", "geopolitics", "trade", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - India nationals evacuation abroad"
+    url: "https://news.google.com/rss/search?q=India+nationals+evacuation+MEA+consular+abroad+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["mea", "evacuation", "diaspora", "geopolitics"]
+    active: true
+    verified: true
+    note: "Indian nationals evacuated from conflict zones — MEA consular operations"
+
+  - name: "Google News - India RBI forex monetary"
+    url: "https://news.google.com/rss/search?q=RBI+India+rupee+forex+monetary+policy+rate+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["rbi", "forex", "rupee", "economics", "monetary"]
+    active: true
+    verified: true
+
+  - name: "Google News - India defense security border"
+    url: "https://news.google.com/rss/search?q=India+defense+army+LOC+border+security+operation+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["defense", "army", "border", "security", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - India Pakistan ceasefire Operation Sindoor"
+    url: "https://news.google.com/rss/search?q=India+Pakistan+ceasefire+Operation+Sindoor+LOC+2025&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["pakistan", "defense", "geopolitics", "ceasefire", "event"]
+    active: true
+    verified: true
+
+  - name: "Google News - India trade FDI global"
+    url: "https://news.google.com/rss/search?q=India+FDI+trade+export+import+global+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["fdi", "trade", "economics", "global"]
+    active: true
+    verified: true
+
+  - name: "Google News - India semiconductor PLI technology"
+    url: "https://news.google.com/rss/search?q=India+semiconductor+PLI+technology+chip+manufacturing+2025+2026&hl=en-IN&gl=IN&ceid=IN:en"
+    tags: ["semiconductor", "pli", "technology", "economics"]
+    active: true
+    verified: true
+
   # ── Dead feeds — kept for reference, do not activate ──────────────────
   - name: "PIB Urban Development (DEAD - 301 redirect)"
     url: "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3"
@@ -336,6 +419,13 @@ news_query_templates:
   - "India disaster flood cyclone relief 2025"
   - "NDRF NDMA {state} rescue relief 2025"
   - "India national policy announcement governance 2025"
+  # Geopolitics & global impact on India
+  - "India MEA foreign policy statement 2026"
+  - "India crude oil energy shock impact 2026"
+  - "India Iran war Hormuz oil supply 2026"
+  - "India UNSC vote Middle East conflict 2026"
+  - "India nationals evacuation abroad MEA 2026"
+  - "India rupee forex RBI global shock 2026"
   - "ISRO India space mission 2025"
   - "India economy GDP trade deal 2025"
 

@@ -15,6 +15,9 @@ PAGES = [
 ]
 
 _HIDE_SIDEBAR = """
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
 <style>
   [data-testid="stSidebar"]        { display: none !important; }
   [data-testid="collapsedControl"] { display: none !important; }
@@ -40,16 +43,19 @@ _TRYMINDS_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "..", "Tryminds_logo.jpeg")
 )
 
-
-def _tryminds_img_tag() -> str:
-    if not os.path.exists(_TRYMINDS_PATH):
+# Read once at module load — avoids file I/O on every render
+def _load_img_tag(path: str, mime: str = "image/jpeg", alt: str = "", style: str = "") -> str:
+    if not os.path.exists(path):
         return ""
-    with open(_TRYMINDS_PATH, "rb") as f:
+    with open(path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
-    return (
-        f'<img src="data:image/jpeg;base64,{b64}" alt="Tryminds" '
-        f'style="height:32px;width:auto;object-fit:contain;border-radius:6px;opacity:0.9;">'
-    )
+    return f'<img src="data:{mime};base64,{b64}" alt="{alt}" style="{style}">'
+
+_TRYMINDS_IMG_TAG: str = _load_img_tag(
+    _TRYMINDS_PATH,
+    alt="Tryminds",
+    style="height:32px;width:auto;object-fit:contain;border-radius:6px;opacity:0.9;",
+)
 
 
 def render_topnav(active_page: str | None = None, show_sidebar: bool = False) -> None:
@@ -81,7 +87,6 @@ def render_topnav(active_page: str | None = None, show_sidebar: bool = False) ->
         )
 
     st.markdown(f"""
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
     <style>
       @keyframes navShine {{
         0%   {{ background-position: 200% center; }}
@@ -111,7 +116,7 @@ def render_topnav(active_page: str | None = None, show_sidebar: bool = False) ->
     <div class="pramaan-nav">
       <a href="/" target="_self" class="pramaan-nav-brand">PRAMAAN</a>
       <div class="pramaan-nav-links">{links_html}</div>
-      <div class="pramaan-nav-right">{_tryminds_img_tag()}</div>
+      <div class="pramaan-nav-right">{_TRYMINDS_IMG_TAG}</div>
     </div>
     """, unsafe_allow_html=True)
 
