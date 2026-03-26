@@ -13,6 +13,7 @@ import requests as _req
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 from components.topnav import render_topnav
+from components.ontology_model import render_ontology_model
 from utils.api import safe_get
 
 BACKEND = "http://localhost:8000"
@@ -195,43 +196,38 @@ def page():
     _IST = _dt.timezone(_dt.timedelta(hours=5, minutes=30))
     sync_ts = _dt.datetime.now(_IST).strftime("%H:%M:%S IST")
     view_link = (
-        '<a href="/Scheme_Tracker" target="_self" '
+        '<a href="/Decision_Engine" target="_self" '
         'style="font-size:9px;color:#38bdf8;text-decoration:none;margin-left:6px;">'
         'View graph</a>'
     )
 
-    _stat_col, _feed_col = st.columns([1.3, 1], gap="large")
-    with _stat_col:
-        st.markdown(
-            f'<div style="display:flex;gap:0;background:#060f1e;border:1px solid #1e293b;'
-            f'border-radius:8px;padding:6px 12px;margin-bottom:4px;">'
-            # Nodes
-            f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding-right:12px;">'
-            f'<div style="font-size:1.4em;font-weight:800;color:#a78bfa;">{total_nodes}</div>'
-            f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Nodes</div>'
-            f'<div style="margin-top:1px;">{_delta(total_nodes,"nodes")}{view_link}</div>'
-            f'</div>'
-            # Edges
-            f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding:0 12px;">'
-            f'<div style="font-size:1.4em;font-weight:800;color:#38bdf8;">{total_edges}</div>'
-            f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Edges</div>'
-            f'<div style="margin-top:1px;">{_delta(total_edges,"edges")}</div>'
-            f'</div>'
-            # Events
-            f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding:0 12px;">'
-            f'<div style="font-size:1.4em;font-weight:800;color:#f97316;">{events}</div>'
-            f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Events</div>'
-            f'<div style="margin-top:1px;">{_delta(events,"events")}</div>'
-            f'</div>'
-            # Evidence
-            f'<div style="flex:1;text-align:center;padding-left:12px;">'
-            f'<div style="font-size:1.4em;font-weight:800;color:#22c55e;">{evidence}</div>'
-            f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Evidence</div>'
-            f'<div style="margin-top:1px;font-size:8px;color:#334155;">synced {sync_ts}</div>'
-            f'</div>'
-            f'</div>',
-            unsafe_allow_html=True,
-        )
+    # ── Stats bar — full width, compact single row ──────────────────────────────
+    st.markdown(
+        f'<div style="display:flex;gap:0;background:#060f1e;border:1px solid #1e293b;'
+        f'border-radius:8px;padding:6px 12px;margin-bottom:8px;">'
+        f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding-right:12px;">'
+        f'<div style="font-size:1.4em;font-weight:800;color:#a78bfa;">{total_nodes}</div>'
+        f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Nodes</div>'
+        f'<div style="margin-top:1px;">{_delta(total_nodes,"nodes")}{view_link}</div>'
+        f'</div>'
+        f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding:0 12px;">'
+        f'<div style="font-size:1.4em;font-weight:800;color:#38bdf8;">{total_edges}</div>'
+        f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Edges</div>'
+        f'<div style="margin-top:1px;">{_delta(total_edges,"edges")}</div>'
+        f'</div>'
+        f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding:0 12px;">'
+        f'<div style="font-size:1.4em;font-weight:800;color:#f97316;">{events}</div>'
+        f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Events</div>'
+        f'<div style="margin-top:1px;">{_delta(events,"events")}</div>'
+        f'</div>'
+        f'<div style="flex:1;text-align:center;padding-left:12px;">'
+        f'<div style="font-size:1.4em;font-weight:800;color:#22c55e;">{evidence}</div>'
+        f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Evidence</div>'
+        f'<div style="margin-top:1px;font-size:8px;color:#334155;">synced {sync_ts}</div>'
+        f'</div>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
 
     # ── Main layout ─────────────────────────────────────────────────────────────
     left_col, right_col = st.columns([1.3, 1], gap="large")
@@ -419,8 +415,8 @@ def page():
             unsafe_allow_html=True,
         )
 
-    # ── Feed moved up — renders alongside the graph status bar ─────────────────
-    with _feed_col:
+    # ── Right: Feed + LLM status ───────────────────────────────────────────────
+    with right_col:
         _section("Recent Ingestion Feed")
         live_data  = _get_recent_nodes()
         live_nodes = live_data.get("nodes", [])
@@ -448,8 +444,7 @@ def page():
                     unsafe_allow_html=True,
                 )
 
-    # ── Right: LLM status ──────────────────────────────────────────────────────
-    with right_col:
+        st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
         _section("LLM Chain Status")
 
         ollama_ok = False
@@ -498,5 +493,8 @@ def page():
             unsafe_allow_html=True,
         )
 
+
+
+    render_ontology_model()
 
 page()

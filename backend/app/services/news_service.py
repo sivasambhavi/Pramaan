@@ -37,41 +37,69 @@ class NewsService:
             print(f"[NewsService] fetch_rss error for {url}: {exc}")
             return []
 
+    # Keywords that indicate a topic is already India-centric
+    _INDIA_KEYWORDS = {
+        "india", "indian", "pib", "isro", "ndma", "modi", "jaishankar",
+        "delhi", "mumbai", "kashmir", "sindoor", "pahalgam", "rupee", "sensex",
+    }
+
+    @staticmethod
+    def _is_india_topic(query: str) -> bool:
+        words = {w.lower() for w in query.split()}
+        return bool(words & NewsService._INDIA_KEYWORDS)
+
     @staticmethod
     def fetch_google_news(query: str) -> List[Dict]:
         """
         Fetch Google News RSS for a query string.
-        Called by /scrape/news endpoint.
-        Results are filtered to allowed source domains (v1 whitelist).
+        Called by agentic agent. Uses open queries (no forced India) so breaking
+        international events (e.g. Iran navy chief killed) are also captured.
         """
-        return NewsService.scrape_news_for_event(event_name=query)
+        return NewsService.scrape_news_for_event(event_name=query, force_india=False)
 
     @staticmethod
     def scrape_news_for_event(
         event_name: str,
         domain: str = "",
         max_results: int = 5,
+        force_india: bool = True,
     ) -> List[Dict]:
         """
         Scrape Google News RSS for a national intelligence event.
         Tries queries from specific → broad. Filters results to allowed source domains.
 
         Args:
-            event_name: Human-readable event name (e.g. "Chandrayaan-3 Moon Landing")
-            domain:     Optional domain context (e.g. "Technology", "Climate")
-            max_results: Max articles to return
+            event_name:   Human-readable event name
+            domain:       Optional domain context
+            max_results:  Max articles to return
+            force_india:  If False, lead with open query (no India bias) so
+                          breaking international events are captured first.
         """
         event_clean = event_name.strip()
+        india_topic = NewsService._is_india_topic(event_clean)
 
-        # Build query tiers: specific first, broader fallback
-        queries = [
-            f'"{event_clean}" India site:pib.gov.in OR site:ndma.gov.in OR site:isro.gov.in OR site:imd.gov.in',
-            f'"{event_clean}" India official government',
-            f'{event_clean} India {domain}'.strip(),
-        ]
+        if force_india or india_topic:
+            # India-centric topic — official sources first
+            queries = [
+                f'"{event_clean}" India site:pib.gov.in OR site:ndma.gov.in OR site:isro.gov.in OR site:imd.gov.in',
+                f'"{event_clean}" India official government',
+                f'{event_clean} India {domain}'.strip(),
+                event_clean,                          # bare fallback — no India filter
+            ]
+        else:
+            # International / breaking news — raw query first, India angle as fallback
+            queries = [
+                event_clean,                          # exact raw query — gets breaking news
+                f'{event_clean} latest news',
+                f'{event_clean} India impact',        # India strategic angle
+                f'{event_clean} India {domain}'.strip(),
+            ]
 
         check_words = {w.lower() for w in event_clean.split() if len(w) > 3}
-        stop_words  = {"india", "2023", "2024", "2021", "2019", "the", "and", "for"}
+        stop_words  = {
+            "india", "2020", "2021", "2022", "2023", "2024", "2025", "2026",
+            "the", "and", "for", "news", "latest",
+        }
         check_words -= stop_words
 
         print(f"[NewsService] Scraping for event: {event_clean} | domain: {domain}")

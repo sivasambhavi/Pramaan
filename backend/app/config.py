@@ -28,6 +28,7 @@ settings = Settings()
 # v1: Minimal high-signal official Indian government sources.
 # Covers all 7 domains: Climate, Defense, Economics, Society, Governance, Geopolitics, Technology.
 ALLOWED_SOURCE_DOMAINS_V1: set[str] = {
+    # ── Indian government / official ──────────────────────────────────────────
     "pib.gov.in",           # Press Information Bureau — all press releases (all domains)
     "ndma.gov.in",          # NDMA — disaster policies, advisories, situation reports (Climate)
     "mausam.imd.gov.in",    # IMD operational — cyclone/weather products (Climate)
@@ -36,6 +37,23 @@ ALLOWED_SOURCE_DOMAINS_V1: set[str] = {
     "nrsc.gov.in",          # NRSC/NDEM — satellite disaster imagery (Climate, Governance)
     "ndrf.gov.in",          # NDRF — deployment orders, situation notes (Society, Governance)
     "ndap.niti.gov.in",     # NDAP — cross-sector datasets for India (Economics, Society, Tech)
+    "mea.gov.in",           # Ministry of External Affairs — diplomacy, geopolitics
+    "mod.gov.in",           # Ministry of Defence
+    "rbi.org.in",           # Reserve Bank of India — monetary policy, economics
+    "sebi.gov.in",          # SEBI — markets
+    # ── Indian news agencies ──────────────────────────────────────────────────
+    "pti.in",               # Press Trust of India — primary wire
+    "ani.in",               # Asian News International — defense/geopolitics wire
+    "thehindu.com",         # The Hindu — authoritative Indian broadsheet
+    "hindustantimes.com",   # Hindustan Times
+    "indiatoday.in",        # India Today
+    "ndtv.com",             # NDTV
+    # ── International wire services (for geopolitics / breaking global news) ──
+    "reuters.com",          # Reuters — primary international wire
+    "apnews.com",           # AP — breaking international events
+    "bbc.com",              # BBC — international breaking news
+    "aljazeera.com",        # Al Jazeera — Middle East / Iran coverage
+    "theguardian.com",      # The Guardian
 }
 
 # v2: Extended whitelist — add via env var, no code change needed.

@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 from utils.api import safe_get
 from utils.events import EVENTS, N_EVENTS as _N_EVENTS, render_event_dropdown
 from components.topnav import render_topnav
+from components.ontology_model import render_ontology_model
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "../..", ".env"))
 
@@ -1578,5 +1579,8 @@ def _render_photo_evidence(event_id: str, color: str):
 
     st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
+
+
+    render_ontology_model()
 
 page()

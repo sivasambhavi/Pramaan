@@ -16,6 +16,7 @@ from streamlit_folium import st_folium
 from utils.api import safe_get
 from utils.events import MAP_EVENTS as EVENT_META, EVENTS as _EVENTS_FULL, N_EVENTS, render_event_dropdown
 from components.topnav import render_topnav
+from components.ontology_model import render_ontology_model
 
 DOMAIN_ORDER = ["Climate", "Defense", "Economics", "Society", "Governance", "Geopolitics", "Technology"]
 
@@ -840,7 +841,7 @@ def page():
                     # Escalation Chain
                     chain = ESCALATION_CHAIN.get(sel)
                     if chain:
-                        st.markdown('<div style="font-size:8px;font-weight:700;color:#f97316;letter-spacing:.08em;margin:4px 0 6px;">⚡ ESCALATION CHAIN</div>', unsafe_allow_html=True)
+                        st.markdown('<div style="font-size:8px;font-weight:700;color:#f97316;letter-spacing:.08em;margin:4px 0 6px;">ESCALATION CHAIN</div>', unsafe_allow_html=True)
                         for dt, stage, desc in chain:
                             st.markdown(
                                 f'<div style="display:flex;gap:6px;margin-bottom:5px;">'
@@ -853,7 +854,7 @@ def page():
                     # Forces Deployed
                     forces = FORCES_DEPLOYED.get(sel)
                     if forces:
-                        st.markdown('<div style="font-size:8px;font-weight:700;color:#ef4444;letter-spacing:.08em;margin:8px 0 4px;">🪖 FORCES DEPLOYED</div>', unsafe_allow_html=True)
+                        st.markdown('<div style="font-size:8px;font-weight:700;color:#ef4444;letter-spacing:.08em;margin:8px 0 4px;">FORCES DEPLOYED</div>', unsafe_allow_html=True)
                         for service, asset, role in forces:
                             st.markdown(
                                 f'<div style="background:#1a0a0a;border:1px solid #ef444430;border-radius:5px;'
@@ -867,7 +868,7 @@ def page():
                     # Diplomatic Response
                     diplo = DIPLOMATIC_RESPONSE.get(sel)
                     if diplo:
-                        st.markdown('<div style="font-size:8px;font-weight:700;color:#a78bfa;letter-spacing:.08em;margin:8px 0 4px;">🌐 DIPLOMATIC RESPONSE</div>', unsafe_allow_html=True)
+                        st.markdown('<div style="font-size:8px;font-weight:700;color:#a78bfa;letter-spacing:.08em;margin:8px 0 4px;">DIPLOMATIC RESPONSE</div>', unsafe_allow_html=True)
                         for actor, action in diplo:
                             st.markdown(
                                 f'<div style="border-left:2px solid #a78bfa44;padding:3px 0 3px 8px;margin-bottom:3px;">'
@@ -881,7 +882,7 @@ def page():
                     if t1_schemes:
                         st.markdown(
                             '<div style="font-size:8px;font-weight:700;color:#f97316;'
-                            'letter-spacing:.08em;margin:8px 0 4px;">🚨 OPERATIONAL RESPONSE</div>',
+                            'letter-spacing:.08em;margin:8px 0 4px;">OPERATIONAL RESPONSE</div>',
                             unsafe_allow_html=True,
                         )
                         for sname_t, sbudget_t, sministry_t in t1_schemes:
@@ -903,7 +904,7 @@ def page():
                         assess_label = {"adequate": "✓ ADEQUATE", "partial": "⚠ PARTIAL", "gap": "✗ FAILED"}.get(assessment, assessment)
                         st.markdown(
                             f'<div style="background:#0a1a0a;border:1px solid #22c55e33;border-radius:8px;padding:8px 10px;margin:6px 0;">'
-                            f'<div style="font-size:8px;font-weight:700;color:#22c55e;letter-spacing:.08em;margin-bottom:5px;">🌦 IMD ALERT AUDIT</div>'
+                            f'<div style="font-size:8px;font-weight:700;color:#22c55e;letter-spacing:.08em;margin-bottom:5px;">IMD ALERT AUDIT</div>'
                             f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:9px;">'
                             f'<div><span style="color:#475569;">Alert issued:</span> <span style="color:#e2e8f0;">{alert_issued}</span></div>'
                             f'<div><span style="color:#475569;">Actual level:</span> <span style="color:#e2e8f0;">{actual_level}</span></div>'
@@ -920,7 +921,7 @@ def page():
                         teams, timing, outcome, note = ndrf
                         st.markdown(
                             f'<div style="background:#0a1628;border:1px solid #38bdf833;border-radius:8px;padding:8px 10px;margin:6px 0;">'
-                            f'<div style="font-size:8px;font-weight:700;color:#38bdf8;letter-spacing:.08em;margin-bottom:5px;">🚁 NDRF RESPONSE</div>'
+                            f'<div style="font-size:8px;font-weight:700;color:#38bdf8;letter-spacing:.08em;margin-bottom:5px;">NDRF RESPONSE</div>'
                             f'<div style="font-size:9px;color:#94a3b8;display:flex;flex-direction:column;gap:2px;">'
                             f'<div><span style="color:#475569;">Teams:</span> {teams}</div>'
                             f'<div><span style="color:#475569;">Deployed:</span> {timing}</div>'
@@ -935,7 +936,7 @@ def page():
                         elapsed, status1, status2, rcolor = recon
                         st.markdown(
                             f'<div style="background:#0a1628;border-left:3px solid {rcolor};border-radius:6px;padding:7px 10px;margin:6px 0;">'
-                            f'<div style="font-size:8px;font-weight:700;color:{rcolor};letter-spacing:.08em;margin-bottom:4px;">🔧 RECONSTRUCTION STATUS ({elapsed})</div>'
+                            f'<div style="font-size:8px;font-weight:700;color:{rcolor};letter-spacing:.08em;margin-bottom:4px;">RECONSTRUCTION STATUS ({elapsed})</div>'
                             f'<div style="font-size:9px;color:#94a3b8;">• {status1}</div>'
                             f'<div style="font-size:9px;color:#94a3b8;margin-top:2px;">• {status2}</div>'
                             f'</div>',
@@ -946,7 +947,7 @@ def page():
                     if t1_schemes:
                         st.markdown(
                             '<div style="font-size:8px;font-weight:700;color:#f97316;'
-                            'letter-spacing:.08em;margin:8px 0 4px;">🚨 DISASTER RESPONSE</div>',
+                            'letter-spacing:.08em;margin:8px 0 4px;">DISASTER RESPONSE</div>',
                             unsafe_allow_html=True,
                         )
                         for sname_t, sbudget_t, sministry_t in t1_schemes:
@@ -968,7 +969,7 @@ def page():
                         b_color = "#ef4444" if "+" in bond else "#22c55e"
                         st.markdown(
                             f'<div style="background:#0a1628;border:1px solid #38bdf833;border-radius:8px;padding:8px 10px;margin:6px 0;">'
-                            f'<div style="font-size:8px;font-weight:700;color:#38bdf8;letter-spacing:.08em;margin-bottom:6px;">📊 MARKET REACTION (EVENT DAY)</div>'
+                            f'<div style="font-size:8px;font-weight:700;color:#38bdf8;letter-spacing:.08em;margin-bottom:6px;">MARKET REACTION (EVENT DAY)</div>'
                             f'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:5px;">'
                             f'<div style="text-align:center;"><div style="font-size:14px;font-weight:800;color:{s_color};">{sensex}</div><div style="font-size:8px;color:#475569;">SENSEX</div></div>'
                             f'<div style="text-align:center;"><div style="font-size:14px;font-weight:800;color:{b_color};">{bond}</div><div style="font-size:8px;color:#475569;">10Y BOND</div></div>'
@@ -981,7 +982,7 @@ def page():
                     # Sector Impact
                     sectors = SECTOR_IMPACT.get(sel)
                     if sectors:
-                        st.markdown('<div style="font-size:8px;font-weight:700;color:#38bdf8;letter-spacing:.08em;margin:8px 0 4px;">📈 SECTOR IMPACT</div>', unsafe_allow_html=True)
+                        st.markdown('<div style="font-size:8px;font-weight:700;color:#38bdf8;letter-spacing:.08em;margin:8px 0 4px;">SECTOR IMPACT</div>', unsafe_allow_html=True)
                         for sector, direction, detail in sectors:
                             dir_color = "#22c55e" if "↑" in direction else "#ef4444"
                             st.markdown(
@@ -998,7 +999,7 @@ def page():
                     # Mission Parameters
                     params = MISSION_PARAMS.get(sel)
                     if params:
-                        st.markdown('<div style="font-size:8px;font-weight:700;color:#facc15;letter-spacing:.08em;margin:8px 0 4px;">🛰 MISSION PARAMETERS</div>', unsafe_allow_html=True)
+                        st.markdown('<div style="font-size:8px;font-weight:700;color:#facc15;letter-spacing:.08em;margin:8px 0 4px;">MISSION PARAMETERS</div>', unsafe_allow_html=True)
                         for param, value, note in params:
                             st.markdown(
                                 f'<div style="border-left:2px solid #facc1544;padding:3px 0 3px 8px;margin-bottom:3px;">'
@@ -1014,7 +1015,7 @@ def page():
                         domain_r, position, milestone, context = ranking
                         st.markdown(
                             f'<div style="background:#0f1a0a;border:1px solid #facc1544;border-radius:8px;padding:8px 10px;margin:6px 0;">'
-                            f'<div style="font-size:8px;font-weight:700;color:#facc15;letter-spacing:.08em;margin-bottom:4px;">🏆 INDIA GLOBAL STANDING</div>'
+                            f'<div style="font-size:8px;font-weight:700;color:#facc15;letter-spacing:.08em;margin-bottom:4px;">INDIA GLOBAL STANDING</div>'
                             f'<div style="font-size:12px;font-weight:800;color:#fef08a;">{position}</div>'
                             f'<div style="font-size:9.5px;color:#94a3b8;margin-top:2px;">{milestone}</div>'
                             f'<div style="font-size:8.5px;color:#475569;margin-top:3px;">{context}</div>'
@@ -1026,7 +1027,7 @@ def page():
                     # Diplomatic Response
                     diplo = DIPLOMATIC_RESPONSE.get(sel)
                     if diplo:
-                        st.markdown('<div style="font-size:8px;font-weight:700;color:#a78bfa;letter-spacing:.08em;margin:8px 0 4px;">🌐 DIPLOMATIC RESPONSE</div>', unsafe_allow_html=True)
+                        st.markdown('<div style="font-size:8px;font-weight:700;color:#a78bfa;letter-spacing:.08em;margin:8px 0 4px;">DIPLOMATIC RESPONSE</div>', unsafe_allow_html=True)
                         for actor, action in diplo:
                             st.markdown(
                                 f'<div style="border-left:2px solid #a78bfa44;padding:3px 0 3px 8px;margin-bottom:3px;">'
@@ -1043,7 +1044,7 @@ def page():
                         status, effective, adoption, enforcement = pol
                         st.markdown(
                             f'<div style="background:#0a1628;border:1px solid #06b6d433;border-radius:8px;padding:8px 10px;margin:6px 0;">'
-                            f'<div style="font-size:8px;font-weight:700;color:#06b6d4;letter-spacing:.08em;margin-bottom:5px;">📋 POLICY STATUS</div>'
+                            f'<div style="font-size:8px;font-weight:700;color:#06b6d4;letter-spacing:.08em;margin-bottom:5px;">POLICY STATUS</div>'
                             f'<div style="font-size:9px;color:#94a3b8;display:flex;flex-direction:column;gap:3px;">'
                             f'<div><span style="color:#475569;">Status:</span> <span style="color:#22c55e;font-weight:600;">{status}</span></div>'
                             f'<div><span style="color:#475569;">Effective:</span> {effective}</div>'
@@ -1074,7 +1075,7 @@ def page():
                     if t1_schemes:
                         st.markdown(
                             '<div style="font-size:8px;font-weight:700;color:#f97316;'
-                            'letter-spacing:.08em;margin:8px 0 4px;">🚨 EMERGENCY RESPONSE</div>',
+                            'letter-spacing:.08em;margin:8px 0 4px;">EMERGENCY RESPONSE</div>',
                             unsafe_allow_html=True,
                         )
                         for sname_t, sbudget_t, sministry_t in t1_schemes:
@@ -1109,7 +1110,7 @@ def page():
                 if watch:
                     st.markdown(
                         '<div style="font-size:8px;font-weight:700;color:#f59e0b;'
-                        'letter-spacing:.08em;margin-bottom:6px;">👁 WATCH POINTS</div>',
+                        'letter-spacing:.08em;margin-bottom:6px;">WATCH POINTS</div>',
                         unsafe_allow_html=True,
                     )
                     for wp in watch:
@@ -1125,10 +1126,10 @@ def page():
                     )
 
             st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
-            if st.button("Scheme Tracker →", key=f"goto_graph_{sel}",
+            if st.button("Decision Engine →", key=f"goto_graph_{sel}",
                          use_container_width=True, type="primary"):
                 st.session_state["deep_link_event"] = sel
-                st.switch_page("pages/02_Scheme_Tracker.py")
+                st.switch_page("pages/02_Decision_Engine.py")
             st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
             if st.button("Proof & Evidence →", key=f"goto_proof_{sel}",
                          use_container_width=True):
@@ -1150,53 +1151,7 @@ def page():
                 </div>
                 """, unsafe_allow_html=True)
 
-        # ── Knowledge Model legend — always visible at bottom of right panel ──
-        st.markdown("""
-        <div style="margin-top:14px;padding:9px 11px;background:#060f1e;
-                    border:1px solid #1e293b;border-radius:8px;">
-          <div style="font-size:8px;font-weight:700;color:#14b8a6;letter-spacing:.09em;margin-bottom:6px;">
-            ONTOLOGY KNOWLEDGE MODEL
-          </div>
-          <div style="font-size:8px;color:#475569;margin-bottom:4px;font-weight:600;letter-spacing:.06em;">
-            ENTITY TYPES
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">
-            <span style="background:#0a1f2e;border:1px solid #38bdf844;color:#38bdf8;font-size:8px;padding:1px 6px;border-radius:10px;">Event</span>
-            <span style="background:#0a1f2e;border:1px solid #22c55e44;color:#22c55e;font-size:8px;padding:1px 6px;border-radius:10px;">Region</span>
-            <span style="background:#0a1f2e;border:1px solid #a78bfa44;color:#a78bfa;font-size:8px;padding:1px 6px;border-radius:10px;">Actor</span>
-            <span style="background:#0a1f2e;border:1px solid #fb718544;color:#fb7185;font-size:8px;padding:1px 6px;border-radius:10px;">Beneficiary</span>
-            <span style="background:#0a1f2e;border:1px solid #facc1544;color:#facc15;font-size:8px;padding:1px 6px;border-radius:10px;">Asset</span>
-            <span style="background:#0a1f2e;border:1px solid #06b6d444;color:#06b6d4;font-size:8px;padding:1px 6px;border-radius:10px;">Scheme</span>
-            <span style="background:#0a1f2e;border:1px solid #f97316;color:#f97316;font-size:8px;padding:1px 6px;border-radius:10px;">Policy</span>
-            <span style="background:#0a1f2e;border:1px solid #e879f944;color:#e879f9;font-size:8px;padding:1px 6px;border-radius:10px;">Evidence</span>
-            <span style="background:#0a1f2e;border:1px solid #f4364444;color:#f43f5e;font-size:8px;padding:1px 6px;border-radius:10px;">Impact</span>
-            <span style="background:#0a1f2e;border:1px solid #94a3b844;color:#94a3b8;font-size:8px;padding:1px 6px;border-radius:10px;">Domain</span>
-          </div>
-          <div style="font-size:8px;color:#475569;margin-bottom:4px;font-weight:600;letter-spacing:.06em;">
-            RELATIONSHIP TYPES
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:4px;">
-            <span style="font-size:8px;color:#64748b;padding:1px 0;">CAUSED</span>
-            <span style="font-size:8px;color:#334155;">·</span>
-            <span style="font-size:8px;color:#64748b;">TRIGGERED</span>
-            <span style="font-size:8px;color:#334155;">·</span>
-            <span style="font-size:8px;color:#64748b;">FUNDS</span>
-            <span style="font-size:8px;color:#334155;">·</span>
-            <span style="font-size:8px;color:#64748b;">BENEFITS</span>
-            <span style="font-size:8px;color:#334155;">·</span>
-            <span style="font-size:8px;color:#64748b;">PROVES</span>
-            <span style="font-size:8px;color:#334155;">·</span>
-            <span style="font-size:8px;color:#64748b;">BUILT_BY</span>
-            <span style="font-size:8px;color:#334155;">·</span>
-            <span style="font-size:8px;color:#64748b;">LOCATED_IN</span>
-            <span style="font-size:8px;color:#334155;">·</span>
-            <span style="font-size:8px;color:#64748b;">CONNECTED_TO</span>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("View full knowledge graph", key="goto_graph_legend", use_container_width=True):
-            st.switch_page("pages/02_Scheme_Tracker.py")
-
 
 
 page()
+render_ontology_model()

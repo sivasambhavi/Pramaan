@@ -11,6 +11,7 @@ POST /ingest/agentic
   Returns full step trace + summary.
 """
 
+import re
 import logging
 import time
 from datetime import datetime, timezone
@@ -34,7 +35,80 @@ _ALLOWED_LABELS = {
     "Event", "Region", "Actor", "Scheme", "Policy",
     "Impact", "Evidence", "Asset", "Domain",
 }
-CONFIDENCE_THRESHOLD  = 0.6
+CONFIDENCE_THRESHOLD = 0.6
+
+# Domain property value → Neo4j domain_id
+_DOMAIN_ID_MAP = {
+    "DOM_GEOPOLITICS": "DOM_GEOPOLITICS",
+    "DOM_ECONOMICS":   "DOM_ECONOMICS",
+    "DOM_DEFENSE":     "DOM_DEFENSE",
+    "DOM_TECHNOLOGY":  "DOM_TECHNOLOGY",
+    "DOM_CLIMATE":     "DOM_CLIMATE",
+    "DOM_SOCIETY":     "DOM_SOCIETY",
+    "DOM_GOVERNANCE":  "DOM_GOVERNANCE",
+    # Also handle plain names in case LLM returns them
+    "Geopolitics": "DOM_GEOPOLITICS",
+    "Economics":   "DOM_ECONOMICS",
+    "Defense":     "DOM_DEFENSE",
+    "Technology":  "DOM_TECHNOLOGY",
+    "Climate":     "DOM_CLIMATE",
+    "Society":     "DOM_SOCIETY",
+    "Governance":  "DOM_GOVERNANCE",
+}
+
+# Keyword → region_id for auto OCCURRED_IN inference
+_KEYWORD_REGION: list[tuple[list[str], str]] = [
+    (["iran", "tehran", "irgc", "hormuz", "persian gulf"], "REG_IRAN"),
+    (["israel", "tel aviv", "idf", "gaza"],                "REG_ISRAEL"),
+    (["pakistan", "islamabad", "isi", "lahore"],           "REG_PAKISTAN"),
+    (["kashmir", "j&k", "jammu", "pok", "pojk", "loc"],   "REG_JK"),
+    (["wayanad", "kerala"],                                 "REG_KERALA"),
+    (["odisha", "cyclone dana", "puri"],                   "REG_ODISHA"),
+    (["manipur"],                                           "REG_MANIPUR"),
+    (["delhi", "yamuna", "shahdara"],                      "REG_DELHI"),
+    (["joshimath", "uttarakhand", "chamoli"],              "REG_UTTARAKHAND"),
+    (["uk", "britain", "london", "ceta"],                  "REG_UK"),
+    (["china", "beijing"],                                 "REG_CHINA") if False else ([], ""),  # placeholder
+    (["red sea", "bab el mandeb"],                         "REG_RED_SEA"),
+    (["west asia", "middle east"],                         "REG_WEST_ASIA"),
+    (["russia", "ukraine"],                                "REG_RUSSIA"),
+]
+# Remove empty placeholder
+_KEYWORD_REGION = [(kws, rid) for kws, rid in _KEYWORD_REGION if kws]
+
+
+def _infer_region(name: str, description: str = "") -> str:
+    """Infer best-fit region_id from event name/description keywords. Falls back to REG_INDIA."""
+    text = (name + " " + description).lower()
+    for keywords, region_id in _KEYWORD_REGION:
+        if any(kw in text for kw in keywords):
+            return region_id
+    return "REG_INDIA"
+
+
+def _is_duplicate_event(name: str, session) -> tuple[bool, str]:
+    """
+    Check if an Event with a similar name already exists in Neo4j.
+    Returns (is_duplicate, existing_event_id).
+    Matches if >= 3 significant words overlap (words > 3 chars).
+    """
+    stopwords = {"the", "and", "for", "with", "from", "that", "this", "india", "2025", "2026", "2024"}
+    new_words = {w for w in re.findall(r'\b\w{4,}\b', name.lower()) if w not in stopwords}
+    if not new_words:
+        return False, ""
+    existing = session.run(
+        "MATCH (n:Event) RETURN n.event_id AS id, n.name AS name"
+    ).data()
+    for row in existing:
+        existing_name = (row.get("name") or "").lower()
+        existing_words = {w for w in re.findall(r'\b\w{4,}\b', existing_name) if w not in stopwords}
+        overlap = new_words & existing_words
+        if len(overlap) >= 3:
+            return True, row.get("id", "")
+        # Also catch exact substring match (e.g. "Iran War" vs "Iran-US-Israel War")
+        if name.lower() in existing_name or existing_name in name.lower():
+            return True, row.get("id", "")
+    return False, ""
 
 
 class AgenticRequest(BaseModel):
@@ -167,6 +241,10 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
     from app.neo4j_client import get_session
     new_count = existing_count = conflict_count = 0
 
+    # Track which event_ids were ingested so we can auto-wire edges after
+    ingested_events: list[tuple[str, dict]] = []   # (canonical_id, props)
+    duplicates_skipped = 0
+
     try:
         with get_session() as session:
             for ent in entities:
@@ -182,12 +260,21 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                     entities_skipped += 1
                     continue
 
+                # Duplicate check for Events — skip if similar event already exists
+                if label == "Event":
+                    is_dup, dup_id = _is_duplicate_event(name, session)
+                    if is_dup:
+                        log.info("[agent] Duplicate event skipped: %r matches existing %s", name, dup_id)
+                        duplicates_skipped += 1
+                        entities_skipped += 1
+                        continue
+
                 canonical_id = resolve_entity_id(
                     raw_id=ent.get("id", ""), name=name, label=label, session=session
                 )
                 id_field = _LABEL_ID_FIELD.get(label, f"{label.lower()}_id")
 
-                # Check if exists
+                # Check if exists already
                 existing = session.run(
                     f"MATCH (n:{label} {{{id_field}: $id}}) RETURN n LIMIT 1",
                     id=canonical_id
@@ -195,8 +282,8 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
 
                 audit_props = {
                     **props,
-                    id_field:     canonical_id,
-                    "source":     "agentic_ingestion",
+                    id_field:      canonical_id,
+                    "source":      "agentic_ingestion",
                     "ingested_at": _now_iso(),
                 }
                 set_pairs = ", ".join(f"n.{k} = ${k}" for k, v in audit_props.items() if v is not None)
@@ -210,6 +297,8 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                         existing_count += 1
                     else:
                         new_count += 1
+                        if label == "Event":
+                            ingested_events.append((canonical_id, props))
 
                     # VerificationAgent
                     vr = VerificationAgent.verify(label, canonical_id, props, session)
@@ -218,7 +307,7 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                 else:
                     entities_skipped += 1
 
-            # Relations
+            # ── LLM-extracted relations ───────────────────────────────────────
             for rel in relations:
                 fl = rel.get("from_label",""); tl = rel.get("to_label","")
                 rt = rel.get("type","")
@@ -241,6 +330,52 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                 except Exception:
                     pass
 
+            # ── Auto full-ontology edges for newly ingested Events ────────────
+            # Collect event_ids that already have BELONGS_TO / OCCURRED_IN from LLM
+            llm_rel_set: set[tuple[str, str]] = set()
+            for rel in relations:
+                if rel.get("from_label") == "Event" and rel.get("type") in ("BELONGS_TO", "OCCURRED_IN"):
+                    llm_rel_set.add((rel.get("from_id",""), rel.get("type","")))
+
+            for evt_id, evt_props in ingested_events:
+                ts = _now_iso()
+
+                # BELONGS_TO → Domain
+                if (evt_id, "BELONGS_TO") not in llm_rel_set:
+                    domain_val = evt_props.get("domain", "")
+                    domain_id  = _DOMAIN_ID_MAP.get(domain_val, "DOM_GOVERNANCE")
+                    try:
+                        r = session.run("""
+                            MATCH (e:Event {event_id: $eid})
+                            MATCH (d:Domain {domain_id: $did})
+                            MERGE (e)-[r:BELONGS_TO]->(d)
+                            SET r.ingested_at = $ts
+                            RETURN r
+                        """, eid=evt_id, did=domain_id, ts=ts).single()
+                        if r:
+                            relations_created += 1
+                    except Exception as ex:
+                        log.warning("[agent] BELONGS_TO edge failed for %s: %s", evt_id, ex)
+
+                # OCCURRED_IN → Region
+                if (evt_id, "OCCURRED_IN") not in llm_rel_set:
+                    region_id = _infer_region(
+                        evt_props.get("name", ""),
+                        evt_props.get("description", ""),
+                    )
+                    try:
+                        r = session.run("""
+                            MATCH (e:Event {event_id: $eid})
+                            MATCH (rg:Region {region_id: $rid})
+                            MERGE (e)-[r:OCCURRED_IN]->(rg)
+                            SET r.ingested_at = $ts
+                            RETURN r
+                        """, eid=evt_id, rid=region_id, ts=ts).single()
+                        if r:
+                            relations_created += 1
+                    except Exception as ex:
+                        log.warning("[agent] OCCURRED_IN edge failed for %s: %s", evt_id, ex)
+
     except Exception as e:
         add("Graph Check", f"Neo4j error: {e}", "warn")
         return AgenticResponse(steps=steps, entities_created=entities_created,
@@ -249,9 +384,11 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                                duration_s=round(time.time()-t0, 2),
                                llm_used=llm_used, topic=req.topic)
 
+    dup_note = f" · {duplicates_skipped} duplicates blocked" if duplicates_skipped else ""
     add("Graph Check",
         f"{new_count} new nodes created · {existing_count} existing corroborated"
-        + (f" · {conflict_count} conflicts flagged" if conflict_count else ""),
+        + (f" · {conflict_count} conflicts flagged" if conflict_count else "")
+        + dup_note,
         "warn" if conflict_count else "ok")
 
     # ── Step 5: Relations ─────────────────────────────────────────────────────

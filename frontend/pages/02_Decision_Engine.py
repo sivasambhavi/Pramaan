@@ -1,6 +1,6 @@
 """
-02_Scheme_Tracker.py — PRAMAAN v5
-Scheme Tracker: interactive knowledge graph (streamlit-agraph), Type 1/2 scheme panels,
+02_Decision_Engine.py — PRAMAAN v5
+Decision Engine: interactive knowledge graph (streamlit-agraph), Type 1/2 scheme panels,
 cross-domain connections, node detail panel.
 """
 
@@ -15,6 +15,7 @@ from streamlit_agraph import agraph, Node, Edge, Config
 from utils.api import safe_get
 from utils.events import EVENTS_BY_ID, render_event_dropdown
 from components.topnav import render_topnav
+from components.ontology_model import render_ontology_model
 
 NODE_CONFIG = {
     "Event":    {"color": "#f97316", "size": 26, "shape": "dot",     "desc": "High-impact incidents"},
@@ -428,7 +429,7 @@ def _build_graph(graph_data: dict, filter_type: set | None = None, focus_ids: se
 
 
 def page():
-    st.set_page_config(page_title="Decision Engine (Scheme Tracker) – PRAMAAN", layout="wide")
+    st.set_page_config(page_title="Decision Engine – PRAMAAN", layout="wide")
     render_topnav(active_page="Decision Engine")
 
     st.markdown("""
@@ -447,6 +448,10 @@ def page():
     button[data-baseweb="tab"] { font-size: 11px !important; padding: 6px 12px !important; }
     div[data-baseweb="select"] * { font-size: 12px !important; }
     div[data-testid="stToggle"] label p { font-size: 10px !important; }
+    /* Compact node-type checkboxes */
+    div[data-testid="stCheckbox"] { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+    div[data-testid="stCheckbox"] label { min-height: 0 !important; padding: 2px 0 !important; }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stCheckbox"]) { gap: 2px !important; margin-bottom: 2px !important; }
     div[data-testid="stCheckbox"] label p { font-size: 11px !important; }
     </style>
     """, unsafe_allow_html=True)
@@ -476,11 +481,12 @@ def page():
         unsafe_allow_html=True,
     )
 
-    # ── Fetch ─────────────────────────────────────────────────────────────────
-    with st.spinner("Loading ontology graph..."):
-        graph_data = safe_get("/ontology/graph", timeout=20, silent=True)
-    if not graph_data:
-        graph_data = _FALLBACK_GRAPH
+    # ── Fetch (cached in session so node clicks don't trigger a reload) ────────
+    if "graph_data_cache" not in st.session_state:
+        with st.spinner("Loading ontology graph..."):
+            graph_data = safe_get("/ontology/graph", timeout=20, silent=True)
+        st.session_state.graph_data_cache = graph_data or _FALLBACK_GRAPH
+    graph_data = st.session_state.graph_data_cache
 
     stats       = graph_data.get("stats", {})
     total_nodes = stats.get("total_nodes", len(graph_data.get("nodes", [])))
@@ -504,8 +510,8 @@ def page():
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Top control row: event focus + toggles + reset ───────────────────────
-    ecol, tcol1, tcol2, rcol = st.columns([3, 0.8, 0.9, 0.7], gap="small")
+    # ── Top control row: event focus + refresh + reset ───────────────────────
+    ecol, rcol = st.columns([4, 1], gap="small")
     with ecol:
         render_event_dropdown("ontology_sel", "focus_select", include_all=True)
 
@@ -513,17 +519,12 @@ def page():
     _oid = st.session_state.get("ontology_sel")
     focus_event = f"Event_{_oid}" if _oid else None
 
-    with tcol1:
-        # Physics is now hardcoded for stabilization in Config
-        pass
-    with tcol2:
-        show_cross = st.toggle("Cross-links view", value=True, key="cross_links_tog",
-                               help="Show/hide inter-scheme dependency links.")
-        dynamic_layout = st.toggle("Adaptive Layout", value=False, key="dyn_layout_tog",
-                                  help="Enable live physics for the graph. If off, graph is stable.")
     with rcol:
+        if st.button("↺ Refresh", use_container_width=True):
+            st.session_state.pop("graph_data_cache", None)
+            st.rerun()
         if focus_event:
-            if st.button("Reset", use_container_width=True):
+            if st.button("✕ Reset", use_container_width=True):
                 st.session_state.ontology_sel = None
                 st.session_state.pop("focus_select", None)
                 st.rerun()
@@ -536,106 +537,47 @@ def page():
 
     # ══ LEFT — tabbed panel ═══════════════════════════════════════════════════
     with col_left:
-        tab1, tab2 = st.tabs(["Nodes", "Cross-Links"])
 
-        # ── Tab 1: Node Index (click to toggle type on/off) ──────────────────
-        with tab1:
-            # All-types counts
-            all_type_counts = {}
-            for n in graph_data.get("nodes", []):
-                t = n.get("type", "Event")
-                all_type_counts[t] = all_type_counts.get(t, 0) + 1
+        # ── Node type filter checkboxes ───────────────────────────────────────
+        all_type_counts = {}
+        for n in graph_data.get("nodes", []):
+            t = n.get("type", "Event")
+            all_type_counts[t] = all_type_counts.get(t, 0) + 1
 
-            sel_type = None
-            if st.session_state.graph_clicked:
-                nd = next((n for n in graph_data.get("nodes", [])
-                           if n["id"] == st.session_state.graph_clicked), None)
-                if nd:
-                    sel_type = nd.get("type")
+        sel_type = None
+        if st.session_state.graph_clicked:
+            nd = next((n for n in graph_data.get("nodes", [])
+                       if n["id"] == st.session_state.graph_clicked), None)
+            if nd:
+                sel_type = nd.get("type")
 
-            for ntype, cfg in NODE_CONFIG.items():
-                count     = all_type_counts.get(ntype, 0)
-                is_on     = ntype in st.session_state.active_types
-                shape_r   = "50%" if cfg["shape"] == "dot" else "3px"
-                dot_color  = cfg["color"] if is_on else "#334155"
-                name_color = cfg["color"] if is_on else "#475569"
-                bg         = "#1a2035" if ntype == sel_type else ("#111827" if is_on else "#0a0f1a")
-                border_c   = f'{cfg["color"]}88' if is_on else "#1e293b"
+        for ntype, cfg in NODE_CONFIG.items():
+            count    = all_type_counts.get(ntype, 0)
+            is_on    = ntype in st.session_state.active_types
+            color    = cfg["color"] if is_on else "#334155"
+            bg       = "#1a2035" if ntype == sel_type else ("#0d1117" if is_on else "#080d14")
+            border_c = f'{cfg["color"]}99' if is_on else "#1e293b"
 
-                card_col, tog_col = st.columns([5, 1], gap="small")
-                with card_col:
-                    st.markdown(
-                        f'<div style="border-left:3px solid {border_c};padding:7px 9px;'
-                        f'background:{bg};border-radius:4px;margin-bottom:4px;'
-                        f'border:1px solid rgba(71,85,105,0.15);border-left:3px solid {border_c};">'
-                        f'<div style="display:flex;align-items:center;gap:6px;">'
-                        f'<span style="width:8px;height:8px;border-radius:{shape_r};background:{dot_color};'
-                        f'flex-shrink:0;box-shadow:0 0 4px {dot_color}88;"></span>'
-                        f'<span style="font-size:11px;font-weight:600;color:{name_color};">{ntype}</span>'
-                        f'<span style="font-size:10px;color:#334155;margin-left:auto;">{count}</span>'
-                        f'</div>'
-                        f'<div style="font-size:10px;color:{"#475569" if is_on else "#1e293b"};'
-                        f'padding-left:14px;margin-top:2px;">{cfg["desc"]}</div>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
-                with tog_col:
-                    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
-                    val = st.toggle("", value=is_on, key=f"toggle_{ntype}", label_visibility="collapsed")
-                    if val != is_on:
-                        if val:
-                            st.session_state.active_types.add(ntype)
-                        else:
-                            st.session_state.active_types.discard(ntype)
-                        st.rerun()
-
-
-        # ── Tab 2: Cross-Domain Links ─────────────────────────────────────────
-        with tab2:
-            if show_cross:
-                xd = safe_get("/ontology/cross-domain", silent=True) or _FALLBACK_CROSS_DOMAIN
-                if xd and xd.get("connections"):
-                    for conn in xd["connections"]:
-                        fn      = conn.get("from_name", "")
-                        tn      = conn.get("to_name", "")
-                        reason  = conn.get("reason", "")
-                        fd_raw  = conn.get("from_domain", "")
-                        td_raw  = conn.get("to_domain", "")
-                        # Domain stored as "DOM_CLIMATE" → strip prefix → "Climate"
-                        fd      = fd_raw.replace("DOM_", "").title() if fd_raw else ""
-                        td      = td_raw.replace("DOM_", "").title() if td_raw else ""
-                        fc      = DOMAIN_COLORS.get(fd, "#94a3b8")
-                        tc      = DOMAIN_COLORS.get(td, "#94a3b8")
-                        st.markdown(
-                            f'<div style="background:#0a1628;border:1px solid rgba(255,215,0,0.15);'
-                            f'border-left:3px solid #FFD700;border-radius:6px;'
-                            f'padding:8px 10px;margin-bottom:6px;">'
-                            f'<div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">'
-                            f'<span style="width:7px;height:7px;border-radius:50%;background:{fc};flex-shrink:0;box-shadow:0 0 4px {fc}88;"></span>'
-                            f'<span style="font-size:11px;font-weight:700;color:{fc} !important;">{fn}</span>'
-                            f'<span style="font-size:9px;color:#475569 !important;margin-left:2px;">{fd}</span>'
-                            f'</div>'
-                            f'<div style="font-size:10px;color:#475569;margin:1px 0 1px 12px;">↓</div>'
-                            f'<div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;">'
-                            f'<span style="width:7px;height:7px;border-radius:50%;background:{tc};flex-shrink:0;box-shadow:0 0 4px {tc}88;"></span>'
-                            f'<span style="font-size:11px;font-weight:700;color:{tc} !important;">{tn}</span>'
-                            f'<span style="font-size:9px;color:#475569 !important;margin-left:2px;">{td}</span>'
-                            f'</div>'
-                            f'<div style="font-size:9.5px;color:#64748b;padding-left:12px;'
-                            f'font-style:italic;line-height:1.4;">{reason}</div>'
-                            f'</div>',
-                            unsafe_allow_html=True,
-                        )
-                else:
-                    st.markdown(
-                        '<div style="font-size:11px;color:#334155;padding:8px;">Enable Cross-links toggle to load connections.</div>',
-                        unsafe_allow_html=True,
-                    )
-            else:
+            chk_col, lbl_col = st.columns([1, 5], gap="small")
+            with chk_col:
+                val = st.checkbox("", value=is_on, key=f"chk_{ntype}",
+                                  label_visibility="collapsed")
+            with lbl_col:
                 st.markdown(
-                    '<div style="font-size:11px;color:#334155;padding:8px;">Enable the Cross-links toggle above to see connections.</div>',
+                    f'<div style="border-left:3px solid {border_c};background:{bg};'
+                    f'border-radius:4px;padding:4px 8px;margin-bottom:0;">'
+                    f'<span style="font-size:11px;font-weight:600;color:{color};">{ntype}</span>'
+                    f'<span style="font-size:10px;color:#334155;float:right;">{count}</span>'
+                    f'<div style="font-size:9px;color:#334155;margin-top:1px;">{cfg["desc"]}</div>'
+                    f'</div>',
                     unsafe_allow_html=True,
                 )
+            if val != is_on:
+                if val:
+                    st.session_state.active_types.add(ntype)
+                else:
+                    st.session_state.active_types.discard(ntype)
+                st.rerun()
 
     # ══ RIGHT — full graph ════════════════════════════════════════════════════
     with col_graph:
@@ -656,16 +598,19 @@ def page():
 
         nodes, edges = _build_graph(graph_data, filter_type=active_filter, focus_ids=focus_ids)
 
-        # When cross-links toggle is OFF, hide CONNECTED_TO edges entirely
-        if not show_cross:
-            edges = [e for e in edges if e.color != EDGE_COLORS["CONNECTED_TO"]]
 
         config = Config(
             width="100%",
             height=640,
             directed=True,
             physics=True,
-            stabilization={"enabled": not dynamic_layout, "iterations": 300, "fit": True},
+            solver="repulsion",
+            nodeDistance=200,
+            centralGravity=0.01,
+            springLength=250,
+            springConstant=0.03,
+            damping=0.9,
+            stabilization={"enabled": True, "iterations": 250, "fit": True},
             hierarchical=False,
             node={"labelProperty": "label"},
             edge={"labelProperty": "title", "smooth": {"type": "continuous"}},
@@ -986,5 +931,8 @@ def page():
         st.switch_page("pages/03_Delivery_Monitor.py")
     st.markdown('</div>', unsafe_allow_html=True)
 
+
+
+    render_ontology_model()
 
 page()

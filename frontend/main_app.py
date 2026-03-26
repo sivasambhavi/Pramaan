@@ -220,7 +220,7 @@ def main() -> None:
             st.Page(home,                                   title="Pramaan",          icon=":material/verified_user:", default=True, url_path=""),
             st.Page("pages/05_Live_Ingestion.py",       title="Live Ingestion",        icon=":material/cell_tower:",    url_path="Live_Ingestion"),
             st.Page("pages/01_National_Intelligence.py", title="National Intelligence", icon=":material/map:",           url_path="National_Intelligence"),
-            st.Page("pages/02_Scheme_Tracker.py",       title="Scheme Tracker",        icon=":material/hub:",           url_path="Scheme_Tracker"),
+            st.Page("pages/02_Decision_Engine.py",       title="Decision Engine",       icon=":material/hub:",           url_path="Decision_Engine"),
             st.Page("pages/03_Delivery_Monitor.py",     title="Delivery Monitor",     icon=":material/electric_bolt:", url_path="Delivery_Monitor"),
             st.Page("pages/04_Proof_and_Evidence.py",   title="Proof & Evidence",     icon=":material/psychology:",    url_path="Proof_and_Evidence"),
         ],

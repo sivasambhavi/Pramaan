@@ -14,6 +14,7 @@ import streamlit as st
 from utils.api import safe_get
 from utils.events import EVENTS as _EVENTS_FULL, N_EVENTS as _N_EVENTS, render_event_dropdown
 from components.topnav import render_topnav
+from components.ontology_model import render_ontology_model
 
 # Strip lat/lon — Live Feed only needs first 6 fields
 EVENTS = [e[:6] for e in _EVENTS_FULL]
@@ -872,5 +873,8 @@ def _render_delhi_pilot():
         st.session_state["deep_link_brief"] = "EVT_DELHI_FLOODS_2023"
         st.switch_page("pages/04_Proof_and_Evidence.py")
 
+
+
+    render_ontology_model()
 
 page()
