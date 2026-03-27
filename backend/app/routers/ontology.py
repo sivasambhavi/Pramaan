@@ -10,10 +10,14 @@ Endpoints:
   GET /ontology/actor/{actor_id}    — all events an actor is connected to
   GET /ontology/graph               — full graph (nodes + edges) for visualization
   GET /ontology/cross-domain        — only cross-domain CONNECTED_TO edges
+  GET /ontology/schemes/by-type     — all schemes grouped by Type 1 / Type 2
 """
+
+from datetime import datetime, timezone, timedelta
 
 from fastapi import APIRouter, HTTPException
 from app.neo4j_client import get_session
+from app.queries import BLAST_SCORE_CYPHER
 
 router = APIRouter(prefix="/ontology", tags=["ontology"])
 
@@ -30,13 +34,14 @@ def list_events():
             OPTIONAL MATCH (e)-[:OCCURRED_IN]->(r:Region)
             OPTIONAL MATCH (e)-[:BELONGS_TO]->(d:Domain)
             OPTIONAL MATCH (e)-[:CAUSED]->(i:Impact)
-            RETURN e.event_id   AS event_id,
-                   e.name       AS name,
-                   e.date       AS date,
-                   e.domain     AS domain_id,
-                   e.severity   AS severity,
+            RETURN e.event_id    AS event_id,
+                   e.name        AS name,
+                   e.date        AS date,
+                   e.domain      AS domain_id,
+                   e.severity    AS severity,
+                   e.blast_score AS blast_score,
                    e.description AS description,
-                   e.source_url AS source_url,
+                   e.source_url  AS source_url,
                    collect(DISTINCT r.name) AS regions,
                    collect(DISTINCT d.name) AS domains,
                    count(DISTINCT i)        AS impact_count
@@ -102,12 +107,33 @@ def get_event(event_id: str):
         node_data["_rel"] = row["rel_type"]
         nodes_by_type.setdefault(label, []).append(node_data)
 
+    schemes = nodes_by_type.get("Scheme", [])
+
+    # Enrich schemes with beneficiary counts (separate session)
+    if schemes:
+        scheme_ids = [sch.get("scheme_id") for sch in schemes if sch.get("scheme_id")]
+        with get_session() as s2:
+            bene_rows = s2.run("""
+                UNWIND $ids AS sid
+                MATCH (sc:Scheme {scheme_id: sid})
+                OPTIONAL MATCH (sc)-[:BENEFITS]->(b:Beneficiary)
+                RETURN sid AS scheme_id,
+                       sum(COALESCE(b.count, 0)) AS beneficiary_count,
+                       collect(DISTINCT b.description)[0] AS beneficiary_desc
+            """, {"ids": scheme_ids}).data()
+        bene_map = {r["scheme_id"]: r for r in bene_rows}
+        for sch in schemes:
+            sid = sch.get("scheme_id")
+            if sid and sid in bene_map:
+                sch["beneficiary_count"] = bene_map[sid]["beneficiary_count"] or 0
+                sch["beneficiary_desc"] = bene_map[sid]["beneficiary_desc"] or ""
+
     return {
         "event":       dict(event["e"]),
         "regions":     nodes_by_type.get("Region", []),
         "domains":     nodes_by_type.get("Domain", []),
         "actors":      nodes_by_type.get("Actor", []),
-        "schemes":     nodes_by_type.get("Scheme", []),
+        "schemes":     schemes,
         "policies":    nodes_by_type.get("Policy", []),
         "impacts":     impacts,
         "evidence":    evidence,
@@ -384,3 +410,57 @@ def cross_domain_links():
                    r.reason    AS reason
         """).data()
     return {"connections": rows, "total": len(rows)}
+
+
+# ── /blast-scores ─────────────────────────────────────────────────────────────
+
+@router.get("/blast-scores")
+def get_blast_scores():
+    """
+    Compute dynamic blast scores for ALL events from graph topology and persist
+    blast_score back to each Event node.
+
+    Score (0–10) = graph density weighted by:
+      3.0  Impact count (CAUSED edges)
+      2.0  Evidence volume (PROVEN_BY edges)
+      1.5  Evidence velocity (PROVEN_BY ingested last 24h)
+      2.0  Cross-domain spread (CONNECTED_TO edges)
+      0.5  Domain breadth (ALSO_IN edges)
+      1.0  Source credibility (avg Evidence confidence)
+
+    Thresholds: ≥8.5 critical  ≥6.5 high  ≥4.0 medium  else low
+    """
+    since_24h = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    with get_session() as s:
+        rows = s.run(BLAST_SCORE_CYPHER, {"since_24h": since_24h}).data()
+
+    # Build lookup dict for quick frontend access
+    by_id = {r["event_id"]: r for r in rows}
+    return {"scores": rows, "by_id": by_id, "total": len(rows)}
+
+
+# ── /schemes/by-type ──────────────────────────────────────────────────────────
+
+@router.get("/schemes/by-type")
+def schemes_by_type():
+    """All Scheme nodes grouped by scheme_type (Type 1 Emergency / Type 2 Structural)."""
+    with get_session() as s:
+        rows = s.run("""
+            MATCH (sc:Scheme)
+            RETURN sc.scheme_id       AS scheme_id,
+                   sc.name            AS name,
+                   sc.ministry        AS ministry,
+                   sc.budget_crore    AS budget_crore,
+                   sc.scheme_type     AS scheme_type,
+                   sc.scheme_type_label AS scheme_type_label,
+                   sc.description     AS description,
+                   sc.status          AS status,
+                   sc.strategic_value AS strategic_value,
+                   sc.risk            AS risk,
+                   sc.domain          AS domain
+            ORDER BY sc.scheme_type, sc.name
+        """).data()
+
+    type1 = [r for r in rows if r.get("scheme_type") == "Type 1"]
+    type2 = [r for r in rows if r.get("scheme_type") == "Type 2"]
+    return {"type1": type1, "type2": type2, "total": len(rows)}

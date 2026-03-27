@@ -381,7 +381,7 @@ def _humanize(raw_id: str) -> str:
             parts.append(tok.capitalize())
 
     label = " ".join(parts).strip()
-    return label[:18].strip() if label else raw_id[:18]
+    return label if label else raw_id
 
 
 def _humanize_edge(edge_type: str) -> str:
@@ -1326,26 +1326,26 @@ def page():
                 st.session_state["crisis_sel"] = _crisis_event_id
                 st.switch_page("pages/crisis_tracker.py")
 
-    # ══ DECISION ENGINE PANEL (Event-Aware Fix 13) ══════════════════════════
-    _sel = st.session_state.get("ontology_sel")
-    _panel = _DECISION_PANELS.get(_sel)
+        # ══ DECISION ENGINE PANEL (Event-Aware Fix 13) ══════════════════════════
+        _sel = st.session_state.get("ontology_sel")
+        _panel = _DECISION_PANELS.get(_sel)
 
-    if _panel:
-        st.markdown(f"""
-        <div style="background:linear-gradient(135deg,#1a0a00,#0d1628);
-        border:2px solid {_panel['color']}88;border-radius:14px;padding:16px 20px;margin:12px 0">
-          <div style="font-size:10px;font-weight:700;color:{_panel['color']};
-          letter-spacing:.1em;margin-bottom:10px">⚡ DECISION ENGINE — ACTION REQUIRED</div>
-          <div style="font-size:12px;font-weight:700;color:#e2e8f0">{_panel['scheme']}</div>
-          <div style="font-size:11px;color:#94a3b8;margin:4px 0">{_panel['allocated']} · {_panel['status']}</div>
-          <div style="background:{_panel['color']}22;border:1px solid {_panel['color']}66;
-          border-radius:8px;padding:8px 12px;margin-top:10px">
-            <div style="font-size:9px;font-weight:700;color:{_panel['color']}">RECOMMENDED ACTION</div>
-            <div style="font-size:12px;font-weight:700;color:#e2e8f0;margin:3px 0">🔍 {_panel['action']}</div>
-            <div style="font-size:9px;color:#94a3b8">{_panel['detail']}</div>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
+        if _panel:
+            st.markdown(f"""
+            <div style="background:linear-gradient(135deg,#1a0a00,#0d1628);
+            border:2px solid {_panel['color']}88;border-radius:14px;padding:16px 20px;margin:12px 0">
+              <div style="font-size:10px;font-weight:700;color:{_panel['color']};
+              letter-spacing:.1em;margin-bottom:10px">⚡ DECISION ENGINE — ACTION REQUIRED</div>
+              <div style="font-size:12px;font-weight:700;color:#e2e8f0">{_panel['scheme']}</div>
+              <div style="font-size:11px;color:#94a3b8;margin:4px 0">{_panel['allocated']} · {_panel['status']}</div>
+              <div style="background:{_panel['color']}22;border:1px solid {_panel['color']}66;
+              border-radius:8px;padding:8px 12px;margin-top:10px">
+                <div style="font-size:9px;font-weight:700;color:{_panel['color']}">RECOMMENDED ACTION</div>
+                <div style="font-size:12px;font-weight:700;color:#e2e8f0;margin:3px 0">🔍 {_panel['action']}</div>
+                <div style="font-size:9px;color:#94a3b8">{_panel['detail']}</div>
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
 
     # ══ SCHEME DECISION PANEL ════════════════════════════════════════════════
     st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
@@ -1356,63 +1356,18 @@ def page():
         unsafe_allow_html=True,
     )
 
-    # Static scheme classification
-    TYPE1_SCHEMES = [
-        {"name": "State Disaster Response Fund",    "id": "SCH_SDRF",      "budget": "₹43,900 Cr", "trigger": "Flood / Cyclone / Disaster", "ministry": "MHA",  "events": ["Delhi Floods", "Cyclone Dana", "Wayanad", "Chamoli"]},
-        {"name": "National Disaster Response Fund", "id": "SCH_NDRF_FUND", "budget": "₹12,390 Cr", "trigger": "National emergency declared",  "ministry": "MHA",  "events": ["Delhi Floods", "Cyclone Dana", "Wayanad"]},
-        {"name": "PM-KUSUM / Rupaya Solar",         "id": "SCH_PLI_SEMI",  "budget": "₹76,000 Cr", "trigger": "Semiconductor supply shock",   "ministry": "MoCI", "events": ["Tata Semiconductor Fab"]},
-    ]
+    _schemes_data = safe_get("/ontology/schemes/by-type", silent=True) or {}
+    _type1_schemes = _schemes_data.get("type1", [])
+    _type2_schemes = _schemes_data.get("type2", [])
 
-    TYPE2_SCHEMES = [
-        {"name": "AMRUT 2.0",          "id": "SCH_AMRUT",    "budget": "₹66,750 Cr",  "focus": "Urban water/drainage infrastructure", "ministry": "MoHUA",   "delhi": "3 drainage projects · ₹5.38 Cr · 2 completed ✅", "need": "Drainage Capacity Need"},
-        {"name": "PMAY-U (Urban)",      "id": "SCH_PMAY",     "budget": "₹401 Cr",     "focus": "Affordable urban housing",            "ministry": "MoHUA",   "delhi": "17,067 houses · ₹401 Cr · 100% complete ✅",       "need": "Flood Displacement Need"},
-        {"name": "Ayushman Bharat PMJAY","id": "SCH_AYUSHMAN","budget": "₹7,200 Cr",   "focus": "Universal health coverage",           "ministry": "MoHFW",   "delhi": "7.4 Cr cards issued · 2.2 Cr hospitalised",         "need": "Health Supply-Chain Need"},
-        {"name": "PM SVANidhi",         "id": "SCH_SVANIDHI", "budget": "₹700 Cr",     "focus": "Street vendor micro-credit",          "ministry": "MoHUA",   "delhi": "68.7L beneficiaries · 3rd tranche",                 "need": "Urban Livelihood Need"},
-        {"name": "SBM Urban 2.0",       "id": "SCH_SBM",      "budget": "₹1,400 Cr",   "focus": "Sanitation / waste-free cities",      "ministry": "MoHUA",   "delhi": "ODF+ certified wards",                              "need": "Sanitation Governance Need"},
-        {"name": "Jal Jeevan Mission",  "id": "SCH_JJBY",     "budget": "₹197,000 Cr", "focus": "Har ghar jal — tap water to all",     "ministry": "Jal Shakti","delhi": "14.39 Cr connections (76.7%)",                     "need": "Drinking Water Access Need"},
-        {"name": "DDUGJY Rural Power",  "id": "SCH_DDUGJY",   "budget": "₹12,544 Cr",  "focus": "Rural electrification",               "ministry": "Power",   "delhi": "100% village electrification",                      "need": "Energy Access Need"},
-        {"name": "PLI — Semiconductor", "id": "SCH_PLI_SEMI", "budget": "₹76,000 Cr",  "focus": "Domestic chip manufacturing",         "ministry": "MoCI",    "delhi": "Tata / CG Power · ₹1.26 Lakh Cr investment",        "need": "Semiconductor Sovereignty Need"},
-    ]
-
-    # --- Fix 15: Fund utilization data + bar renderer ---
-    _UTILIZATION = {
-        "SCH_SDRF":      {"allocated": 43900,  "utilized": 38200},
-        "SCH_NDRF_FUND": {"allocated": 12390,  "utilized": 9800},
-        "SCH_PLI_SEMI":  {"allocated": 76000,  "utilized": 12400},
-        "SCH_AMRUT":     {"allocated": 66750,  "utilized": 51200},
-        "SCH_PMAY":      {"allocated": 401,    "utilized": 401},
-        "SCH_AYUSHMAN":  {"allocated": 7200,   "utilized": 5900},
-        "SCH_SVANIDHI":  {"allocated": 700,    "utilized": 610},
-        "SCH_SBM":       {"allocated": 1400,   "utilized": 980},
-        "SCH_JJBY":      {"allocated": 197000, "utilized": 151000},
-        "SCH_DDUGJY":    {"allocated": 12544,  "utilized": 12544},
-    }
-
-    def _utilization_bar(scheme_id: str) -> str:
-        u = _UTILIZATION.get(scheme_id)
-        if not u:
-            return ""
-        alloc     = u["allocated"]
-        used      = u["utilized"]
-        pct       = round((used / alloc) * 100) if alloc else 0
-        remaining = alloc - used
-        color     = "#22c55e" if pct >= 90 else ("#f97316" if pct >= 60 else "#ef4444")
-        return (
-            f'<div style="margin-top:6px;">'
-            f'<div style="display:flex;justify-content:space-between;'
-            f'font-size:9px;color:#475569;margin-bottom:3px;">'
-            f'<span>₹{used:,} Cr utilized</span>'
-            f'<span style="color:{color};font-weight:700;">{pct}% delivered</span>'
-            f'</div>'
-            f'<div style="background:#1e293b;border-radius:3px;height:5px;">'
-            f'<div style="background:{color};width:{pct}%;height:5px;border-radius:3px;'
-            f'box-shadow:0 0 4px {color}88;"></div>'
-            f'</div>'
-            f'<div style="font-size:8.5px;color:#334155;margin-top:2px;">'
-            f'₹{alloc:,} Cr allocated &nbsp;·&nbsp; ₹{remaining:,} Cr remaining'
-            f'</div>'
-            f'</div>'
-        )
+    def _budget_str(s: dict) -> str:
+        b = s.get("budget_crore")
+        if not b:
+            return "—"
+        try:
+            return f"₹{int(b):,} Cr"
+        except (TypeError, ValueError):
+            return str(b)
 
     t1col, t2col = st.columns([1, 2], gap="large")
 
@@ -1428,21 +1383,26 @@ def page():
             '</div>',
             unsafe_allow_html=True,
         )
-        for s in TYPE1_SCHEMES:
-            evts_html = " · ".join(f'<span style="color:#ef444488;">{e}</span>' for e in s["events"])
+        for s in _type1_schemes:
+            name     = s.get("name") or s.get("scheme_id", "—")
+            budget   = _budget_str(s)
+            ministry = s.get("ministry") or ""
+            desc     = (s.get("strategic_value") or s.get("description") or "")[:100]
+            risk     = s.get("risk") or ""
             st.markdown(
                 f'<div style="background:#060f1e;border:1px solid #ef444422;border-radius:8px;'
                 f'padding:9px 12px;margin-bottom:6px;">'
-                f'<div style="font-size:11.5px;font-weight:700;color:#fca5a5;">{s["name"]}</div>'
+                f'<div style="font-size:11.5px;font-weight:700;color:#fca5a5;">{name}</div>'
                 f'<div style="font-size:10px;color:#64748b;margin-top:3px;">'
-                f'{s["budget"]} &nbsp;·&nbsp; {s["ministry"]}</div>'
-                f'<div style="font-size:9.5px;color:#475569;margin-top:4px;">'
-                f'Trigger: <span style="color:#94a3b8;">{s["trigger"]}</span></div>'
-                f'<div style="font-size:9.5px;color:#334155;margin-top:3px;">Events: {evts_html}</div>'
-                f'{_utilization_bar(s["id"])}'
-                f'</div>',
+                f'{budget} &nbsp;·&nbsp; {ministry}</div>'
+                + (f'<div style="font-size:9.5px;color:#94a3b8;margin-top:4px;line-height:1.4;">{desc}</div>' if desc else "")
+                + (f'<div style="font-size:9px;color:#ef444488;margin-top:3px;">⚠ {risk}</div>' if risk else "")
+                + f'</div>',
                 unsafe_allow_html=True,
             )
+        if not _type1_schemes:
+            st.markdown('<div style="font-size:10px;color:#475569;">No Type 1 schemes loaded.</div>',
+                        unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
     with t2col:
@@ -1458,32 +1418,35 @@ def page():
             unsafe_allow_html=True,
         )
         cols_a, cols_b = st.columns(2, gap="small")
-        half = len(TYPE2_SCHEMES) // 2
-        for i, s in enumerate(TYPE2_SCHEMES):
+        half = max(len(_type2_schemes) // 2, 1)
+        for i, s in enumerate(_type2_schemes):
             target_col = cols_a if i < half else cols_b
             with target_col:
-                need_label = s.get("need", "")
+                name     = s.get("name") or s.get("scheme_id", "—")
+                budget   = _budget_str(s)
+                ministry = s.get("ministry") or ""
+                desc     = (s.get("description") or s.get("strategic_value") or "")[:90]
+                sv       = (s.get("strategic_value") or "")[:80]
                 st.markdown(
                     f'<div style="background:#111827;border:1px solid #1e293b;'
                     f'border-radius:10px;padding:10px 12px;margin-bottom:8px;">'
                     f'<div style="font-size:11px;font-weight:700;color:#facc15;'
-                    f'margin-bottom:4px;">{s["name"]}</div>'
+                    f'margin-bottom:4px;">{name}</div>'
                     f'<div style="font-size:10px;color:#64748b;margin-bottom:4px;">'
-                    f'{s["budget"]}  ·  {s["ministry"]}</div>'
-                    f'<div style="font-size:10px;color:#94a3b8;margin-bottom:4px;">'
-                    f'{s["focus"]}</div>'
-                    f'<div style="font-size:10px;color:#94a3b8;margin-bottom:6px;">'
-                    f'Delhi: {s["delhi"]}</div>'
-                    f'<div style="background:#0d1f12;border-left:2px solid #22c55e;'
-                    f'border-radius:4px;padding:3px 7px;">'
-                    f'<span style="font-size:8px;font-weight:700;color:#22c55e;'
-                    f'letter-spacing:.07em;">ADDRESSES → </span>'
-                    f'<span style="font-size:9px;color:#86efac;">{need_label}</span>'
-                    f'</div>'
-                    f'{_utilization_bar(s["id"])}'
-                    f'</div>',
+                    f'{budget}  ·  {ministry}</div>'
+                    + (f'<div style="font-size:10px;color:#94a3b8;margin-bottom:4px;line-height:1.4;">{desc}</div>' if desc else "")
+                    + (f'<div style="background:#0d1f12;border-left:2px solid #22c55e;'
+                       f'border-radius:4px;padding:3px 7px;">'
+                       f'<span style="font-size:8px;font-weight:700;color:#22c55e;'
+                       f'letter-spacing:.07em;">STRATEGIC → </span>'
+                       f'<span style="font-size:9px;color:#86efac;">{sv}</span>'
+                       f'</div>' if sv else "")
+                    + f'</div>',
                     unsafe_allow_html=True,
                 )
+        if not _type2_schemes:
+            st.markdown('<div style="font-size:10px;color:#475569;">No Type 2 schemes loaded.</div>',
+                        unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
     # ── Delivery chain CTA ────────────────────────────────────────────────────
@@ -1503,6 +1466,7 @@ def page():
 
 
 
-    render_ontology_model()
+
+
 
 page()

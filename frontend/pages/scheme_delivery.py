@@ -386,11 +386,18 @@ def _render_event_feed():
     if "feed_sel" not in st.session_state:
         st.session_state.feed_sel = None
 
+    sel_evt = next((e for e in EVENTS_LOCAL if e[0] == st.session_state.get("feed_sel")), None)
+
     dcol, ncol = st.columns([3, 1], gap="small")
     with dcol:
         render_event_dropdown("feed_sel", "feed_event_drop", include_all=True)
-
-    sel_evt = next((e for e in EVENTS_LOCAL if e[0] == st.session_state.get("feed_sel")), None)
+    with ncol:
+        if sel_evt is not None:
+            event_id_tmp = sel_evt[0]
+            if st.button("Proof & Evidence →", key=f"goto_brief_{event_id_tmp}", type="primary",
+                         use_container_width=True):
+                st.session_state["deep_link_brief"] = event_id_tmp
+                st.switch_page("pages/proof_and_evidence.py")
 
     if sel_evt is None:
         st.html(
@@ -406,13 +413,6 @@ def _render_event_feed():
     sev_badge_color = SEV_COLOR_L.get(sev, "#64748b")
     domain_icon     = DOMAIN_ICONS.get(domain, "📡")
     sev_icon        = SEV_ICONS.get(sev, "⚪")
-
-    with ncol:
-        st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
-        if st.button("View AI Summary →", key=f"goto_brief_{event_id}", type="primary",
-                     use_container_width=True):
-            st.session_state["deep_link_brief"] = event_id
-            st.switch_page("pages/proof_and_evidence.py")
 
     # ── Visual event card ───────────────────────────────────────────────────────
     st.html(
@@ -584,10 +584,16 @@ def _render_event_feed():
                     desc       = _html.escape(_sanitise(desc_raw)[:120] if desc_raw else "")
                     sc         = _STATUS_COLOR.get(status_raw, "#64748b")
                     utilization = sch.get("utilization_pct") or 0
+                    bene_count  = sch.get("beneficiary_count") or 0
+                    bene_desc   = _html.escape(sch.get("beneficiary_desc") or "")
                     try:
                         budget_str = f"₹{int(budget):,} Cr" if budget else "—"
                     except (TypeError, ValueError):
                         budget_str = "—"
+                    try:
+                        bene_str = f"{int(bene_count):,} beneficiaries" if bene_count else ""
+                    except (TypeError, ValueError):
+                        bene_str = ""
                     with scol:
                         util_bar = f"""
                           <div style="margin:6px 0 4px;">
@@ -600,6 +606,12 @@ def _render_event_feed():
                             </div>
                           </div>
                         """ if utilization else ""
+                        bene_html = (
+                            f'<div style="display:flex;align-items:center;gap:6px;margin-top:5px;">'
+                            f'<span style="font-size:9px;color:#38bdf8;">👥 {bene_str}</span>'
+                            + (f'<span style="font-size:9px;color:#475569;">· {bene_desc}</span>' if bene_desc else "")
+                            + f'</div>'
+                        ) if bene_str else ""
                         st.html(f"""
                         <div style="background:#060f1e;border:1px solid {group_color}33;
                                     border-top:3px solid {group_color};
@@ -615,6 +627,7 @@ def _render_event_feed():
                             <span style="font-size:10px;color:#475569;background:#0a1628;padding:1px 6px;border-radius:4px;">{ministry}</span>
                           </div>
                           {util_bar}
+                          {bene_html}
                           <div style="font-size:10px;color:#475569;line-height:1.5;border-top:1px solid #1e293b;padding-top:6px;">{desc}</div>
                         </div>
                         """)

@@ -105,6 +105,10 @@ def page():
         for evt in data.get("events", []):
             api_events[evt["event_id"]] = evt
 
+    # Blast scores — dynamic graph-computed risk scores (0–10) for all events
+    _blast_data = safe_get("/ontology/blast-scores", silent=True) or {}
+    blast_by_id: dict[str, dict] = _blast_data.get("by_id", {})
+
     # ── Filter events ──────────────────────────────────────────────────────────
     active_domains    = st.session_state.active_domains
     _sev_sel          = st.session_state.get("sev_filter", ["Critical", "High", "Medium"])
@@ -154,22 +158,9 @@ def page():
         unsafe_allow_html=True,
     )
 
-    # ── Event dropdown + Cross-links toggle ──────────────────────────────────
-    tcol1, tcol2 = st.columns([2.5, 1], gap="medium")
-    with tcol1:
-        render_event_dropdown("sel_event", "map_event_dropdown", include_all=True)
-    with tcol2:
-        show_cross = st.checkbox("Cross-links", value=False, key="cross_cb")
-        if show_cross:
-            st.markdown(
-                "<div style='font-size:9px;color:#FFD700;margin-top:-8px;'>🌐 Global cross-links active</div>",
-                unsafe_allow_html=True
-            )
-        else:
-            st.markdown(
-                "<div style='font-size:9px;color:#94a3b8;margin-top:-8px;'>🇮🇳 India lens · global graph beneath</div>",
-                unsafe_allow_html=True
-            )
+    # ── Event dropdown ───────────────────────────────────────────────────────
+    render_event_dropdown("sel_event", "map_event_dropdown", include_all=True)
+    show_cross = False
 
     # ── Chip filter bar — HTML anchors with target="_self" (same-page navigation) ──
     dcounts = {d: sum(1 for m in EVENT_META.values() if m[3] == d) for d in DOMAIN_ORDER}
@@ -255,7 +246,15 @@ def page():
         if len(api.get("description") or "") > 140:
             desc += "…"
         impact_count = api.get("impact_count", 0)
-        sev_label, radius = SEVERITY_BADGE.get(sev, SEVERITY_BADGE["high"])
+
+        # Use dynamic blast_score to derive severity label + marker radius
+        blast        = blast_by_id.get(event_id, {})
+        bscore       = blast.get("blast_score")
+        if bscore is not None:
+            computed_sev = blast.get("computed_severity", sev)
+        else:
+            computed_sev = sev
+        sev_label, radius = SEVERITY_BADGE.get(computed_sev, SEVERITY_BADGE.get(sev, SEVERITY_BADGE["high"]))
         is_selected  = (event_id == sel)
 
         popup_html = f"""
@@ -376,8 +375,30 @@ def page():
             sdesc    = evt_data.get("description", "") or api_events.get(sel, {}).get("description", "")
 
             # ── Event header card — always visible above tabs ───────────────────────
-            _risk_score = {"critical": "9.1", "high": "7.4", "medium": "5.2"}.get(ssev, "6.0")
-            _risk_color = {"critical": "#ef4444", "high": "#f97316", "medium": "#facc15"}.get(ssev, "#94a3b8")
+            # Dynamic blast_score from Neo4j graph topology — falls back to manual calc
+            _blast_entry = blast_by_id.get(sel, {})
+            _dyn_score   = _blast_entry.get("blast_score")
+            if _dyn_score is not None:
+                _raw = float(_dyn_score)
+                _dyn_sev = _blast_entry.get("computed_severity", ssev)
+            else:
+                # Fallback: manual approximation until first scheduler run
+                _base = {"critical": 8.0, "high": 6.0, "medium": 4.0, "low": 2.0}.get(ssev, 3.0)
+                _graph_weight = min(1.5, (len(impacts) + len(actors) + len(schemes) + len(policies)) * 0.15)
+                _conf = float(evt_data.get("confidence", 0.9))
+                _raw = min(10.0, _base + _graph_weight + (_conf * 0.5))
+                _dyn_sev = ssev
+            _risk_score = f"{_raw:.1f}"
+            _risk_color = {"critical": "#ef4444", "high": "#f97316", "medium": "#facc15"}.get(_dyn_sev, "#94a3b8")
+            # Breakdown tooltip text for blast score
+            _bk = _blast_entry
+            _score_detail = (
+                f"Impacts: {_bk.get('impact_count',0)} · "
+                f"Evidence: {_bk.get('evidence_count',0)} · "
+                f"Velocity (24h): {_bk.get('recent_evidence',0)} · "
+                f"Cross-domain links: {_bk.get('connection_count',0)} · "
+                f"Domain breadth: {_bk.get('cross_domain_count',0)}"
+            ) if _dyn_score is not None else "Calculated from severity · graph · confidence"
             st.markdown(f"""
             <div style="border-left:3px solid {scolor};padding:10px 12px;
                         background:#0a1628;border-radius:6px;margin-bottom:8px;">
@@ -389,7 +410,7 @@ def page():
               <div style="display:flex;align-items:center;gap:8px;margin-top:5px;">
                 <span style="font-size:8px;color:#475569;">Model risk score:</span>
                 <span style="font-size:11px;font-weight:700;color:{_risk_color};">{_risk_score}/10</span>
-                <span style="font-size:8px;color:#334155;cursor:default;" title="Derived from event severity, impact count, cross-domain links, and source confidence via PRAMAAN ontology engine">[ how derived ]</span>
+                <span style="font-size:8px;color:#334155;cursor:default;" title="{_score_detail}">[ how derived ]</span>
               </div>
             </div>
             """, unsafe_allow_html=True)
@@ -1123,4 +1144,4 @@ def page():
 
 
 page()
-render_ontology_model()
+

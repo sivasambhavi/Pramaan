@@ -159,6 +159,71 @@ ORDER BY assets DESC
 """
 
 # ---------------------------------------------------------------------------
+# Blast score — dynamic event risk scoring from graph topology
+# ---------------------------------------------------------------------------
+#
+# Weights (sum = 10.0 max):
+#   3.0  — Impact density      (CAUSED edges, capped at 5 impacts = full)
+#   2.0  — Evidence volume     (PROVEN_BY edges, capped at 5)
+#   1.5  — Evidence velocity   (PROVEN_BY edges ingested in last 24 h, capped at 3)
+#   2.0  — Cross-domain spread (CONNECTED_TO edges to other events, capped at 4)
+#   0.5  — Domain breadth      (ALSO_IN secondary domains, capped at 3)
+#   1.0  — Source credibility  (avg confidence of connected Evidence nodes)
+#
+# Thresholds: >= 8.5 → critical  |  >= 6.5 → high  |  >= 4.0 → medium  |  else → low
+#
+# The query also writes e.blast_score back to each Event node so the value is
+# persistent and readable by list_events() without re-running the full calc.
+# Pass $since_24h as an ISO-8601 string (datetime - 24h) for velocity window.
+
+BLAST_SCORE_CYPHER = """
+MATCH (e:Event)
+WHERE e.confidence IS NOT NULL
+OPTIONAL MATCH (e)-[:CAUSED]->(i:Impact)
+OPTIONAL MATCH (e)-[:PROVEN_BY]->(ev:Evidence)
+OPTIONAL MATCH (e)-[:CONNECTED_TO]-(other:Event)
+OPTIONAL MATCH (e)-[:ALSO_IN]->(d2:Domain)
+WITH e,
+     count(DISTINCT i)     AS impact_count,
+     count(DISTINCT ev)    AS evidence_count,
+     count(DISTINCT other) AS connection_count,
+     count(DISTINCT d2)    AS cross_domain_count,
+     avg(COALESCE(toFloat(ev.confidence), 0.7)) AS avg_src_confidence
+OPTIONAL MATCH (e)-[:PROVEN_BY]->(ev2:Evidence)
+WHERE ev2.ingested_at IS NOT NULL
+  AND ev2.ingested_at >= $since_24h
+WITH e, impact_count, evidence_count, connection_count,
+     cross_domain_count, avg_src_confidence,
+     count(DISTINCT ev2) AS recent_evidence
+WITH e,
+     (CASE WHEN impact_count     >= 5 THEN 3.0 ELSE toFloat(impact_count)     / 5.0 * 3.0 END
+    + CASE WHEN evidence_count   >= 5 THEN 2.0 ELSE toFloat(evidence_count)   / 5.0 * 2.0 END
+    + CASE WHEN recent_evidence  >= 3 THEN 1.5 ELSE toFloat(recent_evidence)  / 3.0 * 1.5 END
+    + CASE WHEN connection_count >= 4 THEN 2.0 ELSE toFloat(connection_count) / 4.0 * 2.0 END
+    + CASE WHEN cross_domain_count >= 3 THEN 0.5 ELSE toFloat(cross_domain_count) / 3.0 * 0.5 END
+    + COALESCE(avg_src_confidence, 0.7) * 1.0) AS raw_score,
+     impact_count, evidence_count, connection_count,
+     cross_domain_count, recent_evidence
+WITH e,
+     CASE WHEN raw_score > 10.0 THEN 10.0 ELSE raw_score END AS blast_score,
+     impact_count, evidence_count, connection_count,
+     cross_domain_count, recent_evidence
+SET e.blast_score = round(blast_score * 10) / 10.0
+RETURN e.event_id AS event_id,
+       e.name     AS name,
+       round(blast_score * 10) / 10.0 AS blast_score,
+       CASE
+         WHEN blast_score >= 8.5 THEN 'critical'
+         WHEN blast_score >= 6.5 THEN 'high'
+         WHEN blast_score >= 4.0 THEN 'medium'
+         ELSE 'low'
+       END AS computed_severity,
+       impact_count, evidence_count, connection_count,
+       cross_domain_count, recent_evidence
+ORDER BY blast_score DESC
+"""
+
+# ---------------------------------------------------------------------------
 # Ingest helpers
 # ---------------------------------------------------------------------------
 

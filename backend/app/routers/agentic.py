@@ -58,36 +58,6 @@ _DOMAIN_ID_MAP = {
     "Governance":  "DOM_GOVERNANCE",
 }
 
-# Keyword → region_id for auto OCCURRED_IN inference
-_KEYWORD_REGION: list[tuple[list[str], str]] = [
-    (["iran", "tehran", "irgc", "hormuz", "persian gulf"], "REG_IRAN"),
-    (["israel", "tel aviv", "idf", "gaza"],                "REG_ISRAEL"),
-    (["pakistan", "islamabad", "isi", "lahore"],           "REG_PAKISTAN"),
-    (["kashmir", "j&k", "jammu", "pok", "pojk", "loc"],   "REG_JK"),
-    (["wayanad", "kerala"],                                 "REG_KERALA"),
-    (["odisha", "cyclone dana", "puri"],                   "REG_ODISHA"),
-    (["manipur"],                                           "REG_MANIPUR"),
-    (["delhi", "yamuna", "shahdara"],                      "REG_DELHI"),
-    (["joshimath", "uttarakhand", "chamoli"],              "REG_UTTARAKHAND"),
-    (["uk", "britain", "london", "ceta"],                  "REG_UK"),
-    (["china", "beijing"],                                 "REG_CHINA") if False else ([], ""),  # placeholder
-    (["red sea", "bab el mandeb"],                         "REG_RED_SEA"),
-    (["west asia", "middle east"],                         "REG_WEST_ASIA"),
-    (["russia", "ukraine"],                                "REG_RUSSIA"),
-]
-# Remove empty placeholder
-_KEYWORD_REGION = [(kws, rid) for kws, rid in _KEYWORD_REGION if kws]
-
-
-def _infer_region(name: str, description: str = "") -> str:
-    """Infer best-fit region_id from event name/description keywords. Falls back to REG_INDIA."""
-    text = (name + " " + description).lower()
-    for keywords, region_id in _KEYWORD_REGION:
-        if any(kw in text for kw in keywords):
-            return region_id
-    return "REG_INDIA"
-
-
 def _is_duplicate_event(name: str, session) -> tuple[bool, str]:
     """
     Check if an Event with a similar name already exists in Neo4j.
@@ -207,34 +177,30 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
         f"Kept {len(relevant)} relevant · dropped {dropped} unrelated · domains: {domain_summary}",
         "ok")
 
-    # ── Step 3: Crisis detection — route to crisis pipeline if ongoing event ──
-    _CRISIS_KEYWORDS: dict[str, str] = {
-        "iran war":          "EVT_IRAN_WAR_2026",
-        "hormuz":            "EVT_HORMUZ_BLOCKADE_2026",
-        "iran ceasefire":    "EVT_IRAN_CEASEFIRE_TALKS_2026",
-        "iran-us":           "EVT_IRAN_WAR_2026",
-        "iran us war":       "EVT_IRAN_WAR_2026",
-        "indus waters":      "EVT_INDUS_WATERS_CRISIS_2025",
-        "india pakistan":    "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
-        "operation sindoor": "EVT_OPERATION_SINDOOR_2025",
-    }
-    combined_text_lower = req.topic.lower()
+    # ── Step 3: Crisis detection — semantic route to crisis pipeline if ongoing event ──
+    # Construct snippet early for the classifier
+    combined_for_crisis = "\n\n".join(
+        f"Headline: {a['title']}\nSummary: {a.get('snippet','')}" for a in relevant
+    )
+
+    is_crisis = ai_service.is_crisis(combined_for_crisis, topic=req.topic)
     matched_crisis_event_id = None
-    for kw, evt_id in _CRISIS_KEYWORDS.items():
-        if kw in combined_text_lower:
-            matched_crisis_event_id = evt_id
-            break
+
+    if is_crisis:
+        from app.neo4j_client import get_session as _get_session
+        with _get_session() as sess:
+            matched_crisis_event_id = resolve_entity_id(
+                raw_id=f"evt_{req.topic.replace(' ', '_').lower().strip()}",
+                name=req.topic,
+                label="Event",
+                session=sess
+            )
 
     if matched_crisis_event_id:
         add("Crisis Route",
-            f"Topic matches ongoing crisis {matched_crisis_event_id} — extracting sub-events via crisis pipeline",
+            f"Topic evaluated as ongoing crisis ({matched_crisis_event_id}) — extracting sub-events via crisis pipeline",
             "ok")
-        # Extract crisis sub-events from combined articles
-        combined_for_crisis = "\n\n".join(
-            f"Headline: {a['title']}\nSummary: {a.get('snippet','')}" for a in relevant
-        )
         try:
-            from app.neo4j_client import get_session as _get_session
             crisis_extracted = ai_service.extract_crisis_update(
                 text=combined_for_crisis,
                 parent_event_id=matched_crisis_event_id,
@@ -383,18 +349,18 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                     entities_skipped += 1
                     continue
 
-                # Duplicate check for Events — skip if similar event already exists
+                # Resolve canonical ID, handling Event duplicates by remapping instead of skipping
+                canonical_id = ""
                 if label == "Event":
                     is_dup, dup_id = _is_duplicate_event(name, session)
-                    if is_dup:
-                        log.info("[agent] Duplicate event skipped: %r matches existing %s", name, dup_id)
-                        duplicates_skipped += 1
-                        entities_skipped += 1
-                        continue
-
-                canonical_id = resolve_entity_id(
-                    raw_id=ent.get("id", ""), name=name, label=label, session=session
-                )
+                    if is_dup and dup_id:
+                        log.info("[agent] Duplicate event matched! Merging %r into existing %s", name, dup_id)
+                        canonical_id = dup_id
+                        
+                if not canonical_id:
+                    canonical_id = resolve_entity_id(
+                        raw_id=ent.get("id", ""), name=name, label=label, session=session
+                    )
                 id_field = _LABEL_ID_FIELD.get(label, f"{label.lower()}_id")
 
                 # Check if exists already
@@ -482,24 +448,7 @@ def run_agentic_ingestion(req: AgenticRequest) -> AgenticResponse:
                     except Exception as ex:
                         log.warning("[agent] BELONGS_TO edge failed for %s: %s", evt_id, ex)
 
-                # OCCURRED_IN → Region
-                if (evt_id, "OCCURRED_IN") not in llm_rel_set:
-                    region_id = _infer_region(
-                        evt_props.get("name", ""),
-                        evt_props.get("description", ""),
-                    )
-                    try:
-                        r = session.run("""
-                            MATCH (e:Event {event_id: $eid})
-                            MATCH (rg:Region {region_id: $rid})
-                            MERGE (e)-[r:OCCURRED_IN]->(rg)
-                            SET r.ingested_at = $ts
-                            RETURN r
-                        """, eid=evt_id, rid=region_id, ts=ts).single()
-                        if r:
-                            relations_created += 1
-                    except Exception as ex:
-                        log.warning("[agent] OCCURRED_IN edge failed for %s: %s", evt_id, ex)
+
 
     except Exception as e:
         add("Graph Check", f"Neo4j error: {e}", "warn")

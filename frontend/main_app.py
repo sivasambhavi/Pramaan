@@ -60,42 +60,43 @@ def home() -> None:
 
     logo_src = _logo_src()
 
-    # Hero in iframe with JS countUp animation
-    components.html(f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    # Hero section natively embedded (no iframe) for perfect SPA navigation
+    st.markdown(f"""
     <style>
-      *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-      html, body {{ width: 100%; height: 100%; background: transparent; font-family: 'Inter', sans-serif; color: #e2e8f0; overflow: hidden; }}
-      .page {{ width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 8px 24px 6px; }}
-      .logo-wrap {{ width: 130px; height: 130px; border-radius: 22px; background: #020b14; display: flex; align-items: center; justify-content: center; animation: glowPulse 3s ease-in-out infinite; overflow: hidden; }}
-      .logo-img {{ width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; image-rendering: -webkit-optimize-contrast; }}
+      #pramaan-hero * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+      #pramaan-hero {{ width: 100%; height: 580px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 8px 24px 6px; font-family: 'Inter', sans-serif; color: #e2e8f0; overflow: hidden; background: transparent; }}
+      #pramaan-hero .logo-wrap {{ width: 130px; height: 130px; border-radius: 22px; background: #020b14; display: flex; align-items: center; justify-content: center; animation: glowPulse 3s ease-in-out infinite; overflow: hidden; }}
+      #pramaan-hero .logo-img {{ width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; image-rendering: -webkit-optimize-contrast; }}
       @keyframes glowPulse {{ 0%,100% {{ box-shadow: 0 0 20px rgba(249,115,22,0.35); }} 50% {{ box-shadow: 0 0 40px rgba(249,115,22,0.65); }} }}
-      .title-block {{ text-align: center; }}
-      .hero-title {{ font-family: 'Cinzel', serif; font-size: 3.4em; font-weight: 900; background: linear-gradient(105deg,#f97316 0%,#fb923c 28%,#fff4e6 46%,#ffe9b0 52%,#fb923c 68%,#38bdf8 100%); background-size: 250% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 8px; letter-spacing: 0.18em; animation: fadeDown 0.5s ease both, titleShine 3.5s linear 0.8s infinite; }}
+      #pramaan-hero .title-block {{ text-align: center; }}
+      #pramaan-hero .hero-title {{ font-family: 'Cinzel', serif; font-size: 3.4em; font-weight: 900; background: linear-gradient(105deg,#f97316 0%,#fb923c 28%,#fff4e6 46%,#ffe9b0 52%,#fb923c 68%,#38bdf8 100%); background-size: 250% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 8px; letter-spacing: 0.18em; animation: fadeDown 0.5s ease both, titleShine 3.5s linear 0.8s infinite; }}
       @keyframes titleShine {{ 0% {{ background-position: 200% center; }} 100% {{ background-position: -50% center; }} }}
-      .hero-tagline {{ font-size: 0.92em; color: #64748b; letter-spacing: 0.04em; animation: fadeDown 0.5s 0.1s ease both; }}
+      #pramaan-hero .hero-tagline {{ font-size: 0.92em; color: #64748b; letter-spacing: 0.04em; animation: fadeDown 0.5s 0.1s ease both; }}
       @keyframes fadeDown {{ from {{ opacity:0; transform:translateY(-10px); }} to {{ opacity:1; transform:translateY(0); }} }}
-      .explainer {{ font-size: 0.78em; color: #475569; text-align: center; line-height: 1.55; max-width: 500px; padding: 8px 16px; background: rgba(15,23,42,0.6); border: 1px solid rgba(71,85,105,0.3); border-radius: 10px; animation: fadeDown 0.5s 0.18s ease both; }}
-      .stats-wrap {{ width: 80%; background: rgba(13,20,35,0.85); border: 1px solid rgba(249,115,22,0.22); border-radius: 12px; padding: 6px 8px; display: flex; justify-content: center; gap: 0; animation: fadeUp 0.5s 0.25s ease both; }}
+      #pramaan-hero .explainer {{ font-size: 0.78em; color: #475569; text-align: center; line-height: 1.55; max-width: 500px; padding: 8px 16px; background: rgba(15,23,42,0.6); border: 1px solid rgba(71,85,105,0.3); border-radius: 10px; animation: fadeDown 0.5s 0.18s ease both; }}
+      #pramaan-hero .stats-wrap {{ width: 80%; background: rgba(13,20,35,0.85); border: 1px solid rgba(249,115,22,0.22); border-radius: 12px; padding: 6px 8px; display: flex; justify-content: center; gap: 0; animation: fadeUp 0.5s 0.25s ease both; }}
       @keyframes fadeUp {{ from {{ opacity:0; transform:translateY(10px); }} to {{ opacity:1; transform:translateY(0); }} }}
-      .stat {{ flex: 1; text-align: center; padding: 0 12px; border-right: 1px solid rgba(71,85,105,0.3); }}
-      .stat:last-child {{ border-right: none; }}
-      .stat-val {{ font-family: 'Outfit', sans-serif; font-size: 1.8em; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }}
-      .stat-lbl {{ font-size: 0.62em; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-top: 4px; }}
-      .stat-sub {{ font-size: 0.64em; color: #334155; margin-top: 2px; }}
-      .badge-row {{ display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; animation: fadeUp 0.5s 0.42s ease both; }}
-      .badge {{ background: rgba(15,23,42,0.9); border: 1px solid rgba(71,85,105,0.5); border-radius: 20px; padding: 3px 9px; font-size: 0.62em; color: #94a3b8; font-weight: 600; letter-spacing: 0.03em; display: inline-flex; align-items: center; gap: 4px; cursor: default; white-space: nowrap; }}
-      .badge:hover {{ border-color: rgba(249,115,22,0.4); color: #f97316; }}
-      .dot {{ width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }}
-      .footer {{ font-size: 0.68em; color: #94a3b8; text-align: center; width: 100%; animation: fadeUp 0.5s 0.5s ease both; }}
+      #pramaan-hero .stat {{ flex: 1; text-align: center; padding: 0 12px; border-right: 1px solid rgba(71,85,105,0.3); }}
+      #pramaan-hero .stat:last-child {{ border-right: none; }}
+      #pramaan-hero .stat-val {{ font-family: 'Outfit', sans-serif; font-size: 1.8em; font-weight: 800; line-height: 1; letter-spacing: -0.02em; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }}
+      #pramaan-hero #s1 {{ animation-delay: 0.3s; }}
+      #pramaan-hero #s2 {{ animation-delay: 0.4s; }}
+      #pramaan-hero #s3 {{ animation-delay: 0.5s; }}
+      #pramaan-hero #s4 {{ animation-delay: 0.6s; }}
+      @keyframes popIn {{ 0% {{ opacity: 0; transform: scale(0.5); }} 100% {{ opacity: 1; transform: scale(1); }} }}
+      #pramaan-hero .stat-lbl {{ font-size: 0.62em; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-top: 4px; }}
+      #pramaan-hero .stat-sub {{ font-size: 0.64em; color: #334155; margin-top: 2px; }}
+      #pramaan-hero .btn-wrap {{ display:flex; justify-content:center; animation:fadeUp 0.5s 0.35s ease both; }}
+      #pramaan-hero .launch-btn {{ background:linear-gradient(135deg,#f97316,#ea580c); color:#fff !important; text-decoration:none; border-radius:12px; padding:10px 44px; font-family:'Outfit',sans-serif; font-weight:700; font-size:1em; letter-spacing:0.02em; box-shadow:0 4px 20px rgba(249,115,22,0.4); display:inline-block; transition:transform 0.2s; cursor: pointer; }}
+      #pramaan-hero .launch-btn:hover {{ transform:scale(1.05); }}
+      #pramaan-hero .badge-row {{ display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; animation: fadeUp 0.5s 0.42s ease both; }}
+      #pramaan-hero .badge {{ background: rgba(15,23,42,0.9); border: 1px solid rgba(71,85,105,0.5); border-radius: 20px; padding: 3px 9px; font-size: 0.62em; color: #94a3b8; font-weight: 600; letter-spacing: 0.03em; display: inline-flex; align-items: center; gap: 4px; cursor: default; white-space: nowrap; }}
+      #pramaan-hero .badge:hover {{ border-color: rgba(249,115,22,0.4); color: #f97316; }}
+      #pramaan-hero .dot {{ width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }}
+      #pramaan-hero .footer {{ font-size: 0.68em; color: #94a3b8; text-align: center; width: 100%; animation: fadeUp 0.5s 0.5s ease both; }}
     </style>
-    </head>
-    <body>
-    <div class="page">
+    
+    <div id="pramaan-hero">
       {"<div class='logo-wrap'><img class='logo-img' src='" + logo_src + "' /></div>" if logo_src else ""}
       <div class="title-block">
         <div class="hero-title">PRAMAAN</div>
@@ -105,16 +106,14 @@ def home() -> None:
         Know what's happening. Know why. Decide with proof.
       </div>
       <div class="stats-wrap">
-        <div class="stat"><div class="stat-val" id="s1" style="color:#f97316">₹0 Cr</div><div class="stat-lbl">Funds Tracked</div><div class="stat-sub">AMRUT · PMAY · SDRF · PLI</div></div>
-        <div class="stat"><div class="stat-val" id="s2" style="color:#22c55e">0</div><div class="stat-lbl">WARD-LEVEL ASSETS VERIFIED</div><div class="stat-sub">data.gov.in · pilot audit</div></div>
-        <div class="stat"><div class="stat-val" id="s3" style="color:#38bdf8">0</div><div class="stat-lbl">Evidence Nodes</div><div class="stat-sub">PIB · NDMA · ISRO · IMD</div></div>
-        <div class="stat"><div class="stat-val" id="s4" style="color:#a78bfa">0</div><div class="stat-lbl">Events Tracked</div><div class="stat-sub">across 7 domains</div></div>
+        <div class="stat"><div class="stat-val" id="s1" style="color:#f97316">₹{_funds_tracked:,.0f} Cr</div><div class="stat-lbl">Funds Tracked</div><div class="stat-sub">AMRUT · PMAY · SDRF · PLI</div></div>
+        <div class="stat"><div class="stat-val" id="s2" style="color:#22c55e">{_verified_assets:,.0f}</div><div class="stat-lbl">WARD-LEVEL ASSETS VERIFIED</div><div class="stat-sub">data.gov.in · pilot audit</div></div>
+        <div class="stat"><div class="stat-val" id="s3" style="color:#38bdf8">{_evidence:,.0f}</div><div class="stat-lbl">Evidence Nodes</div><div class="stat-sub">PIB · NDMA · ISRO · IMD</div></div>
+        <div class="stat"><div class="stat-val" id="s4" style="color:#a78bfa">{_events:,.0f}</div><div class="stat-lbl">Events Tracked</div><div class="stat-sub">across 7 domains</div></div>
       </div>
       <div style="height:14px;"></div>
-      <div style="display:flex;justify-content:center;animation:fadeUp 0.5s 0.35s ease both;">
-        <a href="/Live_Ingestion" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;text-decoration:none;border-radius:12px;padding:10px 44px;font-family:Outfit,sans-serif;font-weight:700;font-size:1em;letter-spacing:0.02em;box-shadow:0 4px 20px rgba(249,115,22,0.4);display:inline-block;">
-          Launch PRAMAAN &nbsp;→
-        </a>
+      <div class="btn-wrap">
+        <a href="Live_Ingestion" target="_self" class="launch-btn">Launch PRAMAAN &nbsp;→</a>
       </div>
       <div style="height:28px;"></div>
       <div class="badge-row">
@@ -130,32 +129,7 @@ def home() -> None:
         &nbsp;·&nbsp; Bharat Mandapam, New Delhi &nbsp;·&nbsp; March 28–29
       </div>
     </div>
-    <script>
-      function countUp(el, target, dur) {{
-        var start = 0, step = target / (dur / 16);
-        var t = setInterval(function() {{
-          start = Math.min(start + step, target);
-          el.textContent = Math.floor(start);
-          if (start >= target) clearInterval(t);
-        }}, 16);
-      }}
-      setTimeout(function() {{
-        var fundsEl = document.getElementById('s1');
-        var fundsTarget = {_funds_tracked};
-        var fundsStart = 0, fundsStep = fundsTarget / (400 / 16);
-        var fundsT = setInterval(function() {{
-          fundsStart = Math.min(fundsStart + fundsStep, fundsTarget);
-          fundsEl.textContent = '₹' + Math.floor(fundsStart).toLocaleString('en-IN') + ' Cr';
-          if (fundsStart >= fundsTarget) clearInterval(fundsT);
-        }}, 16);
-        countUp(document.getElementById('s2'), {_verified_assets}, 500);
-        countUp(document.getElementById('s3'), {_evidence},        500);
-        countUp(document.getElementById('s4'), {_events},          700);
-      }}, 400);
-    </script>
-    </body>
-    </html>
-    """, height=580, scrolling=False)
+    """, unsafe_allow_html=True)
 
     # --- Fix 12: Live Ticker strip ---
     import time as _time

@@ -190,40 +190,52 @@ def page():
         p = prev.get(key, curr)
         d = curr - p
         if d > 0:
-            return f'<span style="font-size:9px;color:#22c55e;">+{d}</span>'
-        return '<span style="font-size:9px;color:#334155;">—</span>'
+            return f'<span style="font-size:9px;color:#22c55e;">+{d} new</span>'
+        return '<span style="font-size:9px;color:#334155;">0 new</span>'
 
     _IST = _dt.timezone(_dt.timedelta(hours=5, minutes=30))
     sync_ts = _dt.datetime.now(_IST).strftime("%H:%M:%S IST")
     view_link = (
-        '<a href="/Decision_Engine" target="_self" '
-        'style="font-size:9px;color:#38bdf8;text-decoration:none;margin-left:6px;">'
-        'View Ontology Graph</a>'
+        '<div style="margin-top:4px;"><a href="/Decision_Engine" target="_self" '
+        'style="font-size:9px;color:#38bdf8;text-decoration:none;">'
+        'View Ontology Graph →</a></div>'
     )
 
     # ── Stats bar — full width, compact single row ──────────────────────────────
     st.markdown(
         f'<div style="display:flex;gap:0;background:#060f1e;border:1px solid #1e293b;'
         f'border-radius:8px;padding:6px 12px;margin-bottom:8px;">'
-        f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding-right:12px;">'
-        f'<div style="font-size:1.4em;font-weight:800;color:#a78bfa;">{total_nodes}</div>'
-        f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Nodes</div>'
-        f'<div style="margin-top:1px;">{_delta(total_nodes,"nodes")}{view_link}</div>'
+        f'<div style="flex:1; display:flex; flex-direction:column; justify-content:space-between; text-align:center; border-right:1px solid #1e293b; padding-right:12px;">'
+        f'  <div>'
+        f'    <div style="font-size:2.2em;font-weight:800;color:#a78bfa;line-height:1.2;text-shadow:0 0 12px rgba(167,139,250,0.45);">{total_nodes}</div>'
+        f'    <div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;margin-top:2px;">Nodes <span style="text-transform:none;opacity:0.75">(Entities)</span></div>'
+        f'    <div style="margin-top:2px;">{_delta(total_nodes,"nodes")}</div>'
+        f'  </div>'
+        f'  {view_link}'
         f'</div>'
-        f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding:0 12px;">'
-        f'<div style="font-size:1.4em;font-weight:800;color:#38bdf8;">{total_edges}</div>'
-        f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Edges</div>'
-        f'<div style="margin-top:1px;">{_delta(total_edges,"edges")}</div>'
+        f'<div style="flex:1; display:flex; flex-direction:column; justify-content:space-between; text-align:center; border-right:1px solid #1e293b; padding:0 12px;">'
+        f'  <div>'
+        f'    <div style="font-size:2.2em;font-weight:800;color:#38bdf8;line-height:1.2;text-shadow:0 0 12px rgba(56,189,248,0.45);">{total_edges}</div>'
+        f'    <div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;margin-top:2px;">Edges <span style="text-transform:none;opacity:0.75">(Connections)</span></div>'
+        f'    <div style="margin-top:2px;">{_delta(total_edges,"edges")}</div>'
+        f'  </div>'
+        f'  <div style="margin-top:4px;"></div>'
         f'</div>'
-        f'<div style="flex:1;text-align:center;border-right:1px solid #1e293b;padding:0 12px;">'
-        f'<div style="font-size:1.4em;font-weight:800;color:#f97316;">{events}</div>'
-        f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Events</div>'
-        f'<div style="margin-top:1px;">{_delta(events,"events")}</div>'
+        f'<div style="flex:1; display:flex; flex-direction:column; justify-content:space-between; text-align:center; border-right:1px solid #1e293b; padding:0 12px;">'
+        f'  <div>'
+        f'    <div style="font-size:2.2em;font-weight:800;color:#f97316;line-height:1.2;text-shadow:0 0 12px rgba(249,115,22,0.45);">{events}</div>'
+        f'    <div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;margin-top:2px;">Events <span style="text-transform:none;opacity:0.75">(Incidents)</span></div>'
+        f'    <div style="margin-top:2px;">{_delta(events,"events")}</div>'
+        f'  </div>'
+        f'  <div style="margin-top:4px;"></div>'
         f'</div>'
-        f'<div style="flex:1;text-align:center;padding-left:12px;">'
-        f'<div style="font-size:1.4em;font-weight:800;color:#22c55e;">{evidence}</div>'
-        f'<div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;">Evidence</div>'
-        f'<div style="margin-top:1px;font-size:8px;color:#334155;">synced {sync_ts}</div>'
+        f'<div style="flex:1; display:flex; flex-direction:column; justify-content:space-between; text-align:center; padding-left:12px;">'
+        f'  <div>'
+        f'    <div style="font-size:2.2em;font-weight:800;color:#22c55e;line-height:1.2;text-shadow:0 0 12px rgba(34,197,94,0.45);">{evidence}</div>'
+        f'    <div style="font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;margin-top:2px;">Evidence <span style="text-transform:none;opacity:0.75">(Verified Sources)</span></div>'
+        f'    <div style="margin-top:2px;">{_delta(evidence,"evidence")}</div>'
+        f'  </div>'
+        f'  <div style="margin-top:4px;font-size:8px;color:#334155;">last checked {sync_ts}</div>'
         f'</div>'
         f'</div>',
         unsafe_allow_html=True,
@@ -409,8 +421,8 @@ def page():
 
         st.markdown(
             '<div style="margin-top:8px;font-size:9px;color:#334155;">'
-            'View ingestion logs in '
-            '<a href="/Delivery_Monitor" target="_self" style="color:#38bdf8;text-decoration:none;">Scheme Delivery</a>'
+            'View ingested entities in '
+            '<a href="/Decision_Engine" target="_self" style="color:#38bdf8;text-decoration:none;">Ontology Graph</a>'
             '</div>',
             unsafe_allow_html=True,
         )
@@ -466,35 +478,37 @@ def page():
             return f'<span style="font-size:9px;color:{c};margin-left:auto;">{on_label if ok else off_label}</span>'
 
         st.markdown(
-            f'<div style="background:#060f1e;border:1px solid #1e293b;border-radius:8px;padding:10px 14px;">'
-            f'<div style="display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center;'
-            f'font-size:8px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;'
-            f'margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid #0f172a;">'
-            f'<span></span><span>Model</span><span>Role &amp; Status</span></div>'
-            # Ollama
-            f'<div style="display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center;margin-bottom:6px;">'
-            f'{_dot(ollama_ok)}'
-            f'<div><div style="font-size:10px;color:#94a3b8;">Ollama · llama3</div>'
-            f'<div style="font-size:8.5px;color:#475569;">Primary · extraction + summarisation</div></div>'
-            f'{_lbl(ollama_ok, "Online", "Offline")}</div>'
-            # Groq
-            f'<div style="display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center;margin-bottom:6px;">'
-            f'{_dot(groq_ok, warn=True)}'
-            f'<div><div style="font-size:10px;color:#94a3b8;">Groq · LLaMA 3.3 70B</div>'
-            f'<div style="font-size:8.5px;color:#475569;">Fallback · used when Ollama is offline</div></div>'
-            f'{_lbl(groq_ok, "Ready", "Unreachable", warn=True)}</div>'
-            # Gemini
-            f'<div style="display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center;">'
-            f'{_dot(False, warn=True)}'
-            f'<div><div style="font-size:10px;color:#475569;">Gemini · Flash</div>'
-            f'<div style="font-size:8.5px;color:#334155;">Tertiary · classification + validation</div></div>'
-            f'<span style="font-size:9px;color:#475569;">Standby</span></div>'
+            f'<div style="background:#060f1e;border:1px solid #1e293b;border-radius:8px;padding:10px;display:flex;gap:10px;">'
+            # Ollama Box
+            f'<div style="flex:1;background:#081120;border:1px solid #1e293b;border-radius:6px;padding:10px;">'
+            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+            f'<div style="display:flex;align-items:center;gap:6px;">{_dot(ollama_ok)}<span style="font-size:10px;color:#e2e8f0;font-weight:700;">Ollama · llama3</span></div>'
+            f'{_lbl(ollama_ok, "Online", "Offline")}'
+            f'</div>'
+            f'<div style="font-size:8px;color:#64748b;line-height:1.3;">Primary · event extraction + summarisation</div>'
+            f'</div>'
+            # Groq Box
+            f'<div style="flex:1;background:#081120;border:1px solid #1e293b;border-radius:6px;padding:10px;">'
+            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+            f'<div style="display:flex;align-items:center;gap:6px;">{_dot(groq_ok, warn=True)}<span style="font-size:10px;color:#e2e8f0;font-weight:700;">Groq · LLaMA 3.3 70B</span></div>'
+            f'{_lbl(groq_ok, "Ready", "Offline", warn=True)}'
+            f'</div>'
+            f'<div style="font-size:8px;color:#64748b;line-height:1.3;">Fallback · instant fallback when primary is offline</div>'
+            f'</div>'
+            # Gemini Box
+            f'<div style="flex:1;background:#081120;border:1px solid #1e293b;border-radius:6px;padding:10px;">'
+            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+            f'<div style="display:flex;align-items:center;gap:6px;">{_dot(False, warn=True)}<span style="font-size:10px;color:#e2e8f0;font-weight:700;">Gemini · Pro</span></div>'
+            f'<span style="font-size:9px;color:#64748b;">Standby</span>'
+            f'</div>'
+            f'<div style="font-size:8px;color:#64748b;line-height:1.3;">Tertiary · domain classification + risk validation</div>'
+            f'</div>'
             f'</div>',
             unsafe_allow_html=True,
         )
 
 
 
-    render_ontology_model()
+
 
 page()

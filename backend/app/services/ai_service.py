@@ -36,105 +36,6 @@ OLLAMA_MODEL = settings.ollama_model
 
 VALID_SOURCE_TYPES = {"unstructured_llm", "unstructured_rss"}
 
-# ─── Canonical IDs already seeded in Neo4j ───────────────────────────────────
-KNOWN_IDS_CONTEXT = """
-IMPORTANT — The graph already contains these nodes. When the text mentions any
-of them, use the EXACT ID listed. Do NOT invent a new ID for an existing entity.
-
-Events:
-  EVT_IRAN_WAR_2026          = Iran-US-Israel War (2026, ongoing — Hormuz blockade, oil spike)
-  EVT_TWELVE_DAY_WAR_2025    = Twelve-Day War Israel-Iran (June 2025)
-  EVT_OPERATION_SINDOOR_2025 = Operation Sindoor — India strikes Pakistan PoJK (May 7 2025)
-  EVT_PAHALGAM_2025          = Pahalgam Terror Attack J&K, 26 killed (April 22 2025)
-  EVT_INDIA_EXTREME_WEATHER_2025 = India Extreme Weather Year 2025 (331/334 days)
-  EVT_INDIA_UK_CETA_2025     = India-UK Free Trade Agreement CETA (July 2025)
-  EVT_SP_UPGRADE_2025        = S&P India Sovereign Rating Upgrade BBB (August 2025)
-  EVT_ISRO_SPADEX_2025       = ISRO SpaDeX Satellite Docking Mission (January 2025)
-  EVT_SHUKLA_ISS_2025        = First Indian on ISS — Shubhanshu Shukla (June 2025)
-  EVT_INDIA_US_DEFENSE_2025  = India-US 10-Year Defence Partnership Framework (October 2025)
-  EVT_CYCLONE_DANA_2024      = Cyclone Dana (Odisha/West Bengal, 2024)
-  EVT_WAYANAD_2024           = Wayanad Landslide (Kerala, 2024)
-  EVT_TATA_SEMI_2024         = Tata Electronics Semiconductor Fab groundbreaking (2024)
-  EVT_GAZA_REDSEA_2023       = Gaza War and Red Sea Shipping Crisis (2023)
-  EVT_INDIA_CANADA_2023      = India-Canada Diplomatic Row (2023)
-  EVT_G20_INDIA_2023         = G20 New Delhi Summit (September 2023)
-  EVT_IMEC_2023              = India-Middle East-Europe Corridor signing (2023)
-  EVT_CHANDRAYAAN3_2023      = Chandrayaan-3 Moon Landing (2023)
-  EVT_DELHI_FLOODS_2023      = Delhi Yamuna Floods (2023)
-
-Actors — India Government:
-  ACT_MEA          = Ministry of External Affairs India (S. Jaishankar)
-  ACT_PMO          = Prime Minister's Office India (PM Modi)
-  ACT_MOD          = Ministry of Defence India
-  ACT_MOF          = Ministry of Finance India
-  ACT_RBI          = Reserve Bank of India
-  ACT_ISRO         = Indian Space Research Organisation
-  ACT_DRDO         = Defence Research and Development Organisation
-  ACT_MoPNG        = Ministry of Petroleum and Natural Gas India
-  ACT_PPAC         = Petroleum Planning and Analysis Cell
-  ACT_NDMA         = National Disaster Management Authority
-  ACT_NDRF         = National Disaster Response Force
-  ACT_PIB          = Press Information Bureau India
-
-Actors — India PSU / Finance:
-  ACT_HPCL         = Hindustan Petroleum Corporation Ltd
-  ACT_BPCL         = Bharat Petroleum Corporation Ltd
-  ACT_IOC          = Indian Oil Corporation
-  ACT_GAIL         = GAIL India Ltd
-  ACT_ONGC         = Oil and Natural Gas Corporation
-  ACT_SBI          = State Bank of India
-  ACT_NSE          = National Stock Exchange
-  ACT_BSE          = Bombay Stock Exchange
-
-Actors — Global:
-  ACT_OPEC         = OPEC+ (oil cartel)
-  ACT_US_STATE     = US State Department
-  ACT_US_DOD       = US Department of Defense
-  ACT_IAEA         = International Atomic Energy Agency
-  ACT_UN           = United Nations
-  ACT_UNSC         = UN Security Council
-  ACT_IMF          = International Monetary Fund
-  ACT_WORLD_BANK   = World Bank
-  ACT_WTO          = World Trade Organization
-  ACT_WHO          = World Health Organization
-  ACT_IRAN_GOVT    = Government of Iran
-  ACT_ISRAEL_GOVT  = Government of Israel
-  ACT_PAKISTAN_ISI = Pakistan ISI / Military
-
-Regions — Global:
-  REG_INDIA        = India (country)
-  REG_IRAN         = Iran
-  REG_ISRAEL       = Israel
-  REG_USA          = United States of America
-  REG_CHINA        = China
-  REG_PAKISTAN     = Pakistan
-  REG_HORMUZ       = Strait of Hormuz (chokepoint)
-  REG_PERSIAN_GULF = Persian Gulf
-  REG_MIDDLE_EAST  = Middle East region
-  REG_RED_SEA      = Red Sea / Bab-el-Mandeb
-  REG_INDO_PACIFIC = Indo-Pacific region
-  REG_IMEC         = IMEC Corridor (India-Middle East-Europe)
-
-Regions — India:
-  REG_DELHI        = Delhi (NCT)
-  REG_KERALA       = Kerala
-  REG_ODISHA       = Odisha
-  REG_JK           = Jammu & Kashmir
-  REG_W45          = Ward 45 Shahdara (Delhi, local delivery pilot)
-
-Schemes / Policies — India:
-  SCH_AMRUT        = AMRUT Urban Infrastructure Mission
-  SCH_PMAY         = PMAY-Urban Housing Scheme
-  SCH_SWACHH       = Swachh Bharat Mission Urban
-  SCH_PLI          = Production Linked Incentive Scheme
-  SCH_AYUSHMAN     = Ayushman Bharat PMJAY Health Insurance
-  SCH_SPR          = India Strategic Petroleum Reserve (SPR)
-  SCH_JJBY         = Jal Jeevan Mission
-
-Only create a NEW id (e.g. "evt_iran_ceasefire_2026") if the entity is genuinely
-not in this list. Use snake_case prefix matching the label type.
-"""
-
 class AIService:
     def __init__(self):
         # ── Primary: Ollama (local) ───────────────────────────────────────────
@@ -217,12 +118,44 @@ class AIService:
                 "relations": [],
             }
 
+        # Known event IDs — use exact IDs when the text matches these events
+        _KNOWN_EVENT_IDS = """
+EVT_IRAN_WAR_2026               Iran-US-Israel War (Feb 2026)
+EVT_HORMUZ_BLOCKADE_2026        Strait of Hormuz Blockade (Mar 2026)
+EVT_IRAN_CEASEFIRE_TALKS_2026   Iran War Ceasefire Talks (Mar 2026)
+EVT_LABOUR_CODES_2025           Four Labour Codes Enforcement (Nov 2025)
+EVT_INDIA_US_DEFENSE_2025       India-US Defence Pact (Oct 2025)
+EVT_SP_UPGRADE_2025             S&P Sovereign Upgrade BBB (Aug 2025)
+EVT_INDIA_UK_CETA_2025          India-UK Trade Agreement (Jul 2025)
+EVT_SHUKLA_ISS_2025             First Indian on ISS (Jun 2025)
+EVT_TWELVE_DAY_WAR_2025         Twelve-Day War Israel-Iran (Jun 2025)
+EVT_INDIA_PAK_DIPLO_CRISIS_2025 India-Pakistan Diplomatic Crisis (May 2025)
+EVT_INDIA_PAK_CEASEFIRE_2025    India-Pakistan Ceasefire (May 2025)
+EVT_OPERATION_SINDOOR_2025      Operation Sindoor (May 2025)
+EVT_LOC_SKIRMISHES_2025         India-Pakistan LoC Skirmishes (Apr 2025)
+EVT_INDUS_WATERS_CRISIS_2025    Indus Waters Treaty Suspension (Apr 2025)
+EVT_PAHALGAM_2025               Pahalgam Terror Attack (Apr 2025)
+EVT_INDIA_EXTREME_WEATHER_2025  India Extreme Weather 2025 (Jan 2025)
+EVT_ISRO_SPADEX_2025            ISRO SpaDeX Docking (Jan 2025)
+EVT_CYCLONE_DANA_2024           Cyclone Dana Puri (Oct 2024)
+EVT_WAYANAD_2024                Wayanad Landslide (Jul 2024)
+EVT_TATA_SEMI_2024              Tata Semiconductor Fab (Feb 2024)
+EVT_G20_INDIA_2023              G20 New Delhi Summit (Sep 2023)
+EVT_CHANDRAYAAN3_2023           Chandrayaan-3 Landing (Aug 2023)
+EVT_DELHI_FLOODS_2023           Delhi Yamuna Floods (Jul 2023)
+EVT_MANIPUR_2023                Manipur Conflict (May 2023)
+EVT_JOSHIMATH_2023              Joshimath Subsidence (Jan 2023)
+"""
+
         prompt = f"""
 You are a Global Ontology Engine for India intelligence.
 Extract significant entities and relationships from the text across 7 domains:
   Geopolitics · Economics · Defense · Technology · Climate · Society · Governance
 
-{KNOWN_IDS_CONTEXT}
+── KNOWN EVENT IDs — use these exact IDs when the text matches ────────────────
+{_KNOWN_EVENT_IDS}
+If the text refers to any of these events, use the exact event_id shown above.
+For new events not in this list, generate a snake_case ID (e.g. "evt_new_crisis_2026").
 
 ── ENTITY LABEL DEFINITIONS ──────────────────────────────────────────────────
 
@@ -252,9 +185,9 @@ POLICY  — A law, regulation, or standing government directive (not time-bounde
 SCHEME  — A government funding programme or welfare scheme with a scheme ID
 ACTOR   — A government body, agency, PSU, international org, or named individual
 REGION  — A geographic location: country, state, city, or strategic chokepoint
-IMPACT  — A measurable outcome or consequence (deaths, displaced persons, ₹ loss)
-EVIDENCE — A specific document, report, satellite image, or data source
-ASSET   — A physical infrastructure asset (dam, power plant, road)
+IMPACT  — A measurable outcome or consequence (deaths, displaced persons, ₹ loss, ₹ budget)
+EVIDENCE — A specific document, report, satellite image, data source, or official statement
+ASSET   — A physical infrastructure asset (dam, power plant, road, port)
 
 ── Text ───────────────────────────────────────────────────────────────────────
 {text}
@@ -265,7 +198,7 @@ Return ONLY valid JSON — no markdown, no explanation, no code blocks.
 {{
   "entities": [
     {{
-      "id": "<use existing ID from context above, or snake_case new id>",
+      "id": "<use exact known ID if matched, else snake_case>",
       "label": "<Event|Actor|Region|Scheme|Policy|Impact|Evidence|Asset|Domain>",
       "properties": {{
         "name": "<human-readable name>",
@@ -281,37 +214,63 @@ Return ONLY valid JSON — no markdown, no explanation, no code blocks.
     {{
       "from_id": "<id>", "from_label": "<label>",
       "to_id":   "<id>", "to_label":   "<label>",
-      "type": "<CAUSED|TRIGGERED|FUNDS|BENEFITS|PROVES|BUILT_BY|LOCATED_IN|CONNECTED_TO|OCCURRED_IN|BELONGS_TO|MANAGED_BY>"
+      "type": "<CAUSED|TRIGGERED|FUNDS|BENEFITS|PROVEN_BY|BUILT_BY|LOCATED_IN|CONNECTED_TO|OCCURRED_IN|BELONGS_TO|MANAGED_BY>"
     }}
   ]
 }}
 
+── Relation Type Guide ────────────────────────────────────────────────────────
+  CAUSED      — Event → Impact         (e.g. Iran War CAUSED oil price spike)
+  TRIGGERED   — Event → Scheme         (e.g. Iran War TRIGGERED ONGC Videsh activation)
+  PROVEN_BY   — Event → Evidence       (e.g. Event PROVEN_BY satellite report)
+  MANAGED_BY  — Event → Actor          (e.g. Event MANAGED_BY Ministry of Defence)
+  OCCURRED_IN — Event → Region         (e.g. Event OCCURRED_IN Iran)
+  BELONGS_TO  — Event → Domain         (e.g. Event BELONGS_TO DOM_GEOPOLITICS)
+  CONNECTED_TO — Event ↔ Event         (e.g. Iran War CONNECTED_TO Hormuz Blockade — cross-domain link)
+  FUNDS       — Scheme/Policy → Asset  (e.g. Scheme FUNDS road project)
+  BENEFITS    — Scheme → Beneficiary   (e.g. Scheme BENEFITS displaced workers)
+
 ── Examples ───────────────────────────────────────────────────────────────────
 
-Geopolitics (Event — specific military operation):
+Defense (Event with Impact and Actor):
   {{"id": "EVT_OPERATION_SINDOOR_2025", "label": "Event", "properties": {{"name": "Operation Sindoor", "domain": "DOM_DEFENSE", "severity": "critical", "date": "2025-05-07", "confidence": 0.95}}}}
   {{"id": "ACT_MOD", "label": "Actor", "properties": {{"name": "Ministry of Defence India", "confidence": 0.95}}}}
-  Relation: {{"from_id": "EVT_OPERATION_SINDOOR_2025", "from_label": "Event", "to_id": "REG_JK", "to_label": "Region", "type": "OCCURRED_IN"}}
+  {{"id": "imp_sindoor_strikes", "label": "Impact", "properties": {{"name": "9 Pakistani terror infrastructure sites struck", "type": "military", "value": 9, "unit": "sites", "domain": "DOM_DEFENSE", "confidence": 0.95}}}}
+  Relations:
+    {{"from_id": "EVT_OPERATION_SINDOOR_2025", "from_label": "Event", "to_id": "ACT_MOD", "to_label": "Actor", "type": "MANAGED_BY"}}
+    {{"from_id": "EVT_OPERATION_SINDOOR_2025", "from_label": "Event", "to_id": "imp_sindoor_strikes", "to_label": "Impact", "type": "CAUSED"}}
+    {{"from_id": "EVT_OPERATION_SINDOOR_2025", "from_label": "Event", "to_id": "REG_JK", "to_label": "Region", "type": "OCCURRED_IN"}}
 
-Economics (Event — specific market shock, not an ongoing metric):
-  {{"id": "evt_rupee_crisis_2026", "label": "Event", "properties": {{"name": "INR/USD hits 90 — RBI intervention", "domain": "DOM_ECONOMICS", "severity": "high", "date": "2026-03-10", "confidence": 0.85}}}}
+Geopolitics (Event with Scheme triggered and cross-domain connection):
+  {{"id": "EVT_IRAN_WAR_2026", "label": "Event", "properties": {{"name": "Iran-US-Israel War", "domain": "DOM_GEOPOLITICS", "severity": "critical", "date": "2026-02-01", "confidence": 0.95}}}}
+  {{"id": "SCH_ONGC_VIDESH", "label": "Scheme", "properties": {{"name": "ONGC Videsh Ltd Strategic Activation", "domain": "DOM_ECONOMICS", "scheme_type": "Type 1", "confidence": 0.9}}}}
+  {{"id": "imp_oil_shock", "label": "Impact", "properties": {{"name": "Crude oil price spike", "type": "economic", "value": 95, "unit": "usd_per_barrel", "domain": "DOM_ECONOMICS", "confidence": 0.9}}}}
+  Relations:
+    {{"from_id": "EVT_IRAN_WAR_2026", "from_label": "Event", "to_id": "SCH_ONGC_VIDESH", "to_label": "Scheme", "type": "TRIGGERED"}}
+    {{"from_id": "EVT_IRAN_WAR_2026", "from_label": "Event", "to_id": "imp_oil_shock", "to_label": "Impact", "type": "CAUSED"}}
+    {{"from_id": "EVT_IRAN_WAR_2026", "from_label": "Event", "to_id": "EVT_HORMUZ_BLOCKADE_2026", "to_label": "Event", "type": "CONNECTED_TO"}}
 
-Economics (Policy — NOT an Event):
-  {{"id": "pol_gst_amendment_2026", "label": "Policy", "properties": {{"name": "GST Rate Rationalisation 2026", "domain": "DOM_GOVERNANCE", "confidence": 0.9}}}}
+Economics (Event with Evidence):
+  {{"id": "EVT_SP_UPGRADE_2025", "label": "Event", "properties": {{"name": "S&P Sovereign Upgrade BBB", "domain": "DOM_ECONOMICS", "severity": "high", "date": "2025-08-01", "confidence": 0.95}}}}
+  {{"id": "ev_sp_report_2025", "label": "Evidence", "properties": {{"name": "S&P Rating Report Aug 2025", "type": "report", "source": "S&P Global", "confidence": 0.95}}}}
+  Relation: {{"from_id": "EVT_SP_UPGRADE_2025", "from_label": "Event", "to_id": "ev_sp_report_2025", "to_label": "Evidence", "type": "PROVEN_BY"}}
 
-Climate (Event — specific disaster):
-  {{"id": "EVT_WAYANAD_2024", "label": "Event", "properties": {{"name": "Wayanad Landslide 2024", "domain": "DOM_CLIMATE", "severity": "high", "confidence": 0.95}}}}
-  {{"id": "imp_wayanad_dead", "label": "Impact", "properties": {{"name": "231 deaths — Wayanad", "domain": "DOM_CLIMATE", "confidence": 0.95}}}}
+Climate (Event with quantified Impact):
+  {{"id": "EVT_WAYANAD_2024", "label": "Event", "properties": {{"name": "Wayanad Landslide 2024", "domain": "DOM_CLIMATE", "severity": "critical", "confidence": 0.95}}}}
+  {{"id": "imp_wayanad_dead", "label": "Impact", "properties": {{"name": "231 deaths — Wayanad", "type": "casualties", "value": 231, "unit": "persons", "domain": "DOM_CLIMATE", "confidence": 0.95}}}}
+  Relation: {{"from_id": "EVT_WAYANAD_2024", "from_label": "Event", "to_id": "imp_wayanad_dead", "to_label": "Impact", "type": "CAUSED"}}
 
 Governance (Scheme — NOT an Event):
-  {{"id": "SCH_PLI", "label": "Scheme", "properties": {{"name": "PLI Scheme", "domain": "DOM_GOVERNANCE", "confidence": 0.95}}}}
+  {{"id": "SCH_PLI_SOLAR", "label": "Scheme", "properties": {{"name": "PLI Solar Manufacturing Scheme", "domain": "DOM_ECONOMICS", "scheme_type": "Type 2", "confidence": 0.95}}}}
 
 ── Rules ──────────────────────────────────────────────────────────────────────
-- ALWAYS reuse IDs from the IMPORTANT context above when the entity matches.
-- For new entities use snake_case prefixes: evt_, act_, reg_, sch_, pol_, imp_, ev_, ast_
+- Use exact known event IDs from the KNOWN EVENT IDs list when the text matches. Otherwise use snake_case.
 - Only label something Event if it passes the Event definition above — when in doubt use Policy, Impact, or skip.
 - confidence: 1.0 = explicitly stated in text · 0.6 = inferred · below 0.6 = omit entity.
 - Omit fields you cannot determine — do NOT guess dates or numbers.
+- For Scheme entities, include scheme_type: "Type 1" (emergency/crisis response) or "Type 2" (structural/long-term) if determinable.
+- For Impact entities, include type, value (number), and unit when mentioned in the text.
+- PROVEN_BY direction: Event → Evidence (the event is proven by the evidence document).
 - Return ONLY the JSON object. Nothing else.
 """
         def _parse(raw: str) -> dict:
@@ -466,7 +425,59 @@ Return ONLY valid JSON — no markdown, no explanation:
     def analyze_evidence(self, text: str, asset_name: str = "", ward_name: str = "") -> dict:
         return self.score_evidence(text, asset_name, ward_name)
 
-    # ── 3. Domain-aware content classification ────────────────────────────────
+    # ── 3. Domain-aware content classification + Crisis Routing ───────────────
+    def is_crisis(self, text: str, topic: str = "") -> bool:
+        """
+        Dynamically determine if the incoming news article represents an escalating
+        crisis, major geopolitical shock, or active conflict affecting India.
+        """
+        prompt = f"""
+Analyze the following news snippet and determine if it represents an escalating CRISIS or SHOCK.
+A topic is a CRISIS if it involves:
+- Active warfare, military strikes, or severe border conflicts
+- Large-scale natural disasters (cyclones, massive landslides)
+- Major economic shocks (e.g., sudden blockade of trade routes, massive oil price spikes)
+- Diplomatic ruptures with immediate severe consequences
+
+If it is just normal governance, a treaty signing, a planned space launch, or routine news, it is NOT a crisis.
+
+Topic: {topic}
+Snippet: {text}
+
+Answer ONLY with a boolean true or false:
+{{
+  "is_crisis": true or false
+}}
+"""
+        def _parse(raw: str) -> bool:
+            if raw.startswith("```"):
+                raw = raw.split("```")[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+            try:
+                return json.loads(raw.strip()).get("is_crisis", False)
+            except:
+                return False
+
+        if self.client:
+            try:
+                chat = self.client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model="llama-3.3-70b-versatile",
+                    temperature=0.0,
+                    response_format={"type": "json_object"},
+                )
+                return _parse(chat.choices[0].message.content)
+            except Exception as e:
+                pass
+                
+        if self.gemini:
+            try:
+                return _parse(self._call_gemini(prompt))
+            except:
+                pass
+                
+        return False
     def classify_content(self, text: str, topic: str = "") -> dict:
         """
         Determine whether text is relevant to India's national interest across
@@ -566,7 +577,8 @@ Rules:
             except Exception as e:
                 logger.error("[ai] classify_content Gemini also failed: %s", e)
 
-        return _fallback
+        # Drop fallback entirely and raise exception if no AI available
+        raise RuntimeError("classify_content failed: No AI models available or all rate-limited.")
 
     # ── 4. Crisis sub-event extraction ───────────────────────────────────────
     def extract_crisis_update(self, text: str, parent_event_id: str, parent_event_name: str) -> dict:
