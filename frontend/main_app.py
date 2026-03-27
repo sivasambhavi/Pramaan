@@ -218,12 +218,13 @@ def main() -> None:
     pg = st.navigation(
         [
             st.Page(home,                                   title="Pramaan",          icon=":material/verified_user:", default=True, url_path=""),
-            st.Page("pages/05_Live_Ingestion.py",       title="Live Ingestion",        icon=":material/cell_tower:",    url_path="Live_Ingestion"),
-            st.Page("pages/01_National_Intelligence.py", title="National Intelligence", icon=":material/map:",           url_path="National_Intelligence"),
-            st.Page("pages/02_Decision_Engine.py",       title="Decision Engine",       icon=":material/hub:",           url_path="Decision_Engine"),
-            st.Page("pages/03_Delivery_Monitor.py",     title="Delivery Monitor",     icon=":material/electric_bolt:", url_path="Delivery_Monitor"),
-            st.Page("pages/04_Proof_and_Evidence.py",   title="Proof & Evidence",     icon=":material/psychology:",    url_path="Proof_and_Evidence"),
-            st.Page("pages/06_Crisis_Monitor.py",        title="Crisis Monitor",        icon=":material/crisis_alert:",  url_path="Crisis_Monitor"),
+            st.Page("pages/live_ingestion.py",        title="Live Ingestion",       icon=":material/cell_tower:",    url_path="Live_Ingestion"),
+            st.Page("pages/national_intelligence.py", title="National Intelligence", icon=":material/map:",           url_path="National_Intelligence"),
+            st.Page("pages/ontology_graph.py",        title="Ontology Graph",        icon=":material/hub:",           url_path="Decision_Engine"),
+            st.Page("pages/scheme_delivery.py",       title="Scheme Delivery",       icon=":material/electric_bolt:", url_path="Delivery_Monitor"),
+            st.Page("pages/proof_and_evidence.py",    title="Proof & Evidence",      icon=":material/psychology:",    url_path="Proof_and_Evidence"),
+            st.Page("pages/crisis_tracker.py",        title="Crisis Tracker",        icon=":material/crisis_alert:",  url_path="Crisis_Monitor"),
+            st.Page("pages/intelligence_verdict.py",  title="Intelligence Verdict",  icon=":material/psychology:",    url_path="Intelligence_Verdict"),
         ],
         expanded=True,
     )

@@ -1,5 +1,5 @@
 """
-06_Crisis_Monitor.py — PRAMAAN Crisis Intelligence Monitor
+crisis_tracker.py — PRAMAAN Crisis Tracker
 
 Dedicated full-width dashboard for ongoing crisis events.
 Shows: live timeline · India exposure radar · scenario analysis · decisions
@@ -357,8 +357,8 @@ def _scenario_donut(scenarios: list) -> None:
 # ── Page ──────────────────────────────────────────────────────────────────────
 
 def page():
-    st.set_page_config(page_title="Crisis Monitor – PRAMAAN", layout="wide")
-    render_topnav(active_page="Crisis Monitor")
+    st.set_page_config(page_title="Crisis Tracker – PRAMAAN", layout="wide")
+    render_topnav(active_page="Crisis Tracker")
 
     st.markdown("""
     <style>

@@ -1,5 +1,5 @@
 """
-05_Live_Ingestion.py — PRAMAAN v5
+live_ingestion.py — PRAMAAN v5
 Live Ingestion — unified prompt + scheduling, auto-refreshing feed.
 """
 
@@ -198,7 +198,7 @@ def page():
     view_link = (
         '<a href="/Decision_Engine" target="_self" '
         'style="font-size:9px;color:#38bdf8;text-decoration:none;margin-left:6px;">'
-        'View graph</a>'
+        'View Ontology Graph</a>'
     )
 
     # ── Stats bar — full width, compact single row ──────────────────────────────
@@ -410,7 +410,7 @@ def page():
         st.markdown(
             '<div style="margin-top:8px;font-size:9px;color:#334155;">'
             'View ingestion logs in '
-            '<a href="/Delivery_Monitor" target="_self" style="color:#38bdf8;text-decoration:none;">Delivery Monitor</a>'
+            '<a href="/Delivery_Monitor" target="_self" style="color:#38bdf8;text-decoration:none;">Scheme Delivery</a>'
             '</div>',
             unsafe_allow_html=True,
         )

@@ -1,5 +1,5 @@
 """
-02_Decision_Engine.py — PRAMAAN v5
+ontology_graph.py — PRAMAAN v5
 Decision Engine: interactive knowledge graph (streamlit-agraph), Type 1/2 scheme panels,
 cross-domain connections, node detail panel.
 """
@@ -904,8 +904,8 @@ def _render_crisis_dashboard(event_id: str):
 
 
 def page():
-    st.set_page_config(page_title="Decision Engine – PRAMAAN", layout="wide")
-    render_topnav(active_page="Decision Engine")
+    st.set_page_config(page_title="Ontology Graph – PRAMAAN", layout="wide")
+    render_topnav(active_page="Ontology Graph")
 
     st.markdown("""
     <style>
@@ -975,7 +975,7 @@ def page():
                 display:flex;align-items:center;gap:14px;">
       <span style="font-size:1.9em;font-weight:800;color:#a78bfa;font-family:'Cinzel',serif;
                    letter-spacing:0.08em;white-space:nowrap;animation:glowPulse 2.5s ease-in-out infinite;">
-        DECISION ENGINE
+        ONTOLOGY GRAPH
       </span>
       <span style="font-size:0.75em;color:#64748b;white-space:nowrap;">
         {total_nodes} Entities &nbsp;·&nbsp; {total_edges} Relationships &nbsp;·&nbsp;
@@ -1248,10 +1248,10 @@ def page():
                     }}
                     </style>
                     """, unsafe_allow_html=True)
-                    if st.button("View in Delivery Monitor  →", key=f"goto_feed_{sel_node_id}",
+                    if st.button("View in Scheme Delivery  →", key=f"goto_feed_{sel_node_id}",
                                  use_container_width=True, type="primary"):
                         st.session_state["deep_link_feed"] = bare_id
-                        st.switch_page("pages/03_Delivery_Monitor.py")
+                        st.switch_page("pages/scheme_delivery.py")
 
         # ── AI Insights ──────────────────────────────────────────────────────
         _ai_event_id = st.session_state.get("ontology_sel")
@@ -1263,7 +1263,7 @@ def page():
                 unsafe_allow_html=True,
             )
             if st.button("Generate Brief →", key=f"ai_brief_{_ai_event_id}",
-                         use_container_width=True):
+                         use_container_width=True, type="primary"):
                 _ev_detail = safe_get(f"/ontology/events/{_ai_event_id}") or {}
                 _ev        = _ev_detail.get("event", {})
                 _actors    = _ev_detail.get("actors", [])
@@ -1321,10 +1321,10 @@ def page():
                 '</div>',
                 unsafe_allow_html=True,
             )
-            if st.button("Open Crisis Monitor →", key=f"crisis_cta_{_crisis_event_id}",
+            if st.button("Open Crisis Tracker →", key=f"crisis_cta_{_crisis_event_id}",
                          use_container_width=True, type="primary"):
                 st.session_state["crisis_sel"] = _crisis_event_id
-                st.switch_page("pages/06_Crisis_Monitor.py")
+                st.switch_page("pages/crisis_tracker.py")
 
     # ══ DECISION ENGINE PANEL (Event-Aware Fix 13) ══════════════════════════
     _sel = st.session_state.get("ontology_sel")
@@ -1496,9 +1496,9 @@ def page():
         '</div>',
         unsafe_allow_html=True,
     )
-    if st.button("View Delhi Pilot → Delivery Monitor", key="goto_delivery_pilot", type="primary"):
+    if st.button("View Delhi Pilot → Scheme Delivery", key="goto_delivery_pilot", type="primary"):
         st.session_state["feed_sel"] = "EVT_DELHI_FLOODS_2023"
-        st.switch_page("pages/03_Delivery_Monitor.py")
+        st.switch_page("pages/scheme_delivery.py")
     st.markdown('</div>', unsafe_allow_html=True)
 
 

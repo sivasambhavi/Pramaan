@@ -16,6 +16,9 @@ Changelog:
        Added ScrapeNewsResponse typed model.
   v5 — Models support 5-layer proof chain (Event → Response → Scheme → Asset → Evidence).
        /stats returns v5 governance metrics: funds_tracked, verified_assets, evidence, events.
+  v6 — SchemeNode updated: budget_crore, status, scheme_type, scheme_type_label, domain,
+       description, strategic_value, risk, source_url.
+       EventNode updated: domain, severity, description, source_url for global ontology events.
 """
 
 from typing import Any, Literal, Optional
@@ -52,10 +55,20 @@ class RegionNode(AuditFields):
 
 
 class SchemeNode(AuditFields):
-    scheme_id: str                           # PK
-    name:      str
-    ministry:  Optional[str] = None
-    category:  Optional[str] = None
+    scheme_id:         str                   # PK
+    name:              str
+    ministry:          Optional[str]   = None
+    category:          Optional[str]   = None
+    # Ontology / global event fields (added v6)
+    budget_crore:      Optional[float] = None
+    status:            Optional[str]   = None  # active | at_risk | partially_operational | inactive
+    scheme_type:       Optional[str]   = None  # "Type 1" | "Type 2"
+    scheme_type_label: Optional[str]   = None  # "Type 1 — Emergency" | "Type 2 — Structural"
+    domain:            Optional[str]   = None  # DOM_ECONOMICS etc.
+    description:       Optional[str]   = None
+    strategic_value:   Optional[str]   = None
+    risk:              Optional[str]   = None
+    source_url:        Optional[str]   = None
 
 
 class ActorNode(AuditFields):
@@ -99,11 +112,16 @@ class EvidenceNode(AuditFields):
 
 
 class EventNode(AuditFields):
-    event_id:   str                          # PK
-    name:       str
-    event_type: Optional[str] = None        # completion | inauguration | handover
-    date:       Optional[str] = None
-    asset_id:   Optional[str] = None        # FK -> Asset.asset_id
+    event_id:    str                         # PK
+    name:        str
+    event_type:  Optional[str] = None       # completion | inauguration | handover | crisis | geopolitical
+    date:        Optional[str] = None
+    asset_id:    Optional[str] = None       # FK -> Asset.asset_id (delivery events)
+    # Global ontology event fields (added v6)
+    domain:      Optional[str] = None       # DOM_CLIMATE | DOM_DEFENSE | DOM_ECONOMICS etc.
+    severity:    Optional[str] = None       # critical | high | medium | low
+    description: Optional[str] = None
+    source_url:  Optional[str] = None
 
 
 # ---------------------------------------------------------------------------

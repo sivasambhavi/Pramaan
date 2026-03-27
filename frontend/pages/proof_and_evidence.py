@@ -1,5 +1,5 @@
 """
-04_Proof_and_Evidence.py — PRAMAAN v5
+proof_and_evidence.py — PRAMAAN v5
 Proof & Evidence: AI decision brief (Groq LLaMA 3.3 70B), before/after photos,
 data proof layer, trust scoring, citizen mock view.
 """
@@ -672,7 +672,7 @@ def _render_citizen_report_tab():
       <div style="font-size:11px;color:#94a3b8">
         Scan the QR code on the physical asset → fill this form → upload a photo of the issue →
         AI validates the image → Neo4j flags the asset as
-        <b style="color:#f97316">⚠ DISPUTED</b> and it appears on Delivery Monitor for audit.
+        <b style="color:#f97316">⚠ DISPUTED</b> and it appears on Scheme Delivery for audit.
       </div>
     </div>
     """, unsafe_allow_html=True)
@@ -938,7 +938,7 @@ def _render_citizen_report_tab():
             st.markdown(f"**AI says:** {ai_reason}")
             st.markdown(
                 f"Asset **{asset_label}** has been flagged as "
-                f"**⚠ DISPUTED** in Neo4j. Check Delivery Monitor for audit."
+                f"**⚠ DISPUTED** in Neo4j. Check Scheme Delivery for audit."
             )
             st.balloons()
 

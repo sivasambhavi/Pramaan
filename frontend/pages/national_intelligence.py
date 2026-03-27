@@ -1,5 +1,5 @@
 """
-01_National_Intelligence.py — PRAMAAN v5
+national_intelligence.py — PRAMAAN v5
 National Intelligence: world map with event pins, domain-colored markers, event detail cards.
 Horizontal chip filter bar. 17 events across 7 domains.
 """
@@ -1099,10 +1099,10 @@ def page():
                     )
 
             st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
-            if st.button("Decision Engine →", key=f"goto_graph_{sel}",
+            if st.button("Ontology Graph →", key=f"goto_graph_{sel}",
                          use_container_width=True, type="primary"):
                 st.session_state["deep_link_event"] = sel
-                st.switch_page("pages/02_Decision_Engine.py")
+                st.switch_page("pages/ontology_graph.py")
         else:
             _featured = "EVT_PAHALGAM_2025"
             if _featured in EVENT_META:

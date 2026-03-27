@@ -9,10 +9,11 @@ import streamlit as st
 PAGES = [
     ("Live Ingestion",        "/Live_Ingestion"),
     ("National Intelligence", "/National_Intelligence"),
-    ("Decision Engine",       "/Decision_Engine"),
-    ("Crisis Monitor",        "/Crisis_Monitor"),
-    ("Delivery Monitor",      "/Delivery_Monitor"),
+    ("Ontology Graph",        "/Decision_Engine"),
+    ("Crisis Tracker",         "/Crisis_Monitor"),
+    ("Scheme Delivery",        "/Delivery_Monitor"),
     ("Proof & Evidence",      "/Proof_and_Evidence"),
+    ("Intelligence Verdict",  "/Intelligence_Verdict"),
 ]
 
 _HIDE_SIDEBAR = """
