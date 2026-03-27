@@ -16,12 +16,19 @@ from components.topnav import render_topnav
 
 API_BASE   = os.environ.get("PRAMAAN_API_URL", "http://localhost:8000")
 GROQ_KEY   = os.environ.get("GROQ_API_KEY", "")
+GEMINI_KEY = os.environ.get("GOOGLE_API_KEY", "") or os.environ.get("GEMINI_API_KEY", "")
 
 try:
     from groq import Groq as _Groq
     _GROQ_OK = bool(GROQ_KEY)
 except ImportError:
     _GROQ_OK = False
+
+try:
+    import google.generativeai as _genai
+    _GEMINI_OK = bool(GEMINI_KEY)
+except ImportError:
+    _GEMINI_OK = False
 
 _URG_COLOR  = {"48h": "#ef4444", "30d": "#f97316", "6m": "#facc15"}
 _URG_LABEL  = {"48h": "URGENT — 48 HOURS", "30d": "SHORT-TERM — 30 DAYS", "6m": "STRUCTURAL — 6 MONTHS"}
@@ -37,56 +44,63 @@ _DOM_ICON   = {
 def _build_context(data: dict) -> str:
     lines = []
 
-    events = data.get("events", [])
+    events = data.get("events", []) or []
     if events:
         lines.append("=== ACTIVE EVENTS (high/critical) ===")
         for e in events:
             lines.append(
-                f"[{e.get('severity','').upper()}] {e.get('name','')} | "
-                f"Domain: {e.get('domain','')} | Region: {e.get('region','')} | "
-                f"Date: {e.get('date','')} | {e.get('description','')[:200]}"
+                f"[{(e.get('severity') or '').upper()}] {e.get('name') or ''} | "
+                f"Domain: {e.get('domain') or ''} | Region: {e.get('region') or ''} | "
+                f"Date: {e.get('date') or ''} | {(e.get('description') or '')[:200]}"
             )
 
-    connections = data.get("connections", [])
+    connections = data.get("connections", []) or []
     if connections:
         lines.append("\n=== CROSS-DOMAIN CONNECTIONS ===")
         for c in connections:
             lines.append(
-                f"{c.get('from_event','')} → {c.get('to_event','')} | "
-                f"Reason: {c.get('reason','')} | Strength: {c.get('strength','')}"
+                f"{c.get('from_event') or ''} → {c.get('to_event') or ''} | "
+                f"Reason: {c.get('reason') or ''} | Strength: {c.get('strength') or ''}"
             )
 
-    indicators = data.get("indicators", [])
+    indicators = data.get("indicators", []) or []
     if indicators:
         lines.append("\n=== LIVE INDICATORS ===")
         for i in indicators:
             lines.append(
-                f"{i.get('name','')} = {i.get('value','')} {i.get('unit','')} | Trend: {i.get('trend','')}"
+                f"{i.get('name') or ''} = {i.get('value') or ''} {i.get('unit') or ''} | Trend: {i.get('trend') or ''}"
             )
 
-    impacts = data.get("impacts", [])
+    impacts = data.get("impacts", []) or []
     if impacts:
         lines.append("\n=== KEY IMPACTS ===")
         for i in impacts:
             lines.append(
-                f"[{i.get('severity','').upper()}] {i.get('impact','')} | "
-                f"Domain: {i.get('domain','')} | From: {i.get('event','')}"
+                f"[{(i.get('severity') or '').upper()}] {i.get('impact') or ''} | "
+                f"Domain: {i.get('domain') or ''} | From: {i.get('event') or ''}"
             )
 
-    schemes = data.get("schemes", [])
+    schemes = data.get("schemes", []) or []
     if schemes:
         lines.append("\n=== ACTIVE SCHEMES ===")
         for s in schemes:
-            triggered = ", ".join(s.get("triggered_by", [])) or "none"
+            triggered = ", ".join(s.get("triggered_by") or []) or "none"
             lines.append(
-                f"{s.get('name','')} | Budget: ₹{s.get('budget','')} Cr | "
-                f"Status: {s.get('status','')} | Triggered by: {triggered}"
+                f"{s.get('name') or ''} | Budget: ₹{s.get('budget') or ''} Cr | "
+                f"Status: {s.get('status') or ''} | Triggered by: {triggered}"
             )
 
     return "\n".join(lines)
 
 
-def _call_groq(context: str) -> dict:
+_GROQ_MODELS = [
+    "llama-3.3-70b-versatile",
+    "llama-3.1-8b-instant",
+    "gemma2-9b-it",
+]
+
+def _call_groq(context: str) -> tuple[dict, str]:
+    """Returns (verdict_dict, model_used). Raises on total failure."""
     client = _Groq(api_key=GROQ_KEY)
 
     system = (
@@ -144,22 +158,48 @@ Rules:
 - Use only data from the context. No hallucination. Be specific about India's position.
 """
 
-    resp = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user",   "content": user},
-        ],
-        temperature=0.25,
-        max_tokens=1800,
+    last_err = None
+    for model in _GROQ_MODELS:
+        try:
+            resp = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user",   "content": user},
+                ],
+                temperature=0.25,
+                max_tokens=1800,
+            )
+            raw = resp.choices[0].message.content.strip()
+            if raw.startswith("```"):
+                raw = raw.split("```")[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+            return json.loads(raw), model
+        except Exception as ex:
+            last_err = ex
+            if "429" in str(ex) or "rate_limit" in str(ex).lower():
+                continue   # try next model
+            raise          # non-rate-limit error — surface immediately
+
+    raise RuntimeError(f"All models rate-limited. Last error: {last_err}")
+
+
+
+def _call_gemini(prompt: str) -> tuple[dict, str]:
+    """Gemini fallback — returns (verdict_dict, model_name)."""
+    _genai.configure(api_key=GEMINI_KEY)
+    model = _genai.GenerativeModel(
+        "gemini-2.0-flash",
+        generation_config={"response_mime_type": "application/json"},
     )
-    raw = resp.choices[0].message.content.strip()
-    # Strip markdown fences if model adds them anyway
+    resp = model.generate_content(prompt)
+    raw = resp.text.strip()
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"):
             raw = raw[4:]
-    return json.loads(raw)
+    return json.loads(raw), "gemini-2.0-flash"
 
 
 # ── Page ──────────────────────────────────────────────────────────────────────
@@ -223,19 +263,35 @@ def page():
 
         context_str = _build_context(ctx_data)
 
-        with st.spinner("Synthesising verdict with Groq LLaMA 3.3 70B..."):
+        with st.spinner("Synthesising verdict with LLM..."):
             try:
-                verdict = _call_groq(context_str)
-                verdict["_generated_at"] = datetime.now().strftime("%d %b %Y, %H:%M IST")
-                verdict["_event_count"]  = len(ctx_data.get("events", []))
-                verdict["_conn_count"]   = len(ctx_data.get("connections", []))
-                st.session_state["verdict"] = verdict
-            except json.JSONDecodeError as ex:
-                st.error(f"LLM returned malformed JSON: {ex}")
-                return
-            except Exception as ex:
-                st.error(f"Groq error: {ex}")
-                return
+                verdict, model_used = _call_groq(context_str)
+            except Exception as groq_err:
+                if _GEMINI_OK:
+                    st.warning(f"Groq unavailable ({str(groq_err)[:60]}…) — falling back to Gemini.")
+                    try:
+                        # Build a combined prompt for Gemini
+                        combined = (
+                            f"SYSTEM: You are PRAMAAN — India's AI governance intelligence engine. "
+                            f"Respond ONLY with valid JSON matching the schema provided.\n\n"
+                            f"CONTEXT:\n{context_str}\n\n"
+                            f"Return a JSON with keys: decisions (3 items), exposures (3-5), "
+                            f"advantages (2-3), one_line. Each decision has: priority, title, urgency (48h/30d/6m), "
+                            f"actor, action, evidence, consequence. Each exposure has: domain, risk, headline, events, compound_effect. "
+                            f"Each advantage has: title, window, action, rationale."
+                        )
+                        verdict, model_used = _call_gemini(combined)
+                    except Exception as gem_err:
+                        st.error(f"Gemini error: {gem_err}")
+                        return
+                else:
+                    st.error(f"Groq error: {groq_err}")
+                    return
+            verdict["_generated_at"] = datetime.now().strftime("%d %b %Y, %H:%M IST")
+            verdict["_event_count"]  = len(ctx_data.get("events", []))
+            verdict["_conn_count"]   = len(ctx_data.get("connections", []))
+            verdict["_model"]        = model_used
+            st.session_state["verdict"] = verdict
 
     verdict = st.session_state.get("verdict")
     if not verdict:
@@ -254,6 +310,7 @@ def page():
     gen_at = verdict.get("_generated_at", "")
     ev_cnt = verdict.get("_event_count", 0)
     cn_cnt = verdict.get("_conn_count", 0)
+    model_lbl = verdict.get("_model", "LLM")
     one_line = verdict.get("one_line", "")
     if one_line:
         st.markdown(
@@ -270,6 +327,7 @@ def page():
             f'<div style="text-align:right;flex-shrink:0;margin-left:20px;">'
             f'<div style="font-size:9px;color:#334155;">{gen_at}</div>'
             f'<div style="font-size:9px;color:#334155;">{ev_cnt} events · {cn_cnt} connections</div>'
+            f'<div style="font-size:8px;color:#475569;margin-top:2px;">via {model_lbl}</div>'
             f'</div>'
             f'</div></div>',
             unsafe_allow_html=True,

@@ -10,6 +10,9 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from dotenv import load_dotenv
+load_dotenv(os.path.join(os.path.dirname(__file__), "../..", ".env"))
+
 import streamlit as st
 from streamlit_agraph import agraph, Node, Edge, Config
 from utils.api import safe_get
@@ -37,18 +40,22 @@ def _generate_insights(event_id: str, event_name: str, context: str):
     user = (
         f"Event: **{event_name}** (`{event_id}`)\n\n"
         f"Ontology context:\n```\n{context}\n```\n\n"
-        "Generate a decision brief with:\n"
-        "1. **Situation Summary** (2–3 sentences)\n"
-        "2. **Key Impacts** (bullets with numbers)\n"
-        "3. **Cross-Domain Connections** (causal chain across domains — why this connects to other events)\n"
-        "4. **Governance Gaps & Priority Actions** (3 items, each: Actor · Action · Outcome)\n\n"
-        "Only use data from the context above."
+        "Generate a decision brief with EXACTLY this structure. Be extremely concise — one line per point, no elaboration.\n\n"
+        "### Situation\n"
+        "One sentence only.\n\n"
+        "### Cross-Domain Impact\n"
+        "Exactly 5 bullets, one line each:\n"
+        "- **[Domain]** → [10 words max]\n\n"
+        "### Actions\n"
+        "3 bullets, one line each:\n"
+        "- **[Actor]** · [action] · [outcome]\n\n"
+        "Only use data from the context. No extra explanation."
     )
     return client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "system", "content": system},
                   {"role": "user",   "content": user}],
-        temperature=0.3, max_tokens=900, stream=True,
+        temperature=0.3, max_tokens=400, stream=True,
     )
 
 NODE_CONFIG = {
@@ -122,19 +129,19 @@ _DECISION_PANELS = {
         "detail": "Chooralmala families unhoused · 90 day deadline",
         "color": "#22c55e",
     },
-    "EVT_CHAMOLI_2021": {
-        "scheme": "Uttarakhand SDRF · Glacial Outburst Relief",
-        "allocated": "₹200 Cr", "status": "Relief disbursed",
-        "action": "Audit Tapovan tunnel worker insurance",
-        "detail": "NTPC insurance vs SDRF coverage gaps identified",
-        "color": "#fb7185",
+    "EVT_ARUNACHAL_STANDOFF_2026": {
+        "scheme": "BRO Emergency Road Works + Vibrant Villages Phase 2",
+        "allocated": "₹17,200 Cr", "status": "Fast-track approved",
+        "action": "Complete 3 critical all-weather corridors by March 2027",
+        "detail": "Only 60% of forward posts road-accessible year-round — BRO gap",
+        "color": "#f97316",
     },
-    "EVT_JOSHIMATH_2023": {
-        "scheme": "NDMA — Joshimath Subsidence Package",
-        "allocated": "₹1,600 Cr", "status": "Rehabilitation in progress",
-        "action": "Verify core-zone displacement proof",
-        "detail": "165 families in temporary shelters · permanent tokens pending",
-        "color": "#a78bfa",
+    "EVT_INDIA_SEMI_MICRON_2026": {
+        "scheme": "PLI Semiconductor + India Semiconductor Mission",
+        "allocated": "₹86,000 Cr", "status": "Micron Phase 1 operational",
+        "action": "Onboard 25 IITs to chip design curriculum by Dec 2026",
+        "detail": "85,000 engineer deficit — IIT/NIT pipeline critical for Phase 2",
+        "color": "#facc15",
     },
 }
 
@@ -162,20 +169,19 @@ EDGE_STYLE = {
 _FALLBACK_GRAPH = {
     "stats": {"total_nodes": 89, "total_edges": 134},
     "nodes": [
-        # Events
-        {"id": "Event_EVT_DELHI_FLOODS_2023",  "label": "Delhi Floods 2023",    "type": "Event",      "domain": "Climate",     "props": {"severity": "critical", "date": "Jul 2023", "description": "Record Yamuna flooding — 3.59 lakh cusecs, 208.66m river level, 27,000 displaced."}},
-        {"id": "Event_EVT_WAYANAD_2024",        "label": "Wayanad Landslide",    "type": "Event",      "domain": "Climate",     "props": {"severity": "critical", "date": "Jul 2024", "description": "India's deadliest landslide — 231 dead, 1,000+ displaced, Mundakkai & Chooralmala."}},
-        {"id": "Event_EVT_CHAMOLI_2021",        "label": "Chamoli Glacier",      "type": "Event",      "domain": "Climate",     "props": {"severity": "critical", "date": "Feb 2021", "description": "Rock-ice avalanche destroyed NTPC Tapovan (520 MW). 204 killed or missing."}},
-        {"id": "Event_EVT_JOSHIMATH_2023",      "label": "Joshimath Subsidence", "type": "Event",      "domain": "Climate",     "props": {"severity": "high",     "date": "Jan 2023", "description": "4,000+ structures cracked, 600+ families evacuated. NTPC tunnel identified as trigger."}},
-        {"id": "Event_EVT_CYCLONE_DANA_2024",   "label": "Cyclone Dana",         "type": "Event",      "domain": "Climate",     "props": {"severity": "high",     "date": "Oct 2024", "description": "800,000+ evacuated. ₹6,000 Cr damage across Odisha & Andhra Pradesh."}},
-        {"id": "Event_EVT_COVID_WAVE2_2021",    "label": "COVID Wave 2",         "type": "Event",      "domain": "Society",     "props": {"severity": "critical", "date": "Apr 2021", "description": "Oxygen crisis, 4.7L official deaths. Catastrophic healthcare system failure."}},
-        {"id": "Event_EVT_MANIPUR_2023",        "label": "Manipur Conflict",     "type": "Event",      "domain": "Society",     "props": {"severity": "critical", "date": "May 2023", "description": "Ethnic violence — 60,000+ displaced, 175+ dead, ongoing humanitarian crisis."}},
-        {"id": "Event_EVT_CHANDRAYAAN3_2023",   "label": "Chandrayaan-3",        "type": "Event",      "domain": "Technology",  "props": {"severity": "medium",  "date": "Aug 2023", "description": "Lunar south pole soft landing. ₹615 Cr mission cost. ISRO milestone."}},
-        {"id": "Event_EVT_TATA_SEMI_2024",      "label": "Tata Semiconductor",   "type": "Event",      "domain": "Technology",  "props": {"severity": "medium",  "date": "Mar 2024", "description": "India's first semiconductor fab approved. ₹91,000 Cr PLI investment."}},
-        {"id": "Event_EVT_BALAKOT_2019",        "label": "Balakot Strikes",      "type": "Event",      "domain": "Defense",     "props": {"severity": "high",     "date": "Feb 2019", "description": "IAF airstrike on JeM camp post-Pulwama. India-Pakistan escalation."}},
-        {"id": "Event_EVT_ART370_2019",         "label": "Article 370",          "type": "Event",      "domain": "Governance",  "props": {"severity": "high",     "date": "Aug 2019", "description": "J&K bifurcated into UTs. ₹56,000 Cr investment pledges post-abrogation."}},
-        {"id": "Event_EVT_G20_INDIA_2023",      "label": "G20 India 2023",       "type": "Event",      "domain": "Geopolitics", "props": {"severity": "medium",  "date": "Sep 2023", "description": "Delhi Declaration consensus. 83 outcomes. Global South leadership claim."}},
-        {"id": "Event_EVT_RUSSIA_UKRAINE_2022", "label": "Russia-Ukraine War",   "type": "Event",      "domain": "Geopolitics", "props": {"severity": "high",     "date": "Feb 2022", "description": "India's strategic autonomy tested. Discounted Russian oil — $3B savings."}},
+        # Events — current clean set (2026/2025/2024/2023)
+        {"id": "Event_EVT_DELHI_FLOODS_2023",  "label": "Delhi Floods 2023",       "type": "Event", "domain": "Climate",     "props": {"severity": "critical", "date": "Jul 2023", "description": "Record Yamuna flooding — 3.59 lakh cusecs, 208.66m river level, 27,000 displaced."}},
+        {"id": "Event_EVT_WAYANAD_2024",        "label": "Wayanad Landslide",       "type": "Event", "domain": "Climate",     "props": {"severity": "critical", "date": "Jul 2024", "description": "India's deadliest landslide — 231 dead, 1,000+ displaced, Mundakkai & Chooralmala."}},
+        {"id": "Event_EVT_CHAMOLI_2021",        "label": "Chamoli Glacier",         "type": "Event", "domain": "Climate",     "props": {"severity": "critical", "date": "Feb 2021", "description": "Rock-ice avalanche destroyed NTPC Tapovan (520 MW). 204 killed or missing."}},
+        {"id": "Event_EVT_CYCLONE_DANA_2024",   "label": "Cyclone Dana",            "type": "Event", "domain": "Climate",     "props": {"severity": "high",     "date": "Oct 2024", "description": "800,000+ evacuated. ₹6,000 Cr damage across Odisha & Andhra Pradesh."}},
+        {"id": "Event_EVT_CHANDRAYAAN3_2023",   "label": "Chandrayaan-3",           "type": "Event", "domain": "Technology",  "props": {"severity": "high",     "date": "Aug 2023", "description": "Lunar south pole soft landing. ₹615 Cr mission cost. ISRO milestone."}},
+        {"id": "Event_EVT_INDIA_SEMI_MICRON_2026","label": "Micron Fab Launch",    "type": "Event", "domain": "Technology",  "props": {"severity": "high",     "date": "Aug 2026", "description": "Micron's $825M ATMP fab operational in Sanand — India's first advanced chip packaging plant."}},
+        {"id": "Event_EVT_BALAKOT_2019",        "label": "Balakot Strikes",         "type": "Event", "domain": "Defense",     "props": {"severity": "high",     "date": "Feb 2019", "description": "IAF airstrike on JeM camp post-Pulwama. India-Pakistan escalation."}},
+        {"id": "Event_EVT_ARUNACHAL_STANDOFF_2026","label": "Arunachal PLA Standoff","type": "Event", "domain": "Defense",  "props": {"severity": "critical", "date": "Jun 2026", "description": "PLA advances 4.2 km into Asaphila sector — India deploys 3 mountain divisions."}},
+        {"id": "Event_EVT_ART370_2019",         "label": "Article 370",             "type": "Event", "domain": "Governance",  "props": {"severity": "high",     "date": "Aug 2019", "description": "J&K bifurcated into UTs. ₹56,000 Cr investment pledges post-abrogation."}},
+        {"id": "Event_EVT_G20_INDIA_2023",      "label": "G20 India 2023",          "type": "Event", "domain": "Geopolitics", "props": {"severity": "medium",  "date": "Sep 2023", "description": "Delhi Declaration consensus. 83 outcomes. Global South leadership claim."}},
+        {"id": "Event_EVT_RUSSIA_UKRAINE_2022", "label": "Russia-Ukraine War",      "type": "Event", "domain": "Geopolitics", "props": {"severity": "high",     "date": "Feb 2022", "description": "India's strategic autonomy tested. Discounted Russian oil — $3B savings."}},
+        {"id": "Event_EVT_IRAN_WAR_2026",       "label": "Iran-US-Israel War",      "type": "Event", "domain": "Geopolitics", "props": {"severity": "critical", "date": "Feb 2026", "description": "US strikes on Iranian nuclear facilities — Hormuz closure and regional escalation."}},
         # Actors
         {"id": "ACT_NDMA",    "label": "NDMA",    "type": "Actor", "props": {"role": "National Disaster Management Authority — policy & coordination"}},
         {"id": "ACT_NDRF",    "label": "NDRF",    "type": "Actor", "props": {"role": "National Disaster Response Force — field rescue operations"}},
@@ -196,6 +202,7 @@ _FALLBACK_GRAPH = {
         {"id": "REG_WAYANAD", "label": "Wayanad",       "type": "Region", "props": {}},
         {"id": "REG_CHAMOLI", "label": "Chamoli",       "type": "Region", "props": {}},
         {"id": "REG_ODISHA",  "label": "Odisha",        "type": "Region", "props": {}},
+        {"id": "REG_GUJARAT", "label": "Gujarat",       "type": "Region", "props": {}},
         # Domains
         {"id": "DOM_CLIMATE",    "label": "Climate",    "type": "Domain", "props": {}},
         {"id": "DOM_SOCIETY",    "label": "Society",    "type": "Domain", "props": {}},
@@ -204,11 +211,10 @@ _FALLBACK_GRAPH = {
         {"id": "DOM_DEFENSE",    "label": "Defense",    "type": "Domain", "props": {}},
         {"id": "DOM_GEOPOLITICS","label": "Geopolitics","type": "Domain", "props": {}},
         {"id": "DOM_ECONOMICS",  "label": "Economics",  "type": "Domain", "props": {}},
-        # Evidence (a few key ones)
+        # Evidence
         {"id": "EVD_DELHI_DATAGOV",  "label": "data.gov.in — Yamuna Level",   "type": "Evidence", "props": {"source": "data.gov.in", "type": "sensor_data"}},
         {"id": "EVD_WAYANAD_IMD",    "label": "IMD Orange Alert Jul 2024",     "type": "Evidence", "props": {"source": "IMD",         "type": "weather_alert"}},
         {"id": "EVD_CHAMOLI_ISRO",   "label": "ISRO Glacier Imagery Feb 2021", "type": "Evidence", "props": {"source": "ISRO",        "type": "satellite_imagery"}},
-        {"id": "EVD_JOSHI_WADIA",    "label": "Wadia Institute Report 2023",   "type": "Evidence", "props": {"source": "Wadia Institute","type": "scientific_report"}},
         # Impacts
         {"id": "IMP_DELHI_DISPLACED", "label": "27,000 Displaced",    "type": "Impact", "props": {"value": "27000", "unit": "persons", "type": "displacement"}},
         {"id": "IMP_WAYANAD_DEAD",    "label": "231 Deaths",          "type": "Impact", "props": {"value": "231",   "unit": "persons", "type": "fatalities"}},
@@ -220,25 +226,24 @@ _FALLBACK_GRAPH = {
         {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "DOM_CLIMATE",     "type": "BELONGS_TO",  "reason": ""},
         {"from": "Event_EVT_WAYANAD_2024",        "to": "DOM_CLIMATE",     "type": "BELONGS_TO",  "reason": ""},
         {"from": "Event_EVT_CHAMOLI_2021",        "to": "DOM_CLIMATE",     "type": "BELONGS_TO",  "reason": ""},
-        {"from": "Event_EVT_JOSHIMATH_2023",      "to": "DOM_CLIMATE",     "type": "BELONGS_TO",  "reason": ""},
         {"from": "Event_EVT_CYCLONE_DANA_2024",   "to": "DOM_CLIMATE",     "type": "BELONGS_TO",  "reason": ""},
-        {"from": "Event_EVT_COVID_WAVE2_2021",    "to": "DOM_SOCIETY",     "type": "BELONGS_TO",  "reason": ""},
-        {"from": "Event_EVT_MANIPUR_2023",        "to": "DOM_SOCIETY",     "type": "BELONGS_TO",  "reason": ""},
         {"from": "Event_EVT_CHANDRAYAAN3_2023",   "to": "DOM_TECHNOLOGY",  "type": "BELONGS_TO",  "reason": ""},
-        {"from": "Event_EVT_TATA_SEMI_2024",      "to": "DOM_TECHNOLOGY",  "type": "BELONGS_TO",  "reason": ""},
+        {"from": "Event_EVT_INDIA_SEMI_MICRON_2026","to": "DOM_TECHNOLOGY","type": "BELONGS_TO",  "reason": ""},
         {"from": "Event_EVT_BALAKOT_2019",        "to": "DOM_DEFENSE",     "type": "BELONGS_TO",  "reason": ""},
+        {"from": "Event_EVT_ARUNACHAL_STANDOFF_2026","to": "DOM_DEFENSE",  "type": "BELONGS_TO",  "reason": ""},
         {"from": "Event_EVT_ART370_2019",         "to": "DOM_GOVERNANCE",  "type": "BELONGS_TO",  "reason": ""},
         {"from": "Event_EVT_G20_INDIA_2023",      "to": "DOM_GEOPOLITICS", "type": "BELONGS_TO",  "reason": ""},
         {"from": "Event_EVT_RUSSIA_UKRAINE_2022", "to": "DOM_GEOPOLITICS", "type": "BELONGS_TO",  "reason": ""},
+        {"from": "Event_EVT_IRAN_WAR_2026",       "to": "DOM_GEOPOLITICS", "type": "BELONGS_TO",  "reason": ""},
 
         # ── Event → Region ──────────────────────────────────────────────────
         {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "REG_DELHI",   "type": "OCCURRED_IN", "reason": ""},
         {"from": "Event_EVT_WAYANAD_2024",        "to": "REG_WAYANAD", "type": "OCCURRED_IN", "reason": ""},
         {"from": "Event_EVT_CHAMOLI_2021",        "to": "REG_CHAMOLI", "type": "OCCURRED_IN", "reason": ""},
-        {"from": "Event_EVT_JOSHIMATH_2023",      "to": "REG_CHAMOLI", "type": "OCCURRED_IN", "reason": ""},
         {"from": "Event_EVT_CYCLONE_DANA_2024",   "to": "REG_ODISHA",  "type": "OCCURRED_IN", "reason": ""},
+        {"from": "Event_EVT_INDIA_SEMI_MICRON_2026","to": "REG_GUJARAT","type": "OCCURRED_IN","reason": ""},
 
-        # ── Event → Actor (MANAGED_BY / TRIGGERED) ─────────────────────────
+        # ── Event → Actor ───────────────────────────────────────────────────
         {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "ACT_NDMA",  "type": "MANAGED_BY",  "reason": "DDMA coordination and evacuation"},
         {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "ACT_NDRF",  "type": "MANAGED_BY",  "reason": "Flood rescue operations"},
         {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "ACT_DJB",   "type": "MANAGED_BY",  "reason": "Chandrawal & Wazirabad plant shutdown"},
@@ -248,28 +253,24 @@ _FALLBACK_GRAPH = {
         {"from": "Event_EVT_WAYANAD_2024",        "to": "ACT_MOEF",  "type": "MANAGED_BY",  "reason": "Gadgil Committee ESA recommendations ignored"},
         {"from": "Event_EVT_CHAMOLI_2021",        "to": "ACT_NTPC",  "type": "CAUSED_BY",   "reason": "Tapovan project in Zone V avalanche corridor"},
         {"from": "Event_EVT_CHAMOLI_2021",        "to": "ACT_NDRF",  "type": "MANAGED_BY",  "reason": "16 NDRF teams — tunnel rescue"},
-        {"from": "Event_EVT_CHAMOLI_2021",        "to": "ACT_MOEF",  "type": "MANAGED_BY",  "reason": "Clearances granted despite geological objections"},
-        {"from": "Event_EVT_JOSHIMATH_2023",      "to": "ACT_NTPC",  "type": "CAUSED_BY",   "reason": "Tapovan tunnel boring destabilised glacial moraine"},
-        {"from": "Event_EVT_JOSHIMATH_2023",      "to": "ACT_NDMA",  "type": "MANAGED_BY",  "reason": "NDMA Joshimath rehabilitation coordination"},
         {"from": "Event_EVT_CYCLONE_DANA_2024",   "to": "ACT_NDRF",  "type": "MANAGED_BY",  "reason": "Pre-cyclone NDRF pre-positioning"},
         {"from": "Event_EVT_CYCLONE_DANA_2024",   "to": "ACT_IMD",   "type": "MANAGED_BY",  "reason": "Cyclone track and landfall forecast"},
         {"from": "Event_EVT_CHANDRAYAAN3_2023",   "to": "ACT_ISRO",  "type": "MANAGED_BY",  "reason": "Mission design and execution"},
-        {"from": "Event_EVT_TATA_SEMI_2024",      "to": "ACT_MHA",   "type": "MANAGED_BY",  "reason": "PLI scheme approval — MoCI/Cabinet"},
+        {"from": "Event_EVT_INDIA_SEMI_MICRON_2026","to": "ACT_MHA", "type": "MANAGED_BY",  "reason": "PLI scheme approval — MeitY/Cabinet"},
 
-        # ── Event → Scheme (ACTIVATED / FUNDED_BY) ─────────────────────────
-        {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "SCH_SDRF",   "type": "ACTIVATED",   "reason": "Flood disaster — SDRF disbursement triggered"},
-        {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "SCH_AMRUT",  "type": "ACTIVATED",   "reason": "Post-flood storm drain upgrade — AMRUT 2.0"},
-        {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "SCH_PMAY",   "type": "ACTIVATED",   "reason": "Flood-displaced families — PMAY-U housing"},
-        {"from": "Event_EVT_WAYANAD_2024",        "to": "SCH_SDRF",   "type": "ACTIVATED",   "reason": "Landslide disaster — Kerala SDRF"},
-        {"from": "Event_EVT_CHAMOLI_2021",        "to": "SCH_SDRF",   "type": "ACTIVATED",   "reason": "Glacier disaster — Uttarakhand SDRF"},
-        {"from": "Event_EVT_CYCLONE_DANA_2024",   "to": "SCH_SDRF",   "type": "ACTIVATED",   "reason": "Cyclone — Odisha SDRF release"},
-        {"from": "Event_EVT_TATA_SEMI_2024",      "to": "SCH_PLI_SEMI","type":"FUNDED_BY",   "reason": "₹91,000 Cr PLI incentive for Tata fab"},
+        # ── Event → Scheme ──────────────────────────────────────────────────
+        {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "SCH_SDRF",    "type": "ACTIVATED",  "reason": "Flood disaster — SDRF disbursement triggered"},
+        {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "SCH_AMRUT",   "type": "ACTIVATED",  "reason": "Post-flood storm drain upgrade — AMRUT 2.0"},
+        {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "SCH_PMAY",    "type": "ACTIVATED",  "reason": "Flood-displaced families — PMAY-U housing"},
+        {"from": "Event_EVT_WAYANAD_2024",        "to": "SCH_SDRF",    "type": "ACTIVATED",  "reason": "Landslide disaster — Kerala SDRF"},
+        {"from": "Event_EVT_CHAMOLI_2021",        "to": "SCH_SDRF",    "type": "ACTIVATED",  "reason": "Glacier disaster — Uttarakhand SDRF"},
+        {"from": "Event_EVT_CYCLONE_DANA_2024",   "to": "SCH_SDRF",    "type": "ACTIVATED",  "reason": "Cyclone — Odisha SDRF release"},
+        {"from": "Event_EVT_INDIA_SEMI_MICRON_2026","to": "SCH_PLI_SEMI","type": "FUNDED_BY","reason": "₹76,000 Cr PLI incentive for Micron/Tata fabs"},
 
-        # ── Event → Evidence (PROVEN_BY) ───────────────────────────────────
+        # ── Event → Evidence ────────────────────────────────────────────────
         {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "EVD_DELHI_DATAGOV", "type": "PROVEN_BY", "reason": "208.66m river level — data.gov.in sensor"},
         {"from": "Event_EVT_WAYANAD_2024",        "to": "EVD_WAYANAD_IMD",   "type": "PROVEN_BY", "reason": "Orange Alert record — IMD archive"},
         {"from": "Event_EVT_CHAMOLI_2021",        "to": "EVD_CHAMOLI_ISRO",  "type": "PROVEN_BY", "reason": "ISRO satellite imagery — glacier rupture"},
-        {"from": "Event_EVT_JOSHIMATH_2023",      "to": "EVD_JOSHI_WADIA",   "type": "PROVEN_BY", "reason": "Wadia Institute geological assessment"},
 
         # ── Event → Impact (IMPACTED) ───────────────────────────────────────
         {"from": "Event_EVT_DELHI_FLOODS_2023",  "to": "IMP_DELHI_DISPLACED", "type": "IMPACTED", "reason": "27,000 displaced from Yamuna floodplain"},
@@ -1262,7 +1263,7 @@ def page():
                 'letter-spacing:.08em;margin-bottom:6px;">AI INSIGHTS</div>',
                 unsafe_allow_html=True,
             )
-            if st.button("Generate Brief →", key=f"ai_brief_{_ai_event_id}",
+            if st.button("Generate Brief →", key=f"btn_ai_brief_{_ai_event_id}",
                          use_container_width=True, type="primary"):
                 _ev_detail = safe_get(f"/ontology/events/{_ai_event_id}") or {}
                 _ev        = _ev_detail.get("event", {})
@@ -1294,13 +1295,18 @@ def page():
 
             _brief = st.session_state.get(f"ai_brief_{_ai_event_id}", "")
             if _brief:
+                import markdown as _md
+                _html_body = _md.markdown(_brief, extensions=["nl2br"])
                 st.markdown(
-                    '<div style="background:#060f1e;border:1px solid #1e293b;'
-                    'border-radius:8px;padding:10px 12px;margin-top:4px;">',
+                    f'<div style="background:#060f1e;border:1px solid #1e293b;'
+                    f'border-radius:8px;padding:10px 14px;margin-top:6px;'
+                    f'max-height:340px;overflow-y:auto;">'
+                    f'<div style="font-size:10px;line-height:1.6;color:#94a3b8;'
+                    f'font-family:\'Inter\',sans-serif;">'
+                    f'{_html_body}'
+                    f'</div></div>',
                     unsafe_allow_html=True,
                 )
-                st.markdown(_brief)
-                st.markdown("</div>", unsafe_allow_html=True)
 
         # ── Crisis Monitor CTA (inside right panel) ──────────────────────────
         _ONGOING_CRISIS_IDS = {
@@ -1347,122 +1353,7 @@ def page():
             </div>
             """, unsafe_allow_html=True)
 
-    # ══ SCHEME DECISION PANEL ════════════════════════════════════════════════
-    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
-    st.markdown(
-        '<div style="font-size:0.7em;color:#475569;text-transform:uppercase;'
-        'letter-spacing:0.1em;font-weight:700;margin-bottom:10px;border-top:1px solid #1e293b;padding-top:14px;">'
-        'SCHEME DECISION PANEL — TYPE 1 vs TYPE 2</div>',
-        unsafe_allow_html=True,
-    )
 
-    _schemes_data = safe_get("/ontology/schemes/by-type", silent=True) or {}
-    _type1_schemes = _schemes_data.get("type1", [])
-    _type2_schemes = _schemes_data.get("type2", [])
-
-    def _budget_str(s: dict) -> str:
-        b = s.get("budget_crore")
-        if not b:
-            return "—"
-        try:
-            return f"₹{int(b):,} Cr"
-        except (TypeError, ValueError):
-            return str(b)
-
-    t1col, t2col = st.columns([1, 2], gap="large")
-
-    with t1col:
-        st.markdown(
-            '<div style="background:#0d1826;border:1px solid #ef444433;border-left:4px solid #ef4444;'
-            'border-radius:10px;padding:12px 14px;margin-bottom:12px;">'
-            '<div style="font-size:11px;font-weight:800;color:#ef4444;text-transform:uppercase;'
-            'letter-spacing:0.08em;margin-bottom:8px;">🚨 Type 1 — Event-Triggered Response</div>'
-            '<div style="font-size:10.5px;color:#64748b;margin-bottom:10px;line-height:1.5;">'
-            'Activated only when a qualifying disaster or emergency is declared. '
-            'Funds are released directly to state/national agencies.'
-            '</div>',
-            unsafe_allow_html=True,
-        )
-        for s in _type1_schemes:
-            name     = s.get("name") or s.get("scheme_id", "—")
-            budget   = _budget_str(s)
-            ministry = s.get("ministry") or ""
-            desc     = (s.get("strategic_value") or s.get("description") or "")[:100]
-            risk     = s.get("risk") or ""
-            st.markdown(
-                f'<div style="background:#060f1e;border:1px solid #ef444422;border-radius:8px;'
-                f'padding:9px 12px;margin-bottom:6px;">'
-                f'<div style="font-size:11.5px;font-weight:700;color:#fca5a5;">{name}</div>'
-                f'<div style="font-size:10px;color:#64748b;margin-top:3px;">'
-                f'{budget} &nbsp;·&nbsp; {ministry}</div>'
-                + (f'<div style="font-size:9.5px;color:#94a3b8;margin-top:4px;line-height:1.4;">{desc}</div>' if desc else "")
-                + (f'<div style="font-size:9px;color:#ef444488;margin-top:3px;">⚠ {risk}</div>' if risk else "")
-                + f'</div>',
-                unsafe_allow_html=True,
-            )
-        if not _type1_schemes:
-            st.markdown('<div style="font-size:10px;color:#475569;">No Type 1 schemes loaded.</div>',
-                        unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    with t2col:
-        st.markdown(
-            '<div style="background:#0a1a0a;border:1px solid #22c55e33;border-left:4px solid #22c55e;'
-            'border-radius:10px;padding:12px 14px;margin-bottom:12px;">'
-            '<div style="font-size:11px;font-weight:800;color:#22c55e;text-transform:uppercase;'
-            'letter-spacing:0.08em;margin-bottom:8px;">🏗️ Type 2 — Ongoing Delivery Schemes</div>'
-            '<div style="font-size:10.5px;color:#64748b;margin-bottom:10px;line-height:1.5;">'
-            'Always-on implementation programmes. Triggered events create urgency and unlock '
-            'additional fund releases, but delivery is continuous.'
-            '</div>',
-            unsafe_allow_html=True,
-        )
-        cols_a, cols_b = st.columns(2, gap="small")
-        half = max(len(_type2_schemes) // 2, 1)
-        for i, s in enumerate(_type2_schemes):
-            target_col = cols_a if i < half else cols_b
-            with target_col:
-                name     = s.get("name") or s.get("scheme_id", "—")
-                budget   = _budget_str(s)
-                ministry = s.get("ministry") or ""
-                desc     = (s.get("description") or s.get("strategic_value") or "")[:90]
-                sv       = (s.get("strategic_value") or "")[:80]
-                st.markdown(
-                    f'<div style="background:#111827;border:1px solid #1e293b;'
-                    f'border-radius:10px;padding:10px 12px;margin-bottom:8px;">'
-                    f'<div style="font-size:11px;font-weight:700;color:#facc15;'
-                    f'margin-bottom:4px;">{name}</div>'
-                    f'<div style="font-size:10px;color:#64748b;margin-bottom:4px;">'
-                    f'{budget}  ·  {ministry}</div>'
-                    + (f'<div style="font-size:10px;color:#94a3b8;margin-bottom:4px;line-height:1.4;">{desc}</div>' if desc else "")
-                    + (f'<div style="background:#0d1f12;border-left:2px solid #22c55e;'
-                       f'border-radius:4px;padding:3px 7px;">'
-                       f'<span style="font-size:8px;font-weight:700;color:#22c55e;'
-                       f'letter-spacing:.07em;">STRATEGIC → </span>'
-                       f'<span style="font-size:9px;color:#86efac;">{sv}</span>'
-                       f'</div>' if sv else "")
-                    + f'</div>',
-                    unsafe_allow_html=True,
-                )
-        if not _type2_schemes:
-            st.markdown('<div style="font-size:10px;color:#475569;">No Type 2 schemes loaded.</div>',
-                        unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    # ── Delivery chain CTA ────────────────────────────────────────────────────
-    st.markdown(
-        '<div style="background:#0a1628;border:1px solid #22c55e44;border-radius:10px;'
-        'padding:10px 16px;display:flex;align-items:center;gap:16px;margin-top:4px;">'
-        '<div style="flex:1;font-size:12px;color:#64748b;">'
-        '📍 <strong style="color:#22c55e;">Delhi Pilot</strong> — AMRUT + PMAY delivery tracked to asset level '
-        'with real data.gov.in evidence. Click below to see full ground-truth proof chain.'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-    if st.button("View Delhi Pilot → Scheme Delivery", key="goto_delivery_pilot", type="primary"):
-        st.session_state["feed_sel"] = "EVT_DELHI_FLOODS_2023"
-        st.switch_page("pages/scheme_delivery.py")
-    st.markdown('</div>', unsafe_allow_html=True)
 
 
 
