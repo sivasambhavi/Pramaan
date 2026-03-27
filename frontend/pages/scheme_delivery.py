@@ -12,10 +12,20 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import streamlit as st
+import plotly.graph_objects as go
 from utils.api import safe_get
 from utils.events import EVENTS as _EVENTS_FULL, N_EVENTS as _N_EVENTS, render_event_dropdown
 from components.topnav import render_topnav
 from components.ontology_model import render_ontology_model
+
+_PLOTLY_LAYOUT = dict(
+    paper_bgcolor="#020b14",
+    plot_bgcolor="#060f1e",
+    font=dict(family="monospace", color="#94a3b8", size=11),
+    margin=dict(l=0, r=10, t=10, b=0),
+    hoverlabel=dict(bgcolor="#0a1628", font_size=11, bordercolor="#334155"),
+    showlegend=False,
+)
 
 # Strip lat/lon — Live Feed only needs first 6 fields
 EVENTS = [e[:6] for e in _EVENTS_FULL]
@@ -169,52 +179,153 @@ def _evidence_card(ev: dict, color: str):
 
 
 def _impact_card(imp: dict, color: str):
-    """Metric-tile style card: big icon + big number + label."""
-    itype   = imp.get("type") or imp.get("name") or ""
+    """KPI-tile: big value, unit bar, label, description."""
+    raw_id  = imp.get("id") or ""
+    itype   = imp.get("type") or imp.get("name") or raw_id.replace("IMP_", "").replace("_", " ").title() or "Impact"
     value   = imp.get("value", "")
-    unit    = imp.get("unit", "")
-    desc    = _sanitise(imp.get("description", ""))[:90]
+    unit    = _html.escape(imp.get("unit", "") or "")
+    desc    = _html.escape(_sanitise(imp.get("description", "") or "")[:110])
     source  = imp.get("source", "")
-    val_str = (
-        f"{value:,}" if isinstance(value, (int, float)) and value == int(value)
-        else str(value) if value else "—"
-    )
-    badge = _provenance_badge(source)
-    icon  = _impact_icon(itype)
-    label = itype.replace("_", " ").title()
+    badge   = _provenance_badge(source)
+    label   = _html.escape(itype.replace("_", " ").title()) if itype else "Impact"
+    try:
+        val_str = f"{int(value):,}" if isinstance(value, (int, float)) and float(value) == int(float(value)) else str(value) if value else "—"
+    except (TypeError, ValueError):
+        val_str = str(value) if value else "—"
+    val_str = _html.escape(val_str)
+    # accent bar width — cap at 100%
+    try:
+        bar_pct = min(100, max(4, abs(float(value)) / 1000)) if isinstance(value, (int, float)) else 40
+    except (TypeError, ValueError):
+        bar_pct = 40
     st.html(f"""
-    <div style="background:#060f1e;border:1px solid {color}33;border-radius:10px;
-                padding:12px 14px;margin-bottom:8px;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:8px;right:12px;font-size:28px;opacity:0.08;line-height:1;">{icon}</div>
-      <div style="font-size:22px;margin-bottom:4px;line-height:1;">{icon}</div>
-      <div style="font-size:1.7em;font-weight:900;color:{color};line-height:1;letter-spacing:-0.02em;">{val_str}</div>
-      <div style="font-size:9.5px;color:#334155;margin-top:1px;margin-bottom:5px;">{unit}</div>
-      <div style="font-size:11px;font-weight:700;color:#94a3b8;">{label}{badge}</div>
-      <div style="font-size:10px;color:#475569;margin-top:3px;line-height:1.4;">{desc}</div>
+    <div style="background:#060f1e;border:1px solid {color}33;border-radius:8px;
+                padding:12px 14px;margin-bottom:8px;border-left:3px solid {color};">
+      <div style="font-size:1.6em;font-weight:900;color:{color};line-height:1;letter-spacing:-0.02em;">{val_str}</div>
+      <div style="background:#1e293b;border-radius:2px;height:3px;margin:4px 0 6px;">
+        <div style="background:{color};width:{bar_pct}%;height:3px;border-radius:2px;opacity:0.7;"></div>
+      </div>
+      <div style="font-size:10px;color:#64748b;margin-bottom:4px;">{unit}</div>
+      <div style="font-size:11.5px;font-weight:700;color:#94a3b8;">{label}{badge}</div>
+      <div style="font-size:10px;color:#475569;margin-top:4px;line-height:1.5;">{desc}</div>
     </div>
     """)
 
 
+def _render_impacts_chart(impacts: list, color: str):
+    """Horizontal bar chart for numeric impacts + text cards for non-numeric."""
+    numeric, text_only = [], []
+    for imp in impacts:
+        raw_id = imp.get("id") or ""
+        label  = imp.get("type") or imp.get("name") or raw_id.replace("IMP_", "").replace("_", " ").title() or "Impact"
+        label  = label[:35]
+        val    = imp.get("value")
+        unit   = imp.get("unit", "") or ""
+        desc   = _sanitise(imp.get("description", "") or "")[:80]
+        try:
+            fval = float(str(val).replace(",", "").replace("%", "").replace("₹", "").replace("+", "").replace("-", ""))
+            numeric.append({"label": label, "value": fval, "raw": str(val), "unit": unit, "desc": desc})
+        except (TypeError, ValueError):
+            text_only.append({"label": label, "raw": str(val) if val else "—", "unit": unit, "desc": desc})
+
+    if numeric:
+        labels = [n["label"] for n in numeric]
+        values = [n["value"] for n in numeric]
+        units  = [n["unit"] for n in numeric]
+        raws   = [n["raw"] for n in numeric]
+        descs  = [n["desc"] for n in numeric]
+        max_v  = max(abs(v) for v in values) or 1
+        bar_colors = [color if v >= 0 else "#ef4444" for v in values]
+        hover = [f"<b>{l}</b><br>{r} {u}<br><i>{d}</i>" for l, r, u, d in zip(labels, raws, units, descs)]
+        fig = go.Figure(go.Bar(
+            x=values,
+            y=labels,
+            orientation="h",
+            marker=dict(color=bar_colors, opacity=0.85,
+                        line=dict(color=[c.replace(")", ",0.5)").replace("rgb", "rgba") for c in bar_colors], width=0)),
+            text=raws,
+            textposition="outside",
+            textfont=dict(size=10, color="#e2e8f0"),
+            hovertext=hover,
+            hoverinfo="text",
+        ))
+        h = max(160, len(numeric) * 36)
+        fig.update_layout(**_PLOTLY_LAYOUT, height=h,
+                          xaxis=dict(gridcolor="#1e293b", zerolinecolor="#334155",
+                                     range=[0, max_v * 1.35], showticklabels=False),
+                          yaxis=dict(gridcolor="rgba(0,0,0,0)", tickfont=dict(size=10, color="#94a3b8"),
+                                     categoryorder="total ascending"))
+        st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+    # non-numeric as compact KPI chips
+    if text_only:
+        chips = "".join(
+            f'<div style="background:#060f1e;border:1px solid {color}22;border-left:3px solid {color};'
+            f'border-radius:6px;padding:7px 12px;margin-bottom:6px;">'
+            f'<div style="font-size:13px;font-weight:800;color:{color};">{t["raw"]} <span style="font-size:9.5px;color:#334155;font-weight:400;">{t["unit"]}</span></div>'
+            f'<div style="font-size:10.5px;color:#94a3b8;font-weight:600;">{t["label"]}</div>'
+            f'<div style="font-size:9.5px;color:#475569;margin-top:2px;">{t["desc"]}</div>'
+            f'</div>'
+            for t in text_only
+        )
+        st.html(chips)
+
+
+def _render_schemes_chart(schemes: list):
+    """Budget comparison bar chart + utilization bars for all schemes."""
+    budgets = [(s.get("name") or s.get("scheme_id") or "—",
+                s.get("budget_crore") or 0,
+                "#ef4444" if (s.get("scheme_type") or "Type 2") == "Type 1" else "#22c55e",
+                s.get("scheme_type_label") or s.get("scheme_type") or "Type 2",
+                s.get("status") or "active")
+               for s in schemes if s.get("budget_crore")]
+
+    if not budgets:
+        return
+
+    names, vals, colors, types, statuses = zip(*sorted(budgets, key=lambda x: x[1]))
+    hover = [f"<b>{n}</b><br>₹{v:,.0f} Cr<br>{t} · {s}" for n, v, t, s in zip(names, vals, types, statuses)]
+    short_names = [n[:28] + "…" if len(n) > 28 else n for n in names]
+
+    fig = go.Figure(go.Bar(
+        x=list(vals),
+        y=list(short_names),
+        orientation="h",
+        marker=dict(color=list(colors), opacity=0.8,
+                    line=dict(color="rgba(0,0,0,0)", width=0)),
+        text=[f"₹{v:,.0f} Cr" for v in vals],
+        textposition="outside",
+        textfont=dict(size=10, color="#e2e8f0"),
+        hovertext=hover,
+        hoverinfo="text",
+    ))
+    h = max(160, len(budgets) * 38)
+    max_v = max(vals)
+    fig.update_layout(**_PLOTLY_LAYOUT, height=h,
+                      xaxis=dict(gridcolor="#1e293b", zerolinecolor="#334155",
+                                 range=[0, max_v * 1.4], showticklabels=False),
+                      yaxis=dict(gridcolor="rgba(0,0,0,0)", tickfont=dict(size=10, color="#94a3b8"),
+                                 categoryorder="total ascending"))
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
 def _proof_chain_summary(data: dict, color: str):
-    """Horizontal pill row showing counts from loaded event data."""
-    impacts     = len(data.get("impacts", []))
-    actors      = len(data.get("actors", []))
-    evidence    = len(data.get("evidence", []))
-    connections = len(data.get("connections", []))
-    schemes     = len(data.get("schemes", []))
-    pills = [
-        ("📊", impacts,     "Impacts",      color),
-        ("🏛️", schemes,    "Schemes",      "#a78bfa"),
-        ("👥", actors,      "Actors",       "#38bdf8"),
-        ("🗂️", evidence,   "Evidence",     "#0ea5e9"),
-        ("🔗", connections, "Cross-links",  "#f97316"),
+    """Horizontal stat pill row showing counts from loaded event data."""
+    counts = [
+        ("IMPACTS",      len(data.get("impacts", [])),      color),
+        ("SCHEMES",      len(data.get("schemes", [])),      "#a78bfa"),
+        ("ACTORS",       len(data.get("actors", [])),       "#38bdf8"),
+        ("EVIDENCE",     len(data.get("evidence", [])),     "#0ea5e9"),
+        ("CROSS-LINKS",  len(data.get("connections", [])),  "#f97316"),
     ]
     pills_html = "".join(
-        f'<span style="display:inline-flex;align-items:center;gap:4px;'
-        f'background:{pc}15;color:{pc};border:1px solid {pc}44;'
-        f'border-radius:20px;padding:3px 10px;font-size:10.5px;font-weight:700;">'
-        f'{pic} {pv} {pn}</span>'
-        for pic, pv, pn, pc in pills if pv > 0
+        f'<span style="display:inline-flex;align-items:baseline;gap:5px;'
+        f'background:{pc}12;border:1px solid {pc}33;'
+        f'border-radius:6px;padding:4px 12px;font-size:10px;">'
+        f'<span style="font-size:14px;font-weight:900;color:{pc};">{pv}</span>'
+        f'<span style="color:#475569;font-weight:600;letter-spacing:0.06em;">{pn}</span>'
+        f'</span>'
+        for pn, pv, pc in counts if pv > 0
     )
     st.html(f'<div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px;">{pills_html}</div>')
 
@@ -271,14 +382,26 @@ def _render_event_feed():
     EVENTS_LOCAL = [e[:6] for e in _EVENTS_FULL]
     SEV_COLOR_L  = {"critical": "#ef4444", "high": "#f97316", "medium": "#facc15"}
 
+    # Mirror ontology graph: pre-init to None so dropdown starts on "— All Events —"
     if "feed_sel" not in st.session_state:
-        st.session_state.feed_sel = EVENTS_LOCAL[0][0]
+        st.session_state.feed_sel = None
 
     dcol, ncol = st.columns([3, 1], gap="small")
     with dcol:
-        render_event_dropdown("feed_sel", "feed_event_drop")
+        render_event_dropdown("feed_sel", "feed_event_drop", include_all=True)
 
-    sel_evt  = next((e for e in EVENTS_LOCAL if e[0] == st.session_state.feed_sel), EVENTS_LOCAL[0])
+    sel_evt = next((e for e in EVENTS_LOCAL if e[0] == st.session_state.get("feed_sel")), None)
+
+    if sel_evt is None:
+        st.html(
+            '<div style="font-size:13px;color:#334155;padding:40px;text-align:center;'
+            'border:1px dashed #1e293b;border-radius:10px;margin-top:12px;">'
+            'Select an event above to view '
+            '<span style="color:#22c55e;font-weight:700;">scheme delivery</span>'
+            ' analysis.</div>'
+        )
+        return
+
     event_id, name, color, domain, date, sev = sel_evt
     sev_badge_color = SEV_COLOR_L.get(sev, "#64748b")
     domain_icon     = DOMAIN_ICONS.get(domain, "📡")
@@ -293,23 +416,18 @@ def _render_event_feed():
 
     # ── Visual event card ───────────────────────────────────────────────────────
     st.html(
-        f'<div style="background:linear-gradient(135deg,{color}12 0%,#020b14 60%);'
-        f'border:1px solid {color}55;border-radius:12px;padding:14px 18px;margin-bottom:6px;">'
-        f'<div style="display:flex;align-items:flex-start;gap:14px;">'
-        f'<div style="font-size:3em;line-height:1;filter:drop-shadow(0 0 8px {color}88);">{domain_icon}</div>'
+        f'<div style="background:#0a1628;border:1px solid {color}44;border-left:4px solid {color};'
+        f'border-radius:8px;padding:12px 18px;margin-bottom:6px;display:flex;align-items:center;gap:16px;">'
+        f'<div style="width:4px;height:40px;background:{color};border-radius:2px;flex-shrink:0;"></div>'
         f'<div style="flex:1;">'
-        f'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">'
-        f'<span style="font-size:15px;font-weight:800;color:{color};">{name}</span>'
+        f'<div style="font-size:15px;font-weight:800;color:{color};margin-bottom:4px;">{_html.escape(name)}</div>'
+        f'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'
+        f'<span style="background:{color}18;color:{color};font-size:9.5px;padding:2px 8px;'
+        f'border-radius:4px;font-weight:600;">{_html.escape(domain)}</span>'
+        f'<span style="color:#334155;font-size:10px;">{_html.escape(date)}</span>'
         f'<span style="background:{sev_badge_color}22;color:{sev_badge_color};font-weight:700;'
-        f'font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid {sev_badge_color}66;'
-        f'text-transform:uppercase;letter-spacing:0.08em;animation:sevPulse 1.5s ease-in-out infinite;">'
-        f'{sev_icon} {sev}</span>'
-        f'</div>'
-        f'<div style="display:flex;gap:10px;flex-wrap:wrap;">'
-        f'<span style="background:{color}15;color:{color};font-size:10px;padding:2px 8px;'
-        f'border-radius:12px;border:1px solid {color}33;font-weight:600;">{domain}</span>'
-        f'<span style="color:#475569;font-size:10.5px;">🗓️ {date}</span>'
-        f'</div>'
+        f'font-size:9px;padding:2px 8px;border-radius:4px;border:1px solid {sev_badge_color}44;'
+        f'text-transform:uppercase;letter-spacing:0.06em;">{sev.upper()}</span>'
         f'</div>'
         f'</div>'
         f'</div>'
@@ -338,17 +456,11 @@ def _render_event_feed():
             f'<div style="font-size:0.65em;color:#475569;text-transform:uppercase;'
             f'letter-spacing:0.12em;font-weight:700;margin-bottom:10px;'
             f'border-bottom:1px solid #1e293b;padding-bottom:4px;">'
-            f'📊 MEASURED IMPACTS ({len(impacts)})</div>',
+            f'MEASURED IMPACTS ({len(impacts)})</div>',
             unsafe_allow_html=True,
         )
         if impacts:
-            # 2-col grid of metric tiles
-            pairs = [impacts[i:i+2] for i in range(0, len(impacts), 2)]
-            for pair in pairs:
-                pcols = st.columns(len(pair), gap="small")
-                for pcol, imp in zip(pcols, pair):
-                    with pcol:
-                        _impact_card(imp, color)
+            _render_impacts_chart(impacts, color)
         else:
             st.html('<div style="font-size:12px;color:#334155;padding:16px;text-align:center;'
                     'border:1px dashed #1e293b;border-radius:8px;">No impact data loaded.</div>')
@@ -358,21 +470,17 @@ def _render_event_feed():
             st.markdown(
                 '<div style="font-size:0.65em;color:#475569;text-transform:uppercase;'
                 'letter-spacing:0.12em;font-weight:700;margin-top:16px;margin-bottom:8px;'
-                'border-bottom:1px solid #1e293b;padding-bottom:4px;">👥 KEY ACTORS</div>',
+                'border-bottom:1px solid #1e293b;padding-bottom:4px;">KEY ACTORS</div>',
                 unsafe_allow_html=True,
             )
             for a in actors:
                 aname = _html.escape(a.get("name", a.get("actor_id", "")))
                 atype = _html.escape(a.get("type", ""))
-                aicon = "🏛️" if "government" in atype.lower() else ("🗳️" if "elected" in atype.lower() else "🔧")
                 st.html(f"""
-                <div style="background:#060f1e;border:1px solid #38bdf822;border-radius:8px;
-                            padding:8px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;">
-                  <span style="font-size:16px;">{aicon}</span>
-                  <div>
-                    <div style="font-size:12px;font-weight:700;color:#38bdf8;">{aname}</div>
-                    <div style="font-size:10px;color:#334155;margin-top:1px;">{atype}</div>
-                  </div>
+                <div style="background:#060f1e;border:1px solid #38bdf822;border-left:3px solid #38bdf844;
+                            border-radius:6px;padding:7px 12px;margin-bottom:5px;">
+                  <div style="font-size:12px;font-weight:700;color:#38bdf8;">{aname}</div>
+                  <div style="font-size:10px;color:#334155;margin-top:1px;">{atype}</div>
                 </div>
                 """)
 
@@ -382,7 +490,7 @@ def _render_event_feed():
             f'<div style="font-size:0.65em;color:#475569;text-transform:uppercase;'
             f'letter-spacing:0.12em;font-weight:700;margin-bottom:10px;'
             f'border-bottom:1px solid #1e293b;padding-bottom:4px;">'
-            f'🗂️ EVIDENCE SOURCES ({len(evidence)})</div>',
+            f'EVIDENCE SOURCES ({len(evidence)})</div>',
             unsafe_allow_html=True,
         )
         if evidence:
@@ -397,7 +505,7 @@ def _render_event_feed():
             st.markdown(
                 '<div style="font-size:0.65em;color:#f97316;text-transform:uppercase;'
                 'letter-spacing:0.12em;font-weight:700;margin-top:16px;margin-bottom:8px;'
-                'border-bottom:1px solid #1e293b;padding-bottom:4px;">🔗 CROSS-DOMAIN LINKS</div>',
+                'border-bottom:1px solid #1e293b;padding-bottom:4px;">CROSS-DOMAIN LINKS</div>',
                 unsafe_allow_html=True,
             )
             for conn in connections:
@@ -409,14 +517,13 @@ def _render_event_feed():
                 reason = _html.escape(_sanitise(conn.get("reason", "")))
                 st.html(f"""
                 <div style="background:#0a1628;border:1px solid {cc}33;border-left:3px solid {cc};
-                            border-radius:8px;padding:8px 12px;margin-bottom:6px;
-                            display:flex;align-items:flex-start;gap:10px;">
-                  <span style="font-size:18px;line-height:1.2;">{cd_ic}</span>
-                  <div>
+                            border-radius:8px;padding:8px 12px;margin-bottom:6px;">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+                    <div style="width:8px;height:8px;border-radius:50%;background:{cc};flex-shrink:0;"></div>
                     <div style="font-size:12px;font-weight:700;color:{cc};">{cname}</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:1px;">{cd}</div>
-                    <div style="font-size:10px;color:#475569;margin-top:3px;font-style:italic;">"{reason}"</div>
+                    <span style="font-size:9px;color:#334155;background:{cc}15;padding:1px 6px;border-radius:3px;">{cd}</span>
                   </div>
+                  <div style="font-size:10px;color:#475569;font-style:italic;">"{reason}"</div>
                 </div>
                 """)
 
@@ -440,23 +547,28 @@ def _render_event_feed():
             f'<div style="font-size:0.65em;color:#475569;text-transform:uppercase;'
             f'letter-spacing:0.12em;font-weight:700;margin-bottom:10px;'
             f'border-bottom:1px solid #1e293b;padding-bottom:4px;">'
-            f'🏛️ GOVERNMENT SCHEMES ({len(schemes)})'
-            f'{"&nbsp;&nbsp;<span style=\'color:#ef4444;\'>🚨 " + str(len(type1)) + " Emergency</span>" if type1 else ""}'
-            f'{"&nbsp;·&nbsp;<span style=\'color:#22c55e;\'>🏗️ " + str(len(type2)) + " Structural</span>" if type2 else ""}'
+            f'GOVERNMENT SCHEMES ({len(schemes)})'
+            f'{"&nbsp;&nbsp;<span style=\'color:#ef4444;\'>" + str(len(type1)) + " Emergency</span>" if type1 else ""}'
+            f'{"&nbsp;·&nbsp;<span style=\'color:#22c55e;\'>" + str(len(type2)) + " Structural</span>" if type2 else ""}'
             f'</div>'
         )
 
+        # Budget comparison chart
+        _render_schemes_chart(schemes)
+
         # Render Type 1 first (if any), then Type 2
-        for group_label, group_icon, group_color, group in [
-            ("TYPE 1 — EMERGENCY",  "🚨", "#ef4444", type1),
-            ("TYPE 2 — STRUCTURAL", "🏗️", "#22c55e", type2),
+        for group_label, group_color, group in [
+            ("TYPE 1 — EMERGENCY",  "#ef4444", type1),
+            ("TYPE 2 — STRUCTURAL", "#22c55e", type2),
         ]:
             if not group:
                 continue
             st.html(
-                f'<div style="font-size:9px;color:{group_color};font-weight:700;'
-                f'text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">'
-                f'{group_icon} {group_label}</div>'
+                f'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">'
+                f'<div style="width:3px;height:14px;background:{group_color};border-radius:2px;"></div>'
+                f'<span style="font-size:9px;color:{group_color};font-weight:700;'
+                f'text-transform:uppercase;letter-spacing:0.1em;">{group_label}</span>'
+                f'</div>'
             )
             chunks = [group[i:i+3] for i in range(0, len(group), 3)]
             for chunk in chunks:
@@ -471,28 +583,38 @@ def _render_event_feed():
                     desc_raw   = sch.get("description") or ""
                     desc       = _html.escape(_sanitise(desc_raw)[:120] if desc_raw else "")
                     sc         = _STATUS_COLOR.get(status_raw, "#64748b")
-                    st_icon    = _STATUS_ICONS.get(status_raw, "⚪")
+                    utilization = sch.get("utilization_pct") or 0
                     try:
                         budget_str = f"₹{int(budget):,} Cr" if budget else "—"
                     except (TypeError, ValueError):
                         budget_str = "—"
                     with scol:
-                        st.html(f"""
-                        <div style="background:linear-gradient(160deg,{group_color}0d 0%,#060f1e 50%);
-                                    border:1px solid {group_color}44;border-top:3px solid {group_color};
-                                    border-radius:10px;padding:12px 14px;margin-bottom:10px;">
-                          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
-                            <span style="font-size:22px;line-height:1;">{group_icon}</span>
-                            <span style="background:{sc}18;color:{sc};font-size:9px;font-weight:700;
-                                         padding:2px 7px;border-radius:4px;border:1px solid {sc}44;">
-                              {st_icon} {status_lbl}
-                            </span>
+                        util_bar = f"""
+                          <div style="margin:6px 0 4px;">
+                            <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+                              <span style="font-size:9px;color:#334155;">Utilization</span>
+                              <span style="font-size:9px;font-weight:700;color:{group_color};">{utilization}%</span>
+                            </div>
+                            <div style="background:#1e293b;border-radius:2px;height:4px;">
+                              <div style="background:{group_color};width:{utilization}%;height:4px;border-radius:2px;opacity:0.8;"></div>
+                            </div>
                           </div>
-                          <div style="font-size:13px;font-weight:800;color:#e2e8f0;line-height:1.2;margin-bottom:6px;">{sname}</div>
-                          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                        """ if utilization else ""
+                        st.html(f"""
+                        <div style="background:#060f1e;border:1px solid {group_color}33;
+                                    border-top:3px solid {group_color};
+                                    border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+                          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+                            <div style="font-size:13px;font-weight:800;color:#e2e8f0;line-height:1.2;flex:1;">{sname}</div>
+                            <span style="background:{sc}18;color:{sc};font-size:9px;font-weight:700;
+                                         padding:2px 7px;border-radius:4px;border:1px solid {sc}33;
+                                         white-space:nowrap;margin-left:8px;">{status_lbl}</span>
+                          </div>
+                          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;">
                             <span style="font-size:12px;font-weight:700;color:{group_color};">{budget_str}</span>
                             <span style="font-size:10px;color:#475569;background:#0a1628;padding:1px 6px;border-radius:4px;">{ministry}</span>
                           </div>
+                          {util_bar}
                           <div style="font-size:10px;color:#475569;line-height:1.5;border-top:1px solid #1e293b;padding-top:6px;">{desc}</div>
                         </div>
                         """)

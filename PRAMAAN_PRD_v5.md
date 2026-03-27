@@ -1,7 +1,7 @@
 # PRAMAAN v5 — Product Requirements Document
 ## India Governance Intelligence & Proof System
 
-**Version:** 5.0
+**Version:** 5.1
 **Date:** March 2026
 **Competition:** India Innovates 2026 · Digital Democracy Domain
 **Venue:** Bharat Mandapam, New Delhi · March 28–29, 2026
@@ -49,32 +49,45 @@ India generates massive governance data across:
 ```
 (Event)-[:CONNECTED_TO]->(Event)
 ```
-- 17 events across 7 domains
+- **28 events** across 7 domains (expanded from 17 in v5.0)
 - Cross-domain connections (gold edges)
 - Real-time ingestion feed
+- Events span 2023–2026 with coverage of geopolitical, climate, defense, and economic developments
 
 **7 Domains:** Climate · Economics · Defense · Technology · Society · Governance · Geopolitics
 
-**17 Events:**
+**28 Events (sorted newest-first):**
+
 | Event | Domain | Date |
 |---|---|---|
-| Wayanad Landslide | Climate | Jul 2024 |
+| Iran War Ceasefire Talks | Geopolitics | Mar 2026 |
+| Strait of Hormuz Blockade | Economics | Mar 2026 |
+| Iran-US-Israel War | Geopolitics | Feb 2026 |
+| Four Labour Codes Enforcement | Governance | Nov 2025 |
+| India-US Defence Pact | Defense | Oct 2025 |
+| S&P Sovereign Upgrade (BBB) | Economics | Aug 2025 |
+| India-UK Trade Agreement (CETA) | Economics | Jul 2025 |
+| First Indian on ISS (Shukla) | Technology | Jun 2025 |
+| Twelve-Day War (Israel-Iran) | Geopolitics | Jun 2025 |
+| India-Pakistan Diplomatic Crisis | Geopolitics | May 2025 |
+| India-Pakistan Ceasefire | Geopolitics | May 2025 |
+| Operation Sindoor | Defense | May 2025 |
+| India-Pakistan LoC Skirmishes | Defense | Apr 2025 |
+| Indus Waters Treaty Suspension | Governance | Apr 2025 |
+| Pahalgam Terror Attack | Defense | Apr 2025 |
+| India Extreme Weather 2025 | Climate | Jan 2025 |
+| ISRO SpaDeX Docking | Technology | Jan 2025 |
 | Cyclone Dana – Puri | Climate | Oct 2024 |
-| Chamoli Glacier Burst | Climate | Feb 2021 |
-| Joshimath Subsidence | Governance | Jan 2023 |
-| Delhi Yamuna Floods | Society | Jul 2023 |
-| COVID Second Wave | Society | Apr 2021 |
-| Manipur Conflict | Defense | May 2023 |
-| Balakot Airstrikes | Defense | Feb 2019 |
-| Article 370 Abrogation | Governance | Aug 2019 |
+| Wayanad Landslide | Climate | Jul 2024 |
 | Tata Semiconductor Fab | Economics | Feb 2024 |
-| IMEC Corridor Signing | Economics | Sep 2023 |
-| G20 New Delhi Summit | Geopolitics | Sep 2023 |
 | India-Canada Diplomatic Row | Geopolitics | Sep 2023 |
-| Chandrayaan-3 Landing | Technology | Aug 2023 |
+| G20 New Delhi Summit | Geopolitics | Sep 2023 |
+| IMEC Corridor Signing | Economics | Sep 2023 |
 | Aditya-L1 Solar Mission | Technology | Sep 2023 |
-| Russia–Ukraine War | Geopolitics | Feb 2022 |
-| Gaza War & Red Sea Crisis | Geopolitics | Oct 2023 |
+| Chandrayaan-3 Landing | Technology | Aug 2023 |
+| Delhi Yamuna Floods | Society | Jul 2023 |
+| Manipur Conflict | Defense | May 2023 |
+| Joshimath Subsidence | Governance | Jan 2023 |
 
 ---
 
@@ -87,30 +100,34 @@ India generates massive governance data across:
 **IMPORTANT DISTINCTION — Two Response Types:**
 
 #### Type 1: Event-Triggered Response Schemes
-Directly activated by a crisis event.
+Directly activated by a crisis event. Stored as `scheme_type: "Type 1"` in Neo4j.
 
-| Scheme | Triggered By |
-|---|---|
-| SDRF | Delhi Floods, Wayanad, Chamoli, Cyclone Dana, Joshimath |
-| NDRF | Wayanad, Chamoli, Cyclone Dana |
-
-#### Type 2: Implementation Schemes (Ongoing)
-National schemes tracked for ground delivery. Connected via governance need — not forced event links.
-
-| Scheme | Domain | Real Data Source |
+| Scheme ID | Name | Triggered By |
 |---|---|---|
-| AMRUT | Urban Infrastructure | data.gov.in |
-| PMAY | Housing | data.gov.in |
-| PLI | Manufacturing | data.gov.in |
-| Ayushman Bharat | Health | data.gov.in |
-| PM SVANidhi | Vendor Relief | data.gov.in |
-| SBM | Sanitation | data.gov.in |
+| SCH_NDRF_FUND | NDRF Fund | Wayanad, Chamoli, Cyclone Dana |
+| SCH_SDRF | SDRF | Delhi Floods, Wayanad, Chamoli, Cyclone Dana, Joshimath |
+| SCH_SPR | Strategic Petroleum Reserve | Hormuz Blockade, Iran War |
+| SCH_CHABAHAR | Chabahar Port Development | Iran Ceasefire, Hormuz Blockade |
+| SCH_ONGC_VIDESH | ONGC Videsh | Iran War, Hormuz Blockade |
 
-> PRAMAAN clearly distinguishes Type 1 from Type 2. This is a core system design decision — not all schemes are event-triggered, and the UI makes this explicit.
+#### Type 2: Structural/Implementation Schemes (Ongoing)
+National schemes tracked for ground delivery. Stored as `scheme_type: "Type 2"` in Neo4j.
+
+| Scheme ID | Name | Domain | Real Data Source |
+|---|---|---|---|
+| SCH_AMRUT | AMRUT | Urban Infrastructure | data.gov.in |
+| SCH_PMAY | PMAY-U | Housing | data.gov.in |
+| SCH_ISM | India-Saudi Maritime | Economics | data.gov.in |
+| SCH_ISRO_BUDGET | ISRO Budget | Technology | data.gov.in |
+| SCH_INSTC | INSTC Corridor | Geopolitics | data.gov.in |
+| SCH_GREEN_H2 | Green Hydrogen Mission | Climate | data.gov.in |
+| SCH_PLI_SOLAR | PLI Solar | Economics | data.gov.in |
+
+> PRAMAAN clearly distinguishes Type 1 from Type 2. This is a core system design decision — not all schemes are event-triggered, and the UI makes this explicit with visual color coding (red = Type 1 Emergency, green = Type 2 Structural).
 
 ---
 
-### Layer 3 — Delivery (Delhi Pilot)
+### Layer 3 — Delivery
 
 ```
 (Scheme)-[:FUNDS]->(Asset)
@@ -180,8 +197,8 @@ Delhi Yamuna Floods
 4. UI refreshes with notification
 
 **Example UI messages:**
-- `🔄 New Event Ingested: Cyclone Alert — PIB Source`
-- `🔄 New Evidence Added: Delhi Drainage Project — data.gov.in`
+- `New Event Ingested: Cyclone Alert — PIB Source`
+- `New Evidence Added: Delhi Drainage Project — data.gov.in`
 
 **Backend flow:**
 ```
@@ -193,7 +210,7 @@ Pre-seeded data → Button/Timer trigger → Neo4j update → UI refresh
 
 ---
 
-## 7. UI — 5 SCREENS
+## 7. UI — 6 SCREENS
 
 ---
 
@@ -217,65 +234,80 @@ Pre-seeded data → Button/Timer trigger → Neo4j update → UI refresh
 
 ---
 
-### Screen 1: National Intelligence
+### Screen 1: National Intelligence (Intelligence Map)
 
-**Purpose:** Show all 17 events across 7 domains with government response and live feed.
+**Purpose:** Show all 28 events across 7 domains with government response and live feed.
 
 **Shows:**
-- Event map / ontology graph (7 domains, 17 events)
+- Event map / ontology graph (7 domains, 28 events)
 - Cross-domain gold edges
 - Government response connections
-- 🔄 Live ingestion feed (button + auto-timer)
+- Live ingestion feed (button + auto-timer)
 
 **Insight panel:**
 > *"Repeated climate events stress the same infrastructure systems"*
 
 ---
 
-### Screen 2: Scheme Tracker
+### Screen 2: Crisis Tracker
 
-**Purpose:** Show scheme intelligence and decision engine.
-
-**Two-panel structure:**
-
-**Panel A — Event Response Schemes (Type 1):**
-| Scheme | Triggered By | Amount Released |
-|---|---|---|
-| SDRF | Delhi Floods 2023 | ₹X Cr |
-| NDRF | Wayanad Landslide 2024 | ₹X Cr |
-
-**Panel B — Implementation Schemes (Type 2):**
-| Scheme | Delivery % | Evidence % |
-|---|---|---|
-| AMRUT | 67% | X% |
-| PMAY | 100% | X% |
-| PLI | X% | X% |
-
-**Decision Panel (AMRUT — accountability gap):**
-> *"₹5.38 Cr allocated for Delhi drainage — 1 of 3 projects unverified*
-> *→ Recommendation: Investigate Ward drainage project"*
-
-**MUST SHOW:** DATA → INSIGHT → DECISION
-
----
-
-### Screen 3: Delivery Monitor
-
-**Purpose:** Show ground-level delivery in Delhi pilot.
+**Purpose:** Real-time crisis monitoring — focused on active geopolitical and security events.
 
 **Shows:**
-- Scheme → Ward → Asset chain
-- Delhi AMRUT: 3 drainage projects (2 complete, 1 in progress)
-- Delhi PMAY: 17,067 houses (100% complete)
-- Delivery score per scheme
-- 🔄 Live update: `"New Asset Verified — Delhi Drainage"`
-
-**PMAY proof moment:**
-> *"₹401.79 Cr released — 17,067 houses — 100% occupied ✅"*
+- Active crisis events with severity indicators
+- Crisis timeline and escalation status
+- Cross-domain impact propagation
+- Backend: `/crisis` router with crisis-specific Neo4j queries
 
 ---
 
-### Screen 4: Proof & Evidence
+### Screen 3: Intelligence Verdict
+
+**Purpose:** AI-powered verdict and decision brief for selected events.
+
+**Shows:**
+- Per-event AI-generated intelligence brief
+- Key actors, evidence sources, strategic implications
+- Confidence scores and provenance chain
+- Backend: `/verdict` router
+
+---
+
+### Screen 4: Scheme Delivery Monitor
+
+**Purpose:** Per-event scheme delivery analysis with graphical impact metrics.
+
+**Key UX behaviours:**
+- Dropdown defaults to **"— Select an event —"** on initial load (no auto-selection)
+- Selecting an event loads full delivery data from Neo4j via `/ontology/events/{event_id}`
+- Proof chain summary pill row showing counts (Impacts · Schemes · Actors · Evidence · Cross-links)
+
+**Graphical representation (v5.1 redesign):**
+
+| Section | Visualization |
+|---|---|
+| Measured Impacts (numeric) | Plotly horizontal bar chart — bar length = magnitude, color = domain accent |
+| Measured Impacts (non-numeric) | KPI text chips — bold value + label + description |
+| Scheme Budgets | Plotly horizontal bar chart — red = Type 1 Emergency, green = Type 2 Structural |
+| Scheme Cards | Grouped by Type 1 / Type 2 with utilization progress bar |
+
+**Impact data handling:**
+- `impact.type = null` in Neo4j → label falls back to `impact.id` (e.g. `IMP_INDIA_IMPORT_BILL` → "India Import Bill")
+- String values like `"-3.2%"` handled by stripping non-numeric characters before float conversion
+- Non-numeric values displayed as KPI chips rather than bar chart entries
+
+**Scheme card details per card:**
+- Scheme name + status badge (Active / At Risk / Partially Operational / Inactive)
+- Budget in ₹ Crore
+- Ministry
+- Utilization % progress bar (if available)
+- Description (120 chars)
+
+**Cross-domain section:** Shows connected events from other domains with domain color coding.
+
+---
+
+### Screen 5: Proof & Evidence
 
 **Purpose:** Show the actual proof — before/after, evidence nodes, citizen mock.
 
@@ -318,7 +350,7 @@ UI display on every page:
 
 ## 10. REAL DATA COVERAGE
 
-All 17 events have real government data. Full registry:
+All events have real government data. Full registry:
 
 | Dataset | Events Covered | Source |
 |---|---|---|
@@ -337,8 +369,10 @@ All 17 events have real government data. Full registry:
 | JK Development Investment | Article 370 | data.gov.in |
 | DoS Budget Allocation | Chandrayaan-3, Aditya-L1 | data.gov.in |
 | ISRO/VSSC Budget | Chandrayaan-3, Aditya-L1 | data.gov.in |
-| Crude Oil Petroleum Imports | Russia-Ukraine | data.gov.in |
-| Merchandise + Services Trade | Gaza/Red Sea | data.gov.in |
+| Crude Oil Petroleum Imports | Iran War, Hormuz Blockade | data.gov.in |
+| Merchandise + Services Trade | Hormuz Blockade | data.gov.in |
+| Strategic Petroleum Reserve | Iran War, Hormuz Blockade | data.gov.in |
+| Chabahar Port Trade Data | Iran Ceasefire | data.gov.in |
 | AMRUT Storm Water Drainage | Delhi Floods | data.gov.in |
 | PMAY Housing | Delhi Floods | data.gov.in |
 
@@ -349,15 +383,47 @@ All 17 events have real government data. Full registry:
 | Metric | Where |
 |---|---|
 | Funds Tracked (₹ Cr) | Home |
-| Verified Assets % | Home + Delivery Monitor |
+| Verified Assets % | Home + Scheme Delivery |
 | Evidence Count | Home + Proof & Evidence |
 | Events Tracked | Home + National Intelligence |
 | Live Updates Count | National Intelligence |
-| Delivery % per Scheme | Scheme Tracker + Delivery Monitor |
+| Delivery % per Scheme | Scheme Delivery |
+| Impact bar charts (Plotly) | Scheme Delivery |
+| Budget comparison chart (Plotly) | Scheme Delivery |
 
 ---
 
-## 12. SYSTEM OPERATION (FOR JUDGES)
+## 12. NEO4J DATA MODEL — KEY PROPERTIES
+
+### Scheme nodes
+```
+(Scheme {
+    scheme_id,
+    name,
+    budget_crore,
+    ministry,
+    status,           // active | at_risk | partially_operational | inactive
+    scheme_type,      // "Type 1" | "Type 2"  ← added in v5.1
+    utilization_pct,
+    description
+})
+```
+
+### Impact nodes
+```
+(Impact {
+    id,
+    type,             // may be null — UI falls back to id-derived label
+    value,            // numeric or string (e.g. "-3.2%")
+    unit,
+    description,
+    source
+})
+```
+
+---
+
+## 13. SYSTEM OPERATION (FOR JUDGES)
 
 > *"PRAMAAN uses:*
 > - *Pre-seeded real government data for structure*
@@ -368,13 +434,13 @@ All 17 events have real government data. Full registry:
 
 ---
 
-## 13. SCALABILITY
+## 14. SCALABILITY
 
 > *"The same ontology supports all domains and regions across India. Scaling requires only adding new data — no redesign needed."*
 
 ---
 
-## 14. DIFFERENTIATION
+## 15. DIFFERENTIATION
 
 | Existing Systems | PRAMAAN |
 |---|---|
@@ -382,34 +448,41 @@ All 17 events have real government data. Full registry:
 | Track schemes | Verifies delivery |
 | Report numbers | Proves outcomes |
 | Static dashboards | Live proof chain |
+| Emoji/text metrics | Plotly graphical impact charts |
 
 ---
 
-## 15. TECH STACK
+## 16. TECH STACK
 
 | Layer | Technology |
 |---|---|
 | Graph Database | Neo4j 5.18 |
 | Backend | FastAPI (Python) |
-| Frontend | Streamlit |
+| Frontend | Streamlit 1.55.0 |
+| Charts | Plotly 6.6.0 (horizontal bar charts) |
 | AI / Insights | Groq · LLaMA 3.3 70B |
 | Data Sources | data.gov.in · PIB · NDMA · ISRO · IMD |
 | Deployment | Docker Compose |
 
 ---
 
-## 16. MVP SCOPE
+## 17. MVP SCOPE
 
 ### INCLUDED
-- 17 events, 7 domains, real data
+- **28 events**, 7 domains, real data (expanded from 17 in v5.0)
 - 5-layer proof chain (Layers 1–4 fully built)
 - Layer 5 Citizen — mock UI card
-- Delhi pilot — AMRUT + PMAY with real data
-- 4-page UI + home screen
+- 6-page UI + home screen
 - Real-time ingestion (button + timer)
 - Insights Engine (2–3 insights + 1 decision)
 - Trust Layer (source + confidence)
-- Type 1 / Type 2 scheme distinction
+- Type 1 / Type 2 scheme distinction — visual color coding throughout
+- `scheme_type` property on all scheme nodes in Neo4j
+- Plotly graphical impact and budget charts on Scheme Delivery
+- Smart dropdown: no auto-select on initial load (user must choose an event)
+- Iran War / Ceasefire / Hormuz Blockade events with full impact + scheme data
+- Operation Sindoor, Pahalgam, India-Pakistan crisis chain fully modelled
+- Crisis Tracker and Intelligence Verdict screens
 
 ### NOT INCLUDED
 - Full India coverage
@@ -419,12 +492,31 @@ All 17 events have real government data. Full registry:
 
 ---
 
-## 17. FINAL DEMO LINE
+## 18. CHANGELOG
+
+### v5.1 (March 2026)
+- **Events expanded:** 17 → 28 events; added Iran War, Hormuz Blockade, Iran Ceasefire, Operation Sindoor, Pahalgam, India-Pakistan chain, LoC Skirmishes, Indus Waters, Shukla ISS, Twelve-Day War, S&P Upgrade, CETA, Labour Codes, India-US Defence Pact, SpaDeX
+- **Scheme Delivery redesign:** Replaced raw HTML rendering bug (st.markdown with 4-space indented HTML) with `st.html()` throughout
+- **Plotly charts:** Horizontal bar charts for numeric impact values; budget comparison chart for schemes (red=Type 1, green=Type 2)
+- **Type 1/Type 2 visual split:** Scheme cards grouped by type with color-coded headers and utilization bars
+- **`scheme_type` Neo4j property:** Seeded on all scheme nodes via seed_scheme_types.py
+- **Impact null handling:** `impact.type=null` nodes now render with fallback label derived from `impact.id`
+- **Dropdown UX:** Scheme Delivery no longer auto-selects Iran Ceasefire on load; `include_none=True` in `render_event_dropdown()` shows placeholder until user makes a selection
+- **New screens:** Crisis Tracker + Intelligence Verdict pages added
+- **Delhi Pilot tab:** Removed from Scheme Delivery (standalone delivery chain still in Neo4j)
+
+### v5.0 (March 2026)
+- Initial MVP with 17 events, 5-layer proof chain, Delhi pilot
+- 4-page UI: Home · National Intelligence · Scheme Tracker · Proof & Evidence
+
+---
+
+## 19. FINAL DEMO LINE
 
 > *"PRAMAAN transforms governance from assumption to proof — in real time."*
 
 ---
 
-## 18. ONE-LINE SUMMARY
+## 20. ONE-LINE SUMMARY
 
 > Build less. Show impact. Prove it.

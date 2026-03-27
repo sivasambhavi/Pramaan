@@ -92,6 +92,7 @@ def render_event_dropdown(
     session_key: str,
     widget_key: str,
     include_all: bool = False,
+    include_none: bool = False,
     label: str = "Event",
 ) -> str | None:
     """
@@ -101,10 +102,11 @@ def render_event_dropdown(
         session_key:  st.session_state key that holds the selected event_id (or None).
         widget_key:   unique key for the st.selectbox widget.
         include_all:  prepend an "— All Events —" option (for Ontology Graph).
+        include_none: prepend a "— Select an event —" placeholder (no auto-select).
         label:        selectbox label (hidden).
 
     Returns:
-        Selected event_id, or None when "— All Events —" is chosen.
+        Selected event_id, or None when a placeholder option is chosen.
 
     Side-effect:
         Updates st.session_state[session_key] and calls st.rerun() on change.
@@ -114,13 +116,21 @@ def render_event_dropdown(
     options: dict[str, str | None] = {}
     if include_all:
         options[_ALL_LABEL] = None
+    if include_none:
+        options[_NONE_LABEL] = None
     for e in EVENTS:
         options[_evt_label(e)] = e[0]
 
     current_id = st.session_state.get(session_key)
+    if include_none:
+        default_label = _NONE_LABEL
+    elif include_all:
+        default_label = _ALL_LABEL
+    else:
+        default_label = _evt_label(EVENTS[0])
     current_label = next(
         (lbl for lbl, eid in options.items() if eid == current_id),
-        _ALL_LABEL if include_all else _evt_label(EVENTS[0]),
+        default_label,
     )
 
     # If session_key was changed externally (e.g. map marker click), the widget
