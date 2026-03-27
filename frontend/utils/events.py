@@ -15,6 +15,14 @@ EVENTS = [
     ("EVT_IRAN_CEASEFIRE_TALKS_2026",  "Iran War Ceasefire Talks",        "#a78bfa", "Geopolitics", "Mar 2026", "high",      35.6892,  51.3890),
     ("EVT_HORMUZ_BLOCKADE_2026",       "Strait of Hormuz Blockade",       "#38bdf8", "Economics",   "Mar 2026", "critical",  26.5667,  56.2500),
     ("EVT_IRAN_WAR_2026",              "Iran-US-Israel War",              "#a78bfa", "Geopolitics", "Feb 2026", "critical",  35.6892,  51.3890),
+    # ── 2026 New Events ───────────────────────────────────────────────────────
+    ("EVT_RUPEE_INR_CRISIS_2026",      "Rupee Depreciation Crisis",       "#38bdf8", "Economics",   "Nov 2026", "critical",  18.9220,  72.8347),
+    ("EVT_AI_REGULATION_ACT_2026",     "India AI Regulation Act 2026",    "#06b6d4", "Governance",  "Jul 2026", "high",      28.6139,  77.2090),
+    ("EVT_US_INDIA_TRADE_2026",        "US-India Strategic Trade Framework","#38bdf8","Economics",  "Sep 2026", "high",      28.6139,  77.2090),
+    ("EVT_INDIA_SEMI_MICRON_2026",     "India Semiconductor Mission — Micron Fab","#facc15","Technology","Aug 2026","high",  23.0225,  72.5714),
+    ("EVT_ARUNACHAL_STANDOFF_2026",    "Arunachal Pradesh PLA Standoff",  "#f97316", "Defense",     "Jun 2026", "critical",  27.1025,  92.9556),
+    ("EVT_INDIA_CLIMATE_TARGETS_2026", "India 2030 Climate Targets Review","#22c55e","Climate",     "Apr 2026", "high",      28.6139,  77.2090),
+    ("EVT_TEESTA_TREATY_2026",         "Teesta Water Treaty Signed",      "#a78bfa", "Geopolitics", "Jan 2026", "high",      26.7271,  88.3953),
     # ── 2025 ──────────────────────────────────────────────────────────────────
     ("EVT_LABOUR_CODES_2025",          "Four Labour Codes Enforcement",   "#06b6d4", "Governance",  "Nov 2025", "high",      28.6139,  77.2090),
     ("EVT_INDIA_US_DEFENSE_2025",      "India-US Defence Pact",           "#f97316", "Defense",     "Oct 2025", "high",      28.6139,  77.2090),
@@ -33,16 +41,12 @@ EVENTS = [
     # ── 2024 ──────────────────────────────────────────────────────────────────
     ("EVT_CYCLONE_DANA_2024",          "Cyclone Dana – Puri",             "#22c55e", "Climate",     "Oct 2024", "critical",  19.8135,  85.8312),
     ("EVT_WAYANAD_2024",               "Wayanad Landslide",               "#22c55e", "Climate",     "Jul 2024", "critical",  11.6854,  76.1320),
-    ("EVT_TATA_SEMI_2024",             "Tata Semiconductor Fab",          "#38bdf8", "Economics",   "Feb 2024", "high",      22.4707,  72.2110),
     # ── 2023 ──────────────────────────────────────────────────────────────────
     ("EVT_INDIA_CANADA_2023",          "India-Canada Diplomatic Row",     "#a78bfa", "Geopolitics", "Sep 2023", "high",      28.6292,  77.2208),
     ("EVT_G20_INDIA_2023",             "G20 New Delhi Summit",            "#a78bfa", "Geopolitics", "Sep 2023", "high",      28.6183,  77.2781),
-    ("EVT_IMEC_2023",                  "IMEC Corridor Signing",           "#38bdf8", "Economics",   "Sep 2023", "high",      18.9220,  72.8347),
     ("EVT_ADITYAL1_2023",              "Aditya-L1 Solar Mission",         "#facc15", "Technology",  "Sep 2023", "high",      12.9716,  77.5946),
     ("EVT_CHANDRAYAAN3_2023",          "Chandrayaan-3 Landing",           "#facc15", "Technology",  "Aug 2023", "high",      13.7199,  80.2304),
     ("EVT_DELHI_FLOODS_2023",          "Delhi Yamuna Floods",             "#fb7185", "Society",     "Jul 2023", "critical",  28.6139,  77.2090),
-    ("EVT_MANIPUR_2023",               "Manipur Conflict",                "#f97316", "Defense",     "May 2023", "critical",  24.8170,  93.9368),
-    ("EVT_JOSHIMATH_2023",             "Joshimath Subsidence",            "#06b6d4", "Governance",  "Jan 2023", "high",      30.5581,  79.5647),
 ]
 
 _MONTH = {"Jan":1,"Feb":2,"Mar":3,"Apr":4,"May":5,"Jun":6,

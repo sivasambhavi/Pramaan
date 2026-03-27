@@ -313,14 +313,23 @@ def page():
         # Iran war chain → India economic impact
         ("EVT_IRAN_WAR_2026",            "EVT_HORMUZ_BLOCKADE_2026",      "Iran war triggered Strait of Hormuz closure"),
         ("EVT_HORMUZ_BLOCKADE_2026",     "EVT_IRAN_CEASEFIRE_TALKS_2026", "Blockade economic pressure accelerated ceasefire talks"),
-        ("EVT_IMEC_2023",                "EVT_HORMUZ_BLOCKADE_2026",      "IMEC corridor further disrupted by Hormuz crisis"),
+        ("EVT_HORMUZ_BLOCKADE_2026",     "EVT_RUPEE_INR_CRISIS_2026",     "Sustained Hormuz blockade spiked oil import bill, collapsing the Rupee"),
+        ("EVT_RUPEE_INR_CRISIS_2026",    "EVT_SP_UPGRADE_2025",           "Currency crisis threatens reversal of S&P BBB upgrade trajectory"),
         # India strategic / technology
         ("EVT_G20_INDIA_2023",           "EVT_INDIA_CANADA_2023",         "G20 diplomacy vs bilateral breakdown"),
         ("EVT_CHANDRAYAAN3_2023",        "EVT_SHUKLA_ISS_2025",           "ISRO space programme milestone progression"),
-        ("EVT_TATA_SEMI_2024",           "EVT_INDIA_US_DEFENSE_2025",     "Semiconductor + defense pact: India-US strategic depth"),
+        ("EVT_INDIA_SEMI_MICRON_2026",   "EVT_INDIA_US_DEFENSE_2025",     "Micron fab + defense pact: deepening India-US strategic technology chain"),
+        ("EVT_INDIA_SEMI_MICRON_2026",   "EVT_US_INDIA_TRADE_2026",       "Semiconductor fab underpins trade framework strategic technology pillar"),
+        ("EVT_US_INDIA_TRADE_2026",      "EVT_INDIA_UK_CETA_2025",        "Back-to-back trade agreements reshape India's Western market access"),
         # Climate chain
-        ("EVT_DELHI_FLOODS_2023",        "EVT_JOSHIMATH_2023",            "Urban load on fragile river floodplain"),
         ("EVT_WAYANAD_2024",             "EVT_INDIA_EXTREME_WEATHER_2025","Back-to-back extreme climate events stress NDMA capacity"),
+        ("EVT_INDIA_CLIMATE_TARGETS_2026","EVT_INDIA_EXTREME_WEATHER_2025","Climate crisis urgency drives NDC acceleration"),
+        # Security / border chain
+        ("EVT_ARUNACHAL_STANDOFF_2026",  "EVT_INDIA_US_DEFENSE_2025",     "PLA standoff accelerates India-US defense pact implementation"),
+        ("EVT_ARUNACHAL_STANDOFF_2026",  "EVT_OPERATION_SINDOOR_2025",    "Two-front pressure: China standoff concurrent with Pakistan post-Sindoor tensions"),
+        # Governance chain
+        ("EVT_AI_REGULATION_ACT_2026",   "EVT_INDIA_SEMI_MICRON_2026",    "AI governance framework required before Micron fab scales AI chip output"),
+        ("EVT_TEESTA_TREATY_2026",       "EVT_INDUS_WATERS_CRISIS_2025",  "Teesta treaty success contrasted against Indus Waters breakdown — India's dual water diplomacy"),
     ]
     if show_cross:
         for e1_id, e2_id, reason in CROSS_PAIRS:
@@ -417,10 +426,18 @@ def page():
 
             # ── All data maps (defined before tabs so available in all tab blocks) ────
             NEEDS_MAP = {
-                # 2026
+                # 2026 — Existing
                 "EVT_IRAN_CEASEFIRE_TALKS_2026":  ("Strategic Petroleum Reserve Need",  "India's SPR covers only 9 days — minimum 30-day reserve needed to buffer Hormuz-class shocks.", "#38bdf8"),
                 "EVT_HORMUZ_BLOCKADE_2026":        ("Energy Route Diversification Need", "No operational alternative to Gulf oil routing — pipeline via Central Asia or expanded SPR urgently required.", "#f97316"),
                 "EVT_IRAN_WAR_2026":               ("Energy Security Policy Need",       "India lacks a formal energy-shock response protocol; ad-hoc oil procurement from spot markets is costly.", "#a78bfa"),
+                # 2026 — New
+                "EVT_RUPEE_INR_CRISIS_2026":       ("Forex Reserve Depth Need",          "RBI's $652B reserve buffer sustainable for ~8 months of crisis — sovereign wealth fund or gold monetisation mechanism required.", "#38bdf8"),
+                "EVT_AI_REGULATION_ACT_2026":      ("AI Audit Infrastructure Need",      "India has fewer than 200 certified AI auditors vs 1,400+ regulated systems — AIRB must fast-track certification programmes.", "#06b6d4"),
+                "EVT_US_INDIA_TRADE_2026":         ("Export Compliance Standardisation Need", "Indian CDSCO-FDA regulatory equivalence not formalised — ₹28,000 Cr pharma pipeline blocked without bilateral recognition MoU.", "#38bdf8"),
+                "EVT_INDIA_SEMI_MICRON_2026":      ("Chip Design Talent Need",           "85,000 semiconductor engineers deficit nationally — IIT curriculum update and industry apprenticeship pipeline urgently needed.", "#facc15"),
+                "EVT_ARUNACHAL_STANDOFF_2026":     ("Mountain Warfare Logistics Need",   "Only 60% of forward Arunachal posts are road-accessible year-round — BRO all-weather corridor completion critical by 2027.", "#f97316"),
+                "EVT_INDIA_CLIMATE_TARGETS_2026":  ("EV Infrastructure Deployment Need", "India needs 1.8M public EV charging stations by 2030 — current installed base <200,000; FAME III funds 60% short of requirement.", "#22c55e"),
+                "EVT_TEESTA_TREATY_2026":          ("Trans-Boundary River Governance Need","India-Bangladesh Joint Rivers Commission lacks a real-time flood alert protocol — failure risk during Teesta seasonal floods.", "#a78bfa"),
                 # 2025
                 "EVT_PAHALGAM_2025":               ("Counter-Terror Early-Warning Need", "IB-RAW-state intelligence fusion gaps allowed a 20-man team to operate in Pahalgam for 4+ hours undetected.", "#f97316"),
                 "EVT_OPERATION_SINDOOR_2025":       ("Border Civilian Evacuation Need",  "No permanent evacuation protocol for 1.2M border-belt civilians — ad-hoc relocations during Sindoor exposed gap.", "#f97316"),
@@ -437,12 +454,14 @@ def page():
                 # 2024
                 "EVT_CYCLONE_DANA_2024":            ("Coastal Resilience Need",          "Cyclone-resilient housing and early-warning last-mile gaps in Odisha.", "#38bdf8"),
                 "EVT_WAYANAD_2024":                 ("Land-Use Governance Need",         "Deforestation on eco-sensitive slopes without oversight.", "#f97316"),
-                "EVT_TATA_SEMI_2024":               ("Semiconductor Sovereignty Need",   "Domestic chip manufacturing capacity near-zero before PLI.", "#facc15"),
                 # 2023
                 "EVT_DELHI_FLOODS_2023":            ("Drainage Capacity Need",           "Ward-level storm water drain capacity insufficient; Ward 46 incomplete.", "#22c55e"),
-                "EVT_JOSHIMATH_2023":               ("Urban Subsidence Need",            "Heavy construction on fragile hill terrain without geological load assessment.", "#fb7185"),
-                "EVT_MANIPUR_2023":                 ("Conflict Early-Warning Need",      "Ethnic tension signals went unaddressed 6+ months before escalation.", "#f97316"),
-                "EVT_IMEC_2023":                    ("Trade Route Resilience Need",      "IMEC corridor not operationalized — compounded by Hormuz blockade in 2026.", "#fb7185"),
+                "EVT_INDIA_CANADA_2023":            ("Diaspora Consular Need",            "No bilateral consular access MoU — 800K Indian students in Canada face denial-of-service in crisis situations.", "#a78bfa"),
+                "EVT_G20_INDIA_2023":               ("Multilateral Debt Framework Need",  "India lacks a formal debt restructuring leadership position in G20 — needed to translate presidency gains into binding commitments.", "#a78bfa"),
+                "EVT_ADITYAL1_2023":               ("Space Weather Alert Need",          "India has no domestic space weather alert infrastructure — ISRO grid ops depend on NOAA SWPC data with 45-min lag.", "#facc15"),
+                "EVT_CHANDRAYAAN3_2023":            ("Lunar Resource Framework Need",     "No international legal framework for lunar resource extraction rights — India needs a bilateral treaty position before Chandrayaan-4.", "#facc15"),
+                "EVT_SHUKLA_ISS_2025":             ("Space Medicine Protocol Need",      "India lacks a national space medicine capability — Gaganyaan crew health protocols depend entirely on NASA JSC support contracts.", "#facc15"),
+                "EVT_ISRO_SPADEX_2025":            ("Commercial Docking Standards Need", "India's SpaDeX docking interface not interoperable with ESA/JAXA standards — limits commercial partnership potential.", "#facc15"),
             }
             GAP_LABEL = {
                 "Defense":     ("⚔ SECURITY GAP EXPOSED",    "#f97316"),
@@ -457,20 +476,27 @@ def page():
                 "EVT_DELHI_FLOODS_2023":        [("SDRF Delhi", "₹350 Cr", "Delhi Govt / MHA"), ("NDRF Teams", "12 units", "MHA")],
                 "EVT_WAYANAD_2024":             [("SDRF Kerala", "₹200 Cr", "Kerala Govt"), ("NDRF Deploy", "₹90 Cr", "MHA")],
                 "EVT_CYCLONE_DANA_2024":        [("SDRF Odisha", "₹800 Cr", "Odisha Govt"), ("NDRF Deploy", "₹350 Cr", "MHA")],
-                "EVT_JOSHIMATH_2023":           [("SDRF Uttarakhand", "₹250 Cr", "Uttarakhand"), ("NDRF Deploy", "₹80 Cr", "MHA")],
                 "EVT_INDIA_EXTREME_WEATHER_2025":[("SDRF Multi-state", "₹3,200 Cr", "MHA"), ("NDRF Deploy", "48 units", "MHA")],
-                "EVT_MANIPUR_2023":             [("SDRF Manipur", "₹175 Cr", "Manipur Govt"), ("CRPF Deploy", "5 Bn", "MHA")],
                 "EVT_PAHALGAM_2025":            [("PM Relief Fund", "₹50 Cr", "PMO"), ("CRPF Surge", "8 Bn", "MHA"), ("NIA Investigation", "Activated", "MHA")],
                 "EVT_OPERATION_SINDOOR_2025":   [("IAF Strike Op", "9 targets", "MoD"), ("Army LoC Posture", "High-readiness", "MoD")],
                 "EVT_LOC_SKIRMISHES_2025":      [("Army Artillery Reserve", "Activated", "MoD"), ("Border Civilian Evac", "14 villages", "MHA")],
+                "EVT_ARUNACHAL_STANDOFF_2026":  [("Army Mountain Div", "3 divisions — 45,000 troops", "MoD"), ("IAF ALG Activation", "Tawang + Pasighat", "IAF"), ("BRO Emergency Works", "₹2,400 Cr fast-track", "MoD")],
             }
 
             # ── Watch Points — forward-looking intelligence (all domains) ──────────────
             WATCH_POINTS = {
-                # 2026
+                # 2026 — Existing
                 "EVT_IRAN_CEASEFIRE_TALKS_2026":  ["Will ceasefire hold past 90-day review? Iran parliament hardliners pushing back.", "India-Iran bilateral oil deal window opens if Hormuz reopens — track MEA signals.", "IMEC Phase 1 restart conditional on Hormuz status — Jul 2026 deadline."],
                 "EVT_HORMUZ_BLOCKADE_2026":        ["SPR drawdown rate — India crosses critical 5-day buffer around Day 18 of blockade.", "Spot LNG procurement surge expected; watch GAIL tender prices.", "US 5th Fleet posture change in Bahrain is the key de-escalation signal."],
                 "EVT_IRAN_WAR_2026":               ["Brent above $130 triggers automatic fuel subsidy review under MoPNG protocol.", "India's vote if UNSC emergency session called — non-aligned vs US pressure.", "Pakistan opportunism risk: cross-border provocation while India is economically stressed."],
+                # 2026 — New
+                "EVT_RUPEE_INR_CRISIS_2026":       ["RBI forex reserve floor — watch $640B level; below triggers emergency IMF consultation protocol.", "Fed rate decision in Dec 2026 is the single biggest external catalyst for Rupee recovery.", "Gold import duty hike likely next lever — watch CBIC notification for 15%+ slab."],
+                "EVT_AI_REGULATION_ACT_2026":      ["AIRB enforcement date: April 2027 — compliance readiness of 600+ hospital AI systems is the key risk.", "US EU AI Act equivalence talks — India's AIRB recognised or isolated? G20 AI track signal.", "NASSCOM's model compliance toolkit — release date signals industry-govt friction level."],
+                "EVT_US_INDIA_TRADE_2026":         ["GE F414 engine IPR clause resolution is the single biggest sticking point — Q1 2027 deadline.", "India's pharma FDA fast-track: 90-day review vs current 18-month cycle — first approvals signal.", "US critical minerals offtake agreement: cobalt and lithium first delivery timeline."],
+                "EVT_INDIA_SEMI_MICRON_2026":      ["Phase 2 fab expansion: 28nm → 16nm node — Micron capex decision expected Q2 2027.", "ISMC Mysuru (SoftBank JV) ground-breaking — land clearance the only remaining blocker.", "IIT semiconductor curriculum update: 25 institutes must be onboarded by Dec 2026."],
+                "EVT_ARUNACHAL_STANDOFF_2026":     ["PLA withdrawal timeline — 72-hour rolling assessment by ITBP; 4.2 km restored or further advance?", "India-China Corps Commander talks: next round is the de-escalation signal to watch.", "Vibrant Villages Phase 2 fast-track — BRO road completion in 3 critical sectors by March 2027."],
+                "EVT_INDIA_CLIMATE_TARGETS_2026":  ["2026 monsoon IMD extended-range forecast — early signal for June-Sept renewable generation disruption.", "FAME III EV subsidy utilisation rate — 60% utilisation trigger for next tranche release.", "Green hydrogen electrolyser PLI bids — allocation decision due Q3 2026."],
+                "EVT_TEESTA_TREATY_2026":          ["First lean-season flow measurement under treaty — March 2027 is the inaugural compliance check.", "West Bengal political backlash: TMC opposition to Centre — next state election is the stability signal.", "Bangladesh reciprocal offer: land transit access for India's northeast — negotiation track."],
                 # 2025
                 "EVT_PAHALGAM_2025":               ["Indus Waters Treaty legal challenge at Hague by Pakistan — ICJ jurisdiction question pending.", "J&K election calendar: security situation determines polling feasibility.", "LeT-proxy reconstitution attempts in Neelum Valley — IB tracking."],
                 "EVT_OPERATION_SINDOOR_2025":       ["Pakistan Army's internal accountability review — Rawalpindi Corps response.", "India's next doctrine test: will 'right to pursue' be codified in MoD white paper?", "Satellite imagery of struck sites — BrahMos accuracy assessment ongoing at DRDO."],
@@ -489,16 +515,12 @@ def page():
                 # 2024
                 "EVT_CYCLONE_DANA_2024":            ["Cyclone season 2025 Bay of Bengal forecast — IMD pre-season bulletin due April.", "Odisha coastal housing scheme post-Dana: ₹800 Cr released, 60% utilized.", "Early warning last-mile gap: 12 Odisha blocks still without NDMA alert infrastructure."],
                 "EVT_WAYANAD_2024":                 ["Wayanad rehabilitation township — land acquisition stalled, 800 families still in camps.", "Kerala's eco-sensitive zone notification: Gadgil report implementation — SC hearing.", "Landslide early-warning sensor network: NRSC deployment in 200 high-risk sites."],
-                "EVT_TATA_SEMI_2024":               ["Tata fab Phase 2 expansion: 28nm → 16nm node timeline — 2027 target.", "ISMC (SoftBank JV) Mysuru fab ground-breaking — delayed by land clearance.", "India's chip design talent gap: 85,000 engineers needed — IIT curriculum update."],
                 # 2023
                 "EVT_INDIA_CANADA_2023":            ["Nijjar case trial in Canada: Indian diplomats named — next hearing date.", "Indian student visa rejection rate — still elevated at 32% vs 18% pre-crisis.", "Canada election outcome: Conservative govt likely warmer on India relations."],
                 "EVT_G20_INDIA_2023":               ["G20 South Africa 2025 presidency — India's PGII infrastructure commitments.", "Global debt restructuring: Zambia/Ghana outcomes shape India's MDB leverage.", "India-Africa trade target ₹5 Lakh Cr by 2030 — annual progress review."],
-                "EVT_IMEC_2023":                    ["IMEC Phase 1 MoU to binding agreement: legal framework still unsigned.", "Saudi Arabia port expansion at Haifa link — ground-breaking timeline.", "Hormuz reopening is the prerequisite — all IMEC signals conditioned on this."],
                 "EVT_ADITYAL1_2023":                ["Aditya-L1 first solar flare alert issued to ISRO grid ops — response protocol test.", "Space weather data sharing MoU with ESA — signed Q4 2025.", "VELC coronagraph data: first peer-reviewed paper due Nature Astronomy."],
                 "EVT_CHANDRAYAAN3_2023":            ["Chandrayaan-4 sample-return mission: launch window 2028 — module integration.", "Lunar Gateway India participation — NASA-ISRO MoU scope expansion.", "Pragyan rover data: water-ice confirmation paper — ISRO embargo lifting timeline."],
                 "EVT_DELHI_FLOODS_2023":            ["Yamuna floodplain encroachment: 48,000 structures still in flood zone — NGT order.", "AMRUT 2.0 Ward 46 drain upgrade: ₹1,200 Cr, 41% complete as of Jan 2026.", "Hathnikund Barrage real-time telemetry: DJB sensor uptime below 60%."],
-                "EVT_MANIPUR_2023":                 ["Manipur peace talks: MHA interlocutor meetings — stalled since Aug 2025.", "Kuki-Zo demand for separate administration — Home Ministry response pending.", "NHRC inquiry report on Manipur: submission deadline extended to Mar 2026."],
-                "EVT_JOSHIMATH_2023":               ["NTPC Tapovan boring restart: MoEF clearance under challenge at NGT.", "Joshimath subsidence rate: NRSC satellite monitoring — Jan 2026 update.", "Char Dham highway expansion: Supreme Court order on width cap compliance."],
             }
 
             # ── Defense-specific panels ─────────────────────────────────────────────────
@@ -732,7 +754,9 @@ def page():
                         unsafe_allow_html=True,
                     )
                     for imp in impacts[:4]:
-                        itype = imp.get("type", "").replace("_", " ").title()
+                        if not isinstance(imp, dict):
+                            continue
+                        itype = (imp.get("type") or "").replace("_", " ").title()
                         ival  = imp.get("value", "")
                         iunit = imp.get("unit", "")
                         st.markdown(
