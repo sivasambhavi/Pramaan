@@ -20,27 +20,19 @@ from utils.events import EVENTS_BY_ID, render_event_dropdown
 from components.topnav import render_topnav
 from components.ontology_model import render_ontology_model
 
-try:
-    from groq import Groq as _Groq
-    _GROQ_KEY = os.environ.get("GROQ_API_KEY", "")
-    _GROQ_OK  = bool(_GROQ_KEY)
-except ImportError:
-    _GROQ_OK = False
+_OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://192.168.48.1:11434")
+_OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3:latest")
+_GROQ_OK = True   # kept for UI gate — Ollama always available
 
 
 def _generate_insights(event_id: str, event_name: str, context: str):
-    """Stream Groq LLaMA insights for a selected event."""
-    client = _Groq(api_key=_GROQ_KEY)
-    system = (
-        "You are PRAMAAN — an AI governance intelligence engine. "
-        "Synthesise verified ontology data into a crisp decision brief for senior officials. "
-        "Be precise, structured, and cite [REF: source] for every claim. "
-        "Mark anything not in the context as [UNVERIFIED]. Use markdown."
-    )
-    user = (
-        f"Event: **{event_name}** (`{event_id}`)\n\n"
-        f"Ontology context:\n```\n{context}\n```\n\n"
-        "Generate a decision brief with EXACTLY this structure. Be extremely concise — one line per point, no elaboration.\n\n"
+    """Stream Ollama insights for a selected event."""
+    import requests, json as _json
+    prompt = (
+        f"You are PRAMAAN, an AI governance intelligence engine.\n\n"
+        f"Event: {event_name} ({event_id})\n\n"
+        f"Context:\n{context}\n\n"
+        "Reply with EXACTLY this structure. One line per point, no extra explanation.\n\n"
         "### Situation\n"
         "One sentence only.\n\n"
         "### Cross-Domain Impact\n"
@@ -48,15 +40,32 @@ def _generate_insights(event_id: str, event_name: str, context: str):
         "- **[Domain]** → [10 words max]\n\n"
         "### Actions\n"
         "3 bullets, one line each:\n"
-        "- **[Actor]** · [action] · [outcome]\n\n"
-        "Only use data from the context. No extra explanation."
+        "- **[Actor]** · [action] · [outcome]"
     )
-    return client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[{"role": "system", "content": system},
-                  {"role": "user",   "content": user}],
-        temperature=0.3, max_tokens=400, stream=True,
+    resp = requests.post(
+        f"{_OLLAMA_HOST}/api/generate",
+        json={"model": _OLLAMA_MODEL, "prompt": prompt, "stream": True},
+        stream=True,
+        timeout=120,
     )
+    resp.raise_for_status()
+
+    class _StreamWrapper:
+        """Wraps Ollama streaming response to match the iteration pattern."""
+        def __init__(self, r):
+            self._r = r
+
+        def __iter__(self):
+            for line in self._r.iter_lines():
+                if line:
+                    chunk = _json.loads(line)
+                    token = chunk.get("response", "")
+                    if token:
+                        yield token
+                    if chunk.get("done"):
+                        return
+
+    return _StreamWrapper(resp)
 
 NODE_CONFIG = {
     "Event":    {"color": "#f97316", "size": 26, "shape": "dot",     "desc": "High-impact incidents"},
@@ -1287,11 +1296,11 @@ def page():
                     try:
                         stream = _generate_insights(_ai_event_id, _ev_name, _ctx)
                         out = ""
-                        for chunk in stream:
-                            out += chunk.choices[0].delta.content or ""
+                        for token in stream:
+                            out += token
                         st.session_state[f"ai_brief_{_ai_event_id}"] = out
                     except Exception as ex:
-                        st.error(f"Groq error: {ex}")
+                        st.error(f"Ollama error: {ex}")
 
             _brief = st.session_state.get(f"ai_brief_{_ai_event_id}", "")
             if _brief:

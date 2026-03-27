@@ -42,52 +42,43 @@ _DOM_ICON   = {
 # ── LLM ───────────────────────────────────────────────────────────────────────
 
 def _build_context(data: dict) -> str:
+    """Build a compact context string — max ~800 tokens to preserve quota."""
     lines = []
 
-    events = data.get("events", []) or []
+    events = (data.get("events") or [])[:8]          # top 8 events only
     if events:
-        lines.append("=== ACTIVE EVENTS (high/critical) ===")
+        lines.append("=== ACTIVE EVENTS ===")
         for e in events:
+            desc = (e.get('description') or '')[:80]
             lines.append(
                 f"[{(e.get('severity') or '').upper()}] {e.get('name') or ''} | "
-                f"Domain: {e.get('domain') or ''} | Region: {e.get('region') or ''} | "
-                f"Date: {e.get('date') or ''} | {(e.get('description') or '')[:200]}"
+                f"{e.get('domain') or ''} | {e.get('date') or ''} | {desc}"
             )
 
-    connections = data.get("connections", []) or []
+    connections = (data.get("connections") or [])[:5]  # top 5
     if connections:
-        lines.append("\n=== CROSS-DOMAIN CONNECTIONS ===")
+        lines.append("=== CONNECTIONS ===")
         for c in connections:
             lines.append(
-                f"{c.get('from_event') or ''} → {c.get('to_event') or ''} | "
-                f"Reason: {c.get('reason') or ''} | Strength: {c.get('strength') or ''}"
+                f"{c.get('from_event') or ''} → {c.get('to_event') or ''}: "
+                f"{(c.get('reason') or '')[:60]}"
             )
 
-    indicators = data.get("indicators", []) or []
-    if indicators:
-        lines.append("\n=== LIVE INDICATORS ===")
-        for i in indicators:
-            lines.append(
-                f"{i.get('name') or ''} = {i.get('value') or ''} {i.get('unit') or ''} | Trend: {i.get('trend') or ''}"
-            )
-
-    impacts = data.get("impacts", []) or []
+    impacts = (data.get("impacts") or [])[:5]          # top 5
     if impacts:
-        lines.append("\n=== KEY IMPACTS ===")
+        lines.append("=== IMPACTS ===")
         for i in impacts:
             lines.append(
-                f"[{(i.get('severity') or '').upper()}] {i.get('impact') or ''} | "
-                f"Domain: {i.get('domain') or ''} | From: {i.get('event') or ''}"
+                f"[{(i.get('severity') or '').upper()}] {(i.get('impact') or '')[:60]} "
+                f"({i.get('domain') or ''})"
             )
 
-    schemes = data.get("schemes", []) or []
+    schemes = (data.get("schemes") or [])[:5]          # top 5
     if schemes:
-        lines.append("\n=== ACTIVE SCHEMES ===")
+        lines.append("=== SCHEMES ===")
         for s in schemes:
-            triggered = ", ".join(s.get("triggered_by") or []) or "none"
             lines.append(
-                f"{s.get('name') or ''} | Budget: ₹{s.get('budget') or ''} Cr | "
-                f"Status: {s.get('status') or ''} | Triggered by: {triggered}"
+                f"{s.get('name') or ''} | ₹{s.get('budget') or ''} Cr | {s.get('status') or ''}"
             )
 
     return "\n".join(lines)
@@ -96,7 +87,8 @@ def _build_context(data: dict) -> str:
 _GROQ_MODELS = [
     "llama-3.3-70b-versatile",
     "llama-3.1-8b-instant",
-    "gemma2-9b-it",
+    "mixtral-8x7b-32768",
+    "mistral-saba-24b",
 ]
 
 def _call_groq(context: str) -> tuple[dict, str]:
@@ -187,19 +179,26 @@ Rules:
 
 
 def _call_gemini(prompt: str) -> tuple[dict, str]:
-    """Gemini fallback — returns (verdict_dict, model_name)."""
+    """Gemini fallback — tries 2.0-flash then 1.5-flash."""
     _genai.configure(api_key=GEMINI_KEY)
-    model = _genai.GenerativeModel(
-        "gemini-2.0-flash",
-        generation_config={"response_mime_type": "application/json"},
-    )
-    resp = model.generate_content(prompt)
-    raw = resp.text.strip()
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    return json.loads(raw), "gemini-2.0-flash"
+    for gmodel in ["gemini-2.0-flash", "gemini-1.5-flash"]:
+        try:
+            model = _genai.GenerativeModel(
+                gmodel,
+                generation_config={"response_mime_type": "application/json"},
+            )
+            resp = model.generate_content(prompt)
+            raw = resp.text.strip()
+            if raw.startswith("```"):
+                raw = raw.split("```")[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+            return json.loads(raw), gmodel
+        except Exception as ex:
+            if "429" in str(ex) or "quota" in str(ex).lower():
+                continue
+            raise
+    raise RuntimeError("All Gemini models quota-exceeded")
 
 
 # ── Page ──────────────────────────────────────────────────────────────────────
