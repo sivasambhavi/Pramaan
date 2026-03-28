@@ -193,7 +193,7 @@ def main() -> None:
         [
             st.Page(home,                                   title="Pramaan",          icon=":material/verified_user:", default=True, url_path=""),
             st.Page("pages/live_ingestion.py",        title="Live Ingestion",       icon=":material/cell_tower:",    url_path="Live_Ingestion"),
-            st.Page("pages/national_intelligence.py", title="National Intelligence", icon=":material/map:",           url_path="National_Intelligence"),
+            st.Page("pages/national_intelligence.py", title="Global Intelligence", icon=":material/map:",           url_path="Global_Intelligence"),
             st.Page("pages/ontology_graph.py",        title="Ontology Graph",        icon=":material/hub:",           url_path="Decision_Engine"),
             st.Page("pages/scheme_delivery.py",       title="Scheme Delivery",       icon=":material/electric_bolt:", url_path="Delivery_Monitor"),
             st.Page("pages/proof_and_evidence.py",    title="Proof & Evidence",      icon=":material/psychology:",    url_path="Proof_and_Evidence"),

@@ -1,6 +1,6 @@
 """
 national_intelligence.py — PRAMAAN v5
-National Intelligence: world map with event pins, domain-colored markers, event detail cards.
+Global Intelligence: world map with event pins, domain-colored markers, event detail cards.
 Horizontal chip filter bar. 17 events across 7 domains.
 """
 
@@ -62,8 +62,8 @@ DEFAULT_ZOOM   = INDIA_ZOOM
 
 
 def page():
-    st.set_page_config(page_title="National Intelligence – PRAMAAN", layout="wide")
-    render_topnav(active_page="National Intelligence")
+    st.set_page_config(page_title="Global Intelligence – PRAMAAN", layout="wide")
+    render_topnav(active_page="Global Intelligence")
 
     st.markdown("""
     <style>
@@ -134,7 +134,7 @@ def page():
       <span style="font-size:1.9em;font-weight:800;color:#14b8a6;
                    font-family:'Cinzel',serif;letter-spacing:0.08em;white-space:nowrap;
                    animation:glowPulse 2.5s ease-in-out infinite;">
-        NATIONAL INTELLIGENCE
+        GLOBAL INTELLIGENCE
       </span>
       <span style="font-size:0.75em;color:#64748b;white-space:nowrap;">
         {n_events} Events &nbsp;·&nbsp; {n_domains} Active Domains

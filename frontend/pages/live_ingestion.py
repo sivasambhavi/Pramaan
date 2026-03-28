@@ -143,31 +143,39 @@ def page():
     html, body, [class*="css"] { background-color: #020b14 !important; color: #e2e8f0 !important; }
     .block-container { padding-top: 0 !important; padding-bottom: 0 !important; max-width: 100% !important; }
     header[data-testid="stHeader"] { height: 0 !important; min-height: 0 !important; }
+    section[data-testid="stMain"] > div:first-child { padding-top: 0 !important; }
+    div[data-testid="stVerticalBlock"] > div:first-child { margin-top: 0 !important; }
     div[data-baseweb="select"] * { font-size: 13px !important; }
     /* Hide autorefresh iframe height */
     iframe[title="streamlit_autorefresh.autorefresh"] { display: none !important; height: 0 !important; }
     @keyframes glowPulse {
-        0%, 100% { text-shadow: 0 0 10px rgba(249,115,22,0.5); }
-        50%       { text-shadow: 0 0 28px rgba(249,115,22,0.9); }
+        0%, 100% { text-shadow: 0 0 10px rgba(20,184,166,0.6), 0 0 20px rgba(20,184,166,0.3); }
+        50%       { text-shadow: 0 0 22px rgba(20,184,166,1.0), 0 0 40px rgba(20,184,166,0.6); }
     }
     </style>
     """, unsafe_allow_html=True)
 
-    # Auto-refresh every 30s — hidden via CSS above so it adds no vertical space
-    st_autorefresh(interval=30_000, key="live_autorefresh")
-
     # ── Header ─────────────────────────────────────────────────────────────────
     st.markdown("""
-    <div style="padding:6px 0 4px;border-bottom:1px solid #1e293b;margin-bottom:6px;
-                display:flex;align-items:center;gap:14px;">
-      <span style="font-size:1.9em;font-weight:800;color:#f97316;
-                   font-family:'Cinzel',serif;letter-spacing:0.08em;
-                   animation:glowPulse 2.5s ease-in-out infinite;">
-        LIVE INGESTION
-      </span>
-      <span style="font-size:0.75em;color:#64748b;">
-        Agentic · Ollama LLaMA3 · Neo4j Knowledge Graph
-      </span>
+    <div style="padding:0 0 4px;border-bottom:1px solid #1e293b;margin-bottom:6px;
+                display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-size:1.9em;font-weight:800;color:#f1f5f9;
+                     font-family:'Cinzel',serif;letter-spacing:0.08em;
+                     animation:glowPulse 2.5s ease-in-out infinite;">
+          LIVE INGESTION
+        </span>
+        <span style="font-size:0.75em;color:#64748b;">
+          Agentic · Ollama LLaMA3 · Neo4j Knowledge Graph
+        </span>
+      </div>
+      <a href="/Global_Intelligence" target="_self"
+         style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;
+                text-decoration:none;border-radius:8px;padding:6px 16px;
+                font-size:11px;font-weight:700;letter-spacing:0.04em;
+                box-shadow:0 2px 10px rgba(249,115,22,0.35);white-space:nowrap;">
+        Global Intelligence →
+      </a>
     </div>
     """, unsafe_allow_html=True)
 
@@ -512,3 +520,4 @@ def page():
 
 
 page()
+st_autorefresh(interval=30_000, key="live_autorefresh")

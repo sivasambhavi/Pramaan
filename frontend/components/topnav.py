@@ -8,7 +8,7 @@ import streamlit as st
 
 PAGES = [
     ("Live Ingestion",        "/Live_Ingestion"),
-    ("National Intelligence", "/National_Intelligence"),
+    ("Global Intelligence", "/Global_Intelligence"),
     ("Ontology Graph",        "/Decision_Engine"),
     ("Crisis Tracker",         "/Crisis_Monitor"),
     ("Scheme Delivery",        "/Delivery_Monitor"),
