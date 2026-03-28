@@ -14,9 +14,11 @@ import requests as _req
 from datetime import datetime
 from components.topnav import render_topnav
 
-API_BASE   = os.environ.get("PRAMAAN_API_URL", "http://localhost:8000")
-GROQ_KEY   = os.environ.get("GROQ_API_KEY", "")
-GEMINI_KEY = os.environ.get("GOOGLE_API_KEY", "") or os.environ.get("GEMINI_API_KEY", "")
+API_BASE    = os.environ.get("PRAMAAN_API_URL", "http://localhost:8000")
+GROQ_KEY    = os.environ.get("GROQ_API_KEY", "")
+GEMINI_KEY  = os.environ.get("GOOGLE_API_KEY", "") or os.environ.get("GEMINI_API_KEY", "")
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+OLLAMA_MODEL= os.environ.get("OLLAMA_MODEL", "llama3")
 
 try:
     from groq import Groq as _Groq
@@ -29,6 +31,8 @@ try:
     _GEMINI_OK = bool(GEMINI_KEY)
 except ImportError:
     _GEMINI_OK = False
+
+import requests as _rq
 
 _URG_COLOR  = {"48h": "#ef4444", "30d": "#f97316", "6m": "#facc15"}
 _URG_LABEL  = {"48h": "URGENT — 48 HOURS", "30d": "SHORT-TERM — 30 DAYS", "6m": "STRUCTURAL — 6 MONTHS"}
@@ -82,6 +86,24 @@ def _build_context(data: dict) -> str:
             )
 
     return "\n".join(lines)
+
+
+def _call_ollama(prompt: str) -> tuple[dict, str]:
+    """Primary — Ollama local LLM. Returns (verdict_dict, model_name)."""
+    payload = {
+        "model": OLLAMA_MODEL,
+        "prompt": prompt,
+        "stream": False,
+        "format": "json",
+    }
+    resp = _rq.post(f"{OLLAMA_HOST}/api/generate", json=payload, timeout=60)
+    resp.raise_for_status()
+    raw = resp.json().get("response", "").strip()
+    if raw.startswith("```"):
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+    return json.loads(raw), f"ollama/{OLLAMA_MODEL}"
 
 
 _GROQ_MODELS = [
@@ -263,29 +285,42 @@ def page():
         context_str = _build_context(ctx_data)
 
         with st.spinner("Synthesising verdict with LLM..."):
+            verdict, model_used = None, None
+
+            # 1️⃣ Ollama — local, no quota
             try:
-                verdict, model_used = _call_groq(context_str)
-            except Exception as groq_err:
-                if _GEMINI_OK:
-                    st.warning(f"Groq unavailable ({str(groq_err)[:60]}…) — falling back to Gemini.")
-                    try:
-                        # Build a combined prompt for Gemini
-                        combined = (
-                            f"SYSTEM: You are PRAMAAN — India's AI governance intelligence engine. "
-                            f"Respond ONLY with valid JSON matching the schema provided.\n\n"
-                            f"CONTEXT:\n{context_str}\n\n"
-                            f"Return a JSON with keys: decisions (3 items), exposures (3-5), "
-                            f"advantages (2-3), one_line. Each decision has: priority, title, urgency (48h/30d/6m), "
-                            f"actor, action, evidence, consequence. Each exposure has: domain, risk, headline, events, compound_effect. "
-                            f"Each advantage has: title, window, action, rationale."
-                        )
-                        verdict, model_used = _call_gemini(combined)
-                    except Exception as gem_err:
-                        st.error(f"Gemini error: {gem_err}")
-                        return
-                else:
-                    st.error(f"Groq error: {groq_err}")
+                combined_prompt = (
+                    "You are PRAMAAN — India's AI governance intelligence engine. "
+                    "Respond ONLY with valid JSON.\n\n"
+                    f"CONTEXT:\n{context_str}\n\n"
+                    "Return JSON with keys: decisions (3), exposures (3-5), advantages (2-3), one_line. "
+                    "Each decision: priority, title, urgency (48h/30d/6m), actor, action, evidence, consequence. "
+                    "Each exposure: domain, risk, headline, events, compound_effect. "
+                    "Each advantage: title, window, action, rationale."
+                )
+                verdict, model_used = _call_ollama(combined_prompt)
+            except Exception as ollama_err:
+                logger_msg = f"Ollama unavailable: {str(ollama_err)[:60]}"
+
+            # 2️⃣ Groq — remote, multiple models
+            if verdict is None and _GROQ_OK:
+                try:
+                    verdict, model_used = _call_groq(context_str)
+                except Exception as groq_err:
+                    logger_msg = f"Groq unavailable: {str(groq_err)[:60]}"
+
+            # 3️⃣ Gemini — final fallback
+            if verdict is None and _GEMINI_OK:
+                try:
+                    verdict, model_used = _call_gemini(combined_prompt)
+                except Exception as gem_err:
+                    st.error(f"All LLMs failed. Last error: {gem_err}")
                     return
+
+            if verdict is None:
+                st.error("All LLMs unavailable (Ollama not running, Groq + Gemini rate-limited). Try again in a few minutes.")
+                return
+
             verdict["_generated_at"] = datetime.now().strftime("%d %b %Y, %H:%M IST")
             verdict["_event_count"]  = len(ctx_data.get("events", []))
             verdict["_conn_count"]   = len(ctx_data.get("connections", []))
@@ -320,7 +355,7 @@ def page():
             f'<div>'
             f'<div style="font-size:9px;font-weight:700;color:#f97316;letter-spacing:.1em;'
             f'text-transform:uppercase;margin-bottom:4px;">VERDICT</div>'
-            f'<div style="font-size:13px;font-weight:600;color:#f1f5f9;line-height:1.5;">'
+            f'<div style="font-size:11px;font-weight:600;color:#f1f5f9;line-height:1.5;">'
             f'{one_line}</div>'
             f'</div>'
             f'<div style="text-align:right;flex-shrink:0;margin-left:20px;">'
@@ -356,7 +391,7 @@ def page():
                 f'letter-spacing:.06em;white-space:nowrap;">{ulbl}</span>'
                 f'<span style="font-size:9px;color:#334155;">Priority {dec.get("priority","")}</span>'
                 f'</div>'
-                f'<div style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:6px;">'
+                f'<div style="font-size:11px;font-weight:700;color:#f1f5f9;margin-bottom:6px;">'
                 f'{dec.get("title","")}</div>'
                 f'<div style="font-size:10px;color:#64748b;margin-bottom:4px;">'
                 f'<span style="color:#475569;">Actor:</span> {dec.get("actor","")}</div>'
@@ -394,7 +429,7 @@ def page():
                 f'border-radius:10px;padding:11px 13px;margin-bottom:8px;">'
                 f'<div style="display:flex;align-items:center;justify-content:space-between;'
                 f'margin-bottom:5px;">'
-                f'<span style="font-size:13px;font-weight:700;color:#f1f5f9;">'
+                f'<span style="font-size:11px;font-weight:700;color:#f1f5f9;">'
                 f'{icon} {dom}</span>'
                 f'<span style="background:{rc}22;color:{rc};font-size:8px;font-weight:700;'
                 f'padding:2px 7px;border-radius:4px;text-transform:uppercase;">{risk}</span>'
@@ -421,7 +456,7 @@ def page():
                 f'<div style="background:#060f1e;border:1px solid #22c55e22;'
                 f'border-left:4px solid #22c55e;border-radius:10px;'
                 f'padding:12px 14px;margin-bottom:10px;">'
-                f'<div style="font-size:12px;font-weight:700;color:#22c55e;margin-bottom:4px;">'
+                f'<div style="font-size:10px;font-weight:700;color:#22c55e;margin-bottom:4px;">'
                 f'{adv.get("title","")}</div>'
                 f'<div style="font-size:9px;color:#475569;margin-bottom:6px;">'
                 f'⏱ Window: {adv.get("window","")}</div>'

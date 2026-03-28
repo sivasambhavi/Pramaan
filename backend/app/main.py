@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from app.routers import ontology, scrape, ingest, citizen_report, agentic, crisis, verdict
-from app.services.scheduler import start_scheduler, stop_scheduler, set_news_refresh_interval, get_scheduler_status
+from app.services.scheduler import start_scheduler, stop_scheduler, set_news_refresh_interval, get_scheduler_status, job_news_refresh
 
 log = logging.getLogger("pramaan.startup")
 
@@ -78,6 +78,15 @@ def health():
 def scheduler_status():
     """Current scheduler state — job names, intervals, next run times."""
     return get_scheduler_status()
+
+
+@app.post("/scheduler/run-now", tags=["scheduler"])
+def scheduler_run_now():
+    """Trigger a single news_refresh run immediately in a background thread."""
+    import threading, time
+    t = threading.Thread(target=job_news_refresh, daemon=True, name="manual_refresh")
+    t.start()
+    return {"ok": True, "message": "news_refresh triggered", "started_at": __import__("datetime").datetime.utcnow().isoformat() + "Z"}
 
 
 @app.post("/scheduler/set-interval", tags=["scheduler"])

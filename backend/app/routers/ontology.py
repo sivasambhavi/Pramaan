@@ -78,7 +78,9 @@ def get_event(event_id: str):
         impacts = s.run("""
             MATCH (e:Event {event_id: $id})-[:CAUSED]->(i:Impact)
             RETURN i.impact_id AS id, i.type AS type,
+                   coalesce(i.name, i.type, '') AS name,
                    i.value AS value, i.unit AS unit,
+                   i.severity AS severity,
                    i.description AS description,
                    coalesce(i.source, '') AS source
             ORDER BY i.value DESC

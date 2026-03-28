@@ -70,13 +70,22 @@ SECTION_LABEL_STYLE = (
 
 # ── Module-level cached fetchers (persist across reruns) ──────────────────────
 
+_IST = _dt.timezone(_dt.timedelta(hours=5, minutes=30))
+
+def _now_ist() -> str:
+    return _dt.datetime.now(_IST).strftime("%H:%M:%S IST")
+
 @st.cache_data(ttl=30, show_spinner=False)
 def _get_stats():
-    return safe_get("/stats", silent=True) or {}
+    data = safe_get("/stats", silent=True) or {}
+    data["_fetched_at"] = _now_ist()
+    return data
 
 @st.cache_data(ttl=15, show_spinner=False)
 def _get_recent_nodes():
-    return safe_get("/ingest/live/recent-nodes", params={"limit": 8}, silent=True) or {}
+    data = safe_get("/ingest/live/recent-nodes", params={"limit": 8}, silent=True) or {}
+    data["_fetched_at"] = _now_ist()
+    return data
 
 @st.cache_data(ttl=30, show_spinner=False)
 def _get_scheduler_status():
@@ -166,7 +175,9 @@ def page():
           LIVE INGESTION
         </span>
         <span style="font-size:0.75em;color:#64748b;">
-          Agentic · Ollama LLaMA3 · Neo4j Knowledge Graph
+          <span style="color:#f97316;font-weight:700;letter-spacing:0.06em;">AGENTIC</span>
+          <span style="color:#334155;margin:0 4px;">·</span>Ollama LLaMA3
+          <span style="color:#334155;margin:0 4px;">·</span>Neo4j Knowledge Graph
         </span>
       </div>
       <a href="/Global_Intelligence" target="_self"
@@ -201,8 +212,7 @@ def page():
             return f'<span style="font-size:9px;color:#22c55e;">+{d} new</span>'
         return '<span style="font-size:9px;color:#334155;">0 new</span>'
 
-    _IST = _dt.timezone(_dt.timedelta(hours=5, minutes=30))
-    sync_ts = _dt.datetime.now(_IST).strftime("%H:%M:%S IST")
+    sync_ts = stats.get("_fetched_at", _now_ist())
     view_link = (
         '<div style="margin-top:4px;"><a href="/Decision_Engine" target="_self" '
         'style="font-size:9px;color:#38bdf8;text-decoration:none;">'
@@ -352,20 +362,34 @@ def page():
         next_run_str  = "—"
         if next_run_iso:
             try:
-                _IST = _dt.timezone(_dt.timedelta(hours=5, minutes=30))
                 nrt = _dt.datetime.fromisoformat(next_run_iso).astimezone(_IST)
                 next_run_str = nrt.strftime("%H:%M IST")
             except Exception:
                 next_run_str = next_run_iso[:16]
 
         mins_label = f"every {SCHED_MINUTES.get(schedule, 60)} min" if schedule != "Manual only" else "manual"
+        _last_fetch = st.session_state.get("last_fetch_ts", "never")
         st.markdown(
             f'<div style="font-size:9px;color:#334155;margin-top:4px;padding:4px 8px;'
             f'background:#060f1e;border:1px solid #1e293b;border-radius:4px;">'
-            f'APScheduler · {mins_label} · next auto-run: {next_run_str}'
+            f'APScheduler · {mins_label} · next auto-run: {next_run_str} · '
+            f'last fetch: <span style="color:#14b8a6;">{_last_fetch}</span>'
             f'</div>',
             unsafe_allow_html=True,
         )
+
+        if st.button("⚡ Fetch & Load Now", use_container_width=True, key="btn_fetch_now"):
+            try:
+                resp = _req.post(f"{BACKEND}/scheduler/run-now", timeout=5)
+                if resp.status_code == 200:
+                    _ts = _dt.datetime.now(_IST).strftime("%d %b %H:%M IST")
+                    st.session_state["last_fetch_ts"] = _ts
+                    st.success(f"Scheduler triggered — ingestion running in background. Started at {_ts}")
+                    st.cache_data.clear()
+                else:
+                    st.error(f"Trigger failed ({resp.status_code})")
+            except Exception as e:
+                st.error(f"Error: {e}")
 
         # ── Agent trace output ──────────────────────────────────────────────────
         if run_clicked:
@@ -440,9 +464,11 @@ def page():
         _section("Recent Ingestion Feed")
         live_data  = _get_recent_nodes()
         live_nodes = live_data.get("nodes", [])
+        feed_ts    = live_data.get("_fetched_at", "—")
         st.markdown(
-            '<div style="font-size:9px;color:#334155;margin-bottom:6px;">'
-            'Ontology nodes written to graph · auto-refreshes every 30s</div>',
+            f'<div style="font-size:9px;color:#334155;margin-bottom:6px;">'
+            f'Ontology nodes written to graph · auto-refreshes every 30s · '
+            f'<span style="color:#14b8a6;">loaded {feed_ts}</span></div>',
             unsafe_allow_html=True,
         )
         if live_nodes:
@@ -468,7 +494,7 @@ def page():
         _section("LLM Chain Status")
 
         ollama_ok = False
-        _ollama_host = os.environ.get("OLLAMA_HOST", "http://172.17.240.1:11434").rstrip("/")
+        _ollama_host = os.environ.get("OLLAMA_HOST", "http://192.168.48.1:11434").rstrip("/")
         try:
             r = _req.get(f"{_ollama_host}/api/tags", timeout=0.5)
             ollama_ok = r.status_code == 200

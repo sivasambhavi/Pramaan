@@ -318,6 +318,97 @@ def _ingest_extracted(extracted: dict, source_type: str) -> tuple[int, int, list
     return ent_count, rel_count, new_event_ids
 
 
+_ACTIVE_CRISIS_EVENTS = [
+    ("EVT_IRAN_WAR_2026",               "Iran-US-Israel War"),
+    ("EVT_HORMUZ_BLOCKADE_2026",         "Strait of Hormuz Blockade"),
+    ("EVT_IRAN_CEASEFIRE_TALKS_2026",    "Iran War Ceasefire Negotiations"),
+    ("EVT_INDIA_PAK_DIPLO_CRISIS_2025",  "India-Pakistan Diplomatic Crisis"),
+    ("EVT_INDUS_WATERS_CRISIS_2025",     "Indus Waters Treaty Suspension"),
+    ("EVT_OPERATION_SINDOOR_2025",       "Operation Sindoor"),
+]
+
+
+def _match_crisis(snippet: str) -> tuple[str, str] | None:
+    """Return (event_id, event_name) if snippet matches an active crisis, else None."""
+    from rapidfuzz import fuzz as _fz
+    sl = snippet.lower()
+    KEYWORDS = {
+        "EVT_IRAN_WAR_2026":              ["iran", "israel", "us strike", "tehran", "irgc"],
+        "EVT_HORMUZ_BLOCKADE_2026":       ["hormuz", "strait", "tanker", "oil blockade"],
+        "EVT_IRAN_CEASEFIRE_TALKS_2026":  ["ceasefire", "iran talks", "doha", "peace deal iran"],
+        "EVT_INDIA_PAK_DIPLO_CRISIS_2025":["pakistan", "india pak", "loc", "islamabad", "diplomatic crisis"],
+        "EVT_INDUS_WATERS_CRISIS_2025":   ["indus", "water treaty", "pakistan water", "indus waters"],
+        "EVT_OPERATION_SINDOOR_2025":     ["sindoor", "operation sindoor", "pahalgam", "cross border strike"],
+    }
+    for eid, ename in _ACTIVE_CRISIS_EVENTS:
+        for kw in KEYWORDS.get(eid, []):
+            if kw in sl:
+                return eid, ename
+        if _fz.partial_ratio(ename.lower(), sl) >= 70:
+            return eid, ename
+    return None
+
+
+def _write_crisis_update(parent_event_id: str, result: dict) -> None:
+    """Write SubEvent, Indicator, Decision nodes from extract_crisis_update() into Neo4j."""
+    ts = datetime.now(timezone.utc).isoformat()
+    with get_session() as s:
+        for se in result.get("subevents", []):
+            sid = se.get("subevent_id", "")
+            if not sid:
+                continue
+            s.run("""
+                MERGE (se:SubEvent {subevent_id: $sid})
+                SET se += $props, se.ingested_at = $ts, se.ingested_by = 'scheduler'
+                WITH se
+                MATCH (e:Event {event_id: $eid})
+                MERGE (e)-[:HAS_SUBEVENT]->(se)
+            """, sid=sid, props=se, eid=parent_event_id, ts=ts)
+        for ind in result.get("indicators", []):
+            iid = ind.get("indicator_id", "")
+            if not iid:
+                continue
+            s.run("""
+                MERGE (i:Indicator {indicator_id: $iid})
+                SET i += $props, i.ingested_at = $ts
+                WITH i
+                MATCH (e:Event {event_id: $eid})
+                MERGE (e)-[:HAS_INDICATOR]->(i)
+            """, iid=iid, props=ind, eid=parent_event_id, ts=ts)
+        for dec in result.get("decisions", []):
+            did = dec.get("decision_id", "")
+            if not did:
+                continue
+            s.run("""
+                MERGE (d:Decision {decision_id: $did})
+                SET d += $props, d.ingested_at = $ts
+                WITH d
+                MATCH (e:Event {event_id: $eid})
+                MERGE (e)-[:HAS_DECISION]->(d)
+            """, did=did, props=dec, eid=parent_event_id, ts=ts)
+
+
+def _delete_orphan_nodes() -> int:
+    """Delete nodes with zero relationships — runs after each ingestion cycle."""
+    try:
+        with get_session() as s:
+            result = s.run("""
+                MATCH (n)
+                WHERE NOT (n)--()
+                AND NOT n:Domain
+                AND (n.ingested_by = 'scheduler' OR n.source_type = 'unstructured_rss')
+                DETACH DELETE n
+                RETURN count(n) AS deleted
+            """)
+            deleted = result.consume().counters.nodes_deleted
+            if deleted:
+                log.info("[scheduler] orphan cleanup — deleted %d loose nodes", deleted)
+            return deleted
+    except Exception as e:
+        log.warning("[scheduler] orphan cleanup error: %s", e)
+        return 0
+
+
 def job_news_refresh():
     """Scrape governance news (RSS feeds + search queries) and auto-ingest extracted entities."""
     queries  = _build_news_queries()
@@ -334,7 +425,6 @@ def job_news_refresh():
                 continue
             total_art += len(articles)
 
-            # Filter to India-relevant articles across all 7 domains
             relevant = []
             for a in articles:
                 snippet = f"{a.get('title', '')} {a.get('summary', '')}"
@@ -345,15 +435,36 @@ def job_news_refresh():
                 log.info("[scheduler] query=%r — all articles filtered out", query)
                 continue
 
-            combined  = "\n\n".join(
-                f"Headline: {a['title']}\nSummary: {a.get('summary', '')}" for a in relevant
-            )
-            extracted = ai_service.extract_ontology(combined, source_type="unstructured_rss")
-            e, r, new_evts = _ingest_extracted(extracted, source_type="unstructured_rss")
-            total_ent += e
-            total_rel += r
-            all_new_event_ids.extend(new_evts)
-            log.info("[scheduler] query=%r → %d/%d relevant → %d entities", query, len(relevant), len(articles), e)
+            # Route crisis-matching articles to SubEvent pipeline; rest to normal extract
+            crisis_articles, normal_articles = [], []
+            for a in relevant:
+                snippet = f"{a.get('title', '')} {a.get('summary', '')}"
+                match   = _match_crisis(snippet)
+                if match:
+                    crisis_articles.append((a, match))
+                else:
+                    normal_articles.append(a)
+
+            for a, (crisis_id, crisis_name) in crisis_articles:
+                try:
+                    text = f"{a.get('title', '')}. {a.get('summary', '')}"
+                    result = ai_service.extract_crisis_update(text, crisis_id, crisis_name)
+                    _write_crisis_update(crisis_id, result)
+                    log.info("[scheduler] crisis route: %r → %s", a.get("title", "")[:50], crisis_id)
+                except Exception as ce:
+                    log.warning("[scheduler] crisis route error: %s", ce)
+
+            if normal_articles:
+                combined  = "\n\n".join(
+                    f"Headline: {a['title']}\nSummary: {a.get('summary', '')}" for a in normal_articles
+                )
+                extracted = ai_service.extract_ontology(combined, source_type="unstructured_rss")
+                e, r, new_evts = _ingest_extracted(extracted, source_type="unstructured_rss")
+                total_ent += e
+                total_rel += r
+                all_new_event_ids.extend(new_evts)
+            log.info("[scheduler] query=%r → %d crisis-routed, %d normal → %d entities",
+                     query, len(crisis_articles), len(normal_articles), total_ent)
         except Exception as exc:
             log.error("[scheduler] news_refresh query=%r error: %s", query, exc)
 
@@ -365,7 +476,6 @@ def job_news_refresh():
                 continue
             total_art += len(articles)
 
-            # Filter to India-relevant articles across all 7 domains
             relevant = []
             for a in articles:
                 snippet = f"{a.get('title', '')} {a.get('summary', '')}"
@@ -376,15 +486,35 @@ def job_news_refresh():
                 log.info("[scheduler] RSS %r — all articles filtered out", feed.get("name"))
                 continue
 
-            combined  = "\n\n".join(
-                f"Headline: {a['title']}\nSummary: {a.get('summary', '')}" for a in relevant
-            )
-            extracted = ai_service.extract_ontology(combined, source_type="unstructured_rss")
-            e, r, new_evts = _ingest_extracted(extracted, source_type="unstructured_rss")
-            total_ent += e
-            total_rel += r
-            all_new_event_ids.extend(new_evts)
-            log.info("[scheduler] RSS %r → %d/%d relevant → %d entities", feed["name"], len(relevant), len(articles), e)
+            crisis_articles, normal_articles = [], []
+            for a in relevant:
+                snippet = f"{a.get('title', '')} {a.get('summary', '')}"
+                match   = _match_crisis(snippet)
+                if match:
+                    crisis_articles.append((a, match))
+                else:
+                    normal_articles.append(a)
+
+            for a, (crisis_id, crisis_name) in crisis_articles:
+                try:
+                    text = f"{a.get('title', '')}. {a.get('summary', '')}"
+                    result = ai_service.extract_crisis_update(text, crisis_id, crisis_name)
+                    _write_crisis_update(crisis_id, result)
+                    log.info("[scheduler] crisis route: %r → %s", a.get("title", "")[:50], crisis_id)
+                except Exception as ce:
+                    log.warning("[scheduler] crisis route error: %s", ce)
+
+            if normal_articles:
+                combined  = "\n\n".join(
+                    f"Headline: {a['title']}\nSummary: {a.get('summary', '')}" for a in normal_articles
+                )
+                extracted = ai_service.extract_ontology(combined, source_type="unstructured_rss")
+                e, r, new_evts = _ingest_extracted(extracted, source_type="unstructured_rss")
+                total_ent += e
+                total_rel += r
+                all_new_event_ids.extend(new_evts)
+            log.info("[scheduler] RSS %r → %d crisis-routed, %d normal → %d entities",
+                     feed["name"], len(crisis_articles), len(normal_articles), total_ent)
         except Exception as exc:
             log.error("[scheduler] RSS feed=%r error: %s", feed.get("name"), exc)
 
@@ -405,6 +535,9 @@ def job_news_refresh():
         log.info("[scheduler] Step8 — blast_score updated on %d events", updated)
     except Exception as exc:
         log.error("[scheduler] Step8 error: %s", exc)
+
+    # ── Step 9: Delete orphan nodes from this ingestion cycle ────────────────
+    _delete_orphan_nodes()
 
     log.info(
         "[scheduler] news_refresh done — %d articles → %d entities, %d relations ingested",
