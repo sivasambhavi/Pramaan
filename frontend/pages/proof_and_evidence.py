@@ -1126,8 +1126,7 @@ def page():
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
         generate = st.button("Generate Brief →", type="primary", use_container_width=True)
 
-    # ── Check for pre-loaded brief ─────────────────────────────────────────────
-    # [Hardcoded briefs removed — all now dynamic]
+    cache_key = f"brief_cache_{event_id}"
 
     if generate:
         st.markdown("---")
@@ -1178,22 +1177,50 @@ def page():
                               total_impacts=impacts_count),
             unsafe_allow_html=True,
         )
+        st.session_state[cache_key] = {
+            "text": full_text, "query": final_query,
+            "score": score, "label": label, "trust_color": trust_color,
+            "grounding": grounding, "govdata_count": govdata_impacts,
+            "total_impacts": impacts_count,
+        }
         with st.expander("View raw ontology context used", expanded=False):
             st.code(context, language="text")
 
     else:
-        st.markdown(f"""
-        <div style="background:#0a1628;border:1px dashed #1e293b;border-radius:12px;
-                    padding:40px;text-align:center;margin-top:20px;">
-          <div style="font-size:10px;color:#475569;margin-bottom:6px;">
-            Select a query above, then click <b style="color:#38bdf8;">Generate Brief</b>
-          </div>
-          <div style="font-size:9px;color:#334155;">
-            PRAMAAN will synthesize verified ontology data into a structured intelligence brief<br>
-            using Groq LLaMA 3.3 70B · All facts drawn from real government sources
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
+        cached = st.session_state.get(cache_key)
+        if cached:
+            st.markdown(
+                f'<div style="background:#0a1628;border:1px solid {color}44;border-left:4px solid {color};'
+                f'border-radius:10px;padding:12px 18px;margin-bottom:16px;">'
+                f'<div style="font-size:11px;font-weight:700;color:{color};">INTELLIGENCE BRIEF: {name.upper()}</div>'
+                f'<div style="font-size:9px;color:#475569;margin-top:4px;">'
+                f'Query: <span style="color:#94a3b8;font-style:italic;">{cached["query"]}</span></div>'
+                f'<div style="font-size:9px;color:#334155;margin-top:3px;">'
+                f'Model: LLaMA 3.3 70B · Source: PRAMAAN Neo4j Ontology · Groq AI</div>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+            st.markdown(
+                _render_trust_bar(cached["score"], cached["label"], cached["trust_color"],
+                                  grounding=cached["grounding"],
+                                  govdata_count=cached["govdata_count"],
+                                  total_impacts=cached["total_impacts"]),
+                unsafe_allow_html=True,
+            )
+            st.markdown(_style_priorities(cached["text"]), unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div style="background:#0a1628;border:1px dashed #1e293b;border-radius:12px;
+                        padding:40px;text-align:center;margin-top:20px;">
+              <div style="font-size:10px;color:#475569;margin-bottom:6px;">
+                Select a query above, then click <b style="color:#38bdf8;">Generate Brief</b>
+              </div>
+              <div style="font-size:9px;color:#334155;">
+                PRAMAAN will synthesize verified ontology data into a structured intelligence brief<br>
+                using Groq LLaMA 3.3 70B · All facts drawn from real government sources
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 
