@@ -1,0 +1,2078 @@
+{
+    "index_name": "518e560e-7fa7-4f5b-8aed-3b90323ed965",
+    "title": "Crude oil import and petroleum product import/export by Oil companies",
+    "desc": "Crude oil import and petroleum product import/export by Oil companies",
+    "org_type": "Central",
+    "org": [
+        "Ministry of Petroleum and Natural Gas",
+        "Petroleum Planning & Analysis Cell (PPAC)"
+    ],
+    "type": "6829c601-2972-496e-8d25-623c61c1079f",
+    "source": "data.gov.in",
+    "active": "1",
+    "visualizable": "1",
+    "created": 1692953535,
+    "updated": 1772433085,
+    "created_date": "2023-08-25T11:37:03Z",
+    "updated_date": "2026-03-02T06:31:25Z",
+    "catalog_uuid": "6829c601-2972-496e-8d25-623c61c1079f",
+    "resource_uuid": "518e560e-7fa7-4f5b-8aed-3b90323ed965",
+    "target_bucket": {
+        "index": "ppac",
+        "type": "6829c601-2972-496e-8d25-623c61c1079f"
+    },
+    "field": [
+        {
+            "name": "Month",
+            "id": "Month",
+            "type": "double"
+        },
+        {
+            "name": "Year",
+            "id": "Year",
+            "type": "double"
+        },
+        {
+            "name": "PRODUCTS",
+            "id": "PRODUCTS",
+            "type": "keyword"
+        },
+        {
+            "name": "TRADE",
+            "id": "TRADE",
+            "type": "keyword"
+        },
+        {
+            "name": "Quantity (000 Metric Tonnes)",
+            "id": "Quantity (000 Metric Tonnes)",
+            "type": "double"
+        },
+        {
+            "name": "Value in Rupees (Crore)",
+            "id": "Value in Rupees (Crore)",
+            "type": "double"
+        },
+        {
+            "name": "Value in Dollars (Million US dollar)",
+            "id": "Value in Dollars (Million US dollar)",
+            "type": "double"
+        },
+        {
+            "name": "date_updated",
+            "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||dd/MM/yyyy",
+            "id": "date_updated",
+            "type": "date"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 494,
+    "count": 200,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "CRUDE OIL",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "20985.63",
+            "Value in Rupees (Crore)": "91216.15",
+            "Value in Dollars (Million US dollar)": "10664.39",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1605.94",
+            "Value in Rupees (Crore)": "8314.24",
+            "Value in Dollars (Million US dollar)": "971.71",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "MS",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "0.00",
+            "Value in Rupees (Crore)": "0.23",
+            "Value in Dollars (Million US dollar)": "0.03",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "203.48",
+            "Value in Rupees (Crore)": "1047.36",
+            "Value in Dollars (Million US dollar)": "122.77",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "ATF",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1.15",
+            "Value in Rupees (Crore)": "7.96",
+            "Value in Dollars (Million US dollar)": "0.93",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "296.12",
+            "Value in Rupees (Crore)": "2182.85",
+            "Value in Dollars (Million US dollar)": "255.13",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "296.90",
+            "Value in Rupees (Crore)": "1004.65",
+            "Value in Dollars (Million US dollar)": "117.60",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "297.30",
+            "Value in Rupees (Crore)": "997.66",
+            "Value in Dollars (Million US dollar)": "116.60",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "955.63",
+            "Value in Rupees (Crore)": "1096.35",
+            "Value in Dollars (Million US dollar)": "128.14",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Others&",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "272.75",
+            "Value in Rupees (Crore)": "1417.40",
+            "Value in Dollars (Million US dollar)": "165.59",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "PRODUCT IMPORT*",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "3929.27",
+            "Value in Rupees (Crore)": "16068.70",
+            "Value in Dollars (Million US dollar)": "1878.48",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL IMPORT",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "24914.90",
+            "Value in Rupees (Crore)": "107284.85",
+            "Value in Dollars (Million US dollar)": "12542.87",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "46.28",
+            "Value in Rupees (Crore)": "304.38",
+            "Value in Dollars (Million US dollar)": "35.58",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "MS!",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1222.27",
+            "Value in Rupees (Crore)": "6598.92",
+            "Value in Dollars (Million US dollar)": "769.82",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha$",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "574.67",
+            "Value in Rupees (Crore)": "2769.27",
+            "Value in Dollars (Million US dollar)": "323.46",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "ATF#",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "486.72",
+            "Value in Rupees (Crore)": "2611.16",
+            "Value in Dollars (Million US dollar)": "303.00",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "SKO",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.89",
+            "Value in Rupees (Crore)": "12.53",
+            "Value in Dollars (Million US dollar)": "1.47",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1295.72",
+            "Value in Rupees (Crore)": "6710.40",
+            "Value in Dollars (Million US dollar)": "782.91",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "0.29",
+            "Value in Rupees (Crore)": "5.25",
+            "Value in Dollars (Million US dollar)": "0.62",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "135.75",
+            "Value in Rupees (Crore)": "467.88",
+            "Value in Dollars (Million US dollar)": "54.53",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.23",
+            "Value in Rupees (Crore)": "5.50",
+            "Value in Dollars (Million US dollar)": "0.64",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke / CBFS",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "45.18",
+            "Value in Rupees (Crore)": "231.88",
+            "Value in Dollars (Million US dollar)": "27.23",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "Others%",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "230.01",
+            "Value in Rupees (Crore)": "768.35",
+            "Value in Dollars (Million US dollar)": "89.42",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL  PRODUCT EXPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "4039.99",
+            "Value in Rupees (Crore)": "20485.51",
+            "Value in Dollars (Million US dollar)": "2388.68",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2025",
+            "PRODUCTS": "NET IMPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "20874.90",
+            "Value in Rupees (Crore)": "86799.34",
+            "Value in Dollars (Million US dollar)": "10154.19",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "CRUDE OIL",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "21328.55",
+            "Value in Rupees (Crore)": "87778.82",
+            "Value in Dollars (Million US dollar)": "10284.02",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1685.09",
+            "Value in Rupees (Crore)": "8492.18",
+            "Value in Dollars (Million US dollar)": "995.35",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "MS",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "118.52",
+            "Value in Rupees (Crore)": "571.62",
+            "Value in Dollars (Million US dollar)": "66.98",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "ATF",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "0.00",
+            "Value in Rupees (Crore)": "0.00",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "2.16",
+            "Value in Rupees (Crore)": "19.86",
+            "Value in Dollars (Million US dollar)": "2.33",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "242.51",
+            "Value in Rupees (Crore)": "1782.16",
+            "Value in Dollars (Million US dollar)": "209.15",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "505.49",
+            "Value in Rupees (Crore)": "1749.04",
+            "Value in Dollars (Million US dollar)": "204.53",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "289.94",
+            "Value in Rupees (Crore)": "995.17",
+            "Value in Dollars (Million US dollar)": "116.82",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1073.28",
+            "Value in Rupees (Crore)": "1392.43",
+            "Value in Dollars (Million US dollar)": "163.45",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Others&",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "273.66",
+            "Value in Rupees (Crore)": "1296.28",
+            "Value in Dollars (Million US dollar)": "152.36",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "PRODUCT IMPORT*",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "4190.66",
+            "Value in Rupees (Crore)": "16298.75",
+            "Value in Dollars (Million US dollar)": "1910.98",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL IMPORT",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "25519.21",
+            "Value in Rupees (Crore)": "104077.57",
+            "Value in Dollars (Million US dollar)": "12194.99",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "52.02",
+            "Value in Rupees (Crore)": "338.55",
+            "Value in Dollars (Million US dollar)": "39.74",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "MS!",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1452.49",
+            "Value in Rupees (Crore)": "8105.00",
+            "Value in Dollars (Million US dollar)": "949.74",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha$",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "718.28",
+            "Value in Rupees (Crore)": "3388.24",
+            "Value in Dollars (Million US dollar)": "397.18",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "ATF#",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "752.08",
+            "Value in Rupees (Crore)": "3833.57",
+            "Value in Dollars (Million US dollar)": "449.52",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "SKO",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.59",
+            "Value in Rupees (Crore)": "9.83",
+            "Value in Dollars (Million US dollar)": "1.16",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "2347.98",
+            "Value in Rupees (Crore)": "11580.93",
+            "Value in Dollars (Million US dollar)": "1357.70",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "0.43",
+            "Value in Rupees (Crore)": "6.73",
+            "Value in Dollars (Million US dollar)": "0.76",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "172.07",
+            "Value in Rupees (Crore)": "613.63",
+            "Value in Dollars (Million US dollar)": "71.35",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "4.03",
+            "Value in Rupees (Crore)": "19.50",
+            "Value in Dollars (Million US dollar)": "2.29",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke / CBFS",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "28.33",
+            "Value in Rupees (Crore)": "151.04",
+            "Value in Dollars (Million US dollar)": "17.63",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "Others%",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "100.36",
+            "Value in Rupees (Crore)": "437.37",
+            "Value in Dollars (Million US dollar)": "51.84",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL  PRODUCT EXPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "5629.65",
+            "Value in Rupees (Crore)": "28484.38",
+            "Value in Dollars (Million US dollar)": "3338.92",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "May",
+            "Year": "2025",
+            "PRODUCTS": "NET IMPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "19889.56",
+            "Value in Rupees (Crore)": "75593.18",
+            "Value in Dollars (Million US dollar)": "8856.07",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "CRUDE OIL",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "20314.35",
+            "Value in Rupees (Crore)": "85229.92",
+            "Value in Dollars (Million US dollar)": "9903.87",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1887.69",
+            "Value in Rupees (Crore)": "9361.88",
+            "Value in Dollars (Million US dollar)": "1096.58",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "MS",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "33.47",
+            "Value in Rupees (Crore)": "154.32",
+            "Value in Dollars (Million US dollar)": "18.00",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "ATF",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "0.00",
+            "Value in Rupees (Crore)": "0.00",
+            "Value in Dollars (Million US dollar)": "0.00",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "2.17",
+            "Value in Rupees (Crore)": "13.00",
+            "Value in Dollars (Million US dollar)": "1.51",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "259.13",
+            "Value in Rupees (Crore)": "1901.95",
+            "Value in Dollars (Million US dollar)": "221.49",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "536.40",
+            "Value in Rupees (Crore)": "1950.94",
+            "Value in Dollars (Million US dollar)": "227.02",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "248.94",
+            "Value in Rupees (Crore)": "852.09",
+            "Value in Dollars (Million US dollar)": "99.19",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "773.02",
+            "Value in Rupees (Crore)": "945.04",
+            "Value in Dollars (Million US dollar)": "110.01",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Others&",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "321.74",
+            "Value in Rupees (Crore)": "1608.33",
+            "Value in Dollars (Million US dollar)": "187.36",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "PRODUCT IMPORT*",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "4062.55",
+            "Value in Rupees (Crore)": "16787.56",
+            "Value in Dollars (Million US dollar)": "1961.17",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL IMPORT",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "24376.90",
+            "Value in Rupees (Crore)": "102017.48",
+            "Value in Dollars (Million US dollar)": "11865.04",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "46.72",
+            "Value in Rupees (Crore)": "299.50",
+            "Value in Dollars (Million US dollar)": "34.88",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "MS!",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1269.68",
+            "Value in Rupees (Crore)": "7551.78",
+            "Value in Dollars (Million US dollar)": "875.79",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha$",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "676.17",
+            "Value in Rupees (Crore)": "3311.65",
+            "Value in Dollars (Million US dollar)": "385.46",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "ATF#",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "675.27",
+            "Value in Rupees (Crore)": "3752.45",
+            "Value in Dollars (Million US dollar)": "435.79",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "SKO",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.67",
+            "Value in Rupees (Crore)": "10.04",
+            "Value in Dollars (Million US dollar)": "1.17",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "2245.18",
+            "Value in Rupees (Crore)": "12104.11",
+            "Value in Dollars (Million US dollar)": "1404.76",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "0.69",
+            "Value in Rupees (Crore)": "11.01",
+            "Value in Dollars (Million US dollar)": "1.29",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "262.39",
+            "Value in Rupees (Crore)": "957.56",
+            "Value in Dollars (Million US dollar)": "111.45",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.91",
+            "Value in Rupees (Crore)": "9.32",
+            "Value in Dollars (Million US dollar)": "1.08",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke / CBFS",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "Others%",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "172.71",
+            "Value in Rupees (Crore)": "808.12",
+            "Value in Dollars (Million US dollar)": "94.53",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL  PRODUCT EXPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "5352.39",
+            "Value in Rupees (Crore)": "28815.53",
+            "Value in Dollars (Million US dollar)": "3346.20",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "June",
+            "Year": "2025",
+            "PRODUCTS": "NET IMPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "19024.50",
+            "Value in Rupees (Crore)": "73201.95",
+            "Value in Dollars (Million US dollar)": "8518.84",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "CRUDE OIL",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "18888.64",
+            "Value in Rupees (Crore)": "83867.65",
+            "Value in Dollars (Million US dollar)": "9695.98",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1900.18",
+            "Value in Rupees (Crore)": "8937.96",
+            "Value in Dollars (Million US dollar)": "1036.87",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "MS",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "60.61",
+            "Value in Rupees (Crore)": "289.65",
+            "Value in Dollars (Million US dollar)": "33.12",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "ATF",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "0.66",
+            "Value in Rupees (Crore)": "4.56",
+            "Value in Dollars (Million US dollar)": "0.53",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "261.34",
+            "Value in Rupees (Crore)": "1961.96",
+            "Value in Dollars (Million US dollar)": "227.81",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "525.46",
+            "Value in Rupees (Crore)": "1825.38",
+            "Value in Dollars (Million US dollar)": "211.73",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "198.84",
+            "Value in Rupees (Crore)": "655.34",
+            "Value in Dollars (Million US dollar)": "76.10",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1013.47",
+            "Value in Rupees (Crore)": "1100.32",
+            "Value in Dollars (Million US dollar)": "127.77",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Others&",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "302.59",
+            "Value in Rupees (Crore)": "1562.56",
+            "Value in Dollars (Million US dollar)": "180.86",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "PRODUCT IMPORT*",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "4263.15",
+            "Value in Rupees (Crore)": "16337.74",
+            "Value in Dollars (Million US dollar)": "1894.80",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL IMPORT",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "23151.80",
+            "Value in Rupees (Crore)": "100205.39",
+            "Value in Dollars (Million US dollar)": "11590.78",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "46.60",
+            "Value in Rupees (Crore)": "287.70",
+            "Value in Dollars (Million US dollar)": "33.49",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "MS!",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1197.08",
+            "Value in Rupees (Crore)": "7237.06",
+            "Value in Dollars (Million US dollar)": "838.26",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha$",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "603.65",
+            "Value in Rupees (Crore)": "2957.07",
+            "Value in Dollars (Million US dollar)": "343.55",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "ATF#",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "645.29",
+            "Value in Rupees (Crore)": "3767.50",
+            "Value in Dollars (Million US dollar)": "436.06",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "SKO",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.58",
+            "Value in Rupees (Crore)": "10.25",
+            "Value in Dollars (Million US dollar)": "1.20",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "2242.24",
+            "Value in Rupees (Crore)": "12914.16",
+            "Value in Dollars (Million US dollar)": "1494.36",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.16",
+            "Value in Rupees (Crore)": "16.68",
+            "Value in Dollars (Million US dollar)": "1.92",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "174.15",
+            "Value in Rupees (Crore)": "572.32",
+            "Value in Dollars (Million US dollar)": "66.36",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.41",
+            "Value in Rupees (Crore)": "7.55",
+            "Value in Dollars (Million US dollar)": "0.88",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke / CBFS",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "4.40",
+            "Value in Rupees (Crore)": "10.44",
+            "Value in Dollars (Million US dollar)": "1.22",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "Others%",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "114.16",
+            "Value in Rupees (Crore)": "514.61",
+            "Value in Dollars (Million US dollar)": "59.88",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL  PRODUCT EXPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "5031.71",
+            "Value in Rupees (Crore)": "28295.36",
+            "Value in Dollars (Million US dollar)": "3277.17",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "July",
+            "Year": "2025",
+            "PRODUCTS": "NET IMPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "18120.08",
+            "Value in Rupees (Crore)": "71910.03",
+            "Value in Dollars (Million US dollar)": "8313.60",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "CRUDE OIL",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "19603.42",
+            "Value in Rupees (Crore)": "86705.96",
+            "Value in Dollars (Million US dollar)": "9898.09",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1932.06",
+            "Value in Rupees (Crore)": "8512.85",
+            "Value in Dollars (Million US dollar)": "972.72",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "MS",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "41.49",
+            "Value in Rupees (Crore)": "197.34",
+            "Value in Dollars (Million US dollar)": "22.40",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "ATF",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "3.58",
+            "Value in Rupees (Crore)": "36.80",
+            "Value in Dollars (Million US dollar)": "4.21",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "242.91",
+            "Value in Rupees (Crore)": "1847.43",
+            "Value in Dollars (Million US dollar)": "211.12",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "364.62",
+            "Value in Rupees (Crore)": "1523.89",
+            "Value in Dollars (Million US dollar)": "174.12",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "186.52",
+            "Value in Rupees (Crore)": "621.88",
+            "Value in Dollars (Million US dollar)": "71.05",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1602.58",
+            "Value in Rupees (Crore)": "1758.08",
+            "Value in Dollars (Million US dollar)": "200.88",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Others&",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "158.31",
+            "Value in Rupees (Crore)": "855.98",
+            "Value in Dollars (Million US dollar)": "97.82",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "PRODUCT IMPORT*",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "4532.07",
+            "Value in Rupees (Crore)": "15354.25",
+            "Value in Dollars (Million US dollar)": "1754.32",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL IMPORT",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "24135.49",
+            "Value in Rupees (Crore)": "102060.21",
+            "Value in Dollars (Million US dollar)": "11652.40",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "43.40",
+            "Value in Rupees (Crore)": "261.56",
+            "Value in Dollars (Million US dollar)": "30.45",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "MS!",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1524.66",
+            "Value in Rupees (Crore)": "8732.04",
+            "Value in Dollars (Million US dollar)": "988.24",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha$",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "581.58",
+            "Value in Rupees (Crore)": "2823.43",
+            "Value in Dollars (Million US dollar)": "321.87",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "ATF#",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "556.09",
+            "Value in Rupees (Crore)": "3223.80",
+            "Value in Dollars (Million US dollar)": "362.30",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "SKO",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.19",
+            "Value in Rupees (Crore)": "8.00",
+            "Value in Dollars (Million US dollar)": "0.93",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "2583.36",
+            "Value in Rupees (Crore)": "14423.67",
+            "Value in Dollars (Million US dollar)": "1632.83",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "0.73",
+            "Value in Rupees (Crore)": "11.04",
+            "Value in Dollars (Million US dollar)": "1.26",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "225.94",
+            "Value in Rupees (Crore)": "733.32",
+            "Value in Dollars (Million US dollar)": "84.62",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.73",
+            "Value in Rupees (Crore)": "8.09",
+            "Value in Dollars (Million US dollar)": "0.92",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke / CBFS",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "34.10",
+            "Value in Rupees (Crore)": "178.20",
+            "Value in Dollars (Million US dollar)": "20.31",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "Others%",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "109.66",
+            "Value in Rupees (Crore)": "484.86",
+            "Value in Dollars (Million US dollar)": "55.33",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL  PRODUCT EXPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "5662.43",
+            "Value in Rupees (Crore)": "30888.00",
+            "Value in Dollars (Million US dollar)": "3499.05",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "August",
+            "Year": "2025",
+            "PRODUCTS": "NET IMPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "18473.05",
+            "Value in Rupees (Crore)": "71172.22",
+            "Value in Dollars (Million US dollar)": "8153.35",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "CRUDE OIL",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "20207.81",
+            "Value in Rupees (Crore)": "91112.05",
+            "Value in Dollars (Million US dollar)": "10309.61",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1849.00",
+            "Value in Rupees (Crore)": "8149.69",
+            "Value in Dollars (Million US dollar)": "922.76",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "MS",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "0.01",
+            "Value in Rupees (Crore)": "0.46",
+            "Value in Dollars (Million US dollar)": "0.05",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "108.62",
+            "Value in Rupees (Crore)": "567.48",
+            "Value in Dollars (Million US dollar)": "64.25",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "ATF",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1.65",
+            "Value in Rupees (Crore)": "11.53",
+            "Value in Dollars (Million US dollar)": "1.31",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "297.55",
+            "Value in Rupees (Crore)": "2288.74",
+            "Value in Dollars (Million US dollar)": "259.17",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "693.98",
+            "Value in Rupees (Crore)": "2333.37",
+            "Value in Dollars (Million US dollar)": "264.25",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "193.54",
+            "Value in Rupees (Crore)": "636.73",
+            "Value in Dollars (Million US dollar)": "72.09",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "949.48",
+            "Value in Rupees (Crore)": "1077.80",
+            "Value in Dollars (Million US dollar)": "122.03",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Others&",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "254.10",
+            "Value in Rupees (Crore)": "1292.42",
+            "Value in Dollars (Million US dollar)": "146.45",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "PRODUCT IMPORT*",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "4347.94",
+            "Value in Rupees (Crore)": "16358.22",
+            "Value in Dollars (Million US dollar)": "1852.36",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL IMPORT",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "24555.75",
+            "Value in Rupees (Crore)": "107470.27",
+            "Value in Dollars (Million US dollar)": "12161.97",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "48.19",
+            "Value in Rupees (Crore)": "267.67",
+            "Value in Dollars (Million US dollar)": "31.16",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "MS!",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1569.36",
+            "Value in Rupees (Crore)": "9949.76",
+            "Value in Dollars (Million US dollar)": "1114.15",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha$",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "447.61",
+            "Value in Rupees (Crore)": "2306.04",
+            "Value in Dollars (Million US dollar)": "259.51",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "ATF#",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "688.67",
+            "Value in Rupees (Crore)": "4138.21",
+            "Value in Dollars (Million US dollar)": "461.09",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "SKO",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.28",
+            "Value in Rupees (Crore)": "8.54",
+            "Value in Dollars (Million US dollar)": "0.99",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "3105.09",
+            "Value in Rupees (Crore)": "18118.86",
+            "Value in Dollars (Million US dollar)": "2033.70",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "0.85",
+            "Value in Rupees (Crore)": "10.89",
+            "Value in Dollars (Million US dollar)": "1.23",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "196.58",
+            "Value in Rupees (Crore)": "650.20",
+            "Value in Dollars (Million US dollar)": "73.28",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.28",
+            "Value in Rupees (Crore)": "6.81",
+            "Value in Dollars (Million US dollar)": "0.77",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke / CBFS",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "Others%",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "124.84",
+            "Value in Rupees (Crore)": "638.01",
+            "Value in Dollars (Million US dollar)": "72.20",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL  PRODUCT EXPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "6183.75",
+            "Value in Rupees (Crore)": "36094.98",
+            "Value in Dollars (Million US dollar)": "4048.09",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "September",
+            "Year": "2025",
+            "PRODUCTS": "NET IMPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "18372.00",
+            "Value in Rupees (Crore)": "71375.29",
+            "Value in Dollars (Million US dollar)": "8113.88",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "CRUDE OIL",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "21005.46",
+            "Value in Rupees (Crore)": "90832.16",
+            "Value in Dollars (Million US dollar)": "10263.60",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1916.75",
+            "Value in Rupees (Crore)": "8174.95",
+            "Value in Dollars (Million US dollar)": "923.29",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "MS",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "113.55",
+            "Value in Rupees (Crore)": "575.36",
+            "Value in Dollars (Million US dollar)": "65.07",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "ATF",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "4.26",
+            "Value in Rupees (Crore)": "27.22",
+            "Value in Dollars (Million US dollar)": "3.08",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "288.40",
+            "Value in Rupees (Crore)": "2223.94",
+            "Value in Dollars (Million US dollar)": "251.54",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "622.22",
+            "Value in Rupees (Crore)": "2049.02",
+            "Value in Dollars (Million US dollar)": "231.60",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "194.14",
+            "Value in Rupees (Crore)": "631.38",
+            "Value in Dollars (Million US dollar)": "71.40",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "905.73",
+            "Value in Rupees (Crore)": "1125.85",
+            "Value in Dollars (Million US dollar)": "127.34",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Others&",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "81.90",
+            "Value in Rupees (Crore)": "612.07",
+            "Value in Dollars (Million US dollar)": "69.23",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "PRODUCT IMPORT*",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "4126.96",
+            "Value in Rupees (Crore)": "15419.80",
+            "Value in Dollars (Million US dollar)": "1742.54",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL IMPORT",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "25132.42",
+            "Value in Rupees (Crore)": "106251.96",
+            "Value in Dollars (Million US dollar)": "12006.15",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "LPG",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "42.54",
+            "Value in Rupees (Crore)": "238.12",
+            "Value in Dollars (Million US dollar)": "27.71",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "MS!",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1372.46",
+            "Value in Rupees (Crore)": "8261.95",
+            "Value in Dollars (Million US dollar)": "924.95",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Naphtha$",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "281.49",
+            "Value in Rupees (Crore)": "1386.27",
+            "Value in Dollars (Million US dollar)": "155.40",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "ATF#",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "506.07",
+            "Value in Rupees (Crore)": "3052.17",
+            "Value in Dollars (Million US dollar)": "340.85",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "SKO",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.44",
+            "Value in Rupees (Crore)": "10.04",
+            "Value in Dollars (Million US dollar)": "1.17",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "HSD",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "2706.94",
+            "Value in Rupees (Crore)": "15715.17",
+            "Value in Dollars (Million US dollar)": "1758.83",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "LOBS/ Lube Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "0.69",
+            "Value in Rupees (Crore)": "11.63",
+            "Value in Dollars (Million US dollar)": "1.31",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "70.56",
+            "Value in Rupees (Crore)": "200.34",
+            "Value in Dollars (Million US dollar)": "22.68",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "0.70",
+            "Value in Rupees (Crore)": "3.45",
+            "Value in Dollars (Million US dollar)": "0.39",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Petcoke / CBFS",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "",
+            "Value in Rupees (Crore)": "",
+            "Value in Dollars (Million US dollar)": "",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "Others%",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "131.70",
+            "Value in Rupees (Crore)": "679.26",
+            "Value in Dollars (Million US dollar)": "76.80",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "TOTAL  PRODUCT EXPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "5114.59",
+            "Value in Rupees (Crore)": "29558.41",
+            "Value in Dollars (Million US dollar)": "3310.10",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "October",
+            "Year": "2025",
+            "PRODUCTS": "NET IMPORT",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "20017.83",
+            "Value in Rupees (Crore)": "76693.55",
+            "Value in Dollars (Million US dollar)": "8696.05",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "CRUDE OIL",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "21439.18",
+            "Value in Rupees (Crore)": "108423.37",
+            "Value in Dollars (Million US dollar)": "12992.64",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "LPG",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1453.05",
+            "Value in Rupees (Crore)": "7414.22",
+            "Value in Dollars (Million US dollar)": "888.96",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "MS",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "29.99",
+            "Value in Rupees (Crore)": "224.85",
+            "Value in Dollars (Million US dollar)": "26.97",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "Naphtha",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "121.22",
+            "Value in Rupees (Crore)": "735.58",
+            "Value in Dollars (Million US dollar)": "88.19",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "ATF",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "0.00",
+            "Value in Rupees (Crore)": "0.02",
+            "Value in Dollars (Million US dollar)": "0.00",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "HSD",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1.75",
+            "Value in Rupees (Crore)": "11.46",
+            "Value in Dollars (Million US dollar)": "1.37",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "LOBS/ Lube oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "284.54",
+            "Value in Rupees (Crore)": "2191.06",
+            "Value in Dollars (Million US dollar)": "262.64",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "Fuel Oil",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "791.92",
+            "Value in Rupees (Crore)": "3257.57",
+            "Value in Dollars (Million US dollar)": "390.72",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "Bitumen",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "274.25",
+            "Value in Rupees (Crore)": "857.49",
+            "Value in Dollars (Million US dollar)": "102.81",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "Petcoke",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "1026.11",
+            "Value in Rupees (Crore)": "1046.45",
+            "Value in Dollars (Million US dollar)": "125.47",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "Others&",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "215.47",
+            "Value in Rupees (Crore)": "1201.35",
+            "Value in Dollars (Million US dollar)": "143.97",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "PRODUCT IMPORT*",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "4198.31",
+            "Value in Rupees (Crore)": "16940.04",
+            "Value in Dollars (Million US dollar)": "2031.10",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "TOTAL IMPORT",
+            "TRADE": "Import",
+            "Quantity (000 Metric Tonnes)": "25637.50",
+            "Value in Rupees (Crore)": "125363.41",
+            "Value in Dollars (Million US dollar)": "15023.74",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "LPG",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "44.46",
+            "Value in Rupees (Crore)": "294.22",
+            "Value in Dollars (Million US dollar)": "35.29",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "MS!",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1178.05",
+            "Value in Rupees (Crore)": "8719.28",
+            "Value in Dollars (Million US dollar)": "1046.70",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "Naphtha$",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "438.57",
+            "Value in Rupees (Crore)": "2495.57",
+            "Value in Dollars (Million US dollar)": "299.86",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "ATF#",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "643.14",
+            "Value in Rupees (Crore)": "4262.52",
+            "Value in Dollars (Million US dollar)": "511.57",
+            "date_updated": "2026-03-03 06:41:35"
+        },
+        {
+            "Month": "April",
+            "Year": "2024",
+            "PRODUCTS": "SKO",
+            "TRADE": "Export",
+            "Quantity (000 Metric Tonnes)": "1.11",
+            "Value in Rupees (Crore)": "8.49",
+            "Value in Dollars (Million US dollar)": "1.02",
+            "date_updated": "2026-03-03 06:41:35"
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-24T11:55:09.551725Z",
+    "_pramaan_dataset_name": "crude_oil_petroleum_import_export"
+}

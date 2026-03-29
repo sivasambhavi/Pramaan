@@ -1,0 +1,66 @@
+{
+    "index_name": "0ae1d443-bf20-4d2d-8e64-8367bc0d344a",
+    "title": "Year-wise Details of the Investments for Development of Jammu and Kashmir from 2019-20 to 2022-23",
+    "desc": "Year-wise Details of the Investments for Development of Jammu and Kashmir from 2019-20 to 2022-23",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "ee69ffd5-5bab-4b16-8f55-30ec0b3e4918",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1704814210,
+    "updated": 1704861706,
+    "created_date": "2024-01-09T16:30:10Z",
+    "updated_date": "2024-01-10T10:11:46Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "ee69ffd5-5bab-4b16-8f55-30ec0b3e4918",
+        "field": "0ae1d443-bf20-4d2d-8e64-8367bc0d344a"
+    },
+    "field": [
+        {
+            "id": "_year",
+            "name": "Year",
+            "type": "keyword"
+        },
+        {
+            "id": "amount_of_investment__rs_in_crores_",
+            "name": "Amount of investment (Rs In Crores)",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 4,
+    "count": 4,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "_year": "2019-20",
+            "amount_of_investment__rs_in_crores_": 296.64
+        },
+        {
+            "_year": "2020-21",
+            "amount_of_investment__rs_in_crores_": 412.74
+        },
+        {
+            "_year": "2021-22",
+            "amount_of_investment__rs_in_crores_": 376.76
+        },
+        {
+            "_year": "2022-23",
+            "amount_of_investment__rs_in_crores_": 2153
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:44:25.010299Z",
+    "_pramaan_dataset_name": "jk_development_investment_2019_2023"
+}

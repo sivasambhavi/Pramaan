@@ -1,6 +1,0 @@
-event_id,name,event_type,date,asset_id
-EVT_DRAIN_GALI7_COMPLETION,Completion of drain in Gali No. 7,completion,2024-03-20,ASSET_DRAIN_GALI7
-EVT_ROAD_GALI7_COMPLETION,Completion of road resurfacing,completion,2024-04-15,ASSET_ROAD_GALI7
-EVT_TOILET_MARKET_INAUG,Inauguration of renovated public toilet,inauguration,2024-03-18,ASSET_TOILET_MARKET
-EVT_HOUSING_COLONYY_HANDOVER,Handover of PMAY housing units,handover,2024-03-10,ASSET_HOUSING_COLONYY
-EVT_LIGHTS_BLOCKA_SWITCHON,Switch-on ceremony for LED streetlights,inauguration,2024-04-12,ASSET_LIGHTS_BLOCKA

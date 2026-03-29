@@ -1,0 +1,1583 @@
+{
+    "index_name": "e1c37ff8-df5a-43b8-bca2-f77ba6d2ac58",
+    "title": "FDI Equity Inflows from the year 2000 till last quarter",
+    "desc": "FDI Equity Inflows from the year 2000 till last quarter",
+    "created": "1633454350",
+    "updated": 1773639315,
+    "created_date": "2021-10-05T17:19:10Z",
+    "updated_date": "2026-03-16T05:35:15Z",
+    "active": "1",
+    "visualizable": "0",
+    "catalog_uuid": "9b89072e-4725-4cf3-afae-5f09d374a8a4",
+    "source": "data.gov.in",
+    "org_type": "Central",
+    "org": [
+        "Ministry of Commerce and Industry",
+        "Department for Promotion of industry and Internal Trade"
+    ],
+    "sector": [
+        "Commerce"
+    ],
+    "field": [
+        {
+            "name": "SECTOR_NAME",
+            "id": "SECTOR_NAME",
+            "type": "keyword"
+        },
+        {
+            "name": "AMOUNT_IN_RS",
+            "id": "AMOUNT_IN_RS",
+            "type": "double"
+        },
+        {
+            "name": "AMOUNT_IN_USD",
+            "id": "AMOUNT_IN_USD",
+            "type": "double"
+        },
+        {
+            "name": "UNIT",
+            "id": "UNIT",
+            "type": "keyword"
+        },
+        {
+            "name": "FROM_DATE",
+            "id": "FROM_DATE",
+            "type": "date"
+        },
+        {
+            "name": "TO_DATE",
+            "id": "TO_DATE",
+            "type": "date"
+        }
+    ],
+    "target_bucket": {
+        "index": "dipp_fdi",
+        "type": "9b89072e-4725-4cf3-afae-5f09d374a8a4",
+        "field": "e1c37ff8-df5a-43b8-bca2-f77ba6d2ac58"
+    },
+    "external_ws_url": "",
+    "external_ws": 0,
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 189,
+    "count": 189,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "SECTOR_NAME": "COAL PRODUCTION",
+            "AMOUNT_IN_RS": 1191.89,
+            "AMOUNT_IN_USD": 27.73,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "SEA TRANSPORT",
+            "AMOUNT_IN_RS": 444960.67,
+            "AMOUNT_IN_USD": 6621.54,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "COMMERCIAL, OFFICE & HOUSEHOLD EQUIPMENTS",
+            "AMOUNT_IN_RS": 28542.93,
+            "AMOUNT_IN_USD": 493.05,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "MEDICAL AND SURGICAL APPLIANCES",
+            "AMOUNT_IN_RS": 274588.17,
+            "AMOUNT_IN_USD": 3913.48,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "SCIENTIFIC INSTRUMENTS",
+            "AMOUNT_IN_RS": 37207.76,
+            "AMOUNT_IN_USD": 530.23,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "GLUE AND GELATIN",
+            "AMOUNT_IN_RS": 18047.77,
+            "AMOUNT_IN_USD": 252.49,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "RETAIL TRADING ",
+            "AMOUNT_IN_RS": 350580.43,
+            "AMOUNT_IN_USD": 4839.18,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "DIAMOND, GOLD ORNAMENTS",
+            "AMOUNT_IN_RS": 89641.96,
+            "AMOUNT_IN_USD": 1434.23,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSTRUCTION (INFRASTRUCTURE) ACTIVITIES",
+            "AMOUNT_IN_RS": 2585161.28,
+            "AMOUNT_IN_USD": 36162.57,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "POWER",
+            "AMOUNT_IN_RS": 1232609.66,
+            "AMOUNT_IN_USD": 19978.98,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "INFORMATION & BROADCASTING (INCLUDING PRINT MEDIA)",
+            "AMOUNT_IN_RS": 817295.95,
+            "AMOUNT_IN_USD": 12402.93,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "INDUSTRIAL MACHINERY",
+            "AMOUNT_IN_RS": 483398.13,
+            "AMOUNT_IN_USD": 7571.46,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "MISCELLANEOUS MECHANICAL & ENGINEERING INDUSTRIES",
+            "AMOUNT_IN_RS": 285198.85,
+            "AMOUNT_IN_USD": 4823.46,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "MATHEMATICAL, SURVEYING AND DRAWING INSTRUMENTS",
+            "AMOUNT_IN_RS": 398,
+            "AMOUNT_IN_USD": 7.98,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "DYE-STUFFS",
+            "AMOUNT_IN_RS": 6401.19,
+            "AMOUNT_IN_USD": 105.69,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "SUGAR",
+            "AMOUNT_IN_RS": 15503.61,
+            "AMOUNT_IN_USD": 249.23,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "LEATHER, LEATHER GOODS AND PICKERS",
+            "AMOUNT_IN_RS": 24318.43,
+            "AMOUNT_IN_USD": 359.54,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "PRINTING OF BOOKS (INCLUDING LITHO PRINTING INDUSTRY)",
+            "AMOUNT_IN_RS": 188764.3,
+            "AMOUNT_IN_USD": 2698.14,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "POWER",
+            "AMOUNT_IN_RS": 1242776.88,
+            "AMOUNT_IN_USD": 20093.09,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "NON-CONVENTIONAL ENERGY",
+            "AMOUNT_IN_RS": 1819783.59,
+            "AMOUNT_IN_USD": 24436.43,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "COAL PRODUCTION",
+            "AMOUNT_IN_RS": 1191.89,
+            "AMOUNT_IN_USD": 27.73,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "ELECTRONICS",
+            "AMOUNT_IN_RS": 566518.84,
+            "AMOUNT_IN_USD": 7672.9,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "AUTOMOBILE INDUSTRY",
+            "AMOUNT_IN_RS": 2644556.92,
+            "AMOUNT_IN_USD": 39681.66,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "PORTS",
+            "AMOUNT_IN_RS": 67309.06,
+            "AMOUNT_IN_USD": 1637.3,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "EARTH-MOVING MACHINERY",
+            "AMOUNT_IN_RS": 42660.12,
+            "AMOUNT_IN_USD": 655.91,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "MISCELLANEOUS MECHANICAL & ENGINEERING INDUSTRIES",
+            "AMOUNT_IN_RS": 286891.91,
+            "AMOUNT_IN_USD": 4842.38,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "INDUSTRIAL INSTRUMENTS",
+            "AMOUNT_IN_RS": 4626.39,
+            "AMOUNT_IN_USD": 89.58,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "PHOTOGRAPHIC RAW FILM AND PAPER",
+            "AMOUNT_IN_RS": 656.01,
+            "AMOUNT_IN_USD": 14.6,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "FOOD PROCESSING INDUSTRIES",
+            "AMOUNT_IN_RS": 1104599.73,
+            "AMOUNT_IN_USD": 15856.23,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "RUBBER GOODS",
+            "AMOUNT_IN_RS": 244241.8,
+            "AMOUNT_IN_USD": 3825.09,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "GLUE AND GELATIN",
+            "AMOUNT_IN_RS": 18255.68,
+            "AMOUNT_IN_USD": 254.86,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "CERAMICS",
+            "AMOUNT_IN_RS": 59524.21,
+            "AMOUNT_IN_USD": 1052.1,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "HOSPITAL & DIAGNOSTIC CENTRES",
+            "AMOUNT_IN_RS": 902156.71,
+            "AMOUNT_IN_USD": 12726.93,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "EDUCATION",
+            "AMOUNT_IN_RS": 813169.72,
+            "AMOUNT_IN_USD": 11039.62,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSTRUCTION (INFRASTRUCTURE) ACTIVITIES",
+            "AMOUNT_IN_RS": 2768492.04,
+            "AMOUNT_IN_USD": 38265.46,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "METALLURGICAL INDUSTRIES",
+            "AMOUNT_IN_RS": 1135399.52,
+            "AMOUNT_IN_USD": 18470.79,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "MINING",
+            "AMOUNT_IN_RS": 215411.06,
+            "AMOUNT_IN_USD": 3510.99,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "NON-CONVENTIONAL ENERGY",
+            "AMOUNT_IN_RS": 1599588.11,
+            "AMOUNT_IN_USD": 21899.56,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "PETROLEUM & NATURAL GAS",
+            "AMOUNT_IN_RS": 439067.59,
+            "AMOUNT_IN_USD": 8216.05,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "INFORMATION & BROADCASTING (INCLUDING PRINT MEDIA)",
+            "AMOUNT_IN_RS": 755908.42,
+            "AMOUNT_IN_USD": 11705.45,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "EARTH-MOVING MACHINERY",
+            "AMOUNT_IN_RS": 41946.41,
+            "AMOUNT_IN_USD": 647.7,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "MATHEMATICAL, SURVEYING AND DRAWING INSTRUMENTS",
+            "AMOUNT_IN_RS": 398,
+            "AMOUNT_IN_USD": 7.98,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "DYE-STUFFS",
+            "AMOUNT_IN_RS": 6358.32,
+            "AMOUNT_IN_USD": 105.2,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "PAPER AND PULP (INCLUDING PAPER PRODUCTS)",
+            "AMOUNT_IN_RS": 101599.01,
+            "AMOUNT_IN_USD": 1744.37,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "FERMENTATION INDUSTRIES",
+            "AMOUNT_IN_RS": 291764.47,
+            "AMOUNT_IN_USD": 4549.76,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "FOOD PROCESSING INDUSTRIES",
+            "AMOUNT_IN_RS": 868243.05,
+            "AMOUNT_IN_USD": 13128.29,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "GLASS",
+            "AMOUNT_IN_RS": 91347.09,
+            "AMOUNT_IN_USD": 1390.79,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "CEMENT AND GYPSUM PRODUCTS",
+            "AMOUNT_IN_RS": 511301.63,
+            "AMOUNT_IN_USD": 7919.97,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "TIMBER PRODUCTS",
+            "AMOUNT_IN_RS": 18225.34,
+            "AMOUNT_IN_USD": 276.01,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "SERVICES SECTOR (Fin., Banking, Insurance, Non Fin/Business, Outsourcing, R&D, Courier, Tech. Testing and Analysis, Other)",
+            "AMOUNT_IN_RS": 7657587.11,
+            "AMOUNT_IN_USD": 118843.31,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "HOTEL & TOURISM",
+            "AMOUNT_IN_RS": 1177879.22,
+            "AMOUNT_IN_USD": 18533.62,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "AUTOMOBILE INDUSTRY",
+            "AMOUNT_IN_RS": 2622366.87,
+            "AMOUNT_IN_USD": 39432.66,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "SEA TRANSPORT",
+            "AMOUNT_IN_RS": 446101.15,
+            "AMOUNT_IN_USD": 6634.78,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "MEDICAL AND SURGICAL APPLIANCES",
+            "AMOUNT_IN_RS": 297033.46,
+            "AMOUNT_IN_USD": 4169.3,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "INDUSTRIAL INSTRUMENTS",
+            "AMOUNT_IN_RS": 4626.39,
+            "AMOUNT_IN_USD": 89.58,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "FERTILIZERS",
+            "AMOUNT_IN_RS": 43546.07,
+            "AMOUNT_IN_USD": 743.94,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "DRUGS & PHARMACEUTICALS",
+            "AMOUNT_IN_RS": 1533283.17,
+            "AMOUNT_IN_USD": 24694.35,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "RUBBER GOODS",
+            "AMOUNT_IN_RS": 242313.26,
+            "AMOUNT_IN_USD": 3803.42,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "HOTEL & TOURISM",
+            "AMOUNT_IN_RS": 1203171.58,
+            "AMOUNT_IN_USD": 18827.79,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSTRUCTION DEVELOPMENT: Townships, housing, built-up infrastructure and construction-development projects",
+            "AMOUNT_IN_RS": 1378338.21,
+            "AMOUNT_IN_USD": 27371.88,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "MISCELLANEOUS INDUSTRIES",
+            "AMOUNT_IN_RS": 846265.21,
+            "AMOUNT_IN_USD": 14660.39,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "SEA TRANSPORT",
+            "AMOUNT_IN_RS": 623452.05,
+            "AMOUNT_IN_USD": 8603.36,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "MACHINE TOOLS",
+            "AMOUNT_IN_RS": 86089.98,
+            "AMOUNT_IN_USD": 1380.07,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "DYE-STUFFS",
+            "AMOUNT_IN_RS": 8612.95,
+            "AMOUNT_IN_USD": 130.59,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "DRUGS & PHARMACEUTICALS",
+            "AMOUNT_IN_RS": 1543885.86,
+            "AMOUNT_IN_USD": 24812.83,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "SOAPS, COSMETICS & TOILET PREPARATIONS",
+            "AMOUNT_IN_RS": 171432.68,
+            "AMOUNT_IN_USD": 2596,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "LEATHER, LEATHER GOODS AND PICKERS",
+            "AMOUNT_IN_RS": 27617.61,
+            "AMOUNT_IN_USD": 396.42,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "CEMENT AND GYPSUM PRODUCTS",
+            "AMOUNT_IN_RS": 522669.4,
+            "AMOUNT_IN_USD": 8047.37,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "TIMBER PRODUCTS",
+            "AMOUNT_IN_RS": 19581.36,
+            "AMOUNT_IN_USD": 291.72,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "SERVICES SECTOR (Fin., Banking, Insurance, Non Fin/Business, Outsourcing, R&D, Courier, Tech. Testing and Analysis, Other)",
+            "AMOUNT_IN_RS": 8391048.73,
+            "AMOUNT_IN_USD": 127266.33,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "TRADING",
+            "AMOUNT_IN_RS": 3637844.42,
+            "AMOUNT_IN_USD": 50934.59,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "BOILERS AND STEAM GENERATING PLANTS",
+            "AMOUNT_IN_RS": 23395.33,
+            "AMOUNT_IN_USD": 377.07,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "TELECOMMUNICATIONS",
+            "AMOUNT_IN_RS": 2410914.7,
+            "AMOUNT_IN_USD": 40072.02,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "AUTOMOBILE INDUSTRY",
+            "AMOUNT_IN_RS": 2486825.04,
+            "AMOUNT_IN_USD": 37854.44,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "AIR TRANSPORT (INCLUDING AIR FREIGHT)",
+            "AMOUNT_IN_RS": 376330.18,
+            "AMOUNT_IN_USD": 5207.65,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "RAILWAY RELATED COMPONENTS",
+            "AMOUNT_IN_RS": 91626.12,
+            "AMOUNT_IN_USD": 1429.05,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "MISCELLANEOUS MECHANICAL & ENGINEERING INDUSTRIES",
+            "AMOUNT_IN_RS": 270634.99,
+            "AMOUNT_IN_USD": 4653.67,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "INDUSTRIAL INSTRUMENTS",
+            "AMOUNT_IN_RS": 4626.39,
+            "AMOUNT_IN_USD": 89.58,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "FERTILIZERS",
+            "AMOUNT_IN_RS": 43157.37,
+            "AMOUNT_IN_USD": 739.4,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "LEATHER, LEATHER GOODS AND PICKERS",
+            "AMOUNT_IN_RS": 23174.59,
+            "AMOUNT_IN_USD": 346.61,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "DEFENCE INDUSTRIES",
+            "AMOUNT_IN_RS": 1546.95,
+            "AMOUNT_IN_USD": 21.74,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "AGRICULTURE SERVICES",
+            "AMOUNT_IN_RS": 189475.95,
+            "AMOUNT_IN_USD": 3119.47,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "MISCELLANEOUS INDUSTRIES",
+            "AMOUNT_IN_RS": 813841.85,
+            "AMOUNT_IN_USD": 14287.76,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "PETROLEUM & NATURAL GAS",
+            "AMOUNT_IN_RS": 448582.1,
+            "AMOUNT_IN_USD": 8324.83,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "PRIME MOVER (OTHER THAN ELECTRICAL GENERATORS)",
+            "AMOUNT_IN_RS": 203389.31,
+            "AMOUNT_IN_USD": 3131.38,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "ELECTRICAL EQUIPMENTS",
+            "AMOUNT_IN_RS": 912761.34,
+            "AMOUNT_IN_USD": 13733.69,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "COMPUTER SOFTWARE & HARDWARE",
+            "AMOUNT_IN_RS": 8629221.88,
+            "AMOUNT_IN_USD": 119744.71,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "ELECTRONICS",
+            "AMOUNT_IN_RS": 545923.95,
+            "AMOUNT_IN_USD": 7442.72,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "PORTS",
+            "AMOUNT_IN_RS": 67309.06,
+            "AMOUNT_IN_USD": 1637.3,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "AGRICULTURAL MACHINERY",
+            "AMOUNT_IN_RS": 123306.95,
+            "AMOUNT_IN_USD": 1750.99,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "PHOTOGRAPHIC RAW FILM AND PAPER",
+            "AMOUNT_IN_RS": 656.01,
+            "AMOUNT_IN_USD": 14.6,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "PAPER AND PULP (INCLUDING PAPER PRODUCTS)",
+            "AMOUNT_IN_RS": 103005.48,
+            "AMOUNT_IN_USD": 1760.57,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "FERMENTATION INDUSTRIES",
+            "AMOUNT_IN_RS": 293313.45,
+            "AMOUNT_IN_USD": 4567.87,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "SOAPS, COSMETICS & TOILET PREPARATIONS",
+            "AMOUNT_IN_RS": 171017.09,
+            "AMOUNT_IN_USD": 2591.33,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "CEMENT AND GYPSUM PRODUCTS",
+            "AMOUNT_IN_RS": 513669.3,
+            "AMOUNT_IN_USD": 7947.47,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "TIMBER PRODUCTS",
+            "AMOUNT_IN_RS": 19304.63,
+            "AMOUNT_IN_USD": 288.6,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "SERVICES SECTOR (Fin., Banking, Insurance, Non Fin/Business, Outsourcing, R&D, Courier, Tech. Testing and Analysis, Other)",
+            "AMOUNT_IN_RS": 8095636.54,
+            "AMOUNT_IN_USD": 123941.52,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "HOSPITAL & DIAGNOSTIC CENTRES",
+            "AMOUNT_IN_RS": 874628.53,
+            "AMOUNT_IN_USD": 12417.16,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "TEA AND COFFEE (PROCESSING & WAREHOUSING COFFEE & RUBBER)",
+            "AMOUNT_IN_RS": 19621.43,
+            "AMOUNT_IN_USD": 294.74,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "COIR",
+            "AMOUNT_IN_RS": 220.5,
+            "AMOUNT_IN_USD": 4.07,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSTRUCTION (INFRASTRUCTURE) ACTIVITIES",
+            "AMOUNT_IN_RS": 2727816.23,
+            "AMOUNT_IN_USD": 37809.95,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "PETROLEUM & NATURAL GAS",
+            "AMOUNT_IN_RS": 463026.97,
+            "AMOUNT_IN_USD": 8488.17,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "PRIME MOVER (OTHER THAN ELECTRICAL GENERATORS)",
+            "AMOUNT_IN_RS": 210274.37,
+            "AMOUNT_IN_USD": 3207.8,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "INFORMATION & BROADCASTING (INCLUDING PRINT MEDIA)",
+            "AMOUNT_IN_RS": 822012.92,
+            "AMOUNT_IN_USD": 12455.88,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "FERTILIZERS",
+            "AMOUNT_IN_RS": 43710.09,
+            "AMOUNT_IN_USD": 745.77,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "SUGAR",
+            "AMOUNT_IN_RS": 15503.61,
+            "AMOUNT_IN_USD": 249.23,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "GLASS",
+            "AMOUNT_IN_RS": 127634.47,
+            "AMOUNT_IN_USD": 1810.1,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSTRUCTION DEVELOPMENT: Townships, housing, built-up infrastructure and construction-development projects",
+            "AMOUNT_IN_RS": 1380888.1,
+            "AMOUNT_IN_USD": 27400.55,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "PRIME MOVER (OTHER THAN ELECTRICAL GENERATORS)",
+            "AMOUNT_IN_RS": 203385.58,
+            "AMOUNT_IN_USD": 3131.33,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "MACHINE TOOLS",
+            "AMOUNT_IN_RS": 78549.04,
+            "AMOUNT_IN_USD": 1292.95,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "CHEMICALS (OTHER THAN FERTILIZERS)",
+            "AMOUNT_IN_RS": 1426475.76,
+            "AMOUNT_IN_USD": 23206.87,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "TEXTILES (INCLUDING  DYED,PRINTED)",
+            "AMOUNT_IN_RS": 304798.08,
+            "AMOUNT_IN_USD": 4727.56,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "SUGAR",
+            "AMOUNT_IN_RS": 15503.61,
+            "AMOUNT_IN_USD": 249.23,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "VEGETABLE OILS AND VANASPATI",
+            "AMOUNT_IN_RS": 73399.14,
+            "AMOUNT_IN_USD": 1166.94,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "SOAPS, COSMETICS & TOILET PREPARATIONS",
+            "AMOUNT_IN_RS": 165404.94,
+            "AMOUNT_IN_USD": 2525.74,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "HOSPITAL & DIAGNOSTIC CENTRES",
+            "AMOUNT_IN_RS": 823483.03,
+            "AMOUNT_IN_USD": 11824.08,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "EDUCATION",
+            "AMOUNT_IN_RS": 722103.26,
+            "AMOUNT_IN_USD": 9979.35,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "COIR",
+            "AMOUNT_IN_RS": 220.5,
+            "AMOUNT_IN_USD": 4.07,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSTRUCTION DEVELOPMENT: Townships, housing, built-up infrastructure and construction-development projects",
+            "AMOUNT_IN_RS": 1358238.49,
+            "AMOUNT_IN_USD": 27139.24,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "MINING",
+            "AMOUNT_IN_RS": 217647.18,
+            "AMOUNT_IN_USD": 3536.95,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "COAL PRODUCTION",
+            "AMOUNT_IN_RS": 1191.89,
+            "AMOUNT_IN_USD": 27.73,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "BOILERS AND STEAM GENERATING PLANTS",
+            "AMOUNT_IN_RS": 23445.33,
+            "AMOUNT_IN_USD": 377.65,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "RAILWAY RELATED COMPONENTS",
+            "AMOUNT_IN_RS": 93275.93,
+            "AMOUNT_IN_USD": 1447.73,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "EARTH-MOVING MACHINERY",
+            "AMOUNT_IN_RS": 42527.79,
+            "AMOUNT_IN_USD": 654.42,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "CHEMICALS (OTHER THAN FERTILIZERS)",
+            "AMOUNT_IN_RS": 1475407.17,
+            "AMOUNT_IN_USD": 23803.86,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "FOOD PROCESSING INDUSTRIES",
+            "AMOUNT_IN_RS": 1072331.86,
+            "AMOUNT_IN_USD": 15492.26,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "VEGETABLE OILS AND VANASPATI",
+            "AMOUNT_IN_RS": 78710.14,
+            "AMOUNT_IN_USD": 1228.59,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "GLASS",
+            "AMOUNT_IN_RS": 127269.59,
+            "AMOUNT_IN_USD": 1805.97,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "DEFENCE INDUSTRIES",
+            "AMOUNT_IN_RS": 1959.99,
+            "AMOUNT_IN_USD": 26.54,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "EDUCATION",
+            "AMOUNT_IN_RS": 808184.32,
+            "AMOUNT_IN_USD": 10983.75,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "TRADING",
+            "AMOUNT_IN_RS": 3586834.1,
+            "AMOUNT_IN_USD": 50361.85,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "DIAMOND, GOLD ORNAMENTS",
+            "AMOUNT_IN_RS": 94001.19,
+            "AMOUNT_IN_USD": 1484.87,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "BOILERS AND STEAM GENERATING PLANTS",
+            "AMOUNT_IN_RS": 23445.33,
+            "AMOUNT_IN_USD": 377.65,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "INDUSTRIAL MACHINERY",
+            "AMOUNT_IN_RS": 496120.03,
+            "AMOUNT_IN_USD": 7714.12,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "AGRICULTURAL MACHINERY",
+            "AMOUNT_IN_RS": 123376.69,
+            "AMOUNT_IN_USD": 1751.78,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "MEDICAL AND SURGICAL APPLIANCES",
+            "AMOUNT_IN_RS": 304024.93,
+            "AMOUNT_IN_USD": 4247.91,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "SCIENTIFIC INSTRUMENTS",
+            "AMOUNT_IN_RS": 43566.99,
+            "AMOUNT_IN_USD": 603.4,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "TEXTILES (INCLUDING  DYED,PRINTED)",
+            "AMOUNT_IN_RS": 330027.73,
+            "AMOUNT_IN_USD": 5017.15,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "DEFENCE INDUSTRIES",
+            "AMOUNT_IN_RS": 2069.97,
+            "AMOUNT_IN_USD": 27.78,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "HOTEL & TOURISM",
+            "AMOUNT_IN_RS": 1212327.08,
+            "AMOUNT_IN_USD": 18930.76,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "RETAIL TRADING ",
+            "AMOUNT_IN_RS": 362413.67,
+            "AMOUNT_IN_USD": 4973.37,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "DIAMOND, GOLD ORNAMENTS",
+            "AMOUNT_IN_RS": 97270.26,
+            "AMOUNT_IN_USD": 1521.76,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "TEA AND COFFEE (PROCESSING & WAREHOUSING COFFEE & RUBBER)",
+            "AMOUNT_IN_RS": 19641.07,
+            "AMOUNT_IN_USD": 294.95,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "COIR",
+            "AMOUNT_IN_RS": 220.5,
+            "AMOUNT_IN_USD": 4.07,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "MISCELLANEOUS INDUSTRIES",
+            "AMOUNT_IN_RS": 851763.3,
+            "AMOUNT_IN_USD": 14722.26,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSULTANCY SERVICES",
+            "AMOUNT_IN_RS": 784031.29,
+            "AMOUNT_IN_USD": 11276.51,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "POWER",
+            "AMOUNT_IN_RS": 1209863.31,
+            "AMOUNT_IN_USD": 19715.21,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "ELECTRICAL EQUIPMENTS",
+            "AMOUNT_IN_RS": 864880.23,
+            "AMOUNT_IN_USD": 13175.72,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "COMPUTER SOFTWARE & HARDWARE",
+            "AMOUNT_IN_RS": 7849711.92,
+            "AMOUNT_IN_USD": 110698.11,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "ELECTRONICS",
+            "AMOUNT_IN_RS": 497150.76,
+            "AMOUNT_IN_USD": 6876.73,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "PORTS",
+            "AMOUNT_IN_RS": 67309.06,
+            "AMOUNT_IN_USD": 1637.3,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "INDUSTRIAL MACHINERY",
+            "AMOUNT_IN_RS": 465900.59,
+            "AMOUNT_IN_USD": 7369.67,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "AGRICULTURAL MACHINERY",
+            "AMOUNT_IN_RS": 122975.7,
+            "AMOUNT_IN_USD": 1747.15,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "PHOTOGRAPHIC RAW FILM AND PAPER",
+            "AMOUNT_IN_RS": 2737.61,
+            "AMOUNT_IN_USD": 67.29,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "DRUGS & PHARMACEUTICALS",
+            "AMOUNT_IN_RS": 1423805.51,
+            "AMOUNT_IN_USD": 23419.41,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "RUBBER GOODS",
+            "AMOUNT_IN_RS": 234925.63,
+            "AMOUNT_IN_USD": 3718.19,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "CERAMICS",
+            "AMOUNT_IN_RS": 59088.04,
+            "AMOUNT_IN_USD": 1047.02,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "TRADING",
+            "AMOUNT_IN_RS": 3345055.64,
+            "AMOUNT_IN_USD": 47571.58,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "TEA AND COFFEE (PROCESSING & WAREHOUSING COFFEE & RUBBER)",
+            "AMOUNT_IN_RS": 18704.71,
+            "AMOUNT_IN_USD": 283.84,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "PRINTING OF BOOKS (INCLUDING LITHO PRINTING INDUSTRY)",
+            "AMOUNT_IN_RS": 178513.17,
+            "AMOUNT_IN_USD": 2578.67,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSULTANCY SERVICES",
+            "AMOUNT_IN_RS": 699622.32,
+            "AMOUNT_IN_USD": 10305.7,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/03/2025"
+        },
+        {
+            "SECTOR_NAME": "METALLURGICAL INDUSTRIES",
+            "AMOUNT_IN_RS": 1185813.33,
+            "AMOUNT_IN_USD": 19050.39,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "NON-CONVENTIONAL ENERGY",
+            "AMOUNT_IN_RS": 1769889.12,
+            "AMOUNT_IN_USD": 23878.86,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "TELECOMMUNICATIONS",
+            "AMOUNT_IN_RS": 2419007.62,
+            "AMOUNT_IN_USD": 40165.67,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "AIR TRANSPORT (INCLUDING AIR FREIGHT)",
+            "AMOUNT_IN_RS": 391786.59,
+            "AMOUNT_IN_USD": 5387.8,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "MACHINE TOOLS",
+            "AMOUNT_IN_RS": 84979.3,
+            "AMOUNT_IN_USD": 1367.72,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "COMMERCIAL, OFFICE & HOUSEHOLD EQUIPMENTS",
+            "AMOUNT_IN_RS": 30151.37,
+            "AMOUNT_IN_USD": 511.52,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "SCIENTIFIC INSTRUMENTS",
+            "AMOUNT_IN_RS": 42342.12,
+            "AMOUNT_IN_USD": 589.55,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "TEXTILES (INCLUDING  DYED,PRINTED)",
+            "AMOUNT_IN_RS": 327049.62,
+            "AMOUNT_IN_USD": 4983.76,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "GLUE AND GELATIN",
+            "AMOUNT_IN_RS": 18220.81,
+            "AMOUNT_IN_USD": 254.47,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "CERAMICS",
+            "AMOUNT_IN_RS": 59513.11,
+            "AMOUNT_IN_USD": 1051.97,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "CONSULTANCY SERVICES",
+            "AMOUNT_IN_RS": 773706.79,
+            "AMOUNT_IN_USD": 11160.53,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "RETAIL TRADING ",
+            "AMOUNT_IN_RS": 356401.82,
+            "AMOUNT_IN_USD": 4906.34,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "AGRICULTURE SERVICES",
+            "AMOUNT_IN_RS": 221360.52,
+            "AMOUNT_IN_USD": 3492.01,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "30/09/2025"
+        },
+        {
+            "SECTOR_NAME": "METALLURGICAL INDUSTRIES",
+            "AMOUNT_IN_RS": 1194073.04,
+            "AMOUNT_IN_USD": 19142.67,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "MINING",
+            "AMOUNT_IN_RS": 217755.84,
+            "AMOUNT_IN_USD": 3538.16,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "ELECTRICAL EQUIPMENTS",
+            "AMOUNT_IN_RS": 922641.53,
+            "AMOUNT_IN_USD": 13844.54,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "COMPUTER SOFTWARE & HARDWARE",
+            "AMOUNT_IN_RS": 8776969.46,
+            "AMOUNT_IN_USD": 121399.55,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "TELECOMMUNICATIONS",
+            "AMOUNT_IN_RS": 2420381.01,
+            "AMOUNT_IN_USD": 40181.13,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "AIR TRANSPORT (INCLUDING AIR FREIGHT)",
+            "AMOUNT_IN_RS": 401018,
+            "AMOUNT_IN_USD": 5490.66,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "RAILWAY RELATED COMPONENTS",
+            "AMOUNT_IN_RS": 93444.28,
+            "AMOUNT_IN_USD": 1449.61,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "COMMERCIAL, OFFICE & HOUSEHOLD EQUIPMENTS",
+            "AMOUNT_IN_RS": 30396.62,
+            "AMOUNT_IN_USD": 514.27,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "MATHEMATICAL, SURVEYING AND DRAWING INSTRUMENTS",
+            "AMOUNT_IN_RS": 398,
+            "AMOUNT_IN_USD": 7.98,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "CHEMICALS (OTHER THAN FERTILIZERS)",
+            "AMOUNT_IN_RS": 1490410.97,
+            "AMOUNT_IN_USD": 23971.84,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "PAPER AND PULP (INCLUDING PAPER PRODUCTS)",
+            "AMOUNT_IN_RS": 103676.4,
+            "AMOUNT_IN_USD": 1768.05,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "FERMENTATION INDUSTRIES",
+            "AMOUNT_IN_RS": 293402.33,
+            "AMOUNT_IN_USD": 4568.88,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "VEGETABLE OILS AND VANASPATI",
+            "AMOUNT_IN_RS": 125177.14,
+            "AMOUNT_IN_USD": 1744.37,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "AGRICULTURE SERVICES",
+            "AMOUNT_IN_RS": 264434.7,
+            "AMOUNT_IN_USD": 3979.17,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        },
+        {
+            "SECTOR_NAME": "PRINTING OF BOOKS (INCLUDING LITHO PRINTING INDUSTRY)",
+            "AMOUNT_IN_RS": 189215.13,
+            "AMOUNT_IN_USD": 2703.23,
+            "UNIT": "MILLION",
+            "FROM_DATE": "01/04/2000",
+            "TO_DATE": "31/12/2025"
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:44:25.415490Z",
+    "_pramaan_dataset_name": "fdi_equity_inflows_live"
+}

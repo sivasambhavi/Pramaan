@@ -279,7 +279,7 @@ Add to `requirements.txt`.
 
 ---
 
-## Screen 1 — Ward Overview (`01_🏙_Ward_Map.py`)
+## Screen 1 — Ward Overview (`01_Ward_Map.py`) ✅ Done
 
 ### Purpose
 First screen the judge sees. Must immediately show the scale and health of Ward 45.
@@ -357,7 +357,7 @@ for asset in assets:
 
 ---
 
-## Screen 2 — Proof Chain Viewer (`02_🧷_Proof_Chain.py`)
+## Screen 2 — Proof Chain Viewer (`02_Proof_Chain.py`) ✅ Done
 
 ### Purpose
 Show the full delivery chain for a selected asset as a visual flow. The "wow" screen.
@@ -449,174 +449,7 @@ st.progress(filled / total_steps, text=f"Chain completeness: {filled}/{total_ste
 
 ---
 
-## Screen 3 — Gap Analysis (`03_📊_Gap_Analysis.py`)
-
-### Purpose
-Show judges exactly where governance delivery breaks down. Traffic light system.
-
-### API calls
-- `GET /wards/REG_W45/gaps` → scheme gaps + proven_assets count
-- `GET /wards/REG_W45/score` → delivery score
-
-### Layout
-
-```
-┌──────────────────────────────────────────────────────┐
-│  Gap Analysis — Ward 45                              │
-├───────────────────┬──────────────────────────────────┤
-│  Delivery Score   │  Gap Summary                     │
-│  Gauge (19.6%)    │  🔴 no_evidence: X schemes       │
-│                   │  🟡 partial: Y schemes            │
-│                   │  🟢 complete: Z schemes           │
-├───────────────────┴──────────────────────────────────┤
-│  Scheme-by-scheme breakdown                          │
-│                                                       │
-│  SCH_SFC  Local Dev Grants   ████████░░  🟡 partial  │
-│           51 assets | 10 proven | 41 missing         │
-│                                                       │
-│  SCH_SWACHH  Swachh Bharat   ██████████  🟢 complete │
-│           1 asset  | 1 proven  | 0 missing           │
-└──────────────────────────────────────────────────────┘
-```
-
-### Components
-
-**1. Gap status cards**
-```python
-status_map = {
-    "complete":    ("🟢", "Complete",    "#2ECC71"),
-    "partial":     ("🟡", "Partial",     "#F39C12"),
-    "no_evidence": ("🔴", "No Evidence", "#E74C3C"),
-    "no_assets":   ("⚫", "No Assets",   "#7F8C8D"),
-}
-
-for gap in gaps:
-    icon, label, color = status_map.get(gap["gap_type"], ("⚪", "Unknown", "grey"))
-    pct = gap["proven_assets"] / gap["linked_assets"] * 100 if gap["linked_assets"] else 0
-    st.markdown(f"### {icon} {gap['scheme_name']}")
-    st.progress(pct / 100, text=f"{gap['proven_assets']} / {gap['linked_assets']} assets proven")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total Assets", gap["linked_assets"])
-    col2.metric("Proven", gap["proven_assets"])
-    col3.metric("Gap", gap["linked_assets"] - gap["proven_assets"], delta_color="inverse")
-```
-
-**2. Bar chart (Plotly) — assets vs proven per scheme**
-```python
-fig = go.Figure(data=[
-    go.Bar(name="Total Assets", x=scheme_names, y=total_list, marker_color="#4C8EDA"),
-    go.Bar(name="Proven",       x=scheme_names, y=proven_list, marker_color="#2ECC71"),
-])
-fig.update_layout(barmode="group", paper_bgcolor="#1A1F2E",
-                  plot_bgcolor="#1A1F2E", font_color="white")
-st.plotly_chart(fig, use_container_width=True)
-```
-
-### Enhancement
-Add a "What would it take to reach 100%?" box at the bottom — for each `partial` or `no_evidence` scheme, list the missing step as a bullet (e.g. "SFC: needs evidence for 41 assets").
-
----
-
-## Screen 4 — Delivery Graph (`04_🔗_Graph_View.py`)
-
-### Purpose
-The "intelligence platform" screen. Interactive graph showing the full delivery network. Most visually impressive.
-
-### API calls
-- `GET /wards/REG_W45/assets` → all assets
-- `GET /assets/{asset_id}/chain` → per-asset chain (loop for demo assets)
-
-### Library
-```python
-from streamlit_agraph import agraph, Node, Edge, Config
-```
-
-### Layout
-
-```
-┌─────────────────────────────────────────────────────┐
-│  Filter: [All] [Schemes] [Assets] [Evidence]        │
-│  Ward: REG_W45                                       │
-├─────────────────────────────────────────────────────┤
-│                                                      │
-│         [SCH_SFC]────FUNDS────►[ASSET_DRAIN_GALI7]  │
-│              │                        │              │
-│           TARGETS               LOCATED_IN          │
-│              ▼                        ▼              │
-│         [BEN_GALI7]           [REG_W45_GALI7]       │
-│                                       │              │
-│                                    PROVED_BY         │
-│                                       ▼              │
-│                               [EVD_DRAIN_AFTER]      │
-│                                                      │
-├─────────────────────────────────────────────────────┤
-│  Click a node to see its properties in the sidebar  │
-└─────────────────────────────────────────────────────┘
-```
-
-### Components
-
-**1. Build graph nodes and edges**
-```python
-NODE_COLORS = {
-    "Scheme":      "#A23B72",
-    "Asset":       "#C73E1D",
-    "Region":      "#2E86AB",
-    "Actor":       "#F18F01",
-    "Evidence":    "#44BBA4",
-    "Beneficiary": "#3B1F2B",
-    "Event":       "#E94F37",
-}
-
-nodes, edges = [], []
-
-# Add ward node
-nodes.append(Node(id="REG_W45", label="Ward 45", color="#2E86AB", size=30))
-
-for asset in assets:
-    nodes.append(Node(id=asset["asset_id"], label=asset["name"][:20],
-                      color=NODE_COLORS["Asset"], size=20))
-    edges.append(Edge(source=asset["asset_id"], target="REG_W45",
-                      label="LOCATED_IN"))
-
-# Add chain nodes for key assets (ASSET_DRAIN_GALI7, ASSET_ROAD_GALI7, etc.)
-for chain in chains:
-    if chain["scheme"]:
-        nodes.append(Node(id=chain["scheme"]["scheme_id"],
-                          label=chain["scheme"]["name"][:20],
-                          color=NODE_COLORS["Scheme"], size=25))
-        edges.append(Edge(source=chain["scheme"]["scheme_id"],
-                          target=chain["asset_id"], label="FUNDS"))
-    for ev in chain["evidence"]:
-        nodes.append(Node(id=ev["evidence_id"], label=ev["before_or_after"],
-                          color=NODE_COLORS["Evidence"], size=15))
-        edges.append(Edge(source=ev["evidence_id"],
-                          target=chain["asset_id"], label="PROVES"))
-```
-
-**2. Render graph**
-```python
-config = Config(
-    width=900, height=600,
-    directed=True,
-    physics=True,
-    hierarchical=False,
-    nodeHighlightBehavior=True,
-    highlightColor="#4C8EDA",
-    collapsible=False,
-    node={"labelProperty": "label"},
-    link={"labelProperty": "label", "renderLabel": True},
-)
-
-selected = agraph(nodes=nodes, edges=edges, config=config)
-
-if selected:
-    st.sidebar.markdown(f"**Selected:** `{selected}`")
-```
-
----
-
-## Screen 5 — Live Ingestion (`05_⚡_Live_Ingestion.py`)
+## Screen 3 — Live Ingestion (`03_Live_Ingestion.py`) ✅ Done
 
 ### Purpose
 Demo the AI capability. Paste raw text → watch it become graph data.
@@ -692,121 +525,24 @@ if "extracted" in st.session_state:
 
 ---
 
-## Screen 6 — NL Questions (`06_❓_Questions.py`)
+## Screen 4 — Micro Accountability (`04_Micro_Accountability.py`) ✅ Done
 
 ### Purpose
-Show AI-powered Q&A over the graph. Chat-style, not a dropdown.
+Trigger WhatsApp/SMS alerts to ward councillors and field officers for verified or disputed assets.
 
-### Layout
-
-```
-┌──────────────────────────────────────────────────────┐
-│  Ask Pramaan                                         │
-│                                                      │
-│  Quick questions:                                    │
-│  [What was built in Ward 45?]                        │
-│  [For Gali 7, show delivery chain]                   │
-│  [Which schemes have low scores?]                    │
-│                                                      │
-│  Or type your own:  [_________________________] [Ask]│
-├──────────────────────────────────────────────────────┤
-│  Answer                                              │
-│                                                      │
-│  Q: What was built in Ward 45?                       │
-│  → 51 assets found. Types: water_body (46),          │
-│    drain (1), road (1), toilet (1), housing (1),     │
-│    streetlight (1)                                   │
-│                                                      │
-│  [View as table]  [View as chart]                    │
-└──────────────────────────────────────────────────────┘
-```
-
-### Components
-
-**1. Quick question chips**
-```python
-st.markdown("**Quick Questions:**")
-col1, col2, col3 = st.columns(3)
-q1 = col1.button("🏗 What was built in Ward 45?")
-q2 = col2.button("🔗 Gali 7 delivery chain")
-q3 = col3.button("📊 Low delivery scores?")
-
-question = st.text_input("Or ask your own question")
-ask = st.button("Ask →", type="primary")
-
-if q1: question = "What was built in Ward 45?"
-if q2: question = "For Gali 7, show delivery chain"
-if q3: question = "Which schemes have low delivery scores?"
-```
-
-**2. Answer renderer based on answer_type**
-```python
-if question and (ask or q1 or q2 or q3):
-    with st.spinner("Querying graph..."):
-        result = generate_query(question)
-
-    st.markdown(f"**Q:** {question}")
-
-    if result["answer_type"] == "asset_list":
-        st.markdown(f"→ **{result['total']} assets** found in Ward 45")
-        # Bar chart by asset type
-        import pandas as pd
-        df = pd.DataFrame(result["assets"])
-        type_counts = df["type"].value_counts().reset_index()
-        type_counts.columns = ["type", "count"]
-        fig = go.Figure(go.Bar(
-            x=type_counts["type"], y=type_counts["count"],
-            marker_color="#4C8EDA",
-        ))
-        fig.update_layout(paper_bgcolor="#1A1F2E", plot_bgcolor="#1A1F2E",
-                          font_color="white", margin=dict(t=20, b=20))
-        st.plotly_chart(fig, use_container_width=True)
-        st.dataframe(df, use_container_width=True)
-
-    elif result["answer_type"] == "proof_chain":
-        st.markdown(f"→ Full chain for **{result['asset']['name']}**")
-        # Reuse chain step cards from Screen 2
-
-    elif result["answer_type"] == "gap_analysis":
-        score = result["delivery_score"]["delivery_score"]
-        # Inline gauge (reuse Screen 1 gauge component)
-        fig = go.Figure(go.Indicator(
-            mode="gauge+number", value=score,
-            title={"text": "Delivery Score", "font": {"color": "white"}},
-            gauge={
-                "axis": {"range": [0, 100]},
-                "bar": {"color": "#4C8EDA"},
-                "steps": [
-                    {"range": [0, 40],  "color": "#E74C3C"},
-                    {"range": [40, 70], "color": "#F39C12"},
-                    {"range": [70, 100], "color": "#2ECC71"},
-                ],
-            },
-            number={"suffix": "%", "font": {"color": "white"}},
-        ))
-        fig.update_layout(paper_bgcolor="#1A1F2E", font_color="white", height=220)
-        st.plotly_chart(fig, use_container_width=True)
-        st.dataframe(result["gaps"], use_container_width=True)
-
-    elif result["answer_type"] == "unrecognised":
-        st.warning(result["error"])
-        st.markdown("**Try:** " + " | ".join(result["supported_questions"]))
-
-    st.markdown('<p style="font-size:0.75rem; color:#A0AEB4;">Source: Neo4j · Ward 45 · REG_W45</p>',
-                unsafe_allow_html=True)
-```
+### API calls
+- `POST /notify/whatsapp` → send Twilio notification
+- Uses `ASSET_VERIFICATION_OVERRIDE` from `frontend/utils/constants.py`
 
 ---
 
 ## Implementation order for Sreenu
 
 1. `app.py` — global CSS + page config
-2. `01_🏙_Ward_Map.py` — ward overview (gauge + metric cards + asset table)
-3. `02_🧷_Proof_Chain.py` — chain flow + before/after images
-4. `05_⚡_Live_Ingestion.py` — split screen extract + ingest
-5. `06_❓_Questions.py` — chat-style NL questions
-6. `03_📊_Gap_Analysis.py` — traffic light gap view
-7. `04_🔗_Graph_View.py` — interactive agraph (most complex, last)
+2. `01_Ward_Map.py` — ward overview (gauge + metric cards + asset table) ✅
+3. `02_Proof_Chain.py` — chain flow + before/after images ✅
+4. `03_Live_Ingestion.py` — AI news scraping + ingest to Neo4j ✅
+5. `04_Micro_Accountability.py` — WhatsApp alerts for verified assets ✅
 
 ---
 

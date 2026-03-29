@@ -1,97 +1,106 @@
-# PRAMAAN Gap Fix Plan
+# Implementation Plan: Pramaan V5 Dynamic Transformation
 
-## MUST FIX (4 gaps)
+# Implementation Plan: 10/10 Master Architecture (True Agentic Graph)
 
-### [GAP-6] Beneficiary not showing in Proof Chain
-#### [MODIFY] [queries.py](file:///E:/INDIA_INNOVATES/Pramaan/backend/app/queries.py)
-- Fix `ASSET_CHAIN` Cypher: `OPTIONAL MATCH (s)-[:BENEFITS]->(b:Beneficiary)-[:LIVES_IN]->(br:Region)`
-- Return `b.count`, `b.description` alongside existing returns.
-#### [MODIFY] [02_🧷_Proof_Chain.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/02_🧷_Proof_Chain.py)
-- Render beneficiaries with `st.metric()` for count + `st.caption()` for description.
+# Implementation Plan: Pramaan V5 Demo Survival Protocol
 
----
+## Phase 0: Initialization
+1. **Branch Management:** Run `git checkout -b feature/v5-demo-safe` before executing any operations to protect the [main](file://wsl.localhost/Ubuntu/home/chinni/india_innovates/Pramaan/frontend/main_app.py#191-207) branch.
 
-### [GAP-7] Markdown asterisks showing as raw text
-#### [MODIFY] [02_🧷_Proof_Chain.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/02_🧷_Proof_Chain.py)
-- Replace all `st.write(f"**{x}**")` with `st.markdown(f"**{x}**")`.
-- Chain node content already uses HTML — remove the `**` from the f-string inside the HTML block.
+## Phase 1: Database Purge
+1. **Graph Cleanup:** Execute `DETACH DELETE` in Neo4j to permanently remove the 4 hollow events: `EVT_MANIPUR_2023`, `EVT_JOSHIMATH_2023`, `EVT_IMEC_2023`, and `EVT_TATA_SEMI_2024`.
+2. **UI Cleanup:** Safely remove these exact 4 events from the `EVENTS` map in [frontend/utils/events.py](file://wsl.localhost/Ubuntu/home/chinni/india_innovates/Pramaan/frontend/utils/events.py) so they vanish from the dropdowns and the map.
 
----
+## Phase 2: Structured Demo Seeding
+*We will not use the live web scraper. We will strictly control the data to ensure the 10 AM demo is visually perfect and error-free.*
+1. **Neo4j Seed Script:** Write a targeted Python script to inject 2 massive new 2026 events (e.g., "India Semiconductor Mission" and "Rupee Crisis") directly into the Graph with perfect canonical nodes and edges.
+2. **Curated Intelligence Tying:** Safely append these 2 new event IDs to the existing 400 lines of curated dictionaries (`NEEDS_MAP`, `WATCH_POINTS`, `CROSS_PAIRS`) inside [national_intelligence.py](file://wsl.localhost/Ubuntu/home/chinni/india_innovates/Pramaan/frontend/pages/national_intelligence.py). This guarantees the dashboard tabs light up flawlessly for the new events without breaking the architecture.
+3. **Map Tying:** Safely add the GPS coordinates for the 2 new events to the `MAP_EVENTS` array in [events.py](file://wsl.localhost/Ubuntu/home/chinni/india_innovates/Pramaan/frontend/utils/events.py).
 
-### [GAP-15] Auto-Search has no offline fallback/cache
-#### [MODIFY] [04_⚡_Live_Ingestion.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/04_⚡_Live_Ingestion.py)
-- After a successful scrape, save result to `data/cache/last_autosearch.json`.
-- Add "Use cached result" checkbox. If checked, load from that file instead of calling network.
+## Phase 3: Final Verification & PRD
+- Verify the map renders perfectly, tabs display rich curated intelligence, and the 4 hollow events are completely gone.
+- Write the V5 PRD documenting the current robust demo state (including the blast score engine and scheme beneficiary models).
 
 ---
 
-### [GAP-18] "Clear Graph Demo Nodes" is dangerous
-#### [MODIFY] [04_⚡_Live_Ingestion.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/04_⚡_Live_Ingestion.py)
-- Wrap in `st.expander("⚠️ Developer Tools")`.
-- Inside: add `st.warning("This will remove demo nodes from Neo4j.") + st.button("Confirm Clear")`.
+# Agentic Ingestion Pipeline — Implementation
 
----
+## Overview
 
-## SHOULD FIX (6 gaps)
+The Live Ingestion screen is backed by a fully implemented **3-path agentic ingestion pipeline**. The agent acts as a **classifier and router** — it does not do deep extraction itself. A deterministic downstream sweeper (`agent/loader.py`) handles extraction, schema mapping, and Neo4j writes.
 
-### [GAP-1] Only Ward 45 has data — filter ward dropdown
-#### [MODIFY] [queries.py](file:///E:/INDIA_INNOVATES/Pramaan/backend/app/queries.py)
-- Add `GET_WARDS_WITH_ASSETS` Cypher query.
-#### [MODIFY] [wards.py](file:///E:/INDIA_INNOVATES/Pramaan/backend/app/routers/wards.py)
-- Add `/wards/with-assets` endpoint.
-#### [MODIFY] [01_🏙_Ward_Map.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/01_🏙_Ward_Map.py)
-- Use `with-assets` endpoint for dropdown. Store selection in `st.session_state.selected_ward`.
+## Components Built
 
----
+| File | Role |
+|------|------|
+| `agent/classifier.py` | Main agent entry — Gemini 1.5 Flash function calling, classifies input topics |
+| `agent/tools.py` | Tool definitions — async Crawl4AI scraper, API fetcher |
+| `agent/loader.py` | Downstream sweeper — scans raw folders, calls ai_service, commits to Neo4j |
+| `run_agent.py` | APScheduler daemon — 24h default, configurable |
+| `backend/app/routers/agentic.py` | FastAPI endpoint `POST /ingest/agentic` — wires UI to agent |
+| `backend/app/services/ai_service.py` | `extract_ontology()` — canonical node/edge extraction |
+| `backend/app/services/verification_agent.py` | Confidence scoring on extracted entities |
+| `backend/app/services/scheduler.py` | APScheduler integration for auto-ingestion |
 
-### [GAP-2] Delivery score formula hidden + [GAP-5] No gap warning
-#### [MODIFY] [01_🏙_Ward_Map.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/01_🏙_Ward_Map.py)
-- Add `st.caption("Score = assets with at least 1 evidence ÷ total assets × 100")` below score metric.
-- Add `st.warning(f"⚠️ {total - verified} assets are missing evidence links.")`.
+## 3-Path Pipeline
 
----
+### Path 1 — Structured (API / tabular)
+- **Input:** REST API (data.gov.in, RBI, ISRO) or CSV/JSON URL
+- **Tools:** `requests`, `pandas`, `pydantic`
+- **Flow:** Agent fetches → saves to `/data/structured/raw/` → loader maps schema → Neo4j
 
-### [GAP-9] KML auto-import badge in Proof Chain
-#### [MODIFY] [02_🧷_Proof_Chain.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/02_🧷_Proof_Chain.py)
-- After asset name, check `asset.get('source') == 'KML_auto'` and show `st.caption("📌 Auto-imported from KML. Evidence pending.")`.
+### Path 2 — Semi-Structured (PDF / XML / Excel / KML)
+- **Input:** Files in `/inbox/` dropzone or agent-fetched
+- **Tools:** `PyMuPDF`, `lxml`, `openpyxl`, `markdown`, `fastkml`
+- **Flow:** Agent routes → saves to `/data/semi_structured/raw/<type>/` → loader extracts → Neo4j
 
----
+### Path 3 — Unstructured (Web docs / press releases)
+- **Input:** URL or topic string
+- **Tools:** **Crawl4AI** (async headless JS → Markdown) + **Firecrawl** fallback
+- **Flow:** Agent scrapes → saves to `/data/unstructured/raw/` → loader chunks + extracts via `ai_service.extract_ontology()` → Neo4j → archived to `/processed/`
 
-### [GAP-10] No graph visualization in Proof Chain
-#### [MODIFY] [02_🧷_Proof_Chain.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/02_🧷_Proof_Chain.py)
-- Add a pyvis network graph showing: Scheme → Asset → Region → Beneficiary.
-- Colors: blue=Scheme, orange=Asset, green=Region, purple=Beneficiary, grey=Evidence.
+## Ingestion Trigger Flow
 
----
+```
+UI: Run Agent button / Auto-Scheduler (15m/1h/6h/24h)
+        ↓
+POST /ingest/agentic {topic: "..."}
+        ↓
+classifier.py → classify_and_route() → {source_type, fetch_method, destination}
+        ↓
+tools.py → fetch/scrape → save raw file
+        ↓
+loader.py → ai_service.extract_ontology() → nodes[] + edges[]
+        ↓
+Neo4j MERGE (constraints + indexes) → UI feed refresh
+```
 
-### [GAP-11] Questions hardcoded to Ward 45
-#### [MODIFY] [03_❓_Questions.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/03_❓_Questions.py)
-- Add ward selector at top, reading from `st.session_state.get('selected_ward', 'REG_W45')`.
-- Pass ward_id to all 4 query functions.
+## Data Lake Structure
 
----
+```
+data/
+├── structured/
+│   ├── raw/            ← API JSON responses (data.gov.in, RBI, ISRO)
+│   └── processed/      ← Schema-mapped canonical files
+├── semi_structured/
+│   ├── raw/
+│   │   ├── pdf/        ← Ministry reports, NDMA bulletins
+│   │   ├── kml/        ← Geo overlays
+│   │   ├── xml/        ← PIB feeds
+│   │   └── md/         ← Markdown documents
+│   └── processed/
+└── unstructured/
+    ├── raw/            ← Crawl4AI markdown output
+    └── processed/      ← Entity-extracted + archived
+inbox/                  ← Manual file drop zone
+```
 
-### [GAP-16 + GAP-17] No post-ingestion confirmation or redirect
-#### [MODIFY] [04_⚡_Live_Ingestion.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/04_⚡_Live_Ingestion.py)
-- After ingest, show matched/new asset names.
-- Add `st.page_link("pages/02_🧷_Proof_Chain.py", ...)`.
+## MVP vs Production
 
----
-
-## NICE TO HAVE (3 gaps)
-
-### [GAP-19] Empty home page + [GAP-20] Branding
-#### [MODIFY] [app.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/app.py)
-- Add PRAMAAN logo (emoji header), tagline, 3 bullet points, page link to Ward Map.
-#### [MODIFY] [config.toml](file:///E:/INDIA_INNOVATES/Pramaan/frontend/.streamlit/config.toml)
-- Add theme colors: primaryColor="#E63946", backgroundColor="#0D1117", etc.
-
-### [GAP-13] NL query in Questions page
-#### [MODIFY] [03_❓_Questions.py](file:///E:/INDIA_INNOVATES/Pramaan/frontend/pages/03_❓_Questions.py)
-- Add freetext input above radio buttons, route to correct endpoint.
-
-## Verification Plan
-- Hit `/wards/with-assets` to confirm filtered list.
-- Navigate to Proof Chain → select ASSET_DRAIN_GALI7 → confirm beneficiaries render and subgraph shows.
-- Try Auto-Search → check `data/cache/last_autosearch.json` is created.
-- Use cached result checkbox → confirm offline load works.
+| Aspect | MVP (Demo) | Production |
+|--------|-----------|------------|
+| Topics | 8 curated demo topics | Live PIB, NDMA, data.gov.in, IMD |
+| Scheduler | Manual + 15m–24h timer | Continuous 24h daemon |
+| Crawl4AI | Integrated, tested | Full JS-SPA scraping |
+| Gemini classifier | Function calling, working | Same — scale to Claude 3 |
+| Neo4j writes | MERGE with dedup | Same + conflict resolution |

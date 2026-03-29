@@ -1,126 +1,165 @@
 """
-NewsService — PRAMAAN v3.1
-Guaranteed-working RSS scraper using Google News RSS + feedparser.
-No API key required. Uses multi-query fallback strategy.
+NewsService — PRAMAAN v4.0
+Google News RSS scraper for national intelligence events.
+Queries are built around event names + official Indian source domains (v1 whitelist).
+No API key required.
 """
+import time
 import feedparser
 import urllib.parse
 from datetime import datetime
 from typing import List, Dict
 
+from app.config import is_allowed_source
+
+_RSS_RETRIES = 3
+_RSS_DELAY   = 2.0   # seconds between retries
+
 
 class NewsService:
 
     @staticmethod
-    def fetch_google_news(query: str) -> List[Dict]:
-        """
-        Legacy method — wraps scrape_news_for_asset with a single query.
-        Called by /scrape/news endpoint.
-        """
-        results = NewsService.scrape_news_for_asset(
-            asset_name=query,
-            ward_name="",
-            scheme_name=""
-        )
-        # Normalize to legacy field names for backward compat
-        return [
-            {
-                "title":      r.get("title", ""),
-                "link":       r.get("url", ""),
-                "published":  r.get("date", ""),
-                "summary":    r.get("snippet", ""),
-                "relevance":  r.get("relevance", 0),
-                "query_used": r.get("query_used", ""),
-            }
-            for r in results
-        ]
+    def fetch_rss(url: str) -> List[Dict]:
+        """Fetch any RSS feed URL directly. Used by scheduler for config-driven feeds."""
+        try:
+            feed = feedparser.parse(url)
+            return [
+                {
+                    "title":   e.get("title", ""),
+                    "summary": e.get("summary", "")[:400],
+                    "url":     e.get("link", ""),
+                    "date":    e.get("published", ""),
+                    "source":  (e.get("source") or {}).get("title", "RSS"),
+                }
+                for e in (feed.entries or [])[:10]
+            ]
+        except Exception as exc:
+            print(f"[NewsService] fetch_rss error for {url}: {exc}")
+            return []
+
+    # Keywords that indicate a topic is already India-centric
+    _INDIA_KEYWORDS = {
+        "india", "indian", "pib", "isro", "ndma", "modi", "jaishankar",
+        "delhi", "mumbai", "kashmir", "sindoor", "pahalgam", "rupee", "sensex",
+    }
 
     @staticmethod
-    def scrape_news_for_asset(
-        asset_name: str,
-        ward_name: str,
-        scheme_name: str = ""
+    def _is_india_topic(query: str) -> bool:
+        words = {w.lower() for w in query.split()}
+        return bool(words & NewsService._INDIA_KEYWORDS)
+
+    @staticmethod
+    def fetch_google_news(query: str) -> List[Dict]:
+        """
+        Fetch Google News RSS for a query string.
+        Called by agentic agent. Uses open queries (no forced India) so breaking
+        international events (e.g. Iran navy chief killed) are also captured.
+        """
+        return NewsService.scrape_news_for_event(event_name=query, force_india=False)
+
+    @staticmethod
+    def scrape_news_for_event(
+        event_name: str,
+        domain: str = "",
+        max_results: int = 5,
+        force_india: bool = True,
     ) -> List[Dict]:
         """
-        Scrape Google News RSS for governance evidence.
-        Tries 3 queries from specific → broad. Returns first batch that works.
-        Includes keyword-based relevance filtering to avoid 'Property Tax' pollution.
+        Scrape Google News RSS for a national intelligence event.
+        Tries queries from specific → broad. Filters results to allowed source domains.
+
+        Args:
+            event_name:   Human-readable event name
+            domain:       Optional domain context
+            max_results:  Max articles to return
+            force_india:  If False, lead with open query (no India bias) so
+                          breaking international events are captured first.
         """
-        # ── 1. Clean Inputs ──────────────────────────────────────────────────
-        # Remove "DMC Ward No - " or "Ward " prefixes for cleaner search
-        clean_ward = ward_name.replace("DMC Ward No - ", "").replace("Ward ", "").strip()
-        asset_clean = asset_name.split("(")[0].strip() # Remove (type) suffix if any
+        event_clean = event_name.strip()
+        india_topic = NewsService._is_india_topic(event_clean)
 
-        # ── 2. Build 3 query tiers ──────────────────────────────────────────
-        q1 = f'"{asset_clean}" {clean_ward} MCD Delhi'
-        q2 = f'{asset_clean} {clean_ward} MCD Delhi'
-        q3 = f"MCD Delhi {scheme_name or 'infrastructure'} {clean_ward} 2025"
+        if force_india or india_topic:
+            # India-centric topic — official sources first
+            queries = [
+                f'"{event_clean}" India site:pib.gov.in OR site:ndma.gov.in OR site:isro.gov.in OR site:imd.gov.in',
+                f'"{event_clean}" India official government',
+                f'{event_clean} India {domain}'.strip(),
+                event_clean,                          # bare fallback — no India filter
+            ]
+        else:
+            # International / breaking news — raw query first, India angle as fallback
+            queries = [
+                event_clean,                          # exact raw query — gets breaking news
+                f'{event_clean} latest news',
+                f'{event_clean} India impact',        # India strategic angle
+                f'{event_clean} India {domain}'.strip(),
+            ]
 
-        queries = [q1, q2, q3]
-        print(f"[NewsService] Scrape for: {asset_clean} | Ward: {clean_ward}")
+        check_words = {w.lower() for w in event_clean.split() if len(w) > 3}
+        stop_words  = {
+            "india", "2020", "2021", "2022", "2023", "2024", "2025", "2026",
+            "the", "and", "for", "news", "latest",
+        }
+        check_words -= stop_words
 
-        # ── 3. Define Must-Have Relevance Keywords ──────────────────────────
-        # We want the result to at least mention the asset type or name
-        check_words = set()
-        if asset_clean:
-            check_words.update(asset_clean.lower().split())
-        if clean_ward:
-            check_words.update(clean_ward.lower().split())
-        
-        # Add broad category words if specific asset name is complex
-        if "drain" in asset_name.lower(): check_words.add("drain")
-        if "water" in asset_name.lower(): check_words.add("water")
-        if "road" in asset_name.lower():  check_words.add("road")
-
-        # Remove very common words
-        stop_words = {"mcd", "delhi", "the", "and", "for", "ward", "no", "-"}
-        check_words = {w for w in check_words if w not in stop_words and len(w) > 2}
-
-        print(f"[NewsService] Relevance keywords: {check_words}")
+        print(f"[NewsService] Scraping for event: {event_clean} | domain: {domain}")
 
         for query in queries:
             encoded = urllib.parse.quote(query)
             rss_url = f"https://news.google.com/rss/search?q={encoded}&hl=en-IN&gl=IN&ceid=IN:en"
-            
-            try:
-                feed = feedparser.parse(rss_url)
-                entries = feed.entries or []
-                
-                valid_results = []
-                for entry in entries:
-                    title = entry.get("title", "").lower()
-                    snip  = entry.get("summary", "").lower()
-                    
-                    # Score relevance: how many check_words appear?
-                    match_count = sum(1 for word in check_words if word in title or word in snip)
-                    
-                    # RELEVANCE CRITERIA: 
-                    # If it's a specific query (q1/q2), we need at least 1 match.
-                    # If it's q3, we need at least 2 matches to be sure.
-                    required = 1 if query != q3 else 2
-                    
-                    if match_count >= required:
-                        valid_results.append({
-                            "title":       entry.get("title", ""),
-                            "url":         entry.get("link", ""),
-                            "snippet":     entry.get("summary", "")[:300],
-                            "source":      (entry.get("source") or {}).get("title", "News"),
-                            "date":        entry.get("published", datetime.now().strftime("%d %b %Y")),
-                            "relevance":   match_count,
-                            "query_used":  query
-                        })
-                    
-                    if len(valid_results) >= 3: break
-                
-                if valid_results:
-                    print(f"[NewsService] ✅ Found {len(valid_results)} relevant items for query: '{query}'")
-                    return valid_results
-                    
-            except Exception as e:
-                print(f"[NewsService] Query Error: {e}")
+
+            feed = None
+            for attempt in range(1, _RSS_RETRIES + 1):
+                try:
+                    feed = feedparser.parse(rss_url)
+                    if feed.bozo and not feed.entries:
+                        raise feed.bozo_exception
+                    break
+                except Exception as e:
+                    if attempt < _RSS_RETRIES:
+                        time.sleep(_RSS_DELAY)
+                    else:
+                        feed = None
+
+            if feed is None:
                 continue
 
-        print("[NewsService] No highly relevant evidence found.")
+            valid_results = []
+            for entry in (feed.entries or []):
+                title = entry.get("title", "").lower()
+                snip  = entry.get("summary", "").lower()
+                url   = entry.get("link", "")
+
+                # Relevance check
+                match_count = sum(1 for w in check_words if w in title or w in snip)
+                if match_count == 0:
+                    continue
+
+                # Domain whitelist check — prefer whitelisted sources, allow others
+                allowed = is_allowed_source(url)
+
+                valid_results.append({
+                    "title":        entry.get("title", ""),
+                    "url":          url,
+                    "snippet":      entry.get("summary", "")[:300],
+                    "source":       (entry.get("source") or {}).get("title", "News"),
+                    "date":         entry.get("published", datetime.now().strftime("%d %b %Y")),
+                    "relevance":    match_count,
+                    "whitelisted":  allowed,
+                    "query_used":   query,
+                })
+
+                if len(valid_results) >= max_results:
+                    break
+
+            if valid_results:
+                # Sort: whitelisted sources first, then by relevance
+                valid_results.sort(key=lambda x: (not x["whitelisted"], -x["relevance"]))
+                print(f"[NewsService] ✅ {len(valid_results)} results for: '{query}' "
+                      f"({sum(1 for r in valid_results if r['whitelisted'])} whitelisted)")
+                return valid_results
+
+        print(f"[NewsService] No results found for: {event_clean}")
         return []
 
 

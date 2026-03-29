@@ -1,21 +1,20 @@
 """
-Run once to set up Neo4j constraints and indexes for Pramaan.
+setup_constraints.py — PRAMAAN Neo4j Schema Setup
+Creates uniqueness constraints and indexes for all node labels.
 
-Constraints use domain-specific PK property names to match the CSV schema
-(region_id, scheme_id, asset_id, etc.) — NOT a generic 'id' field.
+Run ONCE before loading any data:
+  python3 backend/scripts/setup_constraints.py
 
-Usage (from project root):
-    PYTHONPATH=backend .venv/bin/python3 backend/scripts/setup_constraints.py
+Safe to re-run — uses CREATE CONSTRAINT IF NOT EXISTS.
 """
 
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from app.neo4j_client import get_driver
+from backend.app.neo4j_client import get_driver
 
-# (label, pk_property)
 CONSTRAINTS = [
     ("Region",      "region_id"),
     ("Scheme",      "scheme_id"),
@@ -26,62 +25,54 @@ CONSTRAINTS = [
     ("Event",       "event_id"),
 ]
 
-# (label, property) — for fast lookups beyond the PK
 INDEXES = [
-    ("Region", "name"),
+    # Region filtering by type (heavily used: type='ward', type='state', etc.)
     ("Region", "type"),
-    ("Asset",  "name"),
-    ("Asset",  "status"),
+    # Asset filtering by type and status
     ("Asset",  "type"),
-    ("Scheme", "name"),
+    ("Asset",  "status"),
+    ("Asset",  "region_id"),
+    # Region geo lookups
+    ("Region", "lgd_code"),
 ]
 
 
-def run():
-    driver = get_driver()
+def setup(driver):
     with driver.session() as session:
-
-        print("Dropping old generic 'id' constraints if they exist...")
-        old = [
-            "unique_ward_id", "unique_region_id", "unique_scheme_id",
-            "unique_actor_id", "unique_asset_id", "unique_beneficiary_id",
-            "unique_evidence_id", "unique_event_id",
-        ]
-        for name in old:
-            session.run(f"DROP CONSTRAINT {name} IF EXISTS")
-        print("  Done.")
-
-        print("\nCreating uniqueness constraints (domain-specific PKs)...")
+        print("\nCreating uniqueness constraints...")
         for label, prop in CONSTRAINTS:
-            name = f"unique_{label.lower()}_{prop}"
+            name = f"constraint_{label.lower()}_{prop}"
             cypher = (
                 f"CREATE CONSTRAINT {name} IF NOT EXISTS "
                 f"FOR (n:{label}) REQUIRE n.{prop} IS UNIQUE"
             )
             session.run(cypher)
-            print(f"  OK  {label}.{prop}")
+            print(f"  ✓ UNIQUE {label}.{prop}")
 
         print("\nCreating indexes...")
         for label, prop in INDEXES:
-            name = f"idx_{label.lower()}_{prop}"
+            name = f"index_{label.lower()}_{prop}"
             cypher = (
                 f"CREATE INDEX {name} IF NOT EXISTS "
                 f"FOR (n:{label}) ON (n.{prop})"
             )
             session.run(cypher)
-            print(f"  OK  {label}.{prop}")
+            print(f"  ✓ INDEX  {label}.{prop}")
 
-        print("\nVerifying...")
+        # Verify
+        print("\nActive constraints:")
         result = session.run("SHOW CONSTRAINTS")
-        constraints = [r["name"] for r in result]
-        print(f"  {len(constraints)} constraint(s) active")
+        for row in result:
+            print(f"  {row['name']} — {row.get('type', '')}")
 
-        result = session.run("SHOW INDEXES")
-        indexes = [r["name"] for r in result]
-        print(f"  {len(indexes)} index(es) active")
+        print("\nActive indexes:")
+        result = session.run("SHOW INDEXES WHERE type <> 'LOOKUP'")
+        for row in result:
+            print(f"  {row['name']} — {row.get('state', '')}")
 
     print("\nDone.")
 
 
 if __name__ == "__main__":
-    run()
+    driver = get_driver()
+    setup(driver)

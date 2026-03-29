@@ -1,0 +1,3565 @@
+{
+  "meta": {
+    "version": "4.0",
+    "description": "PRAMAAN Knowledge Graph v4.0 \u2014 28 events \u00b7 domain-specific panel data \u00b7 market reactions \u00b7 IMD audits \u00b7 policy status \u00b7 defense force metadata",
+    "sources": "PIB, NDMA, ISRO, IMD, MEA, MoHFW, Parliament Q&A, Wikipedia (all publicly verifiable)"
+  },
+  "domains": [
+    {
+      "domain_id": "DOM_CLIMATE",
+      "name": "Climate",
+      "description": "Natural hazards, weather events, environmental change"
+    },
+    {
+      "domain_id": "DOM_ECONOMICS",
+      "name": "Economics",
+      "description": "Investment, schemes, financial flows, development"
+    },
+    {
+      "domain_id": "DOM_GOVERNANCE",
+      "name": "Governance",
+      "description": "Public administration, disaster response, accountability"
+    },
+    {
+      "domain_id": "DOM_SOCIETY",
+      "name": "Society",
+      "description": "Human displacement, casualties, welfare, conflict"
+    },
+    {
+      "domain_id": "DOM_GEOPOLITICS",
+      "name": "Geopolitics",
+      "description": "Inter-state relations, Parliament, policy decisions"
+    },
+    {
+      "domain_id": "DOM_DEFENSE",
+      "name": "Defense",
+      "description": "Military deployment, security forces, strategic assets"
+    },
+    {
+      "domain_id": "DOM_TECHNOLOGY",
+      "name": "Technology",
+      "description": "Digital infrastructure, satellites, semiconductors, innovation"
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "REG_INDIA",
+      "name": "India",
+      "type": "country",
+      "lat": 20.5937,
+      "lon": 78.9629
+    },
+    {
+      "region_id": "REG_KERALA",
+      "name": "Kerala",
+      "type": "state",
+      "lat": 10.8505,
+      "lon": 76.2711
+    },
+    {
+      "region_id": "REG_WAYANAD",
+      "name": "Wayanad",
+      "type": "district",
+      "lat": 11.6854,
+      "lon": 76.132
+    },
+    {
+      "region_id": "REG_ODISHA",
+      "name": "Odisha",
+      "type": "state",
+      "lat": 20.9517,
+      "lon": 85.0985
+    },
+    {
+      "region_id": "REG_PURI",
+      "name": "Puri",
+      "type": "district",
+      "lat": 19.8135,
+      "lon": 85.8312
+    },
+    {
+      "region_id": "REG_UTTARAKHAND",
+      "name": "Uttarakhand",
+      "type": "state",
+      "lat": 30.0668,
+      "lon": 79.0193
+    },
+    {
+      "region_id": "REG_CHAMOLI",
+      "name": "Chamoli",
+      "type": "district",
+      "lat": 30.4163,
+      "lon": 79.3206
+    },
+    {
+      "region_id": "REG_JOSHIMATH",
+      "name": "Joshimath",
+      "type": "city",
+      "lat": 30.5579,
+      "lon": 79.5634
+    },
+    {
+      "region_id": "REG_DELHI",
+      "name": "Delhi",
+      "type": "state",
+      "lat": 28.7041,
+      "lon": 77.1025
+    },
+    {
+      "region_id": "REG_MANIPUR",
+      "name": "Manipur",
+      "type": "state",
+      "lat": 24.6637,
+      "lon": 93.9063
+    },
+    {
+      "region_id": "REG_GUJARAT",
+      "name": "Gujarat",
+      "type": "state",
+      "lat": 22.2587,
+      "lon": 71.1924
+    },
+    {
+      "region_id": "REG_DHOLERA",
+      "name": "Dholera",
+      "type": "city",
+      "lat": 22.244,
+      "lon": 72.1808
+    },
+    {
+      "region_id": "REG_ANDHRA",
+      "name": "Andhra Pradesh",
+      "type": "state",
+      "lat": 15.9129,
+      "lon": 79.74
+    },
+    {
+      "region_id": "REG_SRIHARIKOTA",
+      "name": "Sriharikota",
+      "type": "city",
+      "lat": 13.7199,
+      "lon": 80.2304
+    },
+    {
+      "region_id": "REG_BENGALURU",
+      "name": "Bengaluru",
+      "type": "city",
+      "lat": 12.9716,
+      "lon": 77.5946
+    },
+    {
+      "region_id": "REG_JK",
+      "name": "Jammu & Kashmir",
+      "type": "ut",
+      "lat": 33.7782,
+      "lon": 76.5762
+    },
+    {
+      "region_id": "REG_PAKISTAN",
+      "name": "Pakistan",
+      "type": "country",
+      "lat": 30.3753,
+      "lon": 69.3451
+    },
+    {
+      "region_id": "REG_CANADA",
+      "name": "Canada",
+      "type": "country",
+      "lat": 56.1304,
+      "lon": -106.3468
+    },
+    {
+      "region_id": "REG_SAUDI",
+      "name": "Saudi Arabia",
+      "type": "country",
+      "lat": 23.8859,
+      "lon": 45.0792
+    },
+    {
+      "region_id": "REG_ISRAEL",
+      "name": "Israel",
+      "type": "country",
+      "lat": 31.0461,
+      "lon": 34.8516
+    },
+    {
+      "region_id": "REG_W45",
+      "name": "Ward 45 \u2014 Shahdara South",
+      "type": "ward",
+      "lat": 28.6736,
+      "lon": 77.2795
+    },
+    {
+      "region_id": "REG_W45_GALI3",
+      "name": "Gali 3, Ward 45",
+      "type": "street",
+      "lat": 28.674,
+      "lon": 77.28
+    },
+    {
+      "region_id": "REG_IRAN",
+      "name": "Iran",
+      "type": "country",
+      "lat": 32.4279,
+      "lon": 53.688
+    },
+    {
+      "region_id": "REG_WEST_ASIA",
+      "name": "West Asia",
+      "type": "region",
+      "lat": 29.0,
+      "lon": 45.0
+    },
+    {
+      "region_id": "REG_UK",
+      "name": "United Kingdom",
+      "type": "country",
+      "lat": 55.3781,
+      "lon": -3.436
+    },
+    {
+      "region_id": "REG_POJK",
+      "name": "Pakistan-Occupied J&K (PoJK)",
+      "type": "region",
+      "lat": 34.3718,
+      "lon": 73.471
+    }
+  ],
+  "actors": [
+    {
+      "actor_id": "ACT_NDMA",
+      "name": "National Disaster Management Authority",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_NDRF",
+      "name": "National Disaster Response Force",
+      "type": "military"
+    },
+    {
+      "actor_id": "ACT_INDIAN_ARMY",
+      "name": "Indian Army",
+      "type": "military"
+    },
+    {
+      "actor_id": "ACT_IAF",
+      "name": "Indian Air Force",
+      "type": "military"
+    },
+    {
+      "actor_id": "ACT_MHA",
+      "name": "Ministry of Home Affairs",
+      "type": "ministry"
+    },
+    {
+      "actor_id": "ACT_MeitY",
+      "name": "Ministry of Electronics & Information Technology",
+      "type": "ministry"
+    },
+    {
+      "actor_id": "ACT_PM_MODI",
+      "name": "Prime Minister Narendra Modi",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_KERALA_GOVT",
+      "name": "Government of Kerala",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_ODISHA_GOVT",
+      "name": "Government of Odisha",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_DELHI_GOVT",
+      "name": "Government of Delhi (AAP)",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_MANIPUR_GOVT",
+      "name": "Government of Manipur",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_NTPC",
+      "name": "NTPC Limited",
+      "type": "company"
+    },
+    {
+      "actor_id": "ACT_ISRO",
+      "name": "Indian Space Research Organisation",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_IMD",
+      "name": "India Meteorological Department",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_TATA_ELEC",
+      "name": "Tata Electronics Pvt Ltd",
+      "type": "company"
+    },
+    {
+      "actor_id": "ACT_CG_POWER",
+      "name": "CG Power and Industrial Solutions",
+      "type": "company"
+    },
+    {
+      "actor_id": "ACT_POWERCHIP",
+      "name": "Powerchip Semiconductor Manufacturing Corp",
+      "type": "company"
+    },
+    {
+      "actor_id": "ACT_PARLIAMENT",
+      "name": "Parliament of India",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_CRPF",
+      "name": "Central Reserve Police Force",
+      "type": "military"
+    },
+    {
+      "actor_id": "ACT_ASSAM_RIFLES",
+      "name": "Assam Rifles",
+      "type": "military"
+    },
+    {
+      "actor_id": "ACT_DOS",
+      "name": "Department of Space",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_MEA",
+      "name": "Ministry of External Affairs",
+      "type": "ministry"
+    },
+    {
+      "actor_id": "ACT_US_GOVT",
+      "name": "US Government",
+      "type": "foreign_govt"
+    },
+    {
+      "actor_id": "ACT_G20_SHERPA",
+      "name": "India G20 Sherpa Office",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_RBI",
+      "name": "Reserve Bank of India",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_MoPNG",
+      "name": "Ministry of Petroleum & Natural Gas",
+      "type": "ministry"
+    },
+    {
+      "actor_id": "ACT_CCS",
+      "name": "Cabinet Committee on Security",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_DPIIT",
+      "name": "Dept for Promotion of Industry & IT",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_UK_GOVT",
+      "name": "UK Government",
+      "type": "foreign_government"
+    },
+    {
+      "actor_id": "ACT_SP_GLOBAL",
+      "name": "S&P Global Ratings",
+      "type": "institution"
+    },
+    {
+      "actor_id": "ACT_LABOUR_MIN",
+      "name": "Ministry of Labour & Employment",
+      "type": "government"
+    },
+    {
+      "actor_id": "ACT_AXIOM_SPACE",
+      "name": "Axiom Space",
+      "type": "private"
+    },
+    {
+      "actor_id": "ACT_TRF_LET",
+      "name": "The Resistance Front / Lashkar-e-Taiba",
+      "type": "non_state"
+    },
+    {
+      "actor_id": "ACT_PAKISTAN_ARMY",
+      "name": "Pakistan Army",
+      "type": "foreign_military"
+    }
+  ],
+  "schemes": [
+    {
+      "scheme_id": "SCH_NDRF_FUND",
+      "name": "National Disaster Response Fund",
+      "ministry": "MHA",
+      "budget_crore": 12390.0,
+      "source_url": "https://ndma.gov.in"
+    },
+    {
+      "scheme_id": "SCH_SDRF",
+      "name": "State Disaster Response Fund",
+      "ministry": "MHA",
+      "budget_crore": 43900.0,
+      "source_url": "https://ndma.gov.in"
+    },
+    {
+      "scheme_id": "SCH_ISM",
+      "name": "India Semiconductor Mission",
+      "ministry": "MeitY",
+      "budget_crore": 76000.0,
+      "source_url": "https://pib.gov.in"
+    },
+    {
+      "scheme_id": "SCH_AMRUT",
+      "name": "AMRUT 2.0",
+      "ministry": "MoHUA",
+      "budget_crore": 66750.0,
+      "source_url": "https://amrut.gov.in"
+    },
+    {
+      "scheme_id": "SCH_ISRO_BUDGET",
+      "name": "ISRO Annual Budget 2023-24",
+      "ministry": "DOS",
+      "budget_crore": 12544.0,
+      "source_url": "https://isro.gov.in"
+    },
+    {
+      "scheme_id": "SCH_PMAY",
+      "name": "Pradhan Mantri Awas Yojana - Urban",
+      "ministry": "Ministry of Housing and Urban Affairs",
+      "type": "implementation",
+      "budget_crore": 401.79,
+      "description": "Housing for All \u2014 urban housing scheme providing pucca houses to eligible urban poor",
+      "source_url": "https://pmaymis.gov.in"
+    }
+  ],
+  "policies": [
+    {
+      "policy_id": "POL_NDMA_ACT",
+      "name": "Disaster Management Act 2005",
+      "date": "2005-12-26",
+      "description": "Framework for disaster management in India",
+      "source_url": "https://ndma.gov.in/About-ndma/Act-Rules-Regulations",
+      "status": "Active \u2014 amended 2024",
+      "state_adoption": "28/28 states",
+      "enforcement": "NDRF: 16 battalions \u00b7 pre-positioning gap"
+    },
+    {
+      "policy_id": "POL_SEMICON_MIS",
+      "name": "India Semiconductor Mission",
+      "date": "2021-12-15",
+      "description": "\u20b976,000 crore incentive for chip manufacturing in India",
+      "source_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=1782616",
+      "status": "Active \u2014 2024",
+      "state_adoption": "National \u2014 MeitY PLI",
+      "enforcement": "Tata Fab operational \u00b7 ISMC delayed"
+    },
+    {
+      "policy_id": "POL_AFSPA",
+      "name": "Armed Forces Special Powers Act",
+      "date": "1958-09-11",
+      "description": "Gives armed forces special powers in disturbed areas",
+      "source_url": "https://mha.gov.in",
+      "status": "Partially revoked \u2014 2022",
+      "state_adoption": "Manipur / Nagaland",
+      "enforcement": "Extended annually \u00b7 MHA review ongoing"
+    },
+    {
+      "policy_id": "POL_EWS_REFORM",
+      "name": "Early Warning System Reform 2024",
+      "date": "2024-08-15",
+      "description": "NDMA directive to strengthen landslide EWS post-Wayanad",
+      "source_url": "https://ndma.gov.in",
+      "status": "Under implementation",
+      "state_adoption": "18/28 states",
+      "enforcement": "IMD alert protocols revised post-Wayanad"
+    },
+    {
+      "policy_id": "POL_YAMUNA_FLOOD",
+      "name": "Yamuna Flood Plain Management",
+      "date": "2023-09-01",
+      "description": "Post-flood encroachment removal & floodplain protection policy",
+      "source_url": "https://dda.gov.in",
+      "status": "Active \u2014 2023",
+      "state_adoption": "Delhi \u2014 LG / DJB / MHA",
+      "enforcement": "AMRUT drain: 41% complete \u00b7 NGT oversight"
+    },
+    {
+      "policy_id": "POL_JOSHI_COMM",
+      "name": "Joshimath Expert Committee Report",
+      "date": "2023-02-08",
+      "description": "Govt committee findings on Joshimath subsidence causes & remediation",
+      "source_url": "https://dst.gov.in",
+      "status": "Recommendations submitted",
+      "state_adoption": "Uttarakhand state",
+      "enforcement": "NTPC halt maintained \u00b7 rehab 70% complete"
+    },
+    {
+      "policy_id": "POL_G20_DECL",
+      "name": "New Delhi G20 Leaders Declaration",
+      "date": "2023-09-10",
+      "description": "Historic consensus G20 declaration on Ukraine, global debt, AI governance, and climate; African Union admitted as permanent member",
+      "source_url": "https://g20.in",
+      "status": "Adopted \u2014 Sep 2023",
+      "state_adoption": "83-nation consensus",
+      "enforcement": "Debt restructuring: 12/40 countries actioned"
+    },
+    {
+      "policy_id": "POL_IMEC_MOU",
+      "name": "India-Middle East-Europe Corridor MoU",
+      "date": "2023-09-09",
+      "description": "Eight-nation MoU for rail-and-shipping corridor connecting India to Europe via Gulf, signed at G20 sidelines",
+      "source_url": "https://pib.gov.in",
+      "status": "MoU signed \u2014 Sep 2023",
+      "state_adoption": "Multilateral \u2014 India/UAE/Saudi/EU/USA",
+      "enforcement": "Stalled \u2014 Hormuz blockade freeze"
+    },
+    {
+      "policy_id": "POL_IRAN_ENERGY_RESPONSE",
+      "name": "India Iran Energy Emergency Response",
+      "date": "2026-03-13",
+      "description": "PM Modi outreach to Iran; Cabinet Committee on Security emergency meetings on energy supply",
+      "source_url": "https://www.cnbc.com/2026/03/13/indias-modi-reaches-out-to-iran",
+      "status": "Emergency protocol \u2014 Mar 2026",
+      "state_adoption": "National \u2014 MoPNG",
+      "enforcement": "SPR drawdown activated \u00b7 spot procurement"
+    },
+    {
+      "policy_id": "POL_INDIA_UK_CETA",
+      "name": "India-UK Comprehensive Economic and Trade Agreement",
+      "date": "2025-07-24",
+      "description": "Signed London \u2014 99% tariff elimination on Indian exports; targets 20B bilateral trade by 2030",
+      "source_url": "https://www.weforum.org/stories/2025/05/uk-india-free-trade-deal/",
+      "status": "Agreement signed \u2014 Jul 2025",
+      "state_adoption": "UK Parliament ratification pending",
+      "enforcement": "Tariff phase-down: 10-year schedule"
+    },
+    {
+      "policy_id": "POL_FOUR_LABOUR_CODES",
+      "name": "Four Labour Codes Enforcement",
+      "date": "2025-11-21",
+      "description": "All 4 Labour Codes enforced replacing 29 existing laws \u2014 India largest structural labour reform since 1991",
+      "source_url": "https://www.ey.com/en_in/technical/alerts-hub/2025/11/new-labour-codes-implemented",
+      "status": "Gazette notified \u2014 Nov 2025",
+      "state_adoption": "28/28 states rules drafted \u00b7 14 states active",
+      "enforcement": "Partial \u2014 phased enforcement from Jan 2026"
+    },
+    {
+      "policy_id": "POL_INDIA_US_DEF_PACT",
+      "name": "India-US 10-Year Major Defence Partnership Framework",
+      "date": "2025-10-31",
+      "description": "Strategic leap framework covering technology co-production, industrial collaboration, Indo-Pacific security integration",
+      "source_url": "https://www.mea.gov.in",
+      "status": "MoU signed \u2014 Oct 2025",
+      "state_adoption": "National \u2014 MoD operative",
+      "enforcement": "ITAR waivers: 14/22 cleared \u00b7 ToT pending"
+    },
+    {
+      "policy_id": "POL_INDUS_SUSPENSION",
+      "name": "Indus Waters Treaty Suspension",
+      "date": "2025-04-23",
+      "description": "India suspended 1960 Indus Waters Treaty citing cross-border terrorism. Pakistan called it weaponization of water. Still suspended March 2026.",
+      "source_url": "https://www.npr.org/2025/07/08/g-s1-73122/pakistan-india-indus-waters-treaty",
+      "status": "Suspended \u2014 Apr 2025",
+      "state_adoption": "National \u2014 Cabinet decision",
+      "enforcement": "No expiry \u00b7 World Bank mediation declined"
+    },
+    {
+      "policy_id": "POL_SINDOOR_DOCTRINE",
+      "name": "Operation Sindoor Strike Doctrine",
+      "date": "2025-05-07",
+      "description": "India established precedent of striking deep inside Pakistan against terror infrastructure \u2014 tri-service, 23-minute precision operation. New red-line doctrine.",
+      "source_url": "https://carnegieendowment.org/posts/2025/05/indian-airstrikes-in-pakistan-may-7-2025",
+      "status": "Operationalised \u2014 May 2025",
+      "state_adoption": "National \u2014 NSA / MoD",
+      "enforcement": "Classified \u2014 doctrine white paper pending"
+    },
+    {
+      "policy_id": "POL_INDIA_PAK_DIPLO_RESET",
+      "name": "India-Pakistan Diplomatic Downgrade",
+      "date": "2025-05-13",
+      "description": "India expelled Pakistan diplomat; both high commissions reduced to 30 staff. Trade and IWT suspension maintained. Deepest diplomatic downgrade since 1971.",
+      "source_url": "https://www.aljazeera.com/news/2025/5/13/india-expels-pakistan-diplomat",
+      "status": "Operative \u2014 May 2025",
+      "state_adoption": "National \u2014 MEA",
+      "enforcement": "Charg\u00e9 d'affaires level \u00b7 Kartarpur closed"
+    },
+    {
+      "policy_id": "POL_IRAN_CEASEFIRE_TALKS",
+      "name": "Iran War Ceasefire Negotiations",
+      "date": "2026-03-01",
+      "description": "Iran rejected US 15-point ceasefire proposal. Pakistan, Oman, Turkey, Egypt engaged in backchannel mediation. India called for de-escalation to restore Hormuz shipping.",
+      "source_url": "https://www.aljazeera.com/news/2026/3/25/iran-calls-us-proposal-to-end-war-maximalist-unreasonable",
+      "status": "Ongoing \u2014 Mar 2026",
+      "state_adoption": "Diplomatic \u2014 MEA / NSA",
+      "enforcement": "Oman back-channel \u00b7 90-day review"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "EVT_WAYANAD_2024",
+      "name": "Wayanad Landslide",
+      "date": "2024-07-30",
+      "domain": "DOM_CLIMATE",
+      "description": "Catastrophic landslide at Mundakkai-Chooralmala villages, Wayanad, Kerala. Triggered by 572mm rainfall in 24 hours. Deadliest landslide in Kerala's history.",
+      "severity": "critical",
+      "source_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2039767",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_CYCLONE_DANA_2024",
+      "name": "Cyclone Dana",
+      "date": "2024-10-25",
+      "domain": "DOM_CLIMATE",
+      "description": "Very Severe Cyclonic Storm Dana made landfall near Bhitarkanika, Odisha. Wind speed 100-110 kmph. 5.84 lakh people evacuated across Odisha and Andhra Pradesh.",
+      "severity": "critical",
+      "source_url": "https://ndma.gov.in",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_JOSHIMATH_2023",
+      "name": "Joshimath Land Subsidence",
+      "date": "2023-01-03",
+      "domain": "DOM_CLIMATE",
+      "description": "Rapid land subsidence in Joshimath, Uttarakhand. ISRO satellite data recorded 5.4cm subsidence in 12 days. 868 houses cracked. NTPC Tapovan-Vishnugad hydropower tunnel construction linked as contributing factor.",
+      "severity": "high",
+      "source_url": "https://www.isro.gov.in/Joshimath_Land_Subsidence.html",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_DELHI_FLOODS_2023",
+      "name": "Delhi Yamuna Floods",
+      "date": "2023-07-13",
+      "domain": "DOM_CLIMATE",
+      "description": "Yamuna river breached all-time high of 208.65m in Delhi, surpassing 1978 record of 207.49m. 27,000+ people evacuated. Heavy rains plus Haryana dam release blamed.",
+      "severity": "critical",
+      "source_url": "https://imd.gov.in",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_MANIPUR_2023",
+      "name": "Manipur Ethnic Violence",
+      "date": "2023-05-03",
+      "domain": "DOM_GEOPOLITICS",
+      "description": "Ethnic conflict between Meitei and Kuki-Zo communities triggered by Meitei ST status demand. 200+ deaths, 70,000+ displaced. 143-day internet shutdown. Army and CRPF deployed.",
+      "severity": "critical",
+      "source_url": "https://mha.gov.in",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_TATA_SEMI_2024",
+      "name": "Tata Semiconductor Fab",
+      "date": "2024-02-29",
+      "domain": "DOM_TECHNOLOGY",
+      "description": "Cabinet approved India's first advanced semiconductor fab. Tata Electronics + Powerchip: \u20b991,000 crore plant at Dholera, Gujarat. CG Power + Renesas: \u20b97,600 crore at Sanand, Gujarat. Under India Semiconductor Mission.",
+      "severity": "high",
+      "source_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2002028",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_CHANDRAYAAN3_2023",
+      "name": "Chandrayaan-3 Moon Landing",
+      "date": "2023-08-23",
+      "domain": "DOM_TECHNOLOGY",
+      "description": "India's Chandrayaan-3 Vikram lander soft-landed on the lunar south pole, making India the first nation to land near the lunar south pole and the fourth globally to achieve a soft Moon landing. Pragyan rover operated for 14 days before entering sleep mode.",
+      "severity": "high",
+      "source_url": "https://www.isro.gov.in/Chandrayaan3.html",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_ADITYAL1_2023",
+      "name": "Aditya-L1 Solar Mission",
+      "date": "2023-09-02",
+      "domain": "DOM_TECHNOLOGY",
+      "description": "ISRO launched India's first solar observatory Aditya-L1 from Sriharikota. Spacecraft inserted into L1 Lagrange-point halo orbit on 6 Jan 2024. Carries 7 payloads including VELC coronagraph for continuous solar observation.",
+      "severity": "high",
+      "source_url": "https://www.isro.gov.in/Aditya_L1.html",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_G20_INDIA_2023",
+      "name": "G20 New Delhi Summit",
+      "date": "2023-09-09",
+      "domain": "DOM_GEOPOLITICS",
+      "description": "India hosted the G20 Leaders' Summit under its Presidency theme 'Vasudhaiva Kutumbakam'. Historic consensus New Delhi Declaration on Ukraine, global debt restructuring, AI governance and sustainable development. African Union admitted as permanent G20 member.",
+      "severity": "high",
+      "source_url": "https://g20.in/en/g20-summit/the-delhi-declaration.html",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_INDIA_CANADA_2023",
+      "name": "India-Canada Diplomatic Row",
+      "date": "2023-09-18",
+      "domain": "DOM_GEOPOLITICS",
+      "description": "Canadian PM Trudeau alleged Indian government involvement in killing of Khalistani separatist Hardeep Singh Nijjar in British Columbia. India expelled Canadian diplomat, suspended visa services, and rejected allegations. Bilateral relations severely strained through 2024.",
+      "severity": "high",
+      "source_url": "https://mea.gov.in",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_IMEC_2023",
+      "name": "IMEC Corridor Signing",
+      "date": "2023-09-09",
+      "domain": "DOM_ECONOMICS",
+      "description": "India, USA, UAE, Saudi Arabia, EU, France, Germany and Italy signed MoU for India-Middle East-Europe Economic Corridor (IMEC) at G20 sidelines. Rail-and-shipping route connecting India to Europe via Gulf, positioning India as a key global trade hub.",
+      "severity": "high",
+      "source_url": "https://pib.gov.in",
+      "confidence": 1.0
+    },
+    {
+      "event_id": "EVT_IRAN_WAR_2026",
+      "name": "Iran-US-Israel War",
+      "date": "2026-02-28",
+      "domain": "DOM_GEOPOLITICS",
+      "description": "US and Israel launched airstrikes on Iran on Feb 28 2026, killing Supreme Leader Khamenei. Iran blockaded Strait of Hormuz. Ceasefire talks ongoing via Pakistan, Oman, Turkey mediators.",
+      "severity": "high",
+      "source_url": "https://www.aljazeera.com/news/2026/3/25/iran-calls-us-proposal-to-end-war-maximalist-unreasonable",
+      "confidence": 0.95
+    },
+    {
+      "event_id": "EVT_TWELVE_DAY_WAR_2025",
+      "name": "Twelve-Day War (Israel-Iran)",
+      "date": "2025-06-13",
+      "domain": "DOM_GEOPOLITICS",
+      "description": "Israel launched strikes on Iran nuclear and military infrastructure June 13-24 2025. Ceasefire after 12 days. Triggered first major oil price spike of 2025; strained India Chabahar port access.",
+      "severity": "high",
+      "source_url": "https://en.wikipedia.org/wiki/Twelve-Day_War",
+      "confidence": 0.95
+    },
+    {
+      "event_id": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "name": "India Extreme Weather Year 2025",
+      "date": "2025-01-01",
+      "domain": "DOM_CLIMATE",
+      "description": "India recorded extreme weather events on 331 of 334 days in 2025 \u2014 4,419 deaths, 11M hectares of crop damage across 23 states. Deadliest year for climate-related disasters.",
+      "severity": "high",
+      "source_url": "https://www.downtoearth.org.in/climate-change/year-of-extremes",
+      "confidence": 0.92
+    },
+    {
+      "event_id": "EVT_INDIA_UK_CETA_2025",
+      "name": "India-UK Trade Agreement (CETA)",
+      "date": "2025-07-24",
+      "domain": "DOM_ECONOMICS",
+      "description": "India and UK signed CETA in London \u2014 99% tariff elimination on Indian exports, targeting 20B bilateral trade by 2030. India most significant bilateral FTA in decades.",
+      "severity": "high",
+      "source_url": "https://www.weforum.org/stories/2025/05/uk-india-free-trade-deal/",
+      "confidence": 0.97
+    },
+    {
+      "event_id": "EVT_SP_UPGRADE_2025",
+      "name": "S&P Sovereign Rating Upgrade (BBB)",
+      "date": "2025-08-14",
+      "domain": "DOM_ECONOMICS",
+      "description": "S&P upgraded India's sovereign credit rating from BBB- to BBB \u2014 first upgrade in 18 years. Signals surge in FII inflows and lower sovereign borrowing costs.",
+      "severity": "high",
+      "source_url": "https://www.business-standard.com/economy/news/sp-global-raises-india-sovereign-credit-rating",
+      "confidence": 0.98
+    },
+    {
+      "event_id": "EVT_LABOUR_CODES_2025",
+      "name": "Four Labour Codes Enforcement",
+      "date": "2025-11-21",
+      "domain": "DOM_GOVERNANCE",
+      "description": "India enforced all four Labour Codes replacing 29 existing laws \u2014 most significant structural labour reform since 1991. Affects 500M+ workforce across all 36 states and UTs.",
+      "severity": "high",
+      "source_url": "https://www.ey.com/en_in/technical/alerts-hub/2025/11/new-labour-codes-implemented",
+      "confidence": 0.97
+    },
+    {
+      "event_id": "EVT_ISRO_SPADEX_2025",
+      "name": "ISRO SpaDeX Satellite Docking",
+      "date": "2025-01-16",
+      "domain": "DOM_TECHNOLOGY",
+      "description": "ISRO achieved in-orbit satellite docking under SpaDeX mission, making India only the 4th nation globally (after USA, Russia, China) with this capability. Power transfer also achieved April 2025.",
+      "severity": "medium",
+      "source_url": "https://www.isro.gov.in/spadex",
+      "confidence": 0.98
+    },
+    {
+      "event_id": "EVT_SHUKLA_ISS_2025",
+      "name": "First Indian on ISS \u2014 Shubhanshu Shukla",
+      "date": "2025-06-25",
+      "domain": "DOM_TECHNOLOGY",
+      "description": "Gp Capt Shubhanshu Shukla became first Indian on ISS via Axiom-4 mission, spending 18 days conducting microgravity experiments. Precursor to Gaganyaan space station programme.",
+      "severity": "medium",
+      "source_url": "https://pib.gov.in/axiom4",
+      "confidence": 0.98
+    },
+    {
+      "event_id": "EVT_INDIA_US_DEFENSE_2025",
+      "name": "India-US 10-Year Defence Partnership Framework",
+      "date": "2025-10-31",
+      "domain": "DOM_DEFENSE",
+      "description": "India and US signed 10-year Major Defence Partnership Framework covering technology co-production, industrial collaboration, and Indo-Pacific security integration. Strategic leap beyond procurement.",
+      "severity": "high",
+      "source_url": "https://www.mea.gov.in/defence-framework-2025",
+      "confidence": 0.97
+    },
+    {
+      "event_id": "EVT_PAHALGAM_2025",
+      "name": "Pahalgam Terror Attack",
+      "date": "2025-04-22",
+      "domain": "DOM_DEFENSE",
+      "description": "26 civilians killed by TRF/LeT militants in Baisaran Valley, Pahalgam, J&K \u2014 deadliest attack on civilians since 2008 Mumbai. India suspended Indus Waters Treaty, trade, and visas with Pakistan next day.",
+      "severity": "high",
+      "source_url": "https://en.wikipedia.org/wiki/2025_Pahalgam_attack",
+      "confidence": 0.98
+    },
+    {
+      "event_id": "EVT_OPERATION_SINDOOR_2025",
+      "name": "Operation Sindoor",
+      "date": "2025-05-07",
+      "domain": "DOM_DEFENSE",
+      "description": "India launched tri-service precision strikes on 9 LeT/JeM terror sites in Pakistan and PoJK (01:05-01:28 AM IST, 23 minutes). Pakistan retaliated with LoC shelling and drones. Ceasefire reached May 10.",
+      "severity": "high",
+      "source_url": "https://en.wikipedia.org/wiki/Operation_Sindoor",
+      "confidence": 0.98
+    },
+    {
+      "event_id": "EVT_LOC_SKIRMISHES_2025",
+      "name": "India-Pakistan LoC Skirmishes",
+      "date": "2025-04-30",
+      "domain": "DOM_DEFENSE",
+      "description": "12 consecutive nights of unprovoked cross-LoC firing by Pakistan Army at Kupwara, Uri, Poonch, Rajouri, Akhnoor, Baramulla. First drone battle between two nuclear-armed states (May 8-9). ~16 Indian civilians killed in Poonch.",
+      "severity": "high",
+      "source_url": "https://en.wikipedia.org/wiki/2025_India%E2%80%93Pakistan_border_skirmishes",
+      "confidence": 0.97
+    },
+    {
+      "event_id": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "name": "India-Pakistan Ceasefire",
+      "date": "2025-05-10",
+      "domain": "DOM_GEOPOLITICS",
+      "description": "India and Pakistan announced ceasefire effective 5 PM IST May 10. Violations reported same evening. Broadly held militarily. Indus Waters Treaty, trade suspension, and diplomatic downgrade remain in place.",
+      "severity": "high",
+      "source_url": "https://en.wikipedia.org/wiki/2025_India-Pakistan_ceasefire_agreement",
+      "confidence": 0.98
+    },
+    {
+      "event_id": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "name": "India-Pakistan Diplomatic Crisis",
+      "date": "2025-05-13",
+      "domain": "DOM_GEOPOLITICS",
+      "description": "Deepest India-Pakistan diplomatic downgrade since 1971 \u2014 mutual diplomat expulsions, high commission staff cut from 55 to 30, trade suspended, Indus Waters Treaty in abeyance. IWT still suspended as of Mar 2026.",
+      "severity": "high",
+      "source_url": "https://en.wikipedia.org/wiki/2025_India%E2%80%93Pakistan_diplomatic_crisis",
+      "confidence": 0.98
+    },
+    {
+      "event_id": "EVT_INDUS_WATERS_CRISIS_2025",
+      "name": "Indus Waters Treaty Suspension",
+      "date": "2025-04-23",
+      "domain": "DOM_GOVERNANCE",
+      "description": "India suspended the 1960 Indus Waters Treaty citing cross-border terrorism after Pahalgam. Pakistan called it weaponization of water. World Bank stated no unilateral suspension clause. International court confirmed jurisdiction Aug 2025. Still in abeyance Mar 2026.",
+      "severity": "high",
+      "source_url": "https://www.npr.org/2025/07/08/g-s1-73122/pakistan-india-indus-waters-treaty",
+      "confidence": 0.98
+    },
+    {
+      "event_id": "EVT_HORMUZ_BLOCKADE_2026",
+      "name": "Strait of Hormuz Blockade",
+      "date": "2026-03-01",
+      "domain": "DOM_ECONOMICS",
+      "description": "Iran blockaded Strait of Hormuz following US-Israel airstrikes \u2014 Brent crude spiked to 20/barrel. 28 Indian ships with ~800 seafarers stranded. India imports 85% of oil through this route. PM Modi activated emergency energy diplomacy.",
+      "severity": "high",
+      "source_url": "https://www.downtoearth.org.in/energy/from-crude-to-basmati-iran-war-threatens-indias-energy-and-trade-stability",
+      "confidence": 0.95
+    },
+    {
+      "event_id": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "name": "Iran War Ceasefire Negotiations",
+      "date": "2026-03-10",
+      "domain": "DOM_GEOPOLITICS",
+      "description": "Iran rejected US 15-point ceasefire proposal as maximalist. Mediators Pakistan, Oman, Turkey, Egypt engaged in backchannel talks. No ceasefire as of Mar 26, 2026. India called for de-escalation to restore Hormuz shipping.",
+      "severity": "high",
+      "source_url": "https://www.aljazeera.com/news/2026/3/25/iran-calls-us-proposal-to-end-war-maximalist-unreasonable",
+      "confidence": 0.93
+    }
+  ],
+  "impacts": [
+    {
+      "impact_id": "IMP_WAYANAD_DEATHS",
+      "type": "deaths",
+      "value": 400,
+      "unit": "persons",
+      "description": "Confirmed fatalities \u2014 Wayanad landslide Jul 2024"
+    },
+    {
+      "impact_id": "IMP_WAYANAD_DISPLACED",
+      "type": "displaced",
+      "value": 10000,
+      "unit": "persons",
+      "description": "People displaced \u2014 Wayanad landslide"
+    },
+    {
+      "impact_id": "IMP_WAYANAD_RAINFALL",
+      "type": "rainfall_mm",
+      "value": 572,
+      "unit": "mm/24h",
+      "description": "Rainfall recorded in 24 hours before Wayanad slide"
+    },
+    {
+      "impact_id": "IMP_DANA_DEATHS",
+      "type": "deaths",
+      "value": 24,
+      "unit": "persons",
+      "description": "Confirmed deaths \u2014 Cyclone Dana Oct 2024"
+    },
+    {
+      "impact_id": "IMP_DANA_EVACUATED",
+      "type": "displaced",
+      "value": 584000,
+      "unit": "persons",
+      "description": "Preemptive evacuations \u2014 Cyclone Dana"
+    },
+    {
+      "impact_id": "IMP_JOSHI_HOUSES",
+      "type": "structures_damaged",
+      "value": 868,
+      "unit": "count",
+      "description": "Houses cracked in Joshimath as of Jan 2023"
+    },
+    {
+      "impact_id": "IMP_JOSHI_SUBSIDENCE",
+      "type": "subsidence_cm",
+      "value": 5.4,
+      "unit": "cm",
+      "description": "Ground subsidence recorded by ISRO SAR in 12 days"
+    },
+    {
+      "impact_id": "IMP_DELHI_YAMUNA",
+      "type": "river_level_m",
+      "value": 208.65,
+      "unit": "metres",
+      "description": "All-time record Yamuna water level Jul 13 2023"
+    },
+    {
+      "impact_id": "IMP_DELHI_DISPLACED",
+      "type": "displaced",
+      "value": 27000,
+      "unit": "persons",
+      "description": "People evacuated \u2014 Delhi floods Jul 2023"
+    },
+    {
+      "impact_id": "IMP_MANIPUR_DEATHS",
+      "type": "deaths",
+      "value": 200,
+      "unit": "persons",
+      "description": "Deaths in Manipur ethnic violence 2023"
+    },
+    {
+      "impact_id": "IMP_MANIPUR_DISPLACED",
+      "type": "displaced",
+      "value": 70000,
+      "unit": "persons",
+      "description": "People displaced \u2014 Manipur conflict 2023"
+    },
+    {
+      "impact_id": "IMP_MANIPUR_INTERNET",
+      "type": "internet_shutdown_days",
+      "value": 143,
+      "unit": "days",
+      "description": "Internet shutdown duration \u2014 Manipur 2023"
+    },
+    {
+      "impact_id": "IMP_TATA_INVESTMENT",
+      "type": "investment_crore",
+      "value": 91000,
+      "unit": "crore_inr",
+      "description": "Tata Electronics + Powerchip fab investment at Dholera"
+    },
+    {
+      "impact_id": "IMP_TATA_JOBS",
+      "type": "jobs_created",
+      "value": 20000,
+      "unit": "persons",
+      "description": "Direct jobs from Tata semiconductor fab"
+    },
+    {
+      "impact_id": "IMP_ISM_BUDGET",
+      "type": "investment_crore",
+      "value": 76000,
+      "unit": "crore_inr",
+      "description": "India Semiconductor Mission total incentive budget"
+    },
+    {
+      "impact_id": "IMP_CH3_LANDING_SITE",
+      "type": "geographic_first",
+      "value": 1,
+      "unit": "global_first",
+      "description": "First nation to land near lunar south pole \u2014 Chandrayaan-3"
+    },
+    {
+      "impact_id": "IMP_CH3_ROVER_DAYS",
+      "type": "mission_duration",
+      "value": 14,
+      "unit": "days",
+      "description": "Pragyan rover operational days on Moon \u2014 Chandrayaan-3"
+    },
+    {
+      "impact_id": "IMP_ADITYAL1_ORBIT",
+      "type": "mission_milestone",
+      "value": 1,
+      "unit": "boolean",
+      "description": "India's first spacecraft in L1 Lagrange-point orbit \u2014 Aditya-L1"
+    },
+    {
+      "impact_id": "IMP_G20_NATIONS",
+      "type": "nations_represented",
+      "value": 43,
+      "unit": "count",
+      "description": "Nations and organisations represented at G20 New Delhi Summit 2023"
+    },
+    {
+      "impact_id": "IMP_G20_AU_ADMIT",
+      "type": "diplomatic_outcome",
+      "value": 1,
+      "unit": "boolean",
+      "description": "African Union admitted as permanent G20 member \u2014 New Delhi Summit 2023"
+    },
+    {
+      "impact_id": "IMP_CANADA_DIPLOMATS",
+      "type": "diplomats_expelled",
+      "value": 41,
+      "unit": "persons",
+      "description": "Canadian diplomats asked to leave India in India-Canada row 2023"
+    },
+    {
+      "impact_id": "IMP_IMEC_LENGTH_KM",
+      "type": "infrastructure_km",
+      "value": 4800,
+      "unit": "km",
+      "description": "Estimated rail corridor length of IMEC from India to Europe"
+    },
+    {
+      "impact_id": "IMP_IRAN_OIL_SPIKE",
+      "type": "economic",
+      "value": 120,
+      "unit": "USD/barrel Brent crude",
+      "description": "Oil price spike from 0 to 20/barrel due to Hormuz blockade"
+    },
+    {
+      "impact_id": "IMP_IRAN_SHIPS_STUCK",
+      "type": "humanitarian",
+      "value": 28,
+      "unit": "ships",
+      "description": "28 Indian ships with ~800 seafarers stranded in Strait of Hormuz"
+    },
+    {
+      "impact_id": "IMP_IRAN_DIASPORA",
+      "type": "social",
+      "value": 9000000,
+      "unit": "people",
+      "description": "~9 million Indian diaspora in West Asia at risk"
+    },
+    {
+      "impact_id": "IMP_12DAY_OIL",
+      "type": "economic",
+      "value": 1,
+      "unit": "spike event",
+      "description": "First major oil price spike of 2025 triggered by 12-Day War"
+    },
+    {
+      "impact_id": "IMP_WEATHER25_DEATHS",
+      "type": "humanitarian",
+      "value": 4419,
+      "unit": "deaths",
+      "description": "India extreme weather 2025: 4,419 deaths across 331/334 days"
+    },
+    {
+      "impact_id": "IMP_WEATHER25_CROP",
+      "type": "agricultural",
+      "value": 11,
+      "unit": "million hectares",
+      "description": "11M hectares of cropped area damaged in 23 states"
+    },
+    {
+      "impact_id": "IMP_UKCETA_TRADE",
+      "type": "economic",
+      "value": 120,
+      "unit": "billion USD bilateral trade target",
+      "description": "India-UK CETA: bilateral trade target doubled to 20B by 2030"
+    },
+    {
+      "impact_id": "IMP_SP_UPGRADE",
+      "type": "economic",
+      "value": 1,
+      "unit": "rating notch",
+      "description": "First S&P upgrade in 18 years \u2014 BBB- to BBB, signals FII surge"
+    },
+    {
+      "impact_id": "IMP_LABOUR_WORKFORCE",
+      "type": "social",
+      "value": 500,
+      "unit": "million workers",
+      "description": "Four Labour Codes affect 500M+ workforce; 29 laws consolidated"
+    },
+    {
+      "impact_id": "IMP_SPADEX_DOCKING",
+      "type": "technology",
+      "value": 4,
+      "unit": "nations",
+      "description": "India 4th nation globally to achieve in-orbit satellite docking"
+    },
+    {
+      "impact_id": "IMP_SHUKLA_ISS",
+      "type": "technology",
+      "value": 18,
+      "unit": "days on ISS",
+      "description": "First Indian on ISS \u2014 18 days of microgravity experiments"
+    },
+    {
+      "impact_id": "IMP_INDUS_DEF_PARTNER",
+      "type": "strategic",
+      "value": 10,
+      "unit": "year framework",
+      "description": "10-year India-US Major Defence Partnership covering co-production"
+    },
+    {
+      "impact_id": "IMP_PAHALGAM_CASUALTIES",
+      "type": "humanitarian",
+      "value": 26,
+      "unit": "deaths",
+      "description": "26 civilians killed \u2014 25 Indians, 1 Nepali \u2014 deadliest attack since 2008 Mumbai"
+    },
+    {
+      "impact_id": "IMP_INDUS_TREATY_SUSPENDED",
+      "type": "strategic",
+      "value": 1,
+      "unit": "treaty suspended",
+      "description": "Indus Waters Treaty 1960 suspended by India on April 23 \u2014 still in abeyance as of Mar 2026"
+    },
+    {
+      "impact_id": "IMP_INDIA_PAK_TRADE_HALT",
+      "type": "economic",
+      "value": 3,
+      "unit": "billion USD annual trade halted",
+      "description": "Bilateral India-Pakistan trade suspended indefinitely after Pahalgam"
+    },
+    {
+      "impact_id": "IMP_SINDOOR_SITES_STRUCK",
+      "type": "military",
+      "value": 9,
+      "unit": "terror sites struck",
+      "description": "9 LeT/JeM infrastructure sites struck in Pakistan + PoJK in 23-minute operation"
+    },
+    {
+      "impact_id": "IMP_SINDOOR_MILITANT_KILL",
+      "type": "military",
+      "value": 100,
+      "unit": "militants (claimed)",
+      "description": "India claimed 100+ militants killed; Pakistan disputes figures claiming civilian casualties"
+    },
+    {
+      "impact_id": "IMP_LOC_FIRING_NIGHTS",
+      "type": "security",
+      "value": 12,
+      "unit": "consecutive nights of LoC firing",
+      "description": "12 consecutive nights of cross-LoC firing Apr 30 - May 10 across Kupwara, Uri, Poonch, Rajouri"
+    },
+    {
+      "impact_id": "IMP_LOC_CIVILIAN_DEATHS",
+      "type": "humanitarian",
+      "value": 16,
+      "unit": "civilian deaths",
+      "description": "~16 Indian civilians killed in Poonch during Pakistani LoC shelling May 7-10"
+    },
+    {
+      "impact_id": "IMP_DRONE_BATTLE",
+      "type": "military",
+      "value": 1,
+      "unit": "first drone battle",
+      "description": "First drone battle between two nuclear-armed nations \u2014 Indian and Pakistani UAVs along western border May 8-9"
+    },
+    {
+      "impact_id": "IMP_DIPLO_STAFF_CUT",
+      "type": "diplomatic",
+      "value": 30,
+      "unit": "staff per mission",
+      "description": "Both high commissions reduced from 55 to 30 staff \u2014 mutual diplomat expulsions May 13"
+    },
+    {
+      "impact_id": "IMP_IWT_ABEYANCE",
+      "type": "strategic",
+      "value": 64,
+      "unit": "years treaty in force",
+      "description": "1960 Indus Waters Treaty put in abeyance \u2014 64-year treaty first ever suspended; World Bank has no provision for unilateral suspension"
+    },
+    {
+      "impact_id": "IMP_HORMUZ_OIL_TANKERS",
+      "type": "economic",
+      "value": 28,
+      "unit": "Indian ships stranded",
+      "description": "28 Indian ships with ~800 Indian seafarers stranded in Strait of Hormuz post-blockade"
+    },
+    {
+      "impact_id": "IMP_IRAN_BRENT_120",
+      "type": "economic",
+      "value": 120,
+      "unit": "USD/barrel",
+      "description": "Brent crude spiked to 20/barrel within one week of Hormuz blockade \u2014 India imports 85% of oil"
+    },
+    {
+      "impact_id": "IMP_IRAN_CEASEFIRE_STALLED",
+      "type": "diplomatic",
+      "value": 1,
+      "unit": "stalled talks",
+      "description": "Iran rejected 15-point US ceasefire proposal as maximalist; Pakistan, Oman, Turkey, Egypt mediating as of Mar 2026"
+    },
+    {
+      "impact_id": "IMP_MKT_SP_UPGRADE",
+      "type": "market_reaction",
+      "value": "+1.8%",
+      "unit": "Sensex",
+      "description": "S&P upgrade: Sensex +1.8%, 10Y bond yield -5bp, INR 83.1\u219281.4. FII inflow \u20b922,000 Cr in 30 days post-upgrade."
+    },
+    {
+      "impact_id": "IMP_MKT_HORMUZ",
+      "type": "market_reaction",
+      "value": "-3.2%",
+      "unit": "Sensex",
+      "description": "Hormuz blockade: Sensex -3.2%, bond yield +18bp, INR 83.8\u219287.6. OMC stocks -8%, GAIL -11%. Brent above $120."
+    },
+    {
+      "impact_id": "IMP_MKT_IRAN_WAR",
+      "type": "market_reaction",
+      "value": "-4.1%",
+      "unit": "Sensex",
+      "description": "Iran-US-Israel war: Sensex -4.1%, bond yield +24bp, INR 83.8\u219288.2. Fuel subsidy bill +\u20b940,000 Cr est."
+    },
+    {
+      "impact_id": "IMP_MKT_TATA_SEMI",
+      "type": "market_reaction",
+      "value": "+2.1%",
+      "unit": "Sensex",
+      "description": "Tata fab announcement: Sensex +2.1%, semiconductor index +14%. Signals India PLI credibility to markets."
+    },
+    {
+      "impact_id": "IMP_MKT_INDIA_UK_CETA",
+      "type": "market_reaction",
+      "value": "+0.6%",
+      "unit": "Sensex",
+      "description": "India-UK CETA: Sensex +0.6%, bond yield -3bp. Pharma and textile sectors led gains."
+    },
+    {
+      "impact_id": "IMP_MKT_IMEC",
+      "type": "market_reaction",
+      "value": "+0.4%",
+      "unit": "Sensex",
+      "description": "IMEC corridor signing: Sensex +0.4%, logistics sector +3%. Modest market reaction \u2014 implementation risk priced in."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "EVD_WAYANAD_PIB",
+      "type": "news",
+      "title": "Massive landslides in Wayanad Kerala \u2014 PIB",
+      "date": "2024-07-30",
+      "source": "PIB",
+      "url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2039767"
+    },
+    {
+      "evidence_id": "EVD_WAYANAD_NDMA",
+      "type": "report",
+      "title": "NDMA Situation Report \u2014 Wayanad Landslide",
+      "date": "2024-08-01",
+      "source": "NDMA",
+      "url": "https://ndma.gov.in"
+    },
+    {
+      "evidence_id": "EVD_DANA_IMD",
+      "type": "data",
+      "title": "IMD Cyclone Dana track & intensity bulletin",
+      "date": "2024-10-24",
+      "source": "IMD",
+      "url": "https://imd.gov.in/en/section/nhac/dynamic/CYCL_BULL.pdf"
+    },
+    {
+      "evidence_id": "EVD_DANA_NDRF",
+      "type": "report",
+      "title": "NDRF Deployment \u2014 Cyclone Dana 56 teams Odisha/AP",
+      "date": "2024-10-25",
+      "source": "NDRF",
+      "url": "https://ndrf.gov.in"
+    },
+    {
+      "evidence_id": "EVD_JOSHI_ISRO",
+      "type": "satellite",
+      "title": "ISRO SAR data \u2014 5.4cm subsidence in 12 days Joshimath",
+      "date": "2023-01-14",
+      "source": "ISRO",
+      "url": "https://www.isro.gov.in/Joshimath_Land_Subsidence.html"
+    },
+    {
+      "evidence_id": "EVD_JOSHI_REPORT",
+      "type": "report",
+      "title": "Expert Committee Report on Joshimath Subsidence",
+      "date": "2023-02-08",
+      "source": "Govt",
+      "url": "https://dst.gov.in"
+    },
+    {
+      "evidence_id": "EVD_DELHI_IMD",
+      "type": "data",
+      "title": "IMD \u2014 Yamuna 208.65m record level Jul 13 2023",
+      "date": "2023-07-13",
+      "source": "IMD",
+      "url": "https://imd.gov.in"
+    },
+    {
+      "evidence_id": "EVD_TATA_PIB",
+      "type": "statement",
+      "title": "Cabinet approves Tata, CG Power semiconductor fabs",
+      "date": "2024-02-29",
+      "source": "PIB",
+      "url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2002028"
+    },
+    {
+      "evidence_id": "EVD_MANIPUR_MHA",
+      "type": "report",
+      "title": "MHA deployment order \u2014 Manipur ethnic violence 2023",
+      "date": "2023-05-04",
+      "source": "MHA",
+      "url": "https://mha.gov.in"
+    },
+    {
+      "evidence_id": "EVD_CH3_ISRO",
+      "type": "data",
+      "title": "ISRO Chandrayaan-3 mission status \u2014 successful soft landing",
+      "date": "2023-08-23",
+      "source": "ISRO",
+      "url": "https://www.isro.gov.in/Chandrayaan3.html"
+    },
+    {
+      "evidence_id": "EVD_CH3_PIB",
+      "type": "statement",
+      "title": "PM Modi congratulates ISRO on Chandrayaan-3 success",
+      "date": "2023-08-23",
+      "source": "PIB",
+      "url": "https://pib.gov.in"
+    },
+    {
+      "evidence_id": "EVD_AL1_ISRO",
+      "type": "data",
+      "title": "Aditya-L1 successfully inserted into L1 halo orbit",
+      "date": "2024-01-06",
+      "source": "ISRO",
+      "url": "https://www.isro.gov.in/Aditya_L1.html"
+    },
+    {
+      "evidence_id": "EVD_G20_DECL",
+      "type": "statement",
+      "title": "G20 New Delhi Leaders' Declaration \u2014 consensus text",
+      "date": "2023-09-10",
+      "source": "G20",
+      "url": "https://g20.in/en/g20-summit/the-delhi-declaration.html"
+    },
+    {
+      "evidence_id": "EVD_G20_PIB",
+      "type": "news",
+      "title": "PM Modi chairs G20 Summit; AU admitted as permanent member",
+      "date": "2023-09-09",
+      "source": "PIB",
+      "url": "https://pib.gov.in"
+    },
+    {
+      "evidence_id": "EVD_CANADA_MEA",
+      "type": "statement",
+      "title": "MEA rejects Canadian allegations on Nijjar killing",
+      "date": "2023-09-19",
+      "source": "MEA",
+      "url": "https://mea.gov.in"
+    },
+    {
+      "evidence_id": "EVD_IMEC_MOU",
+      "type": "statement",
+      "title": "IMEC MoU signed \u2014 India-Middle East-Europe Corridor",
+      "date": "2023-09-09",
+      "source": "PIB",
+      "url": "https://pib.gov.in"
+    },
+    {
+      "evidence_id": "EVD_AMRUT_DELHI_DATAGOV",
+      "type": "dataset",
+      "title": "AMRUT Storm Water Drainage \u2014 NCT Delhi \u2014 data.gov.in",
+      "date": "2026-03-24",
+      "source": "data.gov.in",
+      "url": "https://api.data.gov.in/resource/6e38d0c0-045e-4dce-81d0-eca39519bb07",
+      "asset_id": "ASSET_AMRUT_DRAIN_W45_COMPLETED"
+    },
+    {
+      "evidence_id": "EVD_PMAY_DELHI_DATAGOV",
+      "type": "dataset",
+      "title": "PMAY-U Housing Progress \u2014 Delhi \u2014 17,067 houses 100% occupied",
+      "date": "2026-03-24",
+      "source": "data.gov.in",
+      "url": "https://api.data.gov.in/resource/65a47638-5f03-4c47-968f-63ccbac210f1",
+      "asset_id": "ASSET_PMAY_HOUSING_DELHI"
+    },
+    {
+      "evidence_id": "EVD_IRAN_ALJAZEERA",
+      "type": "news_report",
+      "title": "Iran calls US proposal maximalist",
+      "url": "https://www.aljazeera.com/news/2026/3/25/iran-calls-us-proposal-to-end-war-maximalist-unreasonable",
+      "date": "2026-03-25",
+      "source": "Al Jazeera"
+    },
+    {
+      "evidence_id": "EVD_IRAN_CNBC",
+      "type": "news_report",
+      "title": "India hit by high oil prices amid Iran conflict",
+      "url": "https://www.cnbc.com/2026/03/02/india-impact-iran-middle-east-conflict-oil-prices-airlines.html",
+      "date": "2026-03-02",
+      "source": "CNBC"
+    },
+    {
+      "evidence_id": "EVD_IRAN_MODI_CNBC",
+      "type": "news_report",
+      "title": "Modi reaches out to Iran over energy crunch",
+      "url": "https://www.cnbc.com/2026/03/13/indias-modi-reaches-out-to-iran",
+      "date": "2026-03-13",
+      "source": "CNBC"
+    },
+    {
+      "evidence_id": "EVD_WEATHER25_DTE",
+      "type": "report",
+      "title": "India hit by disasters 331 of 334 days in 2025",
+      "url": "https://www.downtoearth.org.in/climate-change/year-of-extremes",
+      "date": "2026-01-01",
+      "source": "Down to Earth"
+    },
+    {
+      "evidence_id": "EVD_UKCETA_WEF",
+      "type": "report",
+      "title": "UK-India Free Trade Deal signed",
+      "url": "https://www.weforum.org/stories/2025/05/uk-india-free-trade-deal/",
+      "date": "2025-07-24",
+      "source": "WEF"
+    },
+    {
+      "evidence_id": "EVD_SP_UPGRADE_BS",
+      "type": "report",
+      "title": "S&P upgrades India sovereign rating to BBB",
+      "url": "https://www.business-standard.com/economy/news/sp-global-raises-india-sovereign-credit-rating",
+      "date": "2025-08-14",
+      "source": "Business Standard"
+    },
+    {
+      "evidence_id": "EVD_LABOUR_EY",
+      "type": "report",
+      "title": "New Labour Codes implemented Nov 21 2025",
+      "url": "https://www.ey.com/en_in/technical/alerts-hub/2025/11/new-labour-codes-implemented",
+      "date": "2025-11-21",
+      "source": "EY India"
+    },
+    {
+      "evidence_id": "EVD_SPADEX_ISRO",
+      "type": "official",
+      "title": "ISRO SpaDeX mission docking success",
+      "url": "https://www.isro.gov.in/spadex",
+      "date": "2025-01-16",
+      "source": "ISRO"
+    },
+    {
+      "evidence_id": "EVD_SHUKLA_PIB",
+      "type": "official",
+      "title": "Shubhanshu Shukla first Indian on ISS",
+      "url": "https://pib.gov.in/axiom4",
+      "date": "2025-06-25",
+      "source": "PIB"
+    },
+    {
+      "evidence_id": "EVD_INDUS_DEF_MEA",
+      "type": "official",
+      "title": "India-US 10-Year Defence Framework signed",
+      "url": "https://www.mea.gov.in/defence-framework-2025",
+      "date": "2025-10-31",
+      "source": "MEA"
+    },
+    {
+      "evidence_id": "EVD_PAHALGAM_PIB",
+      "type": "official",
+      "title": "Government of India response to Pahalgam attack",
+      "url": "https://pib.gov.in/pahalgam-2025",
+      "date": "2025-04-22",
+      "source": "PIB"
+    },
+    {
+      "evidence_id": "EVD_PAHALGAM_AJZ",
+      "type": "news_report",
+      "title": "Act of war: What happened in Kashmir attack that killed 26 tourists",
+      "url": "https://www.aljazeera.com/news/2025/4/23/act-of-war-what-happened-in-kashmir-attack-that-killed-26-tourists",
+      "date": "2025-04-23",
+      "source": "Al Jazeera"
+    },
+    {
+      "evidence_id": "EVD_SINDOOR_PIB",
+      "type": "official",
+      "title": "Operation Sindoor official PIB statement",
+      "url": "https://www.pib.gov.in/Pressreleaseshare.aspx?PRID=2128748",
+      "date": "2025-05-07",
+      "source": "PIB"
+    },
+    {
+      "evidence_id": "EVD_SINDOOR_WIKI",
+      "type": "reference",
+      "title": "Operation Sindoor \u2014 Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Operation_Sindoor",
+      "date": "2025-05-07",
+      "source": "Wikipedia"
+    },
+    {
+      "evidence_id": "EVD_CEASEFIRE_AJZ",
+      "type": "news_report",
+      "title": "India and Pakistan agree ceasefire \u2014 what does it mean",
+      "url": "https://www.aljazeera.com/news/2025/5/10/india-and-pakistan-agree-ceasefire-what-does-it-mean",
+      "date": "2025-05-10",
+      "source": "Al Jazeera"
+    },
+    {
+      "evidence_id": "EVD_UNSC_TRF_2025",
+      "type": "official",
+      "title": "UNSC report confirms TRF/LeT responsibility for Pahalgam",
+      "url": "https://www.indiatvnews.com/news/world/unsc-report-says-trf-published-photo-of-pahalgam-attack-site",
+      "date": "2025-07-30",
+      "source": "UNSC"
+    },
+    {
+      "evidence_id": "EVD_LOC_DDNEWS",
+      "type": "news_report",
+      "title": "Pakistan continues cross-border firing for 11th day \u2014 DD News",
+      "url": "https://ddnews.gov.in/en/pakistan-continues-cross-border-firing-for-11th-day-indian-forces-respond-strongly/",
+      "date": "2025-05-06",
+      "source": "DD News"
+    },
+    {
+      "evidence_id": "EVD_CEASEFIRE_WIKI",
+      "type": "reference",
+      "title": "2025 India-Pakistan ceasefire agreement \u2014 Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/2025_India-Pakistan_ceasefire_agreement",
+      "date": "2025-05-10",
+      "source": "Wikipedia"
+    },
+    {
+      "evidence_id": "EVD_DIPLO_AJZ",
+      "type": "news_report",
+      "title": "India expels Pakistan diplomat as war of words simmers",
+      "url": "https://www.aljazeera.com/news/2025/5/13/india-expels-pakistan-diplomat-as-war-of-words-simmers-in-place-of-fighting",
+      "date": "2025-05-13",
+      "source": "Al Jazeera"
+    },
+    {
+      "evidence_id": "EVD_IWT_NPR",
+      "type": "news_report",
+      "title": "What the Indus Waters Treaty suspension means",
+      "url": "https://www.npr.org/2025/07/08/g-s1-73122/pakistan-india-indus-waters-treaty",
+      "date": "2025-07-08",
+      "source": "NPR"
+    },
+    {
+      "evidence_id": "EVD_HORMUZ_DTE",
+      "type": "news_report",
+      "title": "From crude to basmati \u2014 Iran war threatens India energy and trade",
+      "url": "https://www.downtoearth.org.in/energy/from-crude-to-basmati-iran-war-threatens-indias-energy-and-trade-stability",
+      "date": "2026-03-05",
+      "source": "Down to Earth"
+    },
+    {
+      "evidence_id": "EVD_IRAN_CEASEFIRE_AJZ",
+      "type": "news_report",
+      "title": "Iran calls US ceasefire proposal maximalist and unreasonable",
+      "url": "https://www.aljazeera.com/news/2026/3/25/iran-calls-us-proposal-to-end-war-maximalist-unreasonable",
+      "date": "2026-03-25",
+      "source": "Al Jazeera"
+    },
+    {
+      "evidence_id": "EVD_IMD_WAYANAD_AUDIT",
+      "type": "alert_audit",
+      "title": "IMD Alert Audit \u2014 Wayanad 2024",
+      "date": "2024-07-30",
+      "source": "IMD / Kerala SDMA",
+      "url": "",
+      "alert_issued": "Orange",
+      "actual_level": "Red",
+      "lead_time_hours": 48,
+      "response_adequacy": "gap",
+      "response_taken": "No pre-emptive evacuation ordered"
+    },
+    {
+      "evidence_id": "EVD_IMD_DANA_AUDIT",
+      "type": "alert_audit",
+      "title": "IMD Alert Audit \u2014 Cyclone Dana 2024",
+      "date": "2024-10-25",
+      "source": "IMD / Odisha SDMA",
+      "url": "",
+      "alert_issued": "Red",
+      "actual_level": "Red",
+      "lead_time_hours": 72,
+      "response_adequacy": "adequate",
+      "response_taken": "800,000 evacuated \u2014 largest pre-cyclone evacuation"
+    },
+    {
+      "evidence_id": "EVD_IMD_DELHI_AUDIT",
+      "type": "alert_audit",
+      "title": "IMD Alert Audit \u2014 Delhi Floods 2023",
+      "date": "2023-07-10",
+      "source": "IMD / CWC / DJB",
+      "url": "",
+      "alert_issued": "Orange",
+      "actual_level": "Red",
+      "lead_time_hours": 24,
+      "response_adequacy": "partial",
+      "response_taken": "Partial evacuation \u2014 low-lying areas only"
+    },
+    {
+      "evidence_id": "EVD_IMD_EXTREME_2025",
+      "type": "alert_audit",
+      "title": "IMD Alert Audit \u2014 Extreme Weather 2025",
+      "date": "2025-01-15",
+      "source": "IMD / NDMA",
+      "url": "",
+      "alert_issued": "Red",
+      "actual_level": "Red",
+      "lead_time_hours": 0,
+      "response_adequacy": "partial",
+      "response_taken": "6 states responded \u2014 mixed preparedness"
+    }
+  ],
+  "edges": [
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "REG_WAYANAD",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "REG_KERALA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "DOM_CLIMATE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "DOM_GOVERNANCE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "DOM_SOCIETY",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "ACT_NDMA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "ACT_NDRF",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "ACT_INDIAN_ARMY",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "ACT_IAF",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "ACT_KERALA_GOVT",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "SCH_NDRF_FUND",
+      "type": "FUNDED_BY"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "SCH_SDRF",
+      "type": "FUNDED_BY"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "IMP_WAYANAD_DEATHS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "IMP_WAYANAD_DISPLACED",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "IMP_WAYANAD_RAINFALL",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "POL_NDMA_ACT",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "POL_EWS_REFORM",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "EVD_WAYANAD_PIB",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "EVD_WAYANAD_NDMA",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "REG_PURI",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "REG_ODISHA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "REG_ANDHRA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "DOM_CLIMATE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "DOM_GOVERNANCE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "DOM_DEFENSE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "ACT_NDMA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "ACT_NDRF",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "ACT_INDIAN_ARMY",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "ACT_ODISHA_GOVT",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "SCH_NDRF_FUND",
+      "type": "FUNDED_BY"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "IMP_DANA_DEATHS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "IMP_DANA_EVACUATED",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "POL_NDMA_ACT",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "EVD_DANA_IMD",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "EVD_DANA_NDRF",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "REG_JOSHIMATH",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "REG_CHAMOLI",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "REG_UTTARAKHAND",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "DOM_CLIMATE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "DOM_TECHNOLOGY",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "DOM_GOVERNANCE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "DOM_DEFENSE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "ACT_ISRO",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "ACT_NTPC",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "ACT_NDMA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "IMP_JOSHI_HOUSES",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "IMP_JOSHI_SUBSIDENCE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "POL_JOSHI_COMM",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "EVD_JOSHI_ISRO",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "EVD_JOSHI_REPORT",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "REG_DELHI",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "DOM_CLIMATE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "DOM_ECONOMICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "ACT_NDMA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "ACT_DELHI_GOVT",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "ACT_NDRF",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "ACT_IMD",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "SCH_NDRF_FUND",
+      "type": "FUNDED_BY"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "IMP_DELHI_YAMUNA",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "IMP_DELHI_DISPLACED",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "POL_YAMUNA_FLOOD",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "EVD_DELHI_IMD",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "REG_MANIPUR",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "DOM_GEOPOLITICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "DOM_DEFENSE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "DOM_SOCIETY",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "ACT_MHA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "ACT_INDIAN_ARMY",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "ACT_CRPF",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "ACT_ASSAM_RIFLES",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "ACT_MANIPUR_GOVT",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "IMP_MANIPUR_DEATHS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "IMP_MANIPUR_DISPLACED",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "IMP_MANIPUR_INTERNET",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "POL_AFSPA",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "EVD_MANIPUR_MHA",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "REG_DHOLERA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "REG_GUJARAT",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "DOM_TECHNOLOGY",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "DOM_ECONOMICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "ACT_MeitY",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "ACT_TATA_ELEC",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "ACT_CG_POWER",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "ACT_POWERCHIP",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "SCH_ISM",
+      "type": "FUNDED_BY"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "IMP_TATA_INVESTMENT",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "IMP_TATA_JOBS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "IMP_ISM_BUDGET",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "POL_SEMICON_MIS",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "EVD_TATA_PIB",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "ACT_NDRF",
+      "to": "ACT_MHA",
+      "type": "PART_OF"
+    },
+    {
+      "from": "ACT_NDMA",
+      "to": "ACT_MHA",
+      "type": "PART_OF"
+    },
+    {
+      "from": "ACT_INDIAN_ARMY",
+      "to": "ACT_MHA",
+      "type": "PART_OF"
+    },
+    {
+      "from": "ACT_CRPF",
+      "to": "ACT_MHA",
+      "type": "PART_OF"
+    },
+    {
+      "from": "ACT_ASSAM_RIFLES",
+      "to": "ACT_MHA",
+      "type": "PART_OF"
+    },
+    {
+      "from": "ACT_POWERCHIP",
+      "to": "ACT_TATA_ELEC",
+      "type": "PART_OF"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "EVT_CYCLONE_DANA_2024",
+      "type": "CONNECTED_TO",
+      "reason": "Both climate disasters in 2024 \u2014 same NDMA response framework, same NDRF fund"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "EVT_JOSHIMATH_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Both triggered EWS reform debate \u2014 lack of early warning systems"
+    },
+    {
+      "from": "EVT_JOSHIMATH_2023",
+      "to": "EVT_DELHI_FLOODS_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Both involve NTPC/Haryana infrastructure decisions affecting downstream populations"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "EVT_MANIPUR_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Both in 2023 triggered Parliament no-confidence and Centre-State blame \u2014 same political season"
+    },
+    {
+      "from": "EVT_MANIPUR_2023",
+      "to": "EVT_TATA_SEMI_2024",
+      "type": "CONNECTED_TO",
+      "reason": "Manipur instability highlighted NE connectivity gap; semiconductor investment shifts strategic focus to western India"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "EVT_JOSHIMATH_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Both involve NTPC/infrastructure vs environment tradeoff \u2014 Joshimath dam vs semiconductor water usage policy"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "REG_SRIHARIKOTA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "REG_BENGALURU",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "DOM_TECHNOLOGY",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "ACT_ISRO",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "ACT_DOS",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "SCH_ISRO_BUDGET",
+      "type": "FUNDED_BY"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "IMP_CH3_LANDING_SITE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "IMP_CH3_ROVER_DAYS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "EVD_CH3_ISRO",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "EVD_CH3_PIB",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "REG_SRIHARIKOTA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "REG_BENGALURU",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "DOM_TECHNOLOGY",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "ACT_ISRO",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "ACT_DOS",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "SCH_ISRO_BUDGET",
+      "type": "FUNDED_BY"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "IMP_ADITYAL1_ORBIT",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_ADITYAL1_2023",
+      "to": "EVD_AL1_ISRO",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "REG_DELHI",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "DOM_GEOPOLITICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "DOM_ECONOMICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "DOM_GOVERNANCE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "ACT_G20_SHERPA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "IMP_G20_NATIONS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "IMP_G20_AU_ADMIT",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "POL_G20_DECL",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "EVD_G20_DECL",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "EVD_G20_PIB",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_INDIA_CANADA_2023",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_CANADA_2023",
+      "to": "REG_CANADA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_CANADA_2023",
+      "to": "DOM_GEOPOLITICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_INDIA_CANADA_2023",
+      "to": "DOM_DEFENSE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_INDIA_CANADA_2023",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_CANADA_2023",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_CANADA_2023",
+      "to": "IMP_CANADA_DIPLOMATS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDIA_CANADA_2023",
+      "to": "EVD_CANADA_MEA",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "REG_SAUDI",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "DOM_ECONOMICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "ACT_US_GOVT",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "IMP_IMEC_LENGTH_KM",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "POL_IMEC_MOU",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "EVD_IMEC_MOU",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "EVT_ADITYAL1_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Back-to-back ISRO missions in 2023 \u2014 same launch infrastructure, budget cycle, and DOS mission strategy"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "EVT_IMEC_2023",
+      "type": "CONNECTED_TO",
+      "reason": "IMEC MoU signed at G20 sidelines \u2014 same summit, same diplomatic momentum"
+    },
+    {
+      "from": "EVT_G20_INDIA_2023",
+      "to": "EVT_INDIA_CANADA_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Trudeau raised Nijjar allegations on G20 sidelines, straining India-Canada at India's diplomatic high point"
+    },
+    {
+      "from": "EVT_CHANDRAYAAN3_2023",
+      "to": "EVT_TATA_SEMI_2024",
+      "type": "CONNECTED_TO",
+      "reason": "Both reflect India's deep-tech ambition \u2014 space and semiconductor programs share DOS/MeitY budget advocacy and PM Modi's vision"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "type": "FUNDED_BY",
+      "to": "SCH_SDRF",
+      "reason": "Yamuna floods Jul 2023 triggered SDRF activation for Delhi"
+    },
+    {
+      "from": "SCH_AMRUT",
+      "type": "FUNDS",
+      "to": "ASSET_AMRUT_DRAIN_W45",
+      "reason": "AMRUT 2.0 funds storm water drainage \u2014 in progress"
+    },
+    {
+      "from": "SCH_AMRUT",
+      "type": "FUNDS",
+      "to": "ASSET_AMRUT_DRAIN_W45_COMPLETED",
+      "reason": "AMRUT 2.0 funds completed drainage projects"
+    },
+    {
+      "from": "SCH_PMAY",
+      "type": "FUNDS",
+      "to": "ASSET_PMAY_HOUSING_DELHI",
+      "reason": "PMAY-U funds 17,067 houses in Delhi \u2014 100% delivered"
+    },
+    {
+      "from": "ASSET_AMRUT_DRAIN_W45",
+      "type": "LOCATED_IN",
+      "to": "REG_W45_GALI3",
+      "reason": "Drain located in Ward 45 Gali 3"
+    },
+    {
+      "from": "ASSET_AMRUT_DRAIN_W45_COMPLETED",
+      "type": "LOCATED_IN",
+      "to": "REG_W45",
+      "reason": "Completed drains located in Ward 45"
+    },
+    {
+      "from": "ASSET_PMAY_HOUSING_DELHI",
+      "type": "LOCATED_IN",
+      "to": "REG_DELHI",
+      "reason": "PMAY housing located in Delhi"
+    },
+    {
+      "from": "ASSET_AMRUT_DRAIN_W45_COMPLETED",
+      "type": "HAS_EVIDENCE",
+      "to": "EVD_AMRUT_DELHI_DATAGOV",
+      "reason": "data.gov.in dataset confirms completion"
+    },
+    {
+      "from": "ASSET_PMAY_HOUSING_DELHI",
+      "type": "HAS_EVIDENCE",
+      "to": "EVD_PMAY_DELHI_DATAGOV",
+      "reason": "data.gov.in dataset confirms 100% occupancy"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "REG_IRAN",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "REG_ISRAEL",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "REG_WEST_ASIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "DOM_GEOPOLITICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "DOM_ECONOMICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "DOM_DEFENSE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "ACT_CCS",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "ACT_MoPNG",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "IMP_IRAN_OIL_SPIKE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "IMP_IRAN_SHIPS_STUCK",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "IMP_IRAN_DIASPORA",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "POL_IRAN_ENERGY_RESPONSE",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "EVD_IRAN_ALJAZEERA",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "EVD_IRAN_CNBC",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "EVD_IRAN_MODI_CNBC",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "EVT_TWELVE_DAY_WAR_2025",
+      "type": "CONNECTED_TO",
+      "reason": "2026 war is direct escalation of the June 2025 Twelve-Day War airstrikes on Iran nuclear sites"
+    },
+    {
+      "from": "EVT_TWELVE_DAY_WAR_2025",
+      "to": "REG_IRAN",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_TWELVE_DAY_WAR_2025",
+      "to": "REG_ISRAEL",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_TWELVE_DAY_WAR_2025",
+      "to": "DOM_GEOPOLITICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_TWELVE_DAY_WAR_2025",
+      "to": "DOM_DEFENSE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_TWELVE_DAY_WAR_2025",
+      "to": "DOM_ECONOMICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_TWELVE_DAY_WAR_2025",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_TWELVE_DAY_WAR_2025",
+      "to": "ACT_MoPNG",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_TWELVE_DAY_WAR_2025",
+      "to": "IMP_12DAY_OIL",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "REG_KERALA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "REG_ODISHA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "DOM_CLIMATE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "DOM_GOVERNANCE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "ACT_NDMA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "ACT_NDRF",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "ACT_IMD",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "SCH_NDRF_FUND",
+      "type": "FUNDED_BY"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "IMP_WEATHER25_DEATHS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "IMP_WEATHER25_CROP",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "EVD_WEATHER25_DTE",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "EVT_WAYANAD_2024",
+      "type": "CONNECTED_TO",
+      "reason": "Wayanad 2024 part of same worsening climate pattern \u2014 consecutive years of record disaster days"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "EVT_CYCLONE_DANA_2024",
+      "type": "CONNECTED_TO",
+      "reason": "Successive high-severity climate events reflect deepening India climate crisis trajectory"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "REG_UK",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "DOM_ECONOMICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "DOM_GOVERNANCE",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "ACT_DPIIT",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "ACT_UK_GOVT",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "IMP_UKCETA_TRADE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "POL_INDIA_UK_CETA",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "EVD_UKCETA_WEF",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "EVT_IMEC_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Both signal India FTA/connectivity diplomacy acceleration after decades of strategic caution"
+    },
+    {
+      "from": "EVT_SP_UPGRADE_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_SP_UPGRADE_2025",
+      "to": "DOM_ECONOMICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_SP_UPGRADE_2025",
+      "to": "ACT_RBI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_SP_UPGRADE_2025",
+      "to": "ACT_SP_GLOBAL",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_SP_UPGRADE_2025",
+      "to": "IMP_SP_UPGRADE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_SP_UPGRADE_2025",
+      "to": "EVD_SP_UPGRADE_BS",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_SP_UPGRADE_2025",
+      "to": "EVT_INDIA_UK_CETA_2025",
+      "type": "CONNECTED_TO",
+      "reason": "Credit upgrade and CETA together signal India economic credibility leap \u2014 reinforcing FII confidence"
+    },
+    {
+      "from": "EVT_LABOUR_CODES_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_LABOUR_CODES_2025",
+      "to": "DOM_GOVERNANCE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_LABOUR_CODES_2025",
+      "to": "DOM_ECONOMICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_LABOUR_CODES_2025",
+      "to": "ACT_LABOUR_MIN",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_LABOUR_CODES_2025",
+      "to": "ACT_PARLIAMENT",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_LABOUR_CODES_2025",
+      "to": "IMP_LABOUR_WORKFORCE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_LABOUR_CODES_2025",
+      "to": "POL_FOUR_LABOUR_CODES",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_LABOUR_CODES_2025",
+      "to": "EVD_LABOUR_EY",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_ISRO_SPADEX_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_ISRO_SPADEX_2025",
+      "to": "DOM_TECHNOLOGY",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_ISRO_SPADEX_2025",
+      "to": "ACT_ISRO",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_ISRO_SPADEX_2025",
+      "to": "IMP_SPADEX_DOCKING",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_ISRO_SPADEX_2025",
+      "to": "EVD_SPADEX_ISRO",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_ISRO_SPADEX_2025",
+      "to": "EVT_CHANDRAYAAN3_2023",
+      "type": "CONNECTED_TO",
+      "reason": "SpaDeX docking is the next capability milestone after Chandrayaan-3 \u2014 enabling future crewed lunar missions"
+    },
+    {
+      "from": "EVT_ISRO_SPADEX_2025",
+      "to": "EVT_ADITYAL1_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Both ISRO deep-space milestones in consecutive years \u2014 building India autonomous space infrastructure"
+    },
+    {
+      "from": "EVT_SHUKLA_ISS_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_SHUKLA_ISS_2025",
+      "to": "DOM_TECHNOLOGY",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_SHUKLA_ISS_2025",
+      "to": "ACT_ISRO",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_SHUKLA_ISS_2025",
+      "to": "ACT_AXIOM_SPACE",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_SHUKLA_ISS_2025",
+      "to": "IMP_SHUKLA_ISS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_SHUKLA_ISS_2025",
+      "to": "EVD_SHUKLA_PIB",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_SHUKLA_ISS_2025",
+      "to": "EVT_ISRO_SPADEX_2025",
+      "type": "CONNECTED_TO",
+      "reason": "Axiom-4 human spaceflight + SpaDeX docking together validate Gaganyaan readiness milestones"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "DOM_DEFENSE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY",
+      "role": "Supporting",
+      "scale": "As required"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY",
+      "role": "Supporting",
+      "scale": "As required"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "IMP_INDUS_DEF_PARTNER",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "POL_INDIA_US_DEF_PACT",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "EVD_INDUS_DEF_MEA",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_INDIA_US_DEFENSE_2025",
+      "to": "EVT_IRAN_WAR_2026",
+      "type": "CONNECTED_TO",
+      "reason": "India-US defence pact deepens Indo-Pacific alignment \u2014 shapes India strategic calculus in Iran war neutrality"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "REG_JK",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "DOM_DEFENSE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "DOM_SOCIETY",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "ACT_MHA",
+      "type": "MANAGED_BY",
+      "role": "CRPF surge + NIA investigation lead",
+      "scale": "8 CRPF Battalions"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "ACT_INDIAN_ARMY",
+      "type": "MANAGED_BY",
+      "role": "Cordon-and-search \u2014 Baisaran belt",
+      "scale": "2 RR Battalions"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "ACT_TRF_LET",
+      "type": "MANAGED_BY",
+      "role": "Supporting",
+      "scale": "As required"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "IMP_PAHALGAM_CASUALTIES",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "IMP_INDUS_TREATY_SUSPENDED",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "IMP_INDIA_PAK_TRADE_HALT",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "POL_INDUS_SUSPENSION",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "EVD_PAHALGAM_PIB",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "EVD_PAHALGAM_AJZ",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "EVD_UNSC_TRF_2025",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "EVT_OPERATION_SINDOOR_2025",
+      "type": "CONNECTED_TO",
+      "reason": "Pahalgam attack directly triggered Operation Sindoor 15 days later after 12 nights of LoC cross-border firing"
+    },
+    {
+      "from": "EVT_PAHALGAM_2025",
+      "to": "EVT_MANIPUR_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Both MHA-led security crises with AFSPA-zone deployments and disputed civilian casualty narratives"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "REG_JK",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "REG_PAKISTAN",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "REG_POJK",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "DOM_DEFENSE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "ACT_IAF",
+      "type": "MANAGED_BY",
+      "role": "Strike package lead \u2014 Rafale EH + Mirage 2000H",
+      "scale": "2 squadrons"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "ACT_INDIAN_ARMY",
+      "type": "MANAGED_BY",
+      "role": "BrahMos battery strike + Special Forces verification",
+      "scale": "1 battery + SF detachment"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY",
+      "role": "Supreme Command \u2014 authorised strikes",
+      "scale": "National Command Authority"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY",
+      "role": "Diplomatic brief \u2014 60 ambassadors post-strike",
+      "scale": "All missions"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "IMP_SINDOOR_SITES_STRUCK",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "IMP_SINDOOR_MILITANT_KILL",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "IMP_LOC_FIRING_NIGHTS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "POL_SINDOOR_DOCTRINE",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "EVD_SINDOOR_PIB",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "EVD_SINDOOR_WIKI",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "EVD_CEASEFIRE_AJZ",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "EVT_PAHALGAM_2025",
+      "type": "CONNECTED_TO",
+      "reason": "Direct military response to Pahalgam attack \u2014 established new India strike doctrine against terror infrastructure inside Pakistan"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "EVT_INDIA_US_DEFENSE_2025",
+      "type": "CONNECTED_TO",
+      "reason": "India-US defence pact Oct 2025 deepened partly in context of post-Sindoor regional security architecture"
+    },
+    {
+      "from": "EVT_OPERATION_SINDOOR_2025",
+      "to": "EVT_IRAN_WAR_2026",
+      "type": "CONNECTED_TO",
+      "reason": "Both events reflect 2025-26 era of active military escalation in Asia \u2014 India operating in two concurrent high-tension theatres"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "REG_JK",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "DOM_DEFENSE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "ACT_INDIAN_ARMY",
+      "type": "MANAGED_BY",
+      "role": "Counter-battery fire \u2014 Bofors + M777",
+      "scale": "1 Artillery Brigade"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "ACT_PAKISTAN_ARMY",
+      "type": "MANAGED_BY",
+      "role": "Supporting",
+      "scale": "As required"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "IMP_LOC_CIVILIAN_DEATHS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "IMP_DRONE_BATTLE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "EVD_LOC_DDNEWS",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "EVT_PAHALGAM_2025",
+      "type": "CONNECTED_TO",
+      "reason": "LoC firing escalation began 8 days after Pahalgam attack \u2014 Pakistan Army provocation in parallel with diplomatic crisis"
+    },
+    {
+      "from": "EVT_LOC_SKIRMISHES_2025",
+      "to": "EVT_OPERATION_SINDOOR_2025",
+      "type": "CONNECTED_TO",
+      "reason": "12 nights of LoC firing preceded and co-ran with Operation Sindoor strikes \u2014 escalation ladder"
+    },
+    {
+      "from": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "to": "REG_PAKISTAN",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "to": "DOM_GEOPOLITICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "to": "EVD_CEASEFIRE_WIKI",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "to": "EVT_OPERATION_SINDOOR_2025",
+      "type": "CONNECTED_TO",
+      "reason": "Ceasefire ended the active military phase of Operation Sindoor and Pakistani retaliation after 3 days of fighting"
+    },
+    {
+      "from": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "to": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "type": "CONNECTED_TO",
+      "reason": "Military ceasefire did not resolve diplomatic crisis \u2014 deep freeze continued after guns fell silent"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "REG_PAKISTAN",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "DOM_GEOPOLITICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "DOM_ECONOMICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "IMP_DIPLO_STAFF_CUT",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "POL_INDIA_PAK_DIPLO_RESET",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "EVD_DIPLO_AJZ",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "to": "EVT_INDIA_CANADA_2023",
+      "type": "CONNECTED_TO",
+      "reason": "Both are India diplomatic crises involving expulsion of foreign nationals \u2014 different scale but same MEA playbook"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "REG_PAKISTAN",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "DOM_GOVERNANCE",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "DOM_ECONOMICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "ACT_PM_MODI",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "IMP_IWT_ABEYANCE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "POL_INDUS_SUSPENSION",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "EVD_IWT_NPR",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "EVT_PAHALGAM_2025",
+      "type": "CONNECTED_TO",
+      "reason": "IWT suspension announced within 24 hours of Pahalgam attack \u2014 direct retaliatory measure"
+    },
+    {
+      "from": "EVT_INDUS_WATERS_CRISIS_2025",
+      "to": "EVT_INDIA_PAK_DIPLO_CRISIS_2025",
+      "type": "CONNECTED_TO",
+      "reason": "IWT suspension is the most durable element of the diplomatic crisis \u2014 still in abeyance Mar 2026"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "REG_IRAN",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "REG_WEST_ASIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "REG_INDIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "DOM_ECONOMICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "DOM_GEOPOLITICS",
+      "type": "ALSO_IN"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "ACT_MoPNG",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "ACT_CCS",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "IMP_HORMUZ_OIL_TANKERS",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "IMP_IRAN_BRENT_120",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "POL_IRAN_ENERGY_RESPONSE",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "EVD_HORMUZ_DTE",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "EVT_IRAN_WAR_2026",
+      "type": "CONNECTED_TO",
+      "reason": "Hormuz blockade is Iran direct retaliation to US-Israel airstrikes \u2014 part of same war event"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "REG_IRAN",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "REG_WEST_ASIA",
+      "type": "OCCURRED_IN"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "DOM_GEOPOLITICS",
+      "type": "BELONGS_TO"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "ACT_MEA",
+      "type": "MANAGED_BY"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "IMP_IRAN_CEASEFIRE_STALLED",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "POL_IRAN_CEASEFIRE_TALKS",
+      "type": "TRIGGERED"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "EVD_IRAN_CEASEFIRE_AJZ",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "EVT_IRAN_WAR_2026",
+      "type": "CONNECTED_TO",
+      "reason": "Ceasefire talks are direct follow-on to Iran War \u2014 stalled as of Mar 26 2026"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "EVT_HORMUZ_BLOCKADE_2026",
+      "type": "CONNECTED_TO",
+      "reason": "Hormuz blockade will only lift if ceasefire talks succeed \u2014 India economic fate tied to talks outcome"
+    },
+    {
+      "from": "EVT_IRAN_CEASEFIRE_TALKS_2026",
+      "to": "EVT_INDIA_PAK_CEASEFIRE_2025",
+      "type": "CONNECTED_TO",
+      "reason": "India has ceasefire-brokering experience from May 2025 India-Pak crisis \u2014 geopolitical muscle memory"
+    },
+    {
+      "from": "EVT_SP_UPGRADE_2025",
+      "to": "IMP_MKT_SP_UPGRADE",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_HORMUZ_BLOCKADE_2026",
+      "to": "IMP_MKT_HORMUZ",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_IRAN_WAR_2026",
+      "to": "IMP_MKT_IRAN_WAR",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_TATA_SEMI_2024",
+      "to": "IMP_MKT_TATA_SEMI",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_INDIA_UK_CETA_2025",
+      "to": "IMP_MKT_INDIA_UK_CETA",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_IMEC_2023",
+      "to": "IMP_MKT_IMEC",
+      "type": "CAUSED"
+    },
+    {
+      "from": "EVT_WAYANAD_2024",
+      "to": "EVD_IMD_WAYANAD_AUDIT",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_CYCLONE_DANA_2024",
+      "to": "EVD_IMD_DANA_AUDIT",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_DELHI_FLOODS_2023",
+      "to": "EVD_IMD_DELHI_AUDIT",
+      "type": "PROVEN_BY"
+    },
+    {
+      "from": "EVT_INDIA_EXTREME_WEATHER_2025",
+      "to": "EVD_IMD_EXTREME_2025",
+      "type": "PROVEN_BY"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "ASSET_AMRUT_DRAIN_W45",
+      "name": "Shahdara Storm Water Drain \u2014 Ward 45",
+      "type": "drain",
+      "scheme_id": "SCH_AMRUT",
+      "region_id": "REG_W45_GALI3",
+      "status": "in_progress",
+      "cost_crore": 3.37,
+      "proof_status": "partially_verified",
+      "description": "AMRUT 2.0 funded storm water drain \u2014 1 of 3 projects in progress in NCT Delhi",
+      "source": "data.gov.in"
+    },
+    {
+      "asset_id": "ASSET_AMRUT_DRAIN_W45_COMPLETED",
+      "name": "Shahdara Completed Drainage Projects \u2014 Ward 45",
+      "type": "drain",
+      "scheme_id": "SCH_AMRUT",
+      "region_id": "REG_W45",
+      "status": "completed",
+      "cost_crore": 2.01,
+      "proof_status": "fully_verified",
+      "description": "2 of 3 AMRUT drainage projects completed in NCT Delhi \u2014 \u20b92.01 Cr",
+      "source": "data.gov.in"
+    },
+    {
+      "asset_id": "ASSET_PMAY_HOUSING_DELHI",
+      "name": "PMAY-U Housing \u2014 Delhi",
+      "type": "housing",
+      "scheme_id": "SCH_PMAY",
+      "region_id": "REG_DELHI",
+      "status": "completed",
+      "cost_crore": 401.79,
+      "proof_status": "fully_verified",
+      "description": "17,067 houses sanctioned, grounded, completed and occupied \u2014 100% delivery",
+      "source": "data.gov.in"
+    }
+  ]
+}

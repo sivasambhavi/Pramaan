@@ -1,0 +1,142 @@
+{
+    "index_name": "a89e88bd-9b15-441b-aa6f-80e253d3997c",
+    "title": "State/UT-wise Losses/Damages as reported in the Wake of Cyclone Tauktae and Yaas (in reply to Unstarred Question on 28 July, 2021)",
+    "desc": "State/UT-wise Losses/Damages as reported in the Wake of Cyclone Tauktae and Yaas (in reply to Unstarred Question on 28 July, 2021)",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "54c74b5d-74b1-4e9a-b16e-7023c6c0a6fd",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1772018161,
+    "updated": 1772018161,
+    "created_date": "2026-02-25T12:16:01Z",
+    "updated_date": "2026-02-25T12:16:01Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "54c74b5d-74b1-4e9a-b16e-7023c6c0a6fd",
+        "field": "a89e88bd-9b15-441b-aa6f-80e253d3997c"
+    },
+    "field": [
+        {
+            "id": "state",
+            "name": "State",
+            "type": "keyword"
+        },
+        {
+            "id": "human_lives_lost",
+            "name": "Human lives lost",
+            "type": "double"
+        },
+        {
+            "id": "houses_huts_damaged",
+            "name": "Houses/huts damaged",
+            "type": "keyword"
+        },
+        {
+            "id": "cattle_lost",
+            "name": "Cattle lost",
+            "type": "double"
+        },
+        {
+            "id": "cropped_area_affected__in_ha__",
+            "name": "Cropped area affected (in ha.)",
+            "type": "double"
+        },
+        {
+            "id": "fishermen_s_boats___nets_damaged",
+            "name": "Fishermen's Boats & nets damaged",
+            "type": "keyword"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 9,
+    "count": 9,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "state": "Gujarat - Cyclone 'Tauktae'",
+            "human_lives_lost": 67,
+            "houses_huts_damaged": "88910",
+            "cattle_lost": 8629,
+            "cropped_area_affected__in_ha__": 149270,
+            "fishermen_s_boats___nets_damaged": "475 - boats"
+        },
+        {
+            "state": "Maharashtra - Cyclone 'Tauktae'",
+            "human_lives_lost": 22,
+            "houses_huts_damaged": "44091",
+            "cattle_lost": 34,
+            "cropped_area_affected__in_ha__": 16787,
+            "fishermen_s_boats___nets_damaged": "1215 - boats & 21836 - nets"
+        },
+        {
+            "state": "Dadra and Nagar Haveli and Daman & Diu - Cyclone 'Tauktae'",
+            "human_lives_lost": 1,
+            "houses_huts_damaged": "1203",
+            "cattle_lost": 4,
+            "cropped_area_affected__in_ha__": 51.22,
+            "fishermen_s_boats___nets_damaged": "29 - boats"
+        },
+        {
+            "state": "Goa - Cyclone 'Tauktae'",
+            "human_lives_lost": 3,
+            "houses_huts_damaged": "2004",
+            "cattle_lost": 160,
+            "cropped_area_affected__in_ha__": 227,
+            "fishermen_s_boats___nets_damaged": "NA"
+        },
+        {
+            "state": "Karnataka - Cyclone 'Tauktae'",
+            "human_lives_lost": 6,
+            "houses_huts_damaged": "473",
+            "cattle_lost": 2,
+            "cropped_area_affected__in_ha__": 215.23,
+            "fishermen_s_boats___nets_damaged": "263 - boats & 324 - nets"
+        },
+        {
+            "state": "Kerala - Cyclone 'Tauktae'",
+            "human_lives_lost": 11,
+            "houses_huts_damaged": "5034",
+            "cattle_lost": 91,
+            "cropped_area_affected__in_ha__": 24433,
+            "fishermen_s_boats___nets_damaged": "125 - boats & 282 - nets"
+        },
+        {
+            "state": "Odisha - Cyclone 'Yaas'",
+            "human_lives_lost": 3,
+            "houses_huts_damaged": "18094",
+            "cattle_lost": 72,
+            "cropped_area_affected__in_ha__": 5672.99,
+            "fishermen_s_boats___nets_damaged": "40 - boats & 14 - nets"
+        },
+        {
+            "state": "West Bengal - Cyclone 'Yaas'",
+            "human_lives_lost": "NA",
+            "houses_huts_damaged": "Approx",
+            "cattle_lost": 11740,
+            "cropped_area_affected__in_ha__": 170891,
+            "fishermen_s_boats___nets_damaged": "4353 - boats & 18708 - nets"
+        },
+        {
+            "state": "Jharkhand - Cyclone 'Yaas'",
+            "human_lives_lost": 4,
+            "houses_huts_damaged": "1508",
+            "cattle_lost": 3,
+            "cropped_area_affected__in_ha__": 74.94,
+            "fishermen_s_boats___nets_damaged": "NA"
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:44:22.966210Z",
+    "_pramaan_dataset_name": "cyclone_damage_tauktae_yaas_2021"
+}

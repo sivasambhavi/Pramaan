@@ -1,0 +1,96 @@
+{
+    "index_name": "6ee6994f-ff26-4ba5-8696-d91939f11e9a",
+    "title": "Year-wise Number of Lives and Property saved by National Disaster Response Force (NDRF) from 2018 to 2023",
+    "desc": "Year-wise Number of Lives and Property saved by National Disaster Response Force (NDRF) from 2018 to 2023",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "c87f45f9-6597-41c5-8125-28c5abf93116",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1743110411,
+    "updated": 1743110411,
+    "created_date": "2025-03-27T22:20:11Z",
+    "updated_date": "2025-03-27T22:20:11Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "c87f45f9-6597-41c5-8125-28c5abf93116",
+        "field": "6ee6994f-ff26-4ba5-8696-d91939f11e9a"
+    },
+    "field": [
+        {
+            "id": "year",
+            "name": "Year",
+            "type": "double"
+        },
+        {
+            "id": "persons_rescued",
+            "name": "Persons Rescued",
+            "type": "double"
+        },
+        {
+            "id": "persons_evacuated",
+            "name": "Persons Evacuated",
+            "type": "double"
+        },
+        {
+            "id": "live_stock_evacuated",
+            "name": "Live-stock evacuated",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 6,
+    "count": 6,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "year": 2018,
+            "persons_rescued": 1281,
+            "persons_evacuated": 44346,
+            "live_stock_evacuated": 290
+        },
+        {
+            "year": 2019,
+            "persons_rescued": 16096,
+            "persons_evacuated": 91337,
+            "live_stock_evacuated": 3149
+        },
+        {
+            "year": 2020,
+            "persons_rescued": 2508,
+            "persons_evacuated": 29615,
+            "live_stock_evacuated": 8206
+        },
+        {
+            "year": 2021,
+            "persons_rescued": 11973,
+            "persons_evacuated": 10760,
+            "live_stock_evacuated": 1282
+        },
+        {
+            "year": 2022,
+            "persons_rescued": 2081,
+            "persons_evacuated": 35984,
+            "live_stock_evacuated": 1078
+        },
+        {
+            "year": 2023,
+            "persons_rescued": 6490,
+            "persons_evacuated": 40681,
+            "live_stock_evacuated": 2611
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:43:15.595149Z",
+    "_pramaan_dataset_name": "ndrf_lives_saved_2018_2023"
+}

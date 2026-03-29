@@ -1,0 +1,235 @@
+{
+    "index_name": "9352080d-337a-4594-b5a3-80898cd20cfb",
+    "title": "State/UT-wise Deaths due to COVID-19 during 2021",
+    "desc": "State/UT-wise Deaths due to COVID-19 during 2021",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "54c74b5d-74b1-4e9a-b16e-7023c6c0a6fd",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1650971101,
+    "updated": 1651222041,
+    "created_date": "2022-04-26T11:05:01Z",
+    "updated_date": "2022-04-29T14:17:21Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "54c74b5d-74b1-4e9a-b16e-7023c6c0a6fd",
+        "field": "9352080d-337a-4594-b5a3-80898cd20cfb"
+    },
+    "field": [
+        {
+            "id": "sl__no_",
+            "name": "Sl. No.",
+            "type": "keyword"
+        },
+        {
+            "id": "state_ut",
+            "name": "State/UT",
+            "type": "keyword"
+        },
+        {
+            "id": "deaths_during_2021__till_14th_july_2021_",
+            "name": "Deaths during 2021 (Till 14th July 2021)",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 36,
+    "count": 36,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "sl__no_": "1",
+            "state_ut": "Andaman and Nicobar Islands",
+            "deaths_during_2021__till_14th_july_2021_": 68
+        },
+        {
+            "sl__no_": "2",
+            "state_ut": "Andhra Pradesh",
+            "deaths_during_2021__till_14th_july_2021_": 5937
+        },
+        {
+            "sl__no_": "3",
+            "state_ut": "Arunachal Pradesh",
+            "deaths_during_2021__till_14th_july_2021_": 137
+        },
+        {
+            "sl__no_": "4",
+            "state_ut": "Assam",
+            "deaths_during_2021__till_14th_july_2021_": 3844
+        },
+        {
+            "sl__no_": "5",
+            "state_ut": "Bihar",
+            "deaths_during_2021__till_14th_july_2021_": 8218
+        },
+        {
+            "sl__no_": "6",
+            "state_ut": "Chandigarh",
+            "deaths_during_2021__till_14th_july_2021_": 491
+        },
+        {
+            "sl__no_": "7",
+            "state_ut": "Chhattisgarh",
+            "deaths_during_2021__till_14th_july_2021_": 10114
+        },
+        {
+            "sl__no_": "8",
+            "state_ut": "Dadra and Nagar Haveli and Daman and Diu",
+            "deaths_during_2021__till_14th_july_2021_": 2
+        },
+        {
+            "sl__no_": "9",
+            "state_ut": "Delhi",
+            "deaths_during_2021__till_14th_july_2021_": 14478
+        },
+        {
+            "sl__no_": "10",
+            "state_ut": "Goa",
+            "deaths_during_2021__till_14th_july_2021_": 2362
+        },
+        {
+            "sl__no_": "11",
+            "state_ut": "Gujarat",
+            "deaths_during_2021__till_14th_july_2021_": 5767
+        },
+        {
+            "sl__no_": "12",
+            "state_ut": "Haryana",
+            "deaths_during_2021__till_14th_july_2021_": 6659
+        },
+        {
+            "sl__no_": "13",
+            "state_ut": "Himachal Pradesh",
+            "deaths_during_2021__till_14th_july_2021_": 2560
+        },
+        {
+            "sl__no_": "14",
+            "state_ut": "Jammu and Kashmir",
+            "deaths_during_2021__till_14th_july_2021_": 2477
+        },
+        {
+            "sl__no_": "15",
+            "state_ut": "Jharkhand",
+            "deaths_during_2021__till_14th_july_2021_": 4092
+        },
+        {
+            "sl__no_": "16",
+            "state_ut": "Karnataka",
+            "deaths_during_2021__till_14th_july_2021_": 23858
+        },
+        {
+            "sl__no_": "17",
+            "state_ut": "Kerala",
+            "deaths_during_2021__till_14th_july_2021_": 11721
+        },
+        {
+            "sl__no_": "18",
+            "state_ut": "Ladakh",
+            "deaths_during_2021__till_14th_july_2021_": 94
+        },
+        {
+            "sl__no_": "19",
+            "state_ut": "Madhya Pradesh",
+            "deaths_during_2021__till_14th_july_2021_": 6901
+        },
+        {
+            "sl__no_": "20",
+            "state_ut": "Maharashtra",
+            "deaths_during_2021__till_14th_july_2021_": 76635
+        },
+        {
+            "sl__no_": "21",
+            "state_ut": "Manipur",
+            "deaths_during_2021__till_14th_july_2021_": 954
+        },
+        {
+            "sl__no_": "22",
+            "state_ut": "Meghalaya",
+            "deaths_during_2021__till_14th_july_2021_": 776
+        },
+        {
+            "sl__no_": "23",
+            "state_ut": "Mizoram",
+            "deaths_during_2021__till_14th_july_2021_": 105
+        },
+        {
+            "sl__no_": "24",
+            "state_ut": "Nagaland",
+            "deaths_during_2021__till_14th_july_2021_": 433
+        },
+        {
+            "sl__no_": "25",
+            "state_ut": "Odisha",
+            "deaths_during_2021__till_14th_july_2021_": 2857
+        },
+        {
+            "sl__no_": "26",
+            "state_ut": "Puducherry",
+            "deaths_during_2021__till_14th_july_2021_": 1138
+        },
+        {
+            "sl__no_": "27",
+            "state_ut": "Punjab",
+            "deaths_during_2021__till_14th_july_2021_": 10846
+        },
+        {
+            "sl__no_": "28",
+            "state_ut": "Rajasthan",
+            "deaths_during_2021__till_14th_july_2021_": 6278
+        },
+        {
+            "sl__no_": "29",
+            "state_ut": "Sikkim",
+            "deaths_during_2021__till_14th_july_2021_": 190
+        },
+        {
+            "sl__no_": "30",
+            "state_ut": "Tamil Nadu",
+            "deaths_during_2021__till_14th_july_2021_": 21378
+        },
+        {
+            "sl__no_": "31",
+            "state_ut": "Telangana",
+            "deaths_during_2021__till_14th_july_2021_": 2194
+        },
+        {
+            "sl__no_": "32",
+            "state_ut": "Tripura",
+            "deaths_during_2021__till_14th_july_2021_": 333
+        },
+        {
+            "sl__no_": "33",
+            "state_ut": "Uttar Pradesh",
+            "deaths_during_2021__till_14th_july_2021_": 14331
+        },
+        {
+            "sl__no_": "34",
+            "state_ut": "Uttarakhand",
+            "deaths_during_2021__till_14th_july_2021_": 5839
+        },
+        {
+            "sl__no_": "35",
+            "state_ut": "West Bengal",
+            "deaths_during_2021__till_14th_july_2021_": 8234
+        },
+        {
+            "sl__no_": "India",
+            "state_ut": "India",
+            "deaths_during_2021__till_14th_july_2021_": 262670
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:43:14.538962Z",
+    "_pramaan_dataset_name": "covid_deaths_statewise_2021"
+}

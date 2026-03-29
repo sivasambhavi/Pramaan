@@ -1,0 +1,90 @@
+{
+    "index_name": "3a2055ab-0975-45e4-a16f-efc148f95e1e",
+    "title": "Year-wise Value of Overall ( Merchandise Plus Services) Exports, Imports and Trade Deficit from 2017-18 to 2022-23",
+    "desc": "Year-wise Value of Overall ( Merchandise Plus Services) Exports, Imports and Trade Deficit from 2017-18 to 2022-23",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "d1045b41-4c31-4225-8afa-390b454c2498",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1677744332,
+    "updated": 1677746207,
+    "created_date": "2023-03-02T13:35:32Z",
+    "updated_date": "2023-03-02T14:06:47Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "d1045b41-4c31-4225-8afa-390b454c2498",
+        "field": "3a2055ab-0975-45e4-a16f-efc148f95e1e"
+    },
+    "field": [
+        {
+            "id": "years",
+            "name": "Years",
+            "type": "keyword"
+        },
+        {
+            "id": "overall_export",
+            "name": "Overall Export",
+            "type": "double"
+        },
+        {
+            "id": "overall_import",
+            "name": "Overall Import",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 7,
+    "count": 7,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "years": "2017-18",
+            "overall_export": 498.61,
+            "overall_import": 583.11
+        },
+        {
+            "years": "2018-19",
+            "overall_export": 538.08,
+            "overall_import": 640.09
+        },
+        {
+            "years": "2019-20",
+            "overall_export": 526.55,
+            "overall_import": 602.98
+        },
+        {
+            "years": "2020-21",
+            "overall_export": 497.9,
+            "overall_import": 511.12
+        },
+        {
+            "years": "2021-22",
+            "overall_export": 676.53,
+            "overall_import": 760.06
+        },
+        {
+            "years": "2021-22 ( April to October)",
+            "overall_export": 371.99,
+            "overall_import": 406.03
+        },
+        {
+            "years": "2022-23 ( April to October)",
+            "overall_export": 441.46,
+            "overall_import": 541.37
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-24T11:55:10.082347Z",
+    "_pramaan_dataset_name": "merchandise_services_trade_2017_2023"
+}

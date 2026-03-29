@@ -1,0 +1,78 @@
+{
+    "index_name": "028ce5f5-c769-468d-8c1f-f086a74b1ee0",
+    "title": "Year-wise Gross Defence Budget (BE) as Percentage of GDP from 2019-20 to 2021-22",
+    "desc": "Year-wise Gross Defence Budget (BE) as Percentage of GDP from 2019-20 to 2021-22",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "c985f76a-bd31-4309-a6f3-917cfa5d0d78",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1656586414,
+    "updated": 1659075210,
+    "created_date": "2022-06-30T12:53:34Z",
+    "updated_date": "2022-07-29T11:43:30Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "c985f76a-bd31-4309-a6f3-917cfa5d0d78",
+        "field": "028ce5f5-c769-468d-8c1f-f086a74b1ee0"
+    },
+    "field": [
+        {
+            "id": "_year",
+            "name": "Year",
+            "type": "keyword"
+        },
+        {
+            "id": "defence_budget__be___gross_",
+            "name": "Defence Budget (BE) (Gross)",
+            "type": "double"
+        },
+        {
+            "id": "gdp_",
+            "name": "GDP*",
+            "type": "double"
+        },
+        {
+            "id": "defence__budget_as_percentage_of_gdp",
+            "name": "Defence  Budget as percentage of GDP",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 3,
+    "count": 3,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "_year": "2019-20",
+            "defence_budget__be___gross_": 472069.78,
+            "gdp_": 21100607,
+            "defence__budget_as_percentage_of_gdp": 2.24
+        },
+        {
+            "_year": "2020-21",
+            "defence_budget__be___gross_": 514796.69,
+            "gdp_": 22489420,
+            "defence__budget_as_percentage_of_gdp": 2.29
+        },
+        {
+            "_year": "2021-22",
+            "defence_budget__be___gross_": 520794.99,
+            "gdp_": 22287379,
+            "defence__budget_as_percentage_of_gdp": 2.34
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:44:24.702375Z",
+    "_pramaan_dataset_name": "defence_budget_gdp_percentage"
+}

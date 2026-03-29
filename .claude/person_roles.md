@@ -117,25 +117,27 @@ Build the **Streamlit UI** and **AI integration** so that PRAMAAN feels like an 
 ### Main Responsibilities
 
 - Implement Streamlit app:
-  - `01_🏙_Ward_Map.py` – ward overview + Delivery Score
-  - `02_🧷_Proof_Chain.py` – asset list + full chain view
-  - `03_❓_Questions.py` – 3 fixed questions → backend calls
-  - `04_⚡_Live_Ingestion.py` – AI extraction + ingest flow
+  - `01_Ward_Map.py` – ward overview + Delivery Score gauge + asset table + Folium map ✅
+  - `02_Proof_Chain.py` – asset selector + full chain (Scheme→Actor→Asset→Evidence→Beneficiary) + before/after photos ✅
+  - `03_Live_Ingestion.py` – auto-search news, AI extraction (Groq), one-click Neo4j ingest, voice input ✅
+  - `04_Micro_Accountability.py` – WhatsApp/SMS alerts via Twilio for verified assets ✅
 - Integrate with backend APIs using `requests`/`httpx`.
 - Implement AI modules:
-  - `ai_extraction.py` – `extract_governance_entities(text) -> dict`
-  - `nl_query.py` – simple routing from 3 question types to backend calls
-- Cache LLM responses for the main demo PIB text for offline reliability.
+  - `ai/llm_extractor.py` – `extract_governance_entities(text) -> dict` using Groq
+  - `ai/nl_query.py` – routing from 3 question types to backend calls
+- Cache LLM responses (MD5 cache) for offline demo reliability.
 - Polish UI for a smooth 3–4 minute demo flow.
 
 ### Files Sreenu Primarily Owns
 
 - `frontend/app.py`
-- `frontend/pages/01_🏙_Ward_Map.py`
-- `frontend/pages/02_🧷_Proof_Chain.py`
-- `frontend/pages/03_❓_Questions.py`
-- `frontend/pages/04_⚡_Live_Ingestion.py`
-- `ai/ai_extraction.py`
+- `frontend/pages/01_Ward_Map.py`
+- `frontend/pages/02_Proof_Chain.py`
+- `frontend/pages/03_Live_Ingestion.py`
+- `frontend/pages/04_Micro_Accountability.py`
+- `frontend/utils/constants.py`
+- `frontend/utils/voice_input.py`
+- `ai/llm_extractor.py`
 - `ai/nl_query.py`
 
 ---

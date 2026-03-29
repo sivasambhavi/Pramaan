@@ -1,0 +1,78 @@
+{
+    "index_name": "84b0c530-78e2-4f1b-a642-f80312026c86",
+    "title": "Year-wise Details of Volume and Value of Semiconductor Chips and System on a Chip (SoCs) Imported under Harmonized System of Nomenclature (HSN) in the Country from 2021-22 to 2023-24",
+    "desc": "Year-wise Details of Volume and Value of Semiconductor Chips and System on a Chip (SoCs) Imported under Harmonized System of Nomenclature (HSN) in the Country from 2021-22 to 2023-24",
+    "org_type": "Central",
+    "org": [
+        "Rajya Sabha"
+    ],
+    "sector": [
+        "All"
+    ],
+    "source": "data.gov.in",
+    "catalog_uuid": "78889f83-0f96-484b-9fbc-5be92454446f",
+    "visualizable": "1",
+    "active": "1",
+    "created": 1745516520,
+    "updated": 1745516520,
+    "created_date": "2025-04-24T19:42:00Z",
+    "updated_date": "2025-04-24T19:42:00Z",
+    "external_ws": 0,
+    "external_ws_url": "",
+    "target_bucket": {
+        "index": "api",
+        "type": "78889f83-0f96-484b-9fbc-5be92454446f",
+        "field": "84b0c530-78e2-4f1b-a642-f80312026c86"
+    },
+    "field": [
+        {
+            "id": "_year",
+            "name": "Year",
+            "type": "keyword"
+        },
+        {
+            "id": "volume__quantity_in_bn_",
+            "name": "Volume (Quantity in Bn)",
+            "type": "double"
+        },
+        {
+            "id": "value__usd_bn_",
+            "name": "Value (USD Bn)",
+            "type": "double"
+        },
+        {
+            "id": "value__rs__in_lakh_crore_",
+            "name": "Value (Rs. In Lakh Crore)",
+            "type": "double"
+        }
+    ],
+    "message": "Resource lists",
+    "version": "2.2.0",
+    "status": "ok",
+    "total": 3,
+    "count": 3,
+    "limit": "200",
+    "offset": "0",
+    "records": [
+        {
+            "_year": "2021-22",
+            "volume__quantity_in_bn_": 17.89,
+            "value__usd_bn_": 13.6,
+            "value__rs__in_lakh_crore_": 1.071
+        },
+        {
+            "_year": "2022-23",
+            "volume__quantity_in_bn_": 14.64,
+            "value__usd_bn_": 16.14,
+            "value__rs__in_lakh_crore_": 1.297
+        },
+        {
+            "_year": "2023-24",
+            "volume__quantity_in_bn_": 18.43,
+            "value__usd_bn_": 20.7,
+            "value__rs__in_lakh_crore_": 1.714
+        }
+    ],
+    "_pramaan_fetched_at": "2026-03-23T12:44:24.031613Z",
+    "_pramaan_dataset_name": "semiconductor_imports_2021_2024"
+}

@@ -1,6 +1,0 @@
-eventid,name,type,date,description,related_node_id,region_id
-EVT_W45_DRAIN_INAUG,Drain Inauguration Gali 7,Inauguration,2025-03-12,MCD Councillor inaugurated new drain,ASSET_W45_GALI7_DRAIN,WARD45_SHAHDARA
-EVT_W45_ROAD_INSPECT,Road Quality Inspection,Inspection,2024-11-20,MCD Engineers inspected road work in progress,ASSET_W45_GALI7_ROAD,WARD45_SHAHDARA
-EVT_W47_SBM_COMPLAINT,SBM Toilet Complaint,Complaint,2024-06-15,Residents complained about stalled work,ASSET_W47_TOILET,WARD47_GANDHINAGAR
-EVT_DELHI_SMOG,Severe Smog Delhi,ClimateHazard,2024-11-05,AQI crossed 500 delaying outdoor construction work,,DELHI_STATE
-EVT_AB_DISTRIBUTION,Ayushman Card Distribution Camp,Inauguration,2024-10-18,Camp organized in Booth 12 for health cards,SCHEME_AB,WARD45_SHAHDARA

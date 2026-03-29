@@ -1,6 +1,0 @@
-beneficiary_id,scheme_id,region_id,count,description
-BEN_GALI7_DRAIN,SCH_SFC,REG_W45_GALI7,100,Households protected from waterlogging in Gali No. 7
-BEN_GALI7_ROAD,SCH_SFC,REG_W45_GALI7,100,Households benefiting from smoother internal road in Gali No. 7
-BEN_MARKET_TOILET,SCH_SWACHH,REG_W45_MARKET_ROAD,250,Approximate daily users of renovated public toilet near Shahdara Market
-BEN_COLONYY_PMAY,SCH_PMAY,REG_W45_COLONY_Y,120,Approximate residents in 30 PMAY housing units in Colony Y
-BEN_BLOCKA_LIGHTS,SCH_LOCAL_LIGHTS,REG_W45_BLOCKA,180,Households benefiting from improved night-time lighting in Block A
