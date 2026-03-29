@@ -100,7 +100,7 @@ def home() -> None:
       {"<div class='logo-wrap'><img class='logo-img' src='" + logo_src + "' /></div>" if logo_src else ""}
       <div class="title-block">
         <div class="hero-title">PRAMAAN</div>
-        <div class="hero-tagline">India Governance Intelligence &amp; <span style="color:#f97316;-webkit-text-fill-color:#f97316;">Proof System</span></div>
+        <div class="hero-tagline">Global <span style="color:#f97316;-webkit-text-fill-color:#f97316;">AI</span>-Powered Governance Intelligence &amp; <span style="color:#f97316;-webkit-text-fill-color:#f97316;">Proof System</span></div>
       </div>
       <div class="explainer">
         Know what's happening. Know why. Decide with proof.

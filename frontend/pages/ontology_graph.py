@@ -20,41 +20,39 @@ from utils.events import EVENTS_BY_ID, render_event_dropdown
 from components.topnav import render_topnav
 from components.ontology_model import render_ontology_model
 
-_OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://192.168.48.1:11434")
+_OLLAMA_HOST  = os.environ.get("OLLAMA_HOST",  "http://192.168.48.1:11434")
 _OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3:latest")
-_GROQ_OK = True   # kept for UI gate — Ollama always available
+try:
+    from groq import Groq as _Groq
+    _GROQ_KEY = os.environ.get("GROQ_API_KEY", "")
+    _GROQ_AVAILABLE = bool(_GROQ_KEY)
+except ImportError:
+    _GROQ_AVAILABLE = False
+_GROQ_OK = True   # kept for UI gate
 
 
-def _generate_insights(event_id: str, event_name: str, context: str):
-    """Stream Ollama insights for a selected event."""
+_BRIEF_PROMPT = (
+    "You are PRAMAAN, an AI governance intelligence engine.\n\n"
+    "Event: {event_name} ({event_id})\n\n"
+    "Context:\n{context}\n\n"
+    "Reply with EXACTLY this structure. One line per point, no extra explanation.\n\n"
+    "### Situation\n"
+    "One sentence only.\n\n"
+    "### Cross-Domain Impact\n"
+    "Exactly 5 bullets, one line each:\n"
+    "- **[Domain]** → [10 words max]\n\n"
+    "### Actions\n"
+    "3 bullets, one line each:\n"
+    "- **[Actor]** · [action] · [outcome]"
+)
+
+
+def _ollama_stream(prompt: str):
     import requests, json as _json
-    prompt = (
-        f"You are PRAMAAN, an AI governance intelligence engine.\n\n"
-        f"Event: {event_name} ({event_id})\n\n"
-        f"Context:\n{context}\n\n"
-        "Reply with EXACTLY this structure. One line per point, no extra explanation.\n\n"
-        "### Situation\n"
-        "One sentence only.\n\n"
-        "### Cross-Domain Impact\n"
-        "Exactly 5 bullets, one line each:\n"
-        "- **[Domain]** → [10 words max]\n\n"
-        "### Actions\n"
-        "3 bullets, one line each:\n"
-        "- **[Actor]** · [action] · [outcome]"
-    )
-    resp = requests.post(
-        f"{_OLLAMA_HOST}/api/generate",
-        json={"model": _OLLAMA_MODEL, "prompt": prompt, "stream": True},
-        stream=True,
-        timeout=120,
-    )
-    resp.raise_for_status()
 
     class _StreamWrapper:
-        """Wraps Ollama streaming response to match the iteration pattern."""
         def __init__(self, r):
             self._r = r
-
         def __iter__(self):
             for line in self._r.iter_lines():
                 if line:
@@ -65,7 +63,44 @@ def _generate_insights(event_id: str, event_name: str, context: str):
                     if chunk.get("done"):
                         return
 
+    resp = requests.post(
+        f"{_OLLAMA_HOST}/api/generate",
+        json={"model": _OLLAMA_MODEL, "prompt": prompt, "stream": True},
+        stream=True, timeout=120,
+    )
+    resp.raise_for_status()
     return _StreamWrapper(resp)
+
+
+def _groq_stream(prompt: str):
+    client = _Groq(api_key=_GROQ_KEY)
+
+    class _GroqWrapper:
+        def __init__(self, stream):
+            self._s = stream
+        def __iter__(self):
+            for chunk in self._s:
+                yield chunk.choices[0].delta.content or ""
+
+    stream = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.3, max_tokens=400, stream=True,
+    )
+    return _GroqWrapper(stream)
+
+
+def _generate_insights(event_id: str, event_name: str, context: str):
+    """Try Ollama first; fall back to Groq on any error."""
+    prompt = _BRIEF_PROMPT.format(
+        event_name=event_name, event_id=event_id, context=context
+    )
+    try:
+        return _ollama_stream(prompt)
+    except Exception as ollama_err:
+        if _GROQ_AVAILABLE:
+            return _groq_stream(prompt)
+        raise RuntimeError(f"Ollama failed ({ollama_err}) and Groq not configured.")
 
 NODE_CONFIG = {
     "Event":    {"color": "#f97316", "size": 26, "shape": "dot",     "desc": "High-impact incidents"},
@@ -1267,9 +1302,16 @@ def page():
         _ai_event_id = st.session_state.get("ontology_sel")
         if _ai_event_id and _GROQ_OK:
             st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+            try:
+                import urllib.request as _ur
+                _ur.urlopen(f"{_OLLAMA_HOST}/api/tags", timeout=2)
+                _ai_status = '<span style="color:#22c55e;">● Ollama</span>'
+            except Exception:
+                _ai_status = '<span style="color:#f59e0b;">● Groq fallback</span>' if _GROQ_AVAILABLE else '<span style="color:#ef4444;">● offline</span>'
             st.markdown(
-                '<div style="font-size:9px;font-weight:700;color:#475569;text-transform:uppercase;'
-                'letter-spacing:.08em;margin-bottom:6px;">AI INSIGHTS</div>',
+                f'<div style="font-size:9px;font-weight:700;color:#475569;text-transform:uppercase;'
+                f'letter-spacing:.08em;margin-bottom:6px;">AI INSIGHTS&nbsp;&nbsp;'
+                f'<span style="font-weight:400;text-transform:none;">{_ai_status}</span></div>',
                 unsafe_allow_html=True,
             )
             if st.button("Generate Brief →", key=f"btn_ai_brief_{_ai_event_id}",
@@ -1300,20 +1342,42 @@ def page():
                             out += token
                         st.session_state[f"ai_brief_{_ai_event_id}"] = out
                     except Exception as ex:
-                        st.error(f"Ollama error: {ex}")
+                        st.error(f"AI brief error: {ex}")
 
             _brief = st.session_state.get(f"ai_brief_{_ai_event_id}", "")
             if _brief:
-                import markdown as _md
-                _html_body = _md.markdown(_brief, extensions=["nl2br"])
+                # Render brief as styled HTML matching panel typography
+                _lines = _brief.strip().splitlines()
+                _rows = []
+                for _ln in _lines:
+                    _s = _ln.strip()
+                    if not _s:
+                        continue
+                    if _s.startswith("### "):
+                        _rows.append(
+                            f'<div style="font-size:8px;font-weight:700;color:#f97316;'
+                            f'text-transform:uppercase;letter-spacing:0.1em;'
+                            f'margin:8px 0 3px;border-left:2px solid #f97316;padding-left:5px;">'
+                            f'{_s[4:]}</div>'
+                        )
+                    elif _s.startswith("- "):
+                        _txt = _s[2:].replace("**", "")
+                        _rows.append(
+                            f'<div style="font-size:9px;color:#94a3b8;line-height:1.45;'
+                            f'padding:1px 0 1px 8px;border-left:1px solid #1e293b;">'
+                            f'· {_txt}</div>'
+                        )
+                    else:
+                        _rows.append(
+                            f'<div style="font-size:9px;color:#cbd5e1;line-height:1.45;'
+                            f'margin-bottom:2px;">{_s}</div>'
+                        )
                 st.markdown(
                     f'<div style="background:#060f1e;border:1px solid #1e293b;'
-                    f'border-radius:8px;padding:10px 14px;margin-top:6px;'
-                    f'max-height:340px;overflow-y:auto;">'
-                    f'<div style="font-size:10px;line-height:1.6;color:#94a3b8;'
-                    f'font-family:\'Inter\',sans-serif;">'
-                    f'{_html_body}'
-                    f'</div></div>',
+                    f'border-radius:6px;padding:8px 10px;margin-top:6px;'
+                    f'max-height:200px;overflow-y:auto;">'
+                    + "".join(_rows)
+                    + f'</div>',
                     unsafe_allow_html=True,
                 )
 

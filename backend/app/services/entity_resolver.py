@@ -36,7 +36,7 @@ from rapidfuzz import process, fuzz
 log = logging.getLogger("pramaan.entity_resolver")
 
 # ── Config ────────────────────────────────────────────────────────────────────
-FUZZY_THRESHOLD = 82   # minimum rapidfuzz score to accept a match (0–100)
+FUZZY_THRESHOLD = 72   # minimum rapidfuzz score to accept a match (0–100)
 CACHE_TTL       = 300  # seconds — 5 minutes
 
 # ── In-memory node cache: label → (timestamp, {id_or_name: canonical_id}) ────

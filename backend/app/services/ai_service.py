@@ -16,7 +16,7 @@ source_type must be one of:
 LLM priority chain:
   1. Ollama (local — llama3, mistral, deepseek-coder)
   2. Groq (remote — llama-3.3-70b)
-  3. Gemini (remote — gemini-1.5-flash)
+  3. Gemini (remote — gemini-2.5-flash)
 """
 
 import os
@@ -24,7 +24,7 @@ import json
 import logging
 import requests as _requests
 from groq import Groq
-import google.generativeai as genai
+from google import genai as _genai
 from app.config import settings
 from app.utils.retry import retryable
 
@@ -68,9 +68,8 @@ class AIService:
         gemini_key = settings.google_api_key or os.environ.get("GOOGLE_API_KEY", "")
         if gemini_key:
             try:
-                genai.configure(api_key=gemini_key)
-                self.gemini = genai.GenerativeModel("gemini-1.5-flash")
-                logger.info("AIService: Gemini client initialised (tertiary)")
+                self.gemini = _genai.Client(api_key=gemini_key)
+                logger.info("AIService: Gemini client initialised (tertiary, gemini-2.5-flash)")
             except Exception as e:
                 logger.warning(f"Could not init Gemini client: {e}")
 
@@ -90,13 +89,10 @@ class AIService:
         return "429" in err or "rate_limit_exceeded" in err or "quota" in err.lower()
 
     def _call_gemini(self, prompt: str) -> str:
-        """Call Gemini Flash and return raw text response."""
-        resp = self.gemini.generate_content(
-            prompt,
-            generation_config=genai.GenerationConfig(
-                temperature=0.0,
-                response_mime_type="application/json",
-            ),
+        """Call Gemini 2.5 Flash and return raw text response."""
+        resp = self.gemini.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
         )
         return resp.text.strip()
 

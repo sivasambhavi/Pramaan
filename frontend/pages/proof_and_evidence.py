@@ -15,6 +15,11 @@ import streamlit as st
 from collections import defaultdict
 from groq import Groq
 from dotenv import load_dotenv
+try:
+    from google import genai as _genai
+    _GENAI_AVAILABLE = True
+except ImportError:
+    _GENAI_AVAILABLE = False
 from utils.api import safe_get
 from utils.events import EVENTS, N_EVENTS as _N_EVENTS, render_event_dropdown
 from components.topnav import render_topnav
@@ -39,7 +44,11 @@ SEV_COLOR = {"critical": "#ef4444", "high": "#f97316", "medium": "#facc15"}
 MONTH_MAP = {"Jan":1,"Feb":2,"Mar":3,"Apr":4,"May":5,"Jun":6,
              "Jul":7,"Aug":8,"Sep":9,"Oct":10,"Nov":11,"Dec":12}
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "") or os.getenv("GOOGLE_API_KEY", "")
+
+# ── Pre-loaded briefs removed (now using live AI generation) ───────────────────
+
 
 
 
@@ -272,8 +281,7 @@ def _voice_input_widget(key_suffix: str) -> str:
 
 
 def _generate_brief(context: str, name: str, query: str):
-    """Call Groq LLaMA 3.3 70B to generate a decision brief (streaming)."""
-    client = Groq(api_key=GROQ_API_KEY)
+    """Generate decision brief — Groq primary, Gemini fallback on 429."""
     system_prompt = (
         "You are PRAMAAN — an AI-powered Global Ontology Engine that synthesizes verified government data "
         "into intelligence briefs for senior officials, policymakers, and researchers. "
@@ -304,16 +312,45 @@ def _generate_brief(context: str, name: str, query: str):
         "⚠️ **Intelligence gap** if data is insufficient — state what is missing)\n\n"
         "Use only data from the context. Do not hallucinate facts."
     )
-    return client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user",   "content": user_prompt},
-        ],
-        temperature=0.3,
-        max_tokens=1200,
-        stream=True,
-    )
+    full_prompt = f"{system_prompt}\n\n{user_prompt}"
+
+    # ── Primary: Groq streaming ───────────────────────────────────────────────
+    if GROQ_API_KEY:
+        try:
+            client = Groq(api_key=GROQ_API_KEY)
+            return client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user",   "content": user_prompt},
+                ],
+                temperature=0.3,
+                max_tokens=1200,
+                stream=True,
+            )
+        except Exception as e:
+            if "429" not in str(e) and "rate_limit" not in str(e):
+                raise
+
+    # ── Fallback: Gemini (non-streaming, wraps as iterable) ───────────────────
+    if _GENAI_AVAILABLE and GEMINI_API_KEY:
+        gclient = _genai.Client(api_key=GEMINI_API_KEY)
+        resp    = gclient.models.generate_content(
+            model="gemini-2.5-flash", contents=full_prompt
+        )
+        text = resp.text or ""
+
+        class _GeminiIter:
+            def __init__(self, t):
+                self._chunks = [type("C", (), {"choices": [type("Ch", (), {"delta": type("D", (), {"content": t})()})()]})()]
+                self._done   = False
+            def __iter__(self):
+                if not self._done:
+                    self._done = True
+                    yield self._chunks[0]
+        return _GeminiIter(text)
+
+    raise RuntimeError("No AI provider available — set GROQ_API_KEY or GEMINI_API_KEY")
 
 
 def _build_compound_context(risk_data: dict) -> str:
@@ -365,8 +402,8 @@ def _build_compound_context(risk_data: dict) -> str:
 
 
 def _generate_compound_brief(context: str, query: str):
-    """Generate a portfolio-level compound risk brief (streaming)."""
-    client = Groq(api_key=GROQ_API_KEY)
+    """Generate a portfolio-level compound risk brief — Groq primary, Gemini fallback."""
+    _groq_ok = bool(GROQ_API_KEY)
     system_prompt = (
         "You are PRAMAAN — an AI-powered Global Ontology Engine providing portfolio-level "
         "national intelligence to senior decision-makers. "
@@ -394,16 +431,37 @@ def _generate_compound_brief(context: str, query: str):
         "or intelligence gap. Order by urgency.\n\n"
         "Use only data from the context. Do not hallucinate facts."
     )
-    return client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user",   "content": user_prompt},
-        ],
-        temperature=0.3,
-        max_tokens=1600,
-        stream=True,
-    )
+    full_prompt = f"{system_prompt}\n\n{user_prompt}"
+    if _groq_ok:
+        try:
+            client = Groq(api_key=GROQ_API_KEY)
+            return client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user",   "content": user_prompt},
+                ],
+                temperature=0.3,
+                max_tokens=1600,
+                stream=True,
+            )
+        except Exception as e:
+            if "429" not in str(e) and "rate_limit" not in str(e):
+                raise
+    if _GENAI_AVAILABLE and GEMINI_API_KEY:
+        gclient = _genai.Client(api_key=GEMINI_API_KEY)
+        resp    = gclient.models.generate_content(model="gemini-2.5-flash", contents=full_prompt)
+        text    = resp.text or ""
+        class _GeminiIter:
+            def __init__(self, t):
+                self._chunks = [type("C", (), {"choices": [type("Ch", (), {"delta": type("D", (), {"content": t})()})()]})()]
+                self._done   = False
+            def __iter__(self):
+                if not self._done:
+                    self._done = True
+                    yield self._chunks[0]
+        return _GeminiIter(text)
+    raise RuntimeError("No AI provider available — set GROQ_API_KEY or GEMINI_API_KEY")
 
 
 def _build_default_queries(name: str, domain: str, data: dict) -> list[str]:
@@ -656,38 +714,12 @@ def _render_citizen_report_tab(event_id: str, data: dict):
         with gps_col2:
             longitude = st.number_input("Longitude", value=77.2736, format="%.4f", key="cr_lon")
 
-        st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
-                    'margin:12px 0 8px">STEP 4 — UPLOAD PHOTO</div>',
-                    unsafe_allow_html=True)
-        uploaded_file = st.file_uploader(
-            "Upload a photo of the issue (JPEG / PNG / WebP, max 15 MB)",
-            type=["jpg", "jpeg", "png", "webp"],
-            key="cr_photo",
-        )
+        uploaded_file = None
 
         st.markdown("")
         submit_btn = st.button("🚩 Submit Report", type="primary", use_container_width=True, key="cr_submit")
 
     with col_preview:
-        st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
-                    'margin-bottom:8px">PHOTO PREVIEW</div>',
-                    unsafe_allow_html=True)
-
-        if uploaded_file:
-            st.image(uploaded_file, use_container_width=True)
-            file_kb = len(uploaded_file.getvalue()) // 1024
-            st.markdown(
-                f'<div style="font-size:9px;color:#64748b;margin-top:4px">'
-                f'{uploaded_file.name} · {file_kb} KB · {uploaded_file.type}</div>',
-                unsafe_allow_html=True,
-            )
-        else:
-            st.markdown("""
-            <div style="background:#0a0f1e;border:1px dashed #1e293b;border-radius:10px;
-                        padding:40px 20px;text-align:center;color:#475569;font-size:11px">
-              📷<br>Upload a photo to preview it here
-            </div>
-            """, unsafe_allow_html=True)
 
         st.markdown('<div style="font-size:11px;font-weight:700;color:#e2e8f0;'
                     'margin:16px 0 8px">MOCK QR CODE (demo)</div>',
@@ -827,17 +859,17 @@ def page():
     header[data-testid="stHeader"] { height: 0 !important; min-height: 0 !important; }
     section[data-testid="stMain"] > div:first-child { padding-top: 0 !important; }
     div[data-testid="stVerticalBlock"] > div:first-child { margin-top: 0 !important; }
-    .stMarkdown p  { font-size: 13px !important; color: #cbd5e1 !important; line-height: 1.6 !important; }
-    .stMarkdown h1, .stMarkdown h2 { font-size: 16px !important; font-weight: 700 !important; color: #f97316 !important; margin: 10px 0 4px !important; }
-    .stMarkdown h3 { font-size: 16px !important; font-weight: 600 !important; color: #fb923c !important; margin: 8px 0 3px !important; }
-    .stMarkdown ul li, .stMarkdown ol li { color: #94a3b8 !important; font-size: 12.5px !important; line-height: 1.6 !important; }
-    .stMarkdown strong { color: #e2e8f0 !important; }
-    .stMarkdown code   { font-size: 11px !important; }
+    .stMarkdown p  { font-size: 10px !important; color: #94a3b8 !important; line-height: 1.55 !important; }
+    .stMarkdown h1, .stMarkdown h2 { font-size: 11px !important; font-weight: 700 !important; color: #f97316 !important; margin: 8px 0 3px !important; }
+    .stMarkdown h3 { font-size: 11px !important; font-weight: 600 !important; color: #fb923c !important; margin: 6px 0 3px !important; }
+    .stMarkdown ul li, .stMarkdown ol li { color: #94a3b8 !important; font-size: 10px !important; line-height: 1.55 !important; }
+    .stMarkdown strong { color: #cbd5e1 !important; }
+    .stMarkdown code   { font-size: 9px !important; }
     @keyframes glowPulse {
         0%, 100% { text-shadow: 0 0 10px rgba(56,189,248,0.7), 0 0 30px rgba(56,189,248,0.4), 0 0 50px rgba(56,189,248,0.2); }
         50%       { text-shadow: 0 0 25px rgba(56,189,248,1), 0 0 60px rgba(56,189,248,0.8), 0 0 100px rgba(56,189,248,0.5); }
     }
-    div[data-testid="stExpander"] summary p { font-size: 12px !important; }
+    div[data-testid="stExpander"] summary p { font-size: 10px !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -856,7 +888,7 @@ def page():
     # ── Sidebar ────────────────────────────────────────────────────────────────
     with st.sidebar:
         st.markdown("""
-        <div style="font-size:13px;font-weight:700;color:#38bdf8;font-family:'Cinzel',serif;
+        <div style="font-size:10px;font-weight:700;color:#38bdf8;font-family:'Cinzel',serif;
                     letter-spacing:0.06em;margin-bottom:12px;padding-bottom:8px;
                     border-bottom:1px solid #1e293b;">BRIEF MODE</div>
         """, unsafe_allow_html=True)
@@ -879,7 +911,7 @@ def page():
 
         if mode == "Single Event":
             st.markdown("""
-            <div style="font-size:13px;font-weight:700;color:#38bdf8;font-family:'Cinzel',serif;
+            <div style="font-size:10px;font-weight:700;color:#38bdf8;font-family:'Cinzel',serif;
                         letter-spacing:0.06em;margin-bottom:12px;padding-bottom:8px;
                         border-bottom:1px solid #1e293b;">EVENT NAVIGATOR</div>
             """, unsafe_allow_html=True)
@@ -998,7 +1030,7 @@ def page():
 
             brief_placeholder = st.empty()
             full_text = ""
-            with st.spinner("Generating compound risk brief..."):
+            with st.spinner("Generating compound risk brief…"):
                 try:
                     stream = _generate_compound_brief(context, final_compound_query)
                     for chunk in stream:
@@ -1071,7 +1103,7 @@ def page():
     # ── Citizen section ────────────────────────────────────────────────────────
     _render_citizen_whatsapp(event_id, name, data)
 
-    with st.expander("🚩 Report a Field Issue", expanded=False):
+    with st.expander("🚩 Report a Field Issue - survey details", expanded=False):
         _render_citizen_report_tab(event_id, data)
 
     st.markdown("---")
@@ -1094,17 +1126,18 @@ def page():
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
         generate = st.button("Generate Brief →", type="primary", use_container_width=True)
 
-    cache_key = f"brief_cache_{event_id}"
+    # ── Check for pre-loaded brief ─────────────────────────────────────────────
+    # [Hardcoded briefs removed — all now dynamic]
 
     if generate:
         st.markdown("---")
         st.markdown(
             f'<div style="background:#0a1628;border:1px solid {color}44;border-left:4px solid {color};'
             f'border-radius:10px;padding:12px 18px;margin-bottom:16px;">'
-            f'<div style="font-size:14px;font-weight:700;color:{color};">INTELLIGENCE BRIEF: {name.upper()}</div>'
-            f'<div style="font-size:11.5px;color:#475569;margin-top:4px;">'
+            f'<div style="font-size:11px;font-weight:700;color:{color};">INTELLIGENCE BRIEF: {name.upper()}</div>'
+            f'<div style="font-size:9px;color:#475569;margin-top:4px;">'
             f'Query: <span style="color:#94a3b8;font-style:italic;">{final_query}</span></div>'
-            f'<div style="font-size:10.5px;color:#334155;margin-top:3px;">'
+            f'<div style="font-size:9px;color:#334155;margin-top:3px;">'
             f'Model: LLaMA 3.3 70B · Source: PRAMAAN Neo4j Ontology · Groq AI</div>'
             f'</div>',
             unsafe_allow_html=True,
@@ -1123,9 +1156,9 @@ def page():
 
         brief_placeholder = st.empty()
         full_text = ""
-        context = _build_context(event_id, name, data=data)
 
-        with st.spinner("Generating brief with Groq LLaMA 3.3 70B..."):
+        context = _build_context(event_id, name, data=data)
+        with st.spinner("Generating brief…"):
             try:
                 stream = _generate_brief(context, name, final_query)
                 for chunk in stream:
@@ -1133,7 +1166,7 @@ def page():
                     full_text += delta
                     brief_placeholder.markdown(full_text)
             except Exception as e:
-                st.error(f"Groq API error: {e}")
+                st.error(f"Brief generation error: {e}")
                 return
 
         brief_placeholder.markdown(_style_priorities(full_text), unsafe_allow_html=True)
@@ -1145,51 +1178,22 @@ def page():
                               total_impacts=impacts_count),
             unsafe_allow_html=True,
         )
-        # Cache result for this session
-        st.session_state[cache_key] = {
-            "text": full_text, "query": final_query,
-            "score": score, "label": label, "trust_color": trust_color,
-            "grounding": grounding, "govdata_count": govdata_impacts,
-            "total_impacts": impacts_count,
-        }
         with st.expander("View raw ontology context used", expanded=False):
             st.code(context, language="text")
 
     else:
-        cached = st.session_state.get(cache_key)
-        if cached:
-            st.markdown(
-                f'<div style="background:#0a1628;border:1px solid {color}44;border-left:4px solid {color};'
-                f'border-radius:10px;padding:12px 18px;margin-bottom:16px;">'
-                f'<div style="font-size:14px;font-weight:700;color:{color};">INTELLIGENCE BRIEF: {name.upper()}</div>'
-                f'<div style="font-size:11.5px;color:#475569;margin-top:4px;">'
-                f'Query: <span style="color:#94a3b8;font-style:italic;">{cached["query"]}</span></div>'
-                f'<div style="font-size:10.5px;color:#334155;margin-top:3px;">'
-                f'Model: LLaMA 3.3 70B · Source: PRAMAAN Neo4j Ontology · Groq AI</div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                _render_trust_bar(cached["score"], cached["label"], cached["trust_color"],
-                                  grounding=cached["grounding"],
-                                  govdata_count=cached["govdata_count"],
-                                  total_impacts=cached["total_impacts"]),
-                unsafe_allow_html=True,
-            )
-            st.markdown(_style_priorities(cached["text"]), unsafe_allow_html=True)
-        else:
-            st.markdown("""
-            <div style="background:#0a1628;border:1px dashed #1e293b;border-radius:12px;
-                        padding:40px;text-align:center;margin-top:20px;">
-              <div style="font-size:14px;color:#475569;margin-bottom:6px;">
-                Select a query above, then click <b style="color:#38bdf8;">Generate Brief</b>
-              </div>
-              <div style="font-size:12px;color:#334155;">
-                PRAMAAN will synthesize verified ontology data into a structured intelligence brief<br>
-                using Groq LLaMA 3.3 70B · All facts drawn from real government sources
-              </div>
-            </div>
-            """, unsafe_allow_html=True)
+        st.markdown(f"""
+        <div style="background:#0a1628;border:1px dashed #1e293b;border-radius:12px;
+                    padding:40px;text-align:center;margin-top:20px;">
+          <div style="font-size:10px;color:#475569;margin-bottom:6px;">
+            Select a query above, then click <b style="color:#38bdf8;">Generate Brief</b>
+          </div>
+          <div style="font-size:9px;color:#334155;">
+            PRAMAAN will synthesize verified ontology data into a structured intelligence brief<br>
+            using Groq LLaMA 3.3 70B · All facts drawn from real government sources
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 
