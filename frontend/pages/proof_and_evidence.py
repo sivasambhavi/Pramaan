@@ -41,103 +41,6 @@ MONTH_MAP = {"Jan":1,"Feb":2,"Mar":3,"Apr":4,"May":5,"Jun":6,
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
-# ── Pre-loaded briefs for demo events (instant, no API call needed) ───────────
-_PRELOADED_BRIEFS = {
-    "EVT_DELHI_FLOODS_2023": {
-        "text": """## Situation Summary
-The 2023 Delhi Yamuna floods were triggered by upstream Hathnikund Barrage releasing **3.59 lakh cusecs** [REF: data.gov.in] on 12 July 2023 — the highest discharge in 45 years — combined with record 153mm single-day monsoon rainfall [REF: data.gov.in]. The Yamuna breached 208.66m [REF: data.gov.in], the highest since 1978, inundating 27,000 affected persons across low-lying areas [REF: data.gov.in].
-
-## Key Impacts
-- **27,000 persons displaced** from floodplains [REF: data.gov.in]
-- **153mm rainfall in 24 hours** — highest single-day record for July [REF: data.gov.in]
-- **Hathnikund discharge: 3.59 lakh cusecs** — upstream trigger [REF: data.gov.in]
-- **Yamuna level: 208.66m** — highest since 1978 [REF: data.gov.in]
-- ITO, Civil Lines, Kashmere Gate, Yamuna Bazaar submerged [REF: Curated]
-
-## Actors & Accountability
-- **Delhi Jal Board (DJB):** Water treatment plants at Chandrawal and Wazirabad shut down, causing acute water shortage during and after flooding [REF: Curated]
-- **Delhi Disaster Management Authority (DDMA):** Evacuation of 27,000 persons executed, though early warning communication gaps documented [REF: Curated]
-- **Haryana (Hathnikund Barrage operators):** Rapid gate release without adequate downstream warning to Delhi — inter-state coordination failure [REF: Curated]
-- **DDA:** Decades of unauthorised encroachment on Yamuna floodplain permitted under its watch [REF: Curated]
-
-## Cross-Domain Connections
-The flood's severity is a direct consequence of **floodplain encroachment** (Governance/Urban domain): DDA permitted construction on O-zone reducing the Yamuna's natural buffer from 97 sq km to under 20 sq km over 30 years. Combined with **climate domain** — intensifying monsoon events — this creates a structural compound risk that worsens each year without land-use reform.
-
-## Governance Gaps / Recommendations
-
-### Priority 1 — URGENT (48h)
-**Actor:** Delhi Jal Board
-**Action:** Activate backup water supply through tankers to all wards within flood-affected zones; restore Chandrawal and Wazirabad plant operations immediately
-**Why:** 27,000 displaced persons face water scarcity compounded by plant shutdown [REF: data.gov.in]
-**Outcome:** Zero water-shortage complaints from relief camps within 48 hours
-
-### Priority 2 — SHORT-TERM (30 days)
-**Actor:** DDMA + Haryana Irrigation Dept
-**Action:** Establish a real-time bilateral flood early-warning protocol — Hathnikund discharge data to Delhi DDMA with minimum 12-hour lead time
-**Why:** 2023 discharge of 3.59 lakh cusecs gave Delhi less than 6 hours warning [REF: Curated]
-**Outcome:** 12-hour advance evacuation notice issued for all future high-discharge events
-
-### Priority 3 — STRUCTURAL (6 months)
-**Actor:** DDA + MoEF
-**Action:** Evict all unauthorised structures from O-zone (Yamuna floodplain), restore 97 sq km buffer zone per original Master Plan 2021 zoning
-**Why:** Encroachment reduced flood absorption capacity — core reason 208.66m was reached [REF: Curated]
-**Outcome:** Yamuna floodplain restored; next equivalent discharge contained below danger mark of 205.33m
-⚠️ **Cross-domain flag:** Eviction will displace an estimated 48,000 floodplain residents — requires parallel PMAY housing allocation""",
-        "govdata_count": 5,
-        "total_impacts": 6,
-        "trust_score": 87,
-        "trust_label": "HIGH",
-        "trust_color": "#22c55e",
-        "grounding": {"verified": ["3.59", "208.66", "27000", "153", "1978"], "unverified": [], "total": 5},
-    },
-    "EVT_WAYANAD_2024": {
-        "text": """## Situation Summary
-The Wayanad landslide of 30 July 2024 struck Mundakkai and Chooralmala villages at 2am, killing **231 persons** [REF: data.gov.in] and leaving hundreds missing in what became Kerala's deadliest landslide in recorded history. The disaster occurred in a **Zone IV (very high risk)** area that the Gadgil Committee (2011) had recommended for protected status — a recommendation rejected by the state [REF: Curated].
-
-## Key Impacts
-- **231 confirmed dead** [REF: data.gov.in]
-- **1,000+ displaced** across relief camps [REF: data.gov.in]
-- **Mundakkai and Chooralmala villages** near-totally destroyed [REF: Curated]
-- Strike at 2am — early warning system did not activate evacuation [REF: Curated]
-- IMD had issued Orange Alert (not Red) for Wayanad on 29 July [REF: Curated]
-
-## Actors & Accountability
-- **IMD:** Issued Orange Alert rather than Red Alert despite extreme rainfall forecast — threshold calibration failure [REF: Curated]
-- **Kerala State Disaster Management Authority (KSDMA):** No pre-emptive evacuation ordered for high-risk villages despite alert [REF: Curated]
-- **Ministry of Environment (MoEF):** Failed to implement Gadgil Committee recommendations on Western Ghats Ecologically Sensitive Area [REF: Curated]
-- **NDRF:** 6 teams deployed within 24 hours; rescue operation ongoing [REF: Curated]
-
-## Cross-Domain Connections
-Root cause is **deforestation and plantation monoculture** replacing native forest in Wayanad's fragile slopes (Climate/Environment domain). Over 40% of Wayanad's forests converted to tea and coffee estates, reducing slope stability. Combined with intensifying rainfall (Climate domain) and rejected environmental protection (Governance domain — Gadgil Committee ignored), this was a predictable outcome flagged 13 years before it occurred.
-
-## Governance Gaps / Recommendations
-
-### Priority 1 — URGENT (48h)
-**Actor:** KSDMA + NDRF
-**Action:** Complete search and rescue; establish biometric registration of all survivors to prevent missing-person double-counting
-**Why:** Hundreds still unaccounted for 48 hours post-event [REF: data.gov.in]
-**Outcome:** All survivors registered; missing persons list closed within 72 hours
-
-### Priority 2 — SHORT-TERM (30 days)
-**Actor:** IMD + KSDMA
-**Action:** Revise IMD alert thresholds — trigger mandatory evacuation on Orange Alert (not Red) for any Zone III/IV village in Western Ghats
-**Why:** Orange Alert was active but no evacuation ordered — threshold was insufficient [REF: Curated]
-**Outcome:** Zero night-time casualties in future Orange Alert events in high-risk zones
-
-### Priority 3 — STRUCTURAL (6 months)
-**Actor:** MoEF + Kerala Government
-**Action:** Implement Gadgil Committee Ecologically Sensitive Area (ESA) demarcation for Western Ghats; halt all plantation activity in Zone I areas
-**Why:** 13 years of inaction since Gadgil report directly enabled this disaster [REF: Curated]
-**Outcome:** Zero new construction or plantation conversion in Zone I — verified by satellite monitoring
-⚠️ **Intelligence gap:** No comprehensive land-use change data for Wayanad 2011-2024 is publicly available. RTI to Kerala Revenue Department required.""",
-        "govdata_count": 2,
-        "total_impacts": 4,
-        "trust_score": 74,
-        "trust_label": "MEDIUM",
-        "trust_color": "#f97316",
-        "grounding": {"verified": ["231", "1000"], "unverified": [], "total": 2},
-    },
-}
 
 
 def _build_context(event_id: str, name: str, data: dict | None = None) -> str:
@@ -279,6 +182,24 @@ def _render_trust_bar(score: int, label: str, color: str,
             )
     bar += (
         f'<span style="font-size:9.5px;color:#334155;">Score = source tier + evidence + connections + actors</span>'
+        f'</div>'
+    )
+    # Confidence badge row
+    src_conf = min(100, round((govdata_count / max(total_impacts, 1)) * 100))
+    hallucinated = len(grounding["unverified"]) if grounding else 0
+    hall_color = "#22c55e" if hallucinated == 0 else ("#f97316" if hallucinated <= 2 else "#ef4444")
+    bar += (
+        f'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;padding-top:8px;'
+        f'border-top:1px solid #1e293b22;">'
+        f'<span style="background:#22c55e18;border:1px solid #22c55e44;border-radius:5px;'
+        f'padding:2px 8px;font-size:9px;font-weight:700;color:#22c55e;">'
+        f'🏛 {govdata_count} Gov-Verified</span>'
+        f'<span style="background:#38bdf818;border:1px solid #38bdf844;border-radius:5px;'
+        f'padding:2px 8px;font-size:9px;font-weight:700;color:#38bdf8;">'
+        f'⚡ {src_conf}% Source Confidence</span>'
+        f'<span style="background:{hall_color}18;border:1px solid {hall_color}44;border-radius:5px;'
+        f'padding:2px 8px;font-size:9px;font-weight:700;color:{hall_color};">'
+        f'{"✓ 0 Hallucinated" if hallucinated == 0 else f"⚠ {hallucinated} Unverified"}</span>'
         f'</div></div>'
     )
     return bar
@@ -1173,8 +1094,7 @@ def page():
         st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
         generate = st.button("Generate Brief →", type="primary", use_container_width=True)
 
-    # ── Check for pre-loaded brief ─────────────────────────────────────────────
-    is_preloaded = (final_query == default_queries[0] and event_id in _PRELOADED_BRIEFS)
+    cache_key = f"brief_cache_{event_id}"
 
     if generate:
         st.markdown("---")
@@ -1203,68 +1123,62 @@ def page():
 
         brief_placeholder = st.empty()
         full_text = ""
+        context = _build_context(event_id, name, data=data)
 
-        if is_preloaded:
-            full_text = _PRELOADED_BRIEFS[event_id]["text"]
-            brief_placeholder.markdown(_style_priorities(full_text), unsafe_allow_html=True)
-            pre = _PRELOADED_BRIEFS[event_id]
-            trust_slot.markdown(
-                _render_trust_bar(pre["trust_score"], pre["trust_label"], pre["trust_color"],
-                                  grounding=pre["grounding"],
-                                  govdata_count=pre["govdata_count"],
-                                  total_impacts=pre["total_impacts"]),
-                unsafe_allow_html=True,
-            )
-        else:
-            context = _build_context(event_id, name, data=data)
-            with st.spinner("Generating brief with Groq LLaMA 3.3 70B..."):
-                try:
-                    stream = _generate_brief(context, name, final_query)
-                    for chunk in stream:
-                        delta = chunk.choices[0].delta.content or ""
-                        full_text += delta
-                        brief_placeholder.markdown(full_text)
-                except Exception as e:
-                    st.error(f"Groq API error: {e}")
-                    return
+        with st.spinner("Generating brief with Groq LLaMA 3.3 70B..."):
+            try:
+                stream = _generate_brief(context, name, final_query)
+                for chunk in stream:
+                    delta = chunk.choices[0].delta.content or ""
+                    full_text += delta
+                    brief_placeholder.markdown(full_text)
+            except Exception as e:
+                st.error(f"Groq API error: {e}")
+                return
 
-            brief_placeholder.markdown(_style_priorities(full_text), unsafe_allow_html=True)
-            grounding = _grounding_check(full_text, context)
-            trust_slot.markdown(
-                _render_trust_bar(score, label, trust_color,
-                                  grounding=grounding,
-                                  govdata_count=govdata_impacts,
-                                  total_impacts=impacts_count),
-                unsafe_allow_html=True,
-            )
-            with st.expander("View raw ontology context used", expanded=False):
-                st.code(context, language="text")
+        brief_placeholder.markdown(_style_priorities(full_text), unsafe_allow_html=True)
+        grounding = _grounding_check(full_text, context)
+        trust_slot.markdown(
+            _render_trust_bar(score, label, trust_color,
+                              grounding=grounding,
+                              govdata_count=govdata_impacts,
+                              total_impacts=impacts_count),
+            unsafe_allow_html=True,
+        )
+        # Cache result for this session
+        st.session_state[cache_key] = {
+            "text": full_text, "query": final_query,
+            "score": score, "label": label, "trust_color": trust_color,
+            "grounding": grounding, "govdata_count": govdata_impacts,
+            "total_impacts": impacts_count,
+        }
+        with st.expander("View raw ontology context used", expanded=False):
+            st.code(context, language="text")
 
     else:
-        # Show pre-loaded brief on page open for known events
-        if is_preloaded:
-            pre = _PRELOADED_BRIEFS[event_id]
+        cached = st.session_state.get(cache_key)
+        if cached:
             st.markdown(
                 f'<div style="background:#0a1628;border:1px solid {color}44;border-left:4px solid {color};'
                 f'border-radius:10px;padding:12px 18px;margin-bottom:16px;">'
-                f'<div style="font-size:14px;font-weight:700;color:{color};">INTELLIGENCE BRIEF: {name.upper()} (PRE-LOADED)</div>'
+                f'<div style="font-size:14px;font-weight:700;color:{color};">INTELLIGENCE BRIEF: {name.upper()}</div>'
                 f'<div style="font-size:11.5px;color:#475569;margin-top:4px;">'
-                f'Query: <span style="color:#94a3b8;font-style:italic;">{final_query}</span></div>'
+                f'Query: <span style="color:#94a3b8;font-style:italic;">{cached["query"]}</span></div>'
                 f'<div style="font-size:10.5px;color:#334155;margin-top:3px;">'
-                f'Model: LLaMA 3.3 70B · Source: PRAMAAN Neo4j · 0 Hallucinated</div>'
+                f'Model: LLaMA 3.3 70B · Source: PRAMAAN Neo4j Ontology · Groq AI</div>'
                 f'</div>',
                 unsafe_allow_html=True,
             )
             st.markdown(
-                _render_trust_bar(pre["trust_score"], pre["trust_label"], pre["trust_color"],
-                                  grounding=pre["grounding"],
-                                  govdata_count=pre["govdata_count"],
-                                  total_impacts=pre["total_impacts"]),
+                _render_trust_bar(cached["score"], cached["label"], cached["trust_color"],
+                                  grounding=cached["grounding"],
+                                  govdata_count=cached["govdata_count"],
+                                  total_impacts=cached["total_impacts"]),
                 unsafe_allow_html=True,
             )
-            st.markdown(_style_priorities(pre["text"]), unsafe_allow_html=True)
+            st.markdown(_style_priorities(cached["text"]), unsafe_allow_html=True)
         else:
-            st.markdown(f"""
+            st.markdown("""
             <div style="background:#0a1628;border:1px dashed #1e293b;border-radius:12px;
                         padding:40px;text-align:center;margin-top:20px;">
               <div style="font-size:14px;color:#475569;margin-bottom:6px;">

@@ -42,10 +42,10 @@ _DOM_ICON   = {
 # ── LLM ───────────────────────────────────────────────────────────────────────
 
 def _build_context(data: dict) -> str:
-    """Build a compact context string — max ~800 tokens to preserve quota."""
+    """Build a compact context string — max ~1200 tokens to preserve quota."""
     lines = []
 
-    events = (data.get("events") or [])[:8]          # top 8 events only
+    events = (data.get("events") or [])[:10]          # top 10 events
     if events:
         lines.append("=== ACTIVE EVENTS ===")
         for e in events:
@@ -55,18 +55,35 @@ def _build_context(data: dict) -> str:
                 f"{e.get('domain') or ''} | {e.get('date') or ''} | {desc}"
             )
 
-    connections = (data.get("connections") or [])[:5]  # top 5
+    indicators = (data.get("indicators") or [])[:12]
+    if indicators:
+        lines.append("\n=== LIVE CRISIS INDICATORS ===")
+        for i in indicators:
+            lines.append(
+                f"{i.get('name') or ''}: {i.get('value') or ''} {i.get('unit') or ''} "
+                f"[trend: {i.get('trend') or 'stable'}]"
+            )
+
+    actors = (data.get("actors") or [])[:6]
+    if actors:
+        lines.append("\n=== KEY ACTORS ===")
+        for a in actors:
+            lines.append(
+                f"{a.get('name') or ''} ({a.get('type') or ''}): {a.get('role') or ''}"
+            )
+
+    connections = (data.get("connections") or [])[:8]  # top 8
     if connections:
-        lines.append("=== CONNECTIONS ===")
+        lines.append("\n=== CONNECTIONS ===")
         for c in connections:
             lines.append(
                 f"{c.get('from_event') or ''} → {c.get('to_event') or ''}: "
                 f"{(c.get('reason') or '')[:60]}"
             )
 
-    impacts = (data.get("impacts") or [])[:5]          # top 5
+    impacts = (data.get("impacts") or [])[:8]          # top 8
     if impacts:
-        lines.append("=== IMPACTS ===")
+        lines.append("\n=== IMPACTS ===")
         for i in impacts:
             lines.append(
                 f"[{(i.get('severity') or '').upper()}] {(i.get('impact') or '')[:60]} "
@@ -75,10 +92,13 @@ def _build_context(data: dict) -> str:
 
     schemes = (data.get("schemes") or [])[:5]          # top 5
     if schemes:
-        lines.append("=== SCHEMES ===")
+        lines.append("\n=== SCHEMES ===")
         for s in schemes:
+            triggered = s.get('triggered_by') or ''
+            triggered_str = f" | triggered_by: {triggered}" if triggered else ""
             lines.append(
-                f"{s.get('name') or ''} | ₹{s.get('budget') or ''} Cr | {s.get('status') or ''}"
+                f"{s.get('name') or ''} | ₹{s.get('budget') or ''} Cr | "
+                f"{s.get('status') or ''}{triggered_str}"
             )
 
     return "\n".join(lines)
@@ -120,7 +140,16 @@ Generate an Intelligence Verdict as a JSON object with exactly this structure:
       "actor": "named responsible body",
       "action": "specific executable action",
       "evidence": "cite the specific event/indicator/impact driving this",
-      "consequence": "what happens if India delays by 30 days"
+      "consequence": "what happens if India delays by 30 days",
+      "cross_domain_chain": "Event A → [RELATION] → Event B → [RELATION] → Impact C"
+    }}
+  ],
+  "proof_chain": [
+    {{
+      "step": 1,
+      "node": "event or actor or indicator name",
+      "relation": "CAUSED_BY / TRIGGERS / AMPLIFIES / BLOCKED_BY",
+      "domain": "domain name"
     }}
   ],
   "exposures": [
@@ -147,6 +176,7 @@ Rules:
 - decisions: exactly 3, ordered by urgency (48h first)
 - exposures: 3–5 domains where India is most at risk RIGHT NOW
 - advantages: 2–3 strategic windows India can exploit
+- proof_chain: 4–6 steps showing the most critical causal chain from source event to India impact
 - Use only data from the context. No hallucination. Be specific about India's position.
 """
 
@@ -433,6 +463,41 @@ def page():
                 f'</div>',
                 unsafe_allow_html=True,
             )
+
+    # ── Cross-domain proof chain banner ───────────────────────────────────────
+    _DOM_CHAIN_COLOR = {
+        "Economics": "#38bdf8", "Defense": "#f97316", "Geopolitics": "#a78bfa",
+        "Climate": "#22c55e",   "Society": "#fb7185",  "Governance": "#facc15",
+        "Technology": "#e879f9",
+    }
+    proof_chain = verdict.get("proof_chain", [])
+    if proof_chain:
+        chain_html = ""
+        for idx, step in enumerate(proof_chain):
+            node   = step.get("node", "")
+            rel    = step.get("relation", "→")
+            dom    = step.get("domain", "")
+            dc     = _DOM_CHAIN_COLOR.get(dom, "#64748b")
+            chain_html += (
+                f'<span style="background:{dc}18;border:1px solid {dc}44;border-radius:6px;'
+                f'padding:3px 9px;font-size:9.5px;color:{dc};font-weight:600;'
+                f'white-space:nowrap;">{node}</span>'
+            )
+            if idx < len(proof_chain) - 1:
+                chain_html += (
+                    f'<span style="font-size:9px;color:#475569;padding:0 5px;">'
+                    f'—[{rel}]→</span>'
+                )
+        st.markdown(
+            f'<div style="background:#060f1e;border:1px solid #22c55e22;'
+            f'border-radius:10px;padding:12px 16px;margin-top:14px;">'
+            f'<div style="font-size:9px;font-weight:700;color:#22c55e;letter-spacing:.1em;'
+            f'text-transform:uppercase;margin-bottom:8px;">🔗 CROSS-DOMAIN PROOF CHAIN</div>'
+            f'<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">'
+            f'{chain_html}'
+            f'</div></div>',
+            unsafe_allow_html=True,
+        )
 
 
 page()

@@ -184,29 +184,70 @@ Delhi Yamuna Floods
 
 ---
 
-## 6. REAL-TIME INGESTION
+## 6. AGENTIC INGESTION PIPELINE
 
-**Purpose:** Show system is live and continuously updating.
+**Purpose:** Demonstrate live, continuous, agent-driven data ingestion into the knowledge graph.
 
-**Triggers:** Button-triggered AND auto-timer (both).
+**Triggers:** Manual (Run Agent button) AND APScheduler (15m / 1h / 6h / 24h intervals).
 
-**What happens:**
-1. New event appears in graph
-2. New response linked
-3. New evidence added
-4. UI refreshes with notification
+### Architecture — 3-Path Pipeline
 
-**Example UI messages:**
-- `New Event Ingested: Cyclone Alert — PIB Source`
-- `New Evidence Added: Delhi Drainage Project — data.gov.in`
-
-**Backend flow:**
 ```
-Pre-seeded data → Button/Timer trigger → Neo4j update → UI refresh
+Trigger (Button / APScheduler)
+        ↓
+  agent/classifier.py
+  Brain: Gemini 1.5 Flash (function calling)
+  Classifies input → routes to one of 3 paths:
+        ↓
+  ┌────────────────┬────────────────────┬──────────────────────┐
+  │ Path 1         │ Path 2             │ Path 3               │
+  │ STRUCTURED     │ SEMI-STRUCTURED    │ UNSTRUCTURED         │
+  │ API / CSV      │ PDF / XML / Excel  │ Web / Press releases │
+  │ requests+pandas│ PyMuPDF / lxml     │ Crawl4AI → Markdown  │
+  └────────────────┴────────────────────┴──────────────────────┘
+        ↓
+  agent/loader.py — downstream sweeper
+  ai_service.extract_ontology() → canonical nodes + edges
+        ↓
+  Neo4j (committed with constraints + indexes)
+  → archived to /data/*/processed/
 ```
+
+### Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Agent brain | **Gemini 1.5 Flash** — `classify_and_route` function tool |
+| Web scraper | **Crawl4AI** — async headless JS rendering → clean Markdown |
+| Structured fetch | `requests` + `pandas` + `pydantic` |
+| Semi-structured | `PyMuPDF` · `lxml` · `openpyxl` · `markdown` · `fastkml` |
+| Scheduler | **APScheduler** — configurable intervals (15m/1h/6h/24h) |
+| Entity extraction | `AIService.extract_ontology()` in `ai_service.py` |
+| Confidence scoring | `verification_agent.py` — entity-level hallucination check |
+| Graph write | `neo4j-driver` — MERGE with constraints |
+
+### Live Ingestion Screen Features
+
+1. **Run Agent** — triggers `POST /ingest/agentic` with topic prompt
+2. **Agent Trace** — streams step-by-step actions to UI
+3. **Auto-Scheduler** — 15m/1h/6h/24h continuous ingestion
+4. **Recent Feed** — last N ingested nodes with source + timestamp
+5. **LLM Chain Status** — live badge: Ollama ✅ / Groq ✅ / Gemini ✅
+
+### What Happens Per Ingestion Run
+
+1. New event node appears in graph
+2. Response scheme linked (Type 1 or Type 2)
+3. New evidence/impact node added
+4. UI refreshes feed with source attribution
+
+**Example ingested events:**
+- `Iran-Hormuz Strait Crisis — PIB/MEA Source`
+- `India Semiconductor Mission 2026 — data.gov.in`
+- `Rupee INR Pressure — RBI Bulletin`
 
 **Judge positioning:**
-> *"In MVP, ingestion is simulated to demonstrate continuous updating. In production, automated agents and APIs handle this continuously."*
+> *"In MVP, the scheduler runs curated topics to demonstrate continuous updating reliably. In production, it crawls live PIB press releases, NDMA alerts, data.gov.in API updates, and IMD bulletins — same pipeline, same agent, real sources."*
 
 ---
 
